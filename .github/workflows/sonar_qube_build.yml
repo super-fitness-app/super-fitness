@@ -1,0 +1,47 @@
+name: SonarQube Build
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      # The analysis requires to retrieve dependencies and build successfully
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.1
+      # Step 4: Build & Test commands for Flutter
+      - name: Build & Run Tests with Coverage
+        run: |
+          # Fetch dependencies
+          flutter pub get
+          
+          # Optional: Run code analyzer
+          # flutter analyze
+          
+          # Run tests and generate lcov.info coverage report
+          flutter test --coverage
+
+      # Triggering SonarQube analysis as results of it are required by Quality Gate check.
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          pollingTimeoutSec: 600
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
