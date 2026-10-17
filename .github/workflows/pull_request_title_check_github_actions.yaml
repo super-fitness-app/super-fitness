@@ -1,0 +1,35 @@
+
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  pr-title-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          echo "Checking PR title: $PR_TITLE"
+
+          PR_TITLE_REGEX='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([a-zA-Z0-9_.-]+\))?!?: .+'
+
+          if [[ ! "$PR_TITLE" =~ $PR_TITLE_REGEX ]]; then
+            echo "Invalid PR title: '$PR_TITLE'"
+            echo "Expected: type(scope)!: description"
+            echo "Examples:"
+            echo "  feat: add cart management"
+            echo "  fix(cart): correct item quantity"
+            echo "  feat(api)!: change response format"
+            exit 1
+          fi
+
+          echo "PR title is valid!"
