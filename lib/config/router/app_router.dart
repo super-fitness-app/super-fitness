@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:super_fitness/features/splash/presentation/view/splash_view.dart';
+import 'package:super_fitness/features/auth/presentation/view/login.dart';
 
 abstract final class AppRoutes {
-  static const splash = '/';
+  static const login = '/';
 }
 
 abstract final class AppRouter {
@@ -11,12 +11,12 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.splash,
+    initialLocation: AppRoutes.login,
     routes: [
       GoRoute(
-        path: AppRoutes.splash,
+        path: AppRoutes.login,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const SplashView(),
+        builder: (context, state) => const LoginView(),
       ),
     ],
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/app_bloc_observer.dart';
-import 'package:super_fitness/config/const/app_router.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
@@ -26,7 +26,7 @@ class SuperFitnessApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'Super Fitness',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
+            theme: AppTheme.darkTheme,
             locale: locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -30,7 +30,9 @@ void main() {
       expect(controller.text, 'test@example.com');
     });
 
-    testWidgets('shows localized validation error on form validate', (tester) async {
+    testWidgets('shows localized validation error on form validate', (
+      tester,
+    ) async {
       final formKey = GlobalKey<FormState>();
 
       await tester.pumpWidget(
@@ -55,6 +57,72 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('This field is required'), findsOneWidget);
+    });
+
+    testWidgets('renders prefix and suffix icons with proper constraints', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AppTextField(
+              label: 'Password',
+              hint: 'Enter password',
+              prefixIcon: Icon(Icons.lock),
+              suffixIcon: Icon(Icons.visibility),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.lock), findsOneWidget);
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+    });
+
+    testWidgets('respects obscureText, readOnly, and onChanged callback', (
+      tester,
+    ) async {
+      var changedValue = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppTextField(
+              label: 'Secret',
+              hint: 'Enter secret',
+              obscureText: true,
+              readOnly: false,
+              onChanged: (val) => changedValue = val,
+            ),
+          ),
+        ),
+      );
+
+      final editableText = tester.widget<EditableText>(
+        find.byType(EditableText),
+      );
+      expect(editableText.obscureText, isTrue);
+      expect(editableText.readOnly, isFalse);
+
+      await tester.enterText(find.byType(TextFormField), 'mySecret');
+      expect(changedValue, 'mySecret');
+    });
+
+    testWidgets('uses fallback label as hint when hint is empty', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AppTextField(
+              label: 'FallbackLabel',
+              hint: '',
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('FallbackLabel'), findsWidgets);
     });
   });
 }

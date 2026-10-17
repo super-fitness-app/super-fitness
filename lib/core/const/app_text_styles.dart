@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 
-abstract final class AppStyles {
+abstract final class AppTextStyles {
   // 31px (3.875rem) - Display & Hero Headlines
   static final TextStyle display31 = GoogleFonts.balooThambi2(
     fontWeight: FontWeight.w700,
@@ -101,6 +101,12 @@ abstract final class AppStyles {
   static final TextStyle buttonText = GoogleFonts.balooThambi2(
     fontWeight: FontWeight.w600,
     fontSize: 16,
+    color: AppColors.white,
+  );
+
+  static final TextStyle extraBold14 = GoogleFonts.balooThambi2(
+    fontWeight: FontWeight.w800,
+    fontSize: 14,
     color: AppColors.white,
   );
 
