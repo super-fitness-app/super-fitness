@@ -46,16 +46,19 @@ class AppTextField extends StatelessWidget {
       readOnly: readOnly,
       keyboardType: keyboardType,
       style: AppStyles.regular16.copyWith(color: AppColors.white),
-      validator: (val) => errorValidator?.call(val)?.toLocalizedMessage(context),
+      validator: (val) =>
+          errorValidator?.call(val)?.toLocalizedMessage(context),
       decoration: InputDecoration(
         isDense: true,
         labelText: label.isNotEmpty ? label : null,
-        labelStyle: labelStyle ??
+        labelStyle:
+            labelStyle ??
             AppStyles.regular12.copyWith(
               color: AppColors.white.withValues(alpha: 0.6),
             ),
         hintText: effectiveHint,
-        hintStyle: hintStyle ??
+        hintStyle:
+            hintStyle ??
             AppStyles.regular14.copyWith(
               color: AppColors.white.withValues(alpha: 0.6),
             ),
@@ -97,24 +100,15 @@ class AppTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: pillRadius,
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 1.2,
-          ),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: pillRadius,
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 1.0,
-          ),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: pillRadius,
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 1.2,
-          ),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.2),
         ),
       ),
     );

@@ -7,7 +7,9 @@ import 'package:super_fitness/core/ui/extensions/app_failure_extension.dart';
 
 void main() {
   group('AppFailure & Localization Tests', () {
-    testWidgets('ServerMessageFailure returns custom message directly', (tester) async {
+    testWidgets('ServerMessageFailure returns custom message directly', (
+      tester,
+    ) async {
       late String localizedMsg;
 
       await tester.pumpWidget(
@@ -27,7 +29,9 @@ void main() {
       expect(localizedMsg, 'Custom server error');
     });
 
-    testWidgets('NetworkFailure returns localized message for AppError', (tester) async {
+    testWidgets('NetworkFailure returns localized message for AppError', (
+      tester,
+    ) async {
       late String timeoutMsg;
       late String noConnectionMsg;
 

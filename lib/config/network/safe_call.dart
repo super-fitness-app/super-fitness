@@ -70,10 +70,11 @@ AppError _mapStatusCodeToAppError(int? statusCode) {
 
 String? _extractErrorMessage(dynamic responseData) {
   if (responseData is Map<String, dynamic>) {
-    final rawMessage = (responseData[ApiParams.message] ??
-            responseData[ApiParams.error] ??
-            responseData[ApiParams.msg])
-        ?.toString();
+    final rawMessage =
+        (responseData[ApiParams.message] ??
+                responseData[ApiParams.error] ??
+                responseData[ApiParams.msg])
+            ?.toString();
     if (rawMessage != null && rawMessage.trim().isNotEmpty) {
       return rawMessage;
     }

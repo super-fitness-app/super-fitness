@@ -29,9 +29,7 @@ abstract final class AppTheme {
         disabledBackgroundColor: AppColors.grey70,
         disabledForegroundColor: AppColors.grey40,
         padding: const EdgeInsetsDirectional.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -42,9 +40,7 @@ abstract final class AppTheme {
         disabledBackgroundColor: AppColors.grey70,
         side: const BorderSide(color: AppColors.grey60),
         padding: const EdgeInsetsDirectional.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(

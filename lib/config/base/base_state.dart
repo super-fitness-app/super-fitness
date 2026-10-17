@@ -17,8 +17,7 @@ class BaseState<T> {
     required this.data,
   });
 
-  const BaseState.initial()
-      : this(isLoading: false, failure: null, data: null);
+  const BaseState.initial() : this(isLoading: false, failure: null, data: null);
 
   factory BaseState.loading({T? data}) =>
       BaseState(isLoading: true, failure: null, data: data);
@@ -48,7 +47,9 @@ class BaseState<T> {
     return BaseState<T>(
       isLoading: isLoading ?? this.isLoading,
       data: identical(data, unset) ? this.data : data as T?,
-      failure: identical(failure, unset) ? this.failure : failure as AppFailure?,
+      failure: identical(failure, unset)
+          ? this.failure
+          : failure as AppFailure?,
     );
   }
 

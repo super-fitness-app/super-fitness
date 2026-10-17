@@ -19,7 +19,9 @@ void main() {
       expect(find.text('SUPER FITNESS'), findsOneWidget);
     });
 
-    testWidgets('renders properly in RTL (Arabic) without overflow', (tester) async {
+    testWidgets('renders properly in RTL (Arabic) without overflow', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           locale: Locale('ar'),

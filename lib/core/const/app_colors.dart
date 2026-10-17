@@ -6,7 +6,7 @@ abstract final class AppColors {
   static const Color primaryDark = Color(0xFFCC0E00);
   static const Color primaryLight = Color(0xFFFF8D66);
   static const Color orangeBase = Color(0xFFFF4100);
-  static const Color orangeButton = Color(0xFFFF6A00); 
+  static const Color orangeButton = Color(0xFFFF6A00);
 
   // Tints (Light Scale)
   static const Color orange50 = Color(0xFFFFECE5);

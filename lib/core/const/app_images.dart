@@ -1,3 +1,1 @@
-abstract final class AppImages {
-
-}
+abstract final class AppImages {}

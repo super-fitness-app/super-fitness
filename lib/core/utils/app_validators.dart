@@ -38,8 +38,9 @@ abstract final class AppValidators {
   static final RegExp passwordUppercaseRegex = RegExp(passwordUppercasePattern);
   static final RegExp passwordLowercaseRegex = RegExp(passwordLowercasePattern);
   static final RegExp passwordNumberRegex = RegExp(passwordNumberPattern);
-  static final RegExp passwordSpecialCharRegex =
-      RegExp(passwordSpecialCharPattern);
+  static final RegExp passwordSpecialCharRegex = RegExp(
+    passwordSpecialCharPattern,
+  );
 
   static bool validate(String pattern, String input) {
     return RegExp(pattern).hasMatch(input);

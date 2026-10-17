@@ -30,7 +30,9 @@ void main() {
       expect(controller.text, 'test@example.com');
     });
 
-    testWidgets('shows localized validation error on form validate', (tester) async {
+    testWidgets('shows localized validation error on form validate', (
+      tester,
+    ) async {
       final formKey = GlobalKey<FormState>();
 
       await tester.pumpWidget(

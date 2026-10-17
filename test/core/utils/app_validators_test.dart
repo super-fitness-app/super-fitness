@@ -11,14 +11,23 @@ void main() {
 
     test('validateEmail validates email formats correctly', () {
       expect(AppValidators.validateEmail(null), ValidationError.empty);
-      expect(AppValidators.validateEmail('invalid-email'), ValidationError.invalidEmail);
-      expect(AppValidators.validateEmail('test@test'), ValidationError.invalidEmail);
+      expect(
+        AppValidators.validateEmail('invalid-email'),
+        ValidationError.invalidEmail,
+      );
+      expect(
+        AppValidators.validateEmail('test@test'),
+        ValidationError.invalidEmail,
+      );
       expect(AppValidators.validateEmail('test@example.com'), isNull);
     });
 
     test('validatePhone validates Egyptian phone numbers', () {
       expect(AppValidators.validatePhone(null), ValidationError.empty);
-      expect(AppValidators.validatePhone('12345'), ValidationError.invalidPhone);
+      expect(
+        AppValidators.validatePhone('12345'),
+        ValidationError.invalidPhone,
+      );
       expect(AppValidators.validatePhone('01012345678'), isNull);
       expect(AppValidators.validatePhone('01112345678'), isNull);
       expect(AppValidators.validatePhone('01212345678'), isNull);
@@ -27,19 +36,31 @@ void main() {
 
     test('validateNationalId validates 14 digits', () {
       expect(AppValidators.validateNationalId(null), ValidationError.empty);
-      expect(AppValidators.validateNationalId('123'), ValidationError.invalidNationalId);
+      expect(
+        AppValidators.validateNationalId('123'),
+        ValidationError.invalidNationalId,
+      );
       expect(AppValidators.validateNationalId('12345678901234'), isNull);
     });
 
     test('validatePassword validates strong passwords', () {
       expect(AppValidators.validatePassword(null), ValidationError.empty);
-      expect(AppValidators.validatePassword('weak'), ValidationError.weakPassword);
+      expect(
+        AppValidators.validatePassword('weak'),
+        ValidationError.weakPassword,
+      );
       expect(AppValidators.validatePassword('StrongPass1@'), isNull);
     });
 
     test('validatePasswordDetailed identifies missing rules', () {
-      expect(AppValidators.validatePasswordDetailed(null), ValidationError.empty);
-      expect(AppValidators.validatePasswordDetailed('short'), ValidationError.passwordTooShort);
+      expect(
+        AppValidators.validatePasswordDetailed(null),
+        ValidationError.empty,
+      );
+      expect(
+        AppValidators.validatePasswordDetailed('short'),
+        ValidationError.passwordTooShort,
+      );
       expect(
         AppValidators.validatePasswordDetailed('alllowercase1@'),
         ValidationError.passwordMissingUppercase,
@@ -68,7 +89,10 @@ void main() {
     });
 
     test('validateDropdown checks null value', () {
-      expect(AppValidators.validateDropdown(null), ValidationError.dropdownRequired);
+      expect(
+        AppValidators.validateDropdown(null),
+        ValidationError.dropdownRequired,
+      );
       expect(AppValidators.validateDropdown('Selected'), isNull);
     });
   });

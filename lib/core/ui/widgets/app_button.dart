@@ -94,10 +94,6 @@ class _AppButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: style,
-    );
+    return Text(text, textAlign: TextAlign.center, style: style);
   }
 }
