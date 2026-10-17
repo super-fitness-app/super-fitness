@@ -16,7 +16,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.44.1
+          flutter-version: 3.44.4
       # Step 4: Build & Test commands for Flutter
       - name: Build & Run Tests with Coverage
         run: |
