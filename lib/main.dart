@@ -11,16 +11,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = AppBlocObserver();
   configureDependencies();
-  runApp(const SuperFitnessApp());
+  runApp(SuperFitnessApp(localeCubit: getIt<LocaleCubit>()));
 }
 
 class SuperFitnessApp extends StatelessWidget {
-  const SuperFitnessApp({super.key});
+  final LocaleCubit? localeCubit;
+
+  const SuperFitnessApp({super.key, this.localeCubit});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<LocaleCubit>(),
+    final cubit = localeCubit ?? getIt<LocaleCubit>();
+    return BlocProvider.value(
+      value: cubit,
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
           return MaterialApp.router(

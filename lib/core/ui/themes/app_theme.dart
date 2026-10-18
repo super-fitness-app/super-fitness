@@ -19,11 +19,13 @@ abstract final class AppTheme {
       iconTheme: const IconThemeData(color: AppColors.white, size: 22),
     ),
 
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       color: AppColors.surface,
       elevation: 0,
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
       margin: EdgeInsets.zero,
     ),
 
@@ -57,7 +59,9 @@ abstract final class AppTheme {
         disabledBackgroundColor: AppColors.grey70,
         side: const BorderSide(color: AppColors.grey60),
         padding: const EdgeInsetsDirectional.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
       ),
     ),
 
@@ -74,22 +78,22 @@ abstract final class AppTheme {
       ),
     ),
 
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: AppColors.transparent,
       isDense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(100),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+        borderSide: BorderSide(color: AppColors.borderLight),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(100),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+        borderSide: BorderSide(color: AppColors.borderLight),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(100),
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+        borderSide: BorderSide(color: AppColors.primary, width: 1.2),
       ),
     ),
   );

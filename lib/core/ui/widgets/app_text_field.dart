@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/ui/extensions/validation_error_extension.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
-import 'package:super_fitness/core/const/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
   final String label;
@@ -37,8 +38,13 @@ class AppTextField extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
-      validator: (val) =>
-          errorValidator?.call(val)?.toLocalizedMessage(context),
+      validator: (val) {
+        final error = errorValidator?.call(val);
+        if (error == null || !context.mounted) return null;
+        final l10n = AppLocalizations.of(context);
+        if (l10n == null) return null;
+        return error.toLocalizedMessage(context);
+      },
       decoration: InputDecoration(
         labelText: label.isNotEmpty ? label : null,
         hintText: hint.isNotEmpty ? hint : label,

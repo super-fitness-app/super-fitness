@@ -22,7 +22,6 @@ abstract interface class SessionService {
 }
 
 @LazySingleton(as: SessionService)
-@lazySingleton
 class SessionServiceImpl implements SessionService {
   final StorageService _storage;
   String? _inMemoryToken;

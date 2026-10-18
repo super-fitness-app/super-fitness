@@ -41,8 +41,26 @@ abstract final class AppValidators {
   static final RegExp passwordSpecialCharRegex =
       RegExp(passwordSpecialCharPattern);
 
+  static final Map<String, RegExp> _compiledRegexCache = {
+    emailPattern: emailRegex,
+    phonePattern: phoneRegex,
+    nationalIdPattern: nationalIdRegex,
+    usernamePattern: usernameRegex,
+    namePattern: nameRegex,
+    passwordUppercasePattern: passwordUppercaseRegex,
+    passwordLowercasePattern: passwordLowercaseRegex,
+    passwordNumberPattern: passwordNumberRegex,
+    passwordSpecialCharPattern: passwordSpecialCharRegex,
+  };
+
   static bool validate(String pattern, String input) {
-    return RegExp(pattern).hasMatch(input);
+    final regex =
+        _compiledRegexCache.putIfAbsent(pattern, () => RegExp(pattern));
+    return regex.hasMatch(input);
+  }
+
+  static bool validateRegex(RegExp regExp, String input) {
+    return regExp.hasMatch(input);
   }
 
   static ValidationError? validateRequired(String? val) {

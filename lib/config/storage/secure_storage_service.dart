@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 
 @LazySingleton(as: StorageService)
-@lazySingleton
 class SecureStorageService implements StorageService {
   final FlutterSecureStorage _secureStorage;
 
