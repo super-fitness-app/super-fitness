@@ -40,7 +40,7 @@ abstract final class AppTheme {
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       type: BottomNavigationBarType.fixed,
       elevation: 0,
       selectedItemColor: AppColors.primary,
@@ -76,7 +76,7 @@ abstract final class AppTheme {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.transparent,
+      fillColor: AppColors.transparent,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       border: OutlineInputBorder(

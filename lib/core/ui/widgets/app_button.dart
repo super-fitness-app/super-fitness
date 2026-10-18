@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 
 class AppButton extends StatelessWidget {
@@ -37,7 +38,7 @@ class AppButton extends StatelessWidget {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               )
             : Text(

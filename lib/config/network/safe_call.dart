@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/network/app_error.dart';
@@ -8,35 +10,52 @@ Future<ApiResults<T>> safeCall<T>(Future<ApiResults<T>> Function() call) async {
     return await call();
   } on Exception catch (e) {
     return FailureResponse(errorParser(e));
+  } on Error catch (_) {
+    return const FailureResponse(NetworkFailure(AppError.badResponse));
   }
 }
 
 AppFailure errorParser(Exception exception) {
   if (exception is DioException) {
-    switch (exception.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return const NetworkFailure(AppError.timeout);
-
-      case DioExceptionType.badCertificate:
-        return const NetworkFailure(AppError.security);
-
-      case DioExceptionType.badResponse:
-        return _handleBadResponse(exception);
-
-      case DioExceptionType.connectionError:
-        return const NetworkFailure(AppError.noConnection);
-
-      case DioExceptionType.cancel:
-        return const NetworkFailure(AppError.cancelled);
-
-      case DioExceptionType.unknown:
-      default:
-        return const NetworkFailure(AppError.unknown);
-    }
+    return _handleDioException(exception);
   }
+  if (exception is SocketException) {
+    return const NetworkFailure(AppError.noConnection);
+  }
+  if (exception is FormatException) {
+    return const NetworkFailure(AppError.badResponse);
+  }
+  return const NetworkFailure(AppError.unknown);
+}
 
+AppFailure _handleDioException(DioException exception) {
+  switch (exception.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      return const NetworkFailure(AppError.timeout);
+    case DioExceptionType.badCertificate:
+      return const NetworkFailure(AppError.security);
+    case DioExceptionType.badResponse:
+      return _handleBadResponse(exception);
+    case DioExceptionType.connectionError:
+      return const NetworkFailure(AppError.noConnection);
+    case DioExceptionType.cancel:
+      return const NetworkFailure(AppError.cancelled);
+    case DioExceptionType.unknown:
+    default:
+      return _handleUnknownDioException(exception);
+  }
+}
+
+AppFailure _handleUnknownDioException(DioException exception) {
+  final innerError = exception.error;
+  if (innerError is SocketException) {
+    return const NetworkFailure(AppError.noConnection);
+  }
+  if (innerError is FormatException) {
+    return const NetworkFailure(AppError.badResponse);
+  }
   return const NetworkFailure(AppError.unknown);
 }
 
@@ -70,32 +89,32 @@ AppError _mapStatusCodeToAppError(int? statusCode) {
 
 String? _extractErrorMessage(dynamic responseData) {
   if (responseData is Map<String, dynamic>) {
-    final rawMessage = (responseData[ApiParams.message] ??
-            responseData[ApiParams.error] ??
-            responseData[ApiParams.msg])
-        ?.toString();
-    if (rawMessage != null && rawMessage.trim().isNotEmpty) {
-      return rawMessage;
+    final direct =
+        responseData[ApiParams.message] ?? responseData[ApiParams.msg];
+    if (direct is String && direct.trim().isNotEmpty) return direct.trim();
+
+    final err = responseData[ApiParams.error];
+    if (err is String && err.trim().isNotEmpty) return err.trim();
+    if (err is Map<String, dynamic>) {
+      final nested = err[ApiParams.message] ?? err[ApiParams.msg];
+      if (nested is String && nested.trim().isNotEmpty) return nested.trim();
     }
 
-    final errors = responseData[ApiParams.errors];
-    if (errors is List && errors.isNotEmpty) {
-      final firstError = errors.first;
-      if (firstError is Map<String, dynamic>) {
-        final nestedMsg = firstError[ApiParams.message]?.toString();
-        if (nestedMsg != null && nestedMsg.trim().isNotEmpty) {
-          return nestedMsg;
-        }
-      } else if (firstError != null) {
-        final nestedMsg = firstError.toString();
-        if (nestedMsg.trim().isNotEmpty) {
-          return nestedMsg;
-        }
-      }
-    }
-  } else if (responseData is String && responseData.trim().isNotEmpty) {
-    return responseData;
+    return _extractFromErrorsList(responseData[ApiParams.errors]);
   }
+  return responseData is String && responseData.trim().isNotEmpty
+      ? responseData.trim()
+      : null;
+}
 
+String? _extractFromErrorsList(dynamic errors) {
+  if (errors is! List || errors.isEmpty) return null;
+  final first = errors.first;
+  if (first is Map<String, dynamic>) {
+    final nested = first[ApiParams.message] ?? first[ApiParams.msg];
+    if (nested is String && nested.trim().isNotEmpty) return nested.trim();
+  } else if (first is String && first.trim().isNotEmpty) {
+    return first.trim();
+  }
   return null;
 }

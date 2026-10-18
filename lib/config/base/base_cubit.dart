@@ -9,6 +9,8 @@ abstract class BaseCubit<State, E extends BaseEvent> extends Cubit<State> {
 
   Stream<E> get eventStream => _eventController.stream;
 
+  void doEvent(Object event);
+
   void emitEvent(E event) {
     if (_eventController.isClosed) {
       throw StateError('Cannot emit new events after calling close');

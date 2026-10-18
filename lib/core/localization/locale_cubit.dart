@@ -8,22 +8,32 @@ import 'package:super_fitness/core/const/app_constants.dart';
 class LocaleCubit extends Cubit<Locale> {
   final StorageService _storageService;
 
-  LocaleCubit(this._storageService) : super(const Locale('en')) {
+  LocaleCubit(this._storageService)
+      : super(const Locale(AppConstants.localeEnglish)) {
     loadSavedLocale();
   }
 
   Future<void> loadSavedLocale() async {
-    final savedLanguageCode = await _storageService.get(AppConstants.localeKey);
-    if (savedLanguageCode == 'ar') {
-      emit(const Locale('ar'));
-    } else if (savedLanguageCode == 'en') {
-      emit(const Locale('en'));
+    try {
+      final savedLanguageCode =
+          await _storageService.get(AppConstants.localeKey);
+      if (savedLanguageCode == AppConstants.localeArabic) {
+        emit(const Locale(AppConstants.localeArabic));
+      } else if (savedLanguageCode == AppConstants.localeEnglish) {
+        emit(const Locale(AppConstants.localeEnglish));
+      }
+    } catch (_) {
+      // Retain fallback locale if reading fails
     }
   }
 
   Future<void> changeLocale(Locale locale) async {
     if (state == locale) return;
-    await _storageService.save(AppConstants.localeKey, locale.languageCode);
-    emit(locale);
+    try {
+      await _storageService.save(AppConstants.localeKey, locale.languageCode);
+      emit(locale);
+    } catch (_) {
+      // Retain previous state if saving fails
+    }
   }
 }

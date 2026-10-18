@@ -39,6 +39,7 @@ abstract final class AppColors {
   static const Color whiteBase = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color blackBase = Color(0xFF0B0B0B);
+  static const Color transparent = Color(0x00000000);
 
   // Grays (Mapped to Figma selection)
   static const Color grey10 = Color(0xFFE9E9E9);
