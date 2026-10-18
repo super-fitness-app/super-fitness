@@ -1,49 +1,56 @@
+
 name: Firebase Auto Deploy APK
 
 on:
   push:
     branches:
-      - release/*
-
+      - 'release/*'
 
 jobs:
   deploy:
     name: Firebase Auto Deploy APK
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Check out the repository source code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Java environment required for Android compilation
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: '17'
 
-      # Step 3: Set up the Flutter SDK environment
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.44.4
 
-      # Step 4: Install Flutter application project dependencies
+      # Create Firebase Android configuration
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          test -n "$GOOGLE_SERVICES_JSON"
+          printf '%s' "$GOOGLE_SERVICES_JSON" \
+            > android/app/google-services.json
+          python -m json.tool \
+            android/app/google-services.json > /dev/null
+
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Run generator
-        run: flutter pub run build_runner build
-      # Step 5: Build the release APK binary (add --split-per-abi if desired)
+      - name: Run Generator
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: Build APK
         run: flutter build apk --release
 
-      # Step 6: Upload the generated APK to Firebase App Distribution
       - name: Upload to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_FILE_CONTENT }}
-          groups: testers # Change to your tester group name created in Firebase
+          groups: testers
           file: build/app/outputs/flutter-apk/app-release.apk
