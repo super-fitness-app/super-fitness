@@ -45,6 +45,7 @@ dependencies:
   json_annotation: ^4.9.0
   logger: ^2.6.0
   retrofit: ^4.9.0
+  firebase_core: ^4.14.0
 
 dev_dependencies:
   bloc_test: ^10.0.0
