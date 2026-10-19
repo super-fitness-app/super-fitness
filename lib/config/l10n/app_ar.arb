@@ -1,0 +1,34 @@
+{
+  "@@locale": "ar",
+
+  "emptyValidationError": "هذا الحقل مطلوب",
+  "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
+  "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",
+  "nationalIdError": "يرجى إدخال رقم قومي صحيح",
+  "weakPasswordError": "كلمة المرور ضعيفة جداً",
+  "passwordMustBeAtLeast8Characters": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+  "passwordMustContainUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+  "passwordMustContainLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
+  "passwordMustContainNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+  "passwordMustContainSpecialCharacter": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل",
+  "passwordMismatchError": "كلمتا المرور غير متطابقتين",
+  "fileRequiredError": "يرجى تحميل الملف المطلوب",
+  "dropdownRequiredError": "يرجى اختيار قيمة",
+  "generalValidationError": "مدخلات غير صحيحة",
+
+  "generalErrorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
+  "connectionErrorMessage": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
+  "noConnectionErrorMessage": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
+  "securityErrorMessage": "تعذر إنشاء اتصال آمن.",
+  "cancelErrorMessage": "تم إلغاء الطلب.",
+  "code400Message": "طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.",
+  "code401Message": "انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.",
+  "code403Message": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
+  "code404Message": "العنصر المطلوب غير موجود.",
+  "code409Message": "الحساب أو المورد مسجل مسبقاً.",
+  "code422Message": "خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.",
+  "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
+  "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
+
+  "loginTitle": "مرحباً بعودتك!"
+}

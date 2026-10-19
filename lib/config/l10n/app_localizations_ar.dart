@@ -1,0 +1,109 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Arabic (`ar`).
+class AppLocalizationsAr extends AppLocalizations {
+  AppLocalizationsAr([String locale = 'ar']) : super(locale);
+
+  @override
+  String get appName => 'Super Fitness';
+
+  @override
+  String get emptyValidationError => 'هذا الحقل مطلوب';
+
+  @override
+  String get invalidEmailError => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get invalidPhoneError => 'يرجى إدخال رقم هاتف مصري صحيح';
+
+  @override
+  String get nationalIdError => 'يرجى إدخال رقم قومي صحيح';
+
+  @override
+  String get weakPasswordError => 'كلمة المرور ضعيفة جداً';
+
+  @override
+  String get passwordMustBeAtLeast8Characters =>
+      'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+
+  @override
+  String get passwordMustContainUppercase =>
+      'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل';
+
+  @override
+  String get passwordMustContainLowercase =>
+      'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل';
+
+  @override
+  String get passwordMustContainNumber =>
+      'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل';
+
+  @override
+  String get passwordMustContainSpecialCharacter =>
+      'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل';
+
+  @override
+  String get passwordMismatchError => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get fileRequiredError => 'يرجى تحميل الملف المطلوب';
+
+  @override
+  String get dropdownRequiredError => 'يرجى اختيار قيمة';
+
+  @override
+  String get generalValidationError => 'مدخلات غير صحيحة';
+
+  @override
+  String get generalErrorMessage =>
+      'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get connectionErrorMessage =>
+      'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.';
+
+  @override
+  String get noConnectionErrorMessage =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.';
+
+  @override
+  String get securityErrorMessage => 'تعذر إنشاء اتصال آمن.';
+
+  @override
+  String get cancelErrorMessage => 'تم إلغاء الطلب.';
+
+  @override
+  String get code400Message =>
+      'طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.';
+
+  @override
+  String get code401Message =>
+      'انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.';
+
+  @override
+  String get code403Message => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+
+  @override
+  String get code404Message => 'العنصر المطلوب غير موجود.';
+
+  @override
+  String get code409Message => 'الحساب أو المورد مسجل مسبقاً.';
+
+  @override
+  String get code422Message =>
+      'خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.';
+
+  @override
+  String get code429Message =>
+      'محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.';
+
+  @override
+  String get code500sMessage => 'خطأ في الخادم. يرجى المحاولة بعد لحظات.';
+
+  @override
+  String get loginTitle => 'مرحباً بعودتك!';
+}

@@ -1,0 +1,38 @@
+{
+  "@@locale": "en",
+  "appName": "Super Fitness",
+  "@appName": {
+    "description": "App Name"
+  },
+
+  "emptyValidationError": "This field is required",
+  "invalidEmailError": "Please enter a valid email address",
+  "invalidPhoneError": "Please enter a valid Egyptian phone number",
+  "nationalIdError": "Please enter a valid national ID",
+  "weakPasswordError": "Password is too weak",
+  "passwordMustBeAtLeast8Characters": "Password must be at least 8 characters",
+  "passwordMustContainUppercase": "Password must contain at least one uppercase letter",
+  "passwordMustContainLowercase": "Password must contain at least one lowercase letter",
+  "passwordMustContainNumber": "Password must contain at least one number",
+  "passwordMustContainSpecialCharacter": "Password must contain at least one special character",
+  "passwordMismatchError": "Passwords do not match",
+  "fileRequiredError": "Please upload the required file",
+  "dropdownRequiredError": "Please select an option",
+  "generalValidationError": "Invalid input",
+
+  "generalErrorMessage": "Something went wrong. Please try again later.",
+  "connectionErrorMessage": "Connection timed out. Please check your internet connection.",
+  "noConnectionErrorMessage": "No internet connection. Please verify your network.",
+  "securityErrorMessage": "A secure connection could not be established.",
+  "cancelErrorMessage": "Request was cancelled.",
+  "code400Message": "Bad request. Please check your information and try again.",
+  "code401Message": "Session expired or invalid credentials. Please log in again.",
+  "code403Message": "You do not have permission to perform this action.",
+  "code404Message": "Requested resource not found.",
+  "code409Message": "Account or resource already exists.",
+  "code422Message": "Validation error. Please verify your inputs.",
+  "code429Message": "Too many requests. Please wait a moment and try again.",
+  "code500sMessage": "Server error. Please try again in a few moments.",
+
+  "loginTitle": "Welcome Back!"
+}

@@ -1,0 +1,18 @@
+enum AppError {
+  general,
+  timeout,
+  noConnection,
+  security,
+  cancelled,
+  badRequest,
+  unauthorized,
+  forbidden,
+  notFound,
+  conflict,
+  validation,
+  tooManyRequests,
+  server,
+  unknown,
+  badResponse,
+  forceLogin,
+}
