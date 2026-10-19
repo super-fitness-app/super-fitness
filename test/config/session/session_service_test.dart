@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/session/session_service.dart';
+import 'package:super_fitness/config/session/session_service_impl.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 
@@ -25,7 +26,7 @@ class FakeStorageService implements StorageService {
 void main() {
   group('SessionServiceImpl Tests', () {
     late FakeStorageService storage;
-    late SessionServiceImpl sessionService;
+    late SessionService sessionService;
 
     setUp(() {
       storage = FakeStorageService();

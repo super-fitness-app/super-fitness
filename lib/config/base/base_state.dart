@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:super_fitness/core/errors/app_failure.dart';
 
 class Unset {
@@ -6,7 +7,7 @@ class Unset {
 
 const Unset unset = Unset();
 
-class BaseState<T> {
+class BaseState<T> extends Equatable {
   final bool isLoading;
   final AppFailure? failure;
   final T? data;
@@ -53,16 +54,7 @@ class BaseState<T> {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is BaseState<T> &&
-          runtimeType == other.runtimeType &&
-          isLoading == other.isLoading &&
-          failure == other.failure &&
-          data == other.data;
-
-  @override
-  int get hashCode => Object.hash(isLoading, failure, data);
+  List<Object?> get props => [isLoading, failure, data];
 
   @override
   String toString() =>
