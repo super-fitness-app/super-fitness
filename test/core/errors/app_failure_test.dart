@@ -7,6 +7,20 @@ import 'package:super_fitness/core/ui/extensions/app_failure_extension.dart';
 
 void main() {
   group('AppFailure & Localization Tests', () {
+    test('AppFailure equality and props work correctly', () {
+      const f1 = NetworkFailure(AppError.timeout);
+      const f2 = NetworkFailure(AppError.timeout);
+      const f3 = NetworkFailure(AppError.noConnection);
+      expect(f1, equals(f2));
+      expect(f1, isNot(equals(f3)));
+
+      const s1 = ServerMessageFailure('Error 1');
+      const s2 = ServerMessageFailure('Error 1');
+      const s3 = ServerMessageFailure('Error 2');
+      expect(s1, equals(s2));
+      expect(s1, isNot(equals(s3)));
+    });
+
     testWidgets('ServerMessageFailure returns custom message directly', (
       tester,
     ) async {

@@ -4,9 +4,13 @@ import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/interceptors/auth_interceptor.dart';
 import 'package:super_fitness/core/const/endpoints.dart';
 
+abstract final class DioModule {
+  static const String refreshDioName = 'refreshDio';
+}
+
 @module
-abstract class DioModule {
-  @Named('refreshDio')
+abstract class DioPackageModule {
+  @Named(DioModule.refreshDioName)
   @lazySingleton
   Dio refreshDio() {
     final dio = Dio(

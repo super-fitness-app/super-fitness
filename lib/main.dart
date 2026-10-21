@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/app_bloc_observer.dart';
-import 'package:super_fitness/config/const/app_router.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
@@ -11,22 +11,25 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = AppBlocObserver();
   configureDependencies();
-  runApp(const SuperFitnessApp());
+  runApp(SuperFitnessApp(localeCubit: getIt<LocaleCubit>()));
 }
 
 class SuperFitnessApp extends StatelessWidget {
-  const SuperFitnessApp({super.key});
+  final LocaleCubit? localeCubit;
+
+  const SuperFitnessApp({super.key, this.localeCubit});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<LocaleCubit>(),
+    final cubit = localeCubit ?? getIt<LocaleCubit>();
+    return BlocProvider.value(
+      value: cubit,
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
           return MaterialApp.router(
-            title: 'Super Fitness',
+            onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
+            theme: AppTheme.darkTheme,
             locale: locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

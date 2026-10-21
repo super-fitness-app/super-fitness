@@ -4,4 +4,6 @@ abstract final class AppConstants {
   static const String localeKey = 'appLocaleKey';
   static const String storageRefreshTokenKey = 'userRefreshTokenKey';
   static const String guestModeKey = 'guestModeKey';
+  static const String localeArabic = 'ar';
+  static const String localeEnglish = 'en';
 }
