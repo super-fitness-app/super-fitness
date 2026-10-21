@@ -15,7 +15,7 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.register,
     routes: [
       GoRoute(
         path: AppRoutes.login,

@@ -15,6 +15,9 @@ class AppTextField extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final Color? fillColor;
+  final TextStyle? hintStyle;
+  final TextStyle? style;
 
   const AppTextField({
     super.key,
@@ -28,6 +31,9 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.readOnly = false,
     this.keyboardType,
+    this.fillColor,
+    this.hintStyle,
+    this.style,
   });
 
   @override
@@ -38,6 +44,7 @@ class AppTextField extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
+      style: style,
       validator: (val) {
         final error = errorValidator?.call(val);
         if (error == null || !context.mounted) return null;
@@ -46,8 +53,10 @@ class AppTextField extends StatelessWidget {
         return error.toLocalizedMessage(context);
       },
       decoration: InputDecoration(
+        fillColor: fillColor,
         labelText: label.isNotEmpty ? label : null,
         hintText: hint.isNotEmpty ? hint : label,
+        hintStyle: hintStyle,
         prefixIcon: prefixIcon != null
             ? _AppFieldPrefixIcon(child: prefixIcon!)
             : null,
