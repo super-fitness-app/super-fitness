@@ -61,7 +61,7 @@ void main() {
     final testResponse = RegisterResponseModel(
       message: 'success',
       token: 'jwt_secure_token',
-      user: User(
+      user: UserModel(
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',

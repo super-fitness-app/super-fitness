@@ -32,6 +32,8 @@ class UserEntity extends Equatable {
     firstName,
     lastName,
     email,
+    password,
+    rePassword,
     gender,
     age,
     weight,
