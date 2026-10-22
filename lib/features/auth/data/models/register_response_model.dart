@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 
 part 'register_response_model.g.dart';
 
@@ -38,6 +39,12 @@ class RegisterResponseModel {
       _$RegisterResponseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$RegisterResponseModelToJson(this);
+
+  RegisterEntity toEntity() => RegisterEntity(
+    message: message,
+    token: token,
+    user: user.toEntity(),
+  );
 }
 
 @JsonSerializable()
@@ -113,4 +120,19 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  UserEntity toEntity() => UserEntity(
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    gender: gender,
+    age: age,
+    weight: weight,
+    height: height,
+    activityLevel: activityLevel,
+    goal: goal,
+    photo: photo,
+    id: id,
+    createdAt: createdAt,
+  );
 }
