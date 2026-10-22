@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'Super Fitness';
+  String get appName => 'سوبر فيتنس';
 
   @override
   String get emptyValidationError => 'هذا الحقل مطلوب';
@@ -106,4 +106,38 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginTitle => 'مرحباً بعودتك!';
+
+  @override
+  String get onboardingSkip => 'تخطي';
+
+  @override
+  String get onboardingNext => 'التالي';
+
+  @override
+  String get onboardingBack => 'السابق';
+
+  @override
+  String get onboardingDoIt => 'ابدأ الآن';
+
+  @override
+  String get onboardingTitle1 => 'ثمن التميز\nهو الانضباط';
+
+  @override
+  String get onboardingSubtitle1 =>
+      'النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتصل إلى أعلى مستويات اللياقة والتميز.';
+
+  @override
+  String get onboardingTitle2 =>
+      'اللياقة البدنية لم تكن أبداً\nبهذا القدر من المتعة';
+
+  @override
+  String get onboardingSubtitle2 =>
+      'حوّل تمارينك إلى رحلة ممتعة مع تحديات حماسية وخطط تدريب تجعل كل خطوة مليئة بالطاقة والشغف.';
+
+  @override
+  String get onboardingTitle3 => 'لا مزيد من الأعذار\nابدأ الآن';
+
+  @override
+  String get onboardingSubtitle3 =>
+      'توقف عن انتظار اللحظة المثالية. ابدأ الآن وتخلص من التردد لتصنع التغيير الحقيقي وتبني قوتك.';
 }

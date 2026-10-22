@@ -108,4 +108,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginTitle => 'Welcome Back!';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingBack => 'Back';
+
+  @override
+  String get onboardingDoIt => 'Do IT';
+
+  @override
+  String get onboardingTitle1 => 'The Price Of Excellence\nIs Discipline';
+
+  @override
+  String get onboardingSubtitle1 =>
+      'Success starts with daily commitment. Stay consistent and push your limits to achieve peak performance.';
+
+  @override
+  String get onboardingTitle2 => 'Fitness Has Never Been So\nMuch Fun';
+
+  @override
+  String get onboardingSubtitle2 =>
+      'Turn workouts into an exciting journey with engaging challenges and routines that keep you motivated.';
+
+  @override
+  String get onboardingTitle3 => 'NO MORE EXCUSES\nDo It Now';
+
+  @override
+  String get onboardingSubtitle3 =>
+      'Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve.';
 }

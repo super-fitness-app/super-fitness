@@ -271,6 +271,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome Back!'**
   String get loginTitle;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get onboardingBack;
+
+  /// No description provided for @onboardingDoIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Do IT'**
+  String get onboardingDoIt;
+
+  /// No description provided for @onboardingTitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'The Price Of Excellence\nIs Discipline'**
+  String get onboardingTitle1;
+
+  /// No description provided for @onboardingSubtitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'Success starts with daily commitment. Stay consistent and push your limits to achieve peak performance.'**
+  String get onboardingSubtitle1;
+
+  /// No description provided for @onboardingTitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness Has Never Been So\nMuch Fun'**
+  String get onboardingTitle2;
+
+  /// No description provided for @onboardingSubtitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn workouts into an exciting journey with engaging challenges and routines that keep you motivated.'**
+  String get onboardingSubtitle2;
+
+  /// No description provided for @onboardingTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'NO MORE EXCUSES\nDo It Now'**
+  String get onboardingTitle3;
+
+  /// No description provided for @onboardingSubtitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve.'**
+  String get onboardingSubtitle3;
 }
 
 class _AppLocalizationsDelegate

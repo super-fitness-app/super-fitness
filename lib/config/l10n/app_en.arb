@@ -34,5 +34,16 @@
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
 
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingBack": "Back",
+  "onboardingDoIt": "Do IT",
+  "onboardingTitle1": "The Price Of Excellence\nIs Discipline",
+  "onboardingSubtitle1": "Success starts with daily commitment. Stay consistent and push your limits to achieve peak performance.",
+  "onboardingTitle2": "Fitness Has Never Been So\nMuch Fun",
+  "onboardingSubtitle2": "Turn workouts into an exciting journey with engaging challenges and routines that keep you motivated.",
+  "onboardingTitle3": "NO MORE EXCUSES\nDo It Now",
+  "onboardingSubtitle3": "Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve."
 }
