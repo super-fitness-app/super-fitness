@@ -18,13 +18,7 @@ class LoginView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.loginTitle,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.appTitle,
-              ),
-            ],
+            children: [Text(l10n.loginTitle, style: AppTextStyles.appTitle)],
           ),
         ),
       ),
