@@ -51,14 +51,14 @@ class RegisterFormCard extends StatelessWidget {
             bottomInset > 0 ? bottomInset + 12 : 24,
           ),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 200),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(45),
               topRight: Radius.circular(45),
             ),
             border: Border(
               top: BorderSide(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -121,9 +121,7 @@ class RegisterFormCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              AlreadyHaveAccountRow(
-                onLoginTap: onLoginTap,
-              ),
+              AlreadyHaveAccountRow(onLoginTap: onLoginTap),
             ],
           ),
         ),

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
-import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 
 void main() {
   group('Domain Entities Tests', () {
@@ -42,34 +41,30 @@ void main() {
       expect(user.props, contains(null));
     });
 
-    test('RegisterEntity supports value equality and handles nested UserEntity', () {
-      const entity1 = RegisterEntity(
-        message: 'success',
-        token: 'token_123',
-        user: UserEntity(
-          firstName: 'John',
-          email: 'john@example.com',
-        ),
-      );
+    test(
+      'RegisterEntity supports value equality and handles nested UserEntity',
+      () {
+        const entity1 = RegisterEntity(
+          message: 'success',
+          token: 'token_123',
+          user: UserEntity(firstName: 'John', email: 'john@example.com'),
+        );
 
-      const entity2 = RegisterEntity(
-        message: 'success',
-        token: 'token_123',
-        user: UserEntity(
-          firstName: 'John',
-          email: 'john@example.com',
-        ),
-      );
+        const entity2 = RegisterEntity(
+          message: 'success',
+          token: 'token_123',
+          user: UserEntity(firstName: 'John', email: 'john@example.com'),
+        );
 
-      const entity3 = RegisterEntity(
-        message: 'different',
-        token: 'token_456',
-      );
+        const entity3 = RegisterEntity(
+          message: 'different',
+          token: 'token_456',
+        );
 
-      expect(entity1, equals(entity2));
-      expect(entity1, isNot(equals(entity3)));
-      expect(entity1.props, equals(['success', 'token_123', entity1.user]));
-    });
+        expect(entity1, equals(entity2));
+        expect(entity1, isNot(equals(entity3)));
+        expect(entity1.props, equals(['success', 'token_123', entity1.user]));
+      },
+    );
   });
 }
-

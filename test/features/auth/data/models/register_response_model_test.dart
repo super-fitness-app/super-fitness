@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/features/auth/data/models/register_response_model.dart';
-import 'package:super_fitness/features/auth/data/models/user_model.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 
 void main() {
@@ -39,9 +38,7 @@ void main() {
     });
 
     test('copyWith updates specified fields only', () {
-      final updated = responseModel.copyWith(
-        message: 'Updated message',
-      );
+      final updated = responseModel.copyWith(message: 'Updated message');
 
       expect(updated.message, 'Updated message');
       expect(updated.token, 'jwt_secure_token_abc');
@@ -57,4 +54,3 @@ void main() {
     });
   });
 }
-

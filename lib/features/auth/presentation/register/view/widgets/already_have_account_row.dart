@@ -6,10 +6,7 @@ import 'package:super_fitness/core/const/app_strings.dart';
 class AlreadyHaveAccountRow extends StatelessWidget {
   final VoidCallback onLoginTap;
 
-  const AlreadyHaveAccountRow({
-    super.key,
-    required this.onLoginTap,
-  });
+  const AlreadyHaveAccountRow({super.key, required this.onLoginTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,8 @@ class AlreadyHaveAccountRow extends StatelessWidget {
             TextSpan(
               text: AppStrings.login,
               style: const TextStyle(
-                color: AppColors.orangeBase, // exact same vibrant orange as Register button
+                color: AppColors
+                    .orangeBase, // exact same vibrant orange as Register button
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
                 decoration: TextDecoration.underline,

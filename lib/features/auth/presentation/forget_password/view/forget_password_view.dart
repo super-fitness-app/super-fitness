@@ -12,10 +12,7 @@ class ForgetPasswordView extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
-          child: Text(
-            AppStrings.forgetPassword,
-            style: AppTextStyles.appTitle,
-          ),
+          child: Text(AppStrings.forgetPassword, style: AppTextStyles.appTitle),
         ),
       ),
     );

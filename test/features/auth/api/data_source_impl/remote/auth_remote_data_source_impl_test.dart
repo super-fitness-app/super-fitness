@@ -5,7 +5,6 @@ import 'package:super_fitness/features/auth/api/data_source_impl/remote/auth_rem
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/data/models/register_response_model.dart';
-import 'package:super_fitness/features/auth/data/models/user_model.dart';
 
 class FakeAuthApiClient implements AuthApiClient {
   RegisterResponseModel? responseToReturn;
@@ -65,17 +64,19 @@ void main() {
       remoteDataSource = AuthRemoteDataSourceImpl(fakeApiClient);
     });
 
-    test('register forwards request to AuthApiClient and returns response',
-        () async {
-      fakeApiClient.responseToReturn = testResponse;
+    test(
+      'register forwards request to AuthApiClient and returns response',
+      () async {
+        fakeApiClient.responseToReturn = testResponse;
 
-      final result = await remoteDataSource.register(testDto);
+        final result = await remoteDataSource.register(testDto);
 
-      expect(fakeApiClient.capturedRequest, testDto);
-      expect(result.token, 'jwt_test_token');
-      expect(result.message, 'success');
-      expect(result.user.firstName, 'John');
-    });
+        expect(fakeApiClient.capturedRequest, testDto);
+        expect(result.token, 'jwt_test_token');
+        expect(result.message, 'success');
+        expect(result.user.firstName, 'John');
+      },
+    );
 
     test('register propagates DioException when AuthApiClient fails', () async {
       fakeApiClient.exceptionToThrow = DioException(
@@ -90,4 +91,3 @@ void main() {
     });
   });
 }
-

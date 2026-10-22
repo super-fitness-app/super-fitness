@@ -30,26 +30,20 @@ class RegisterTextField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       onChanged: onChanged,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 14,
-      ),
+      style: const TextStyle(color: Colors.white, fontSize: 14),
       decoration: InputDecoration(
         isDense: true,
         filled: true,
         fillColor: Colors.transparent, // Completely transparent, NO grey tint
         hintText: hint,
         hintStyle: TextStyle(
-          color: Colors.white.withOpacity(0.6),
+          color: Colors.white.withValues(alpha: 0.6),
           fontSize: 14,
         ),
         prefixIcon: Padding(
           padding: const EdgeInsetsDirectional.only(start: 16, end: 10),
           child: IconTheme(
-            data: const IconThemeData(
-              color: Colors.white,
-              size: 20,
-            ),
+            data: const IconThemeData(color: Colors.white, size: 20),
             child: prefixIcon,
           ),
         ),
@@ -62,7 +56,7 @@ class RegisterTextField extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.only(start: 6, end: 14),
                 child: IconTheme(
                   data: IconThemeData(
-                    color: Colors.white.withOpacity(0.85),
+                    color: Colors.white.withValues(alpha: 0.85),
                     size: 20,
                   ),
                   child: suffixIcon!,
@@ -79,38 +73,23 @@ class RegisterTextField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(
-            color: Colors.white,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Colors.white, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(
-            color: Colors.white,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Colors.white, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(
-            color: Colors.white,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Colors.white, width: 1),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(
-            color: Colors.redAccent,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(
-            color: Colors.redAccent,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
         ),
       ),
     );
