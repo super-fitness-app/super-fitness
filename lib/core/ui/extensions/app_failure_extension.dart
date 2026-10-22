@@ -6,8 +6,10 @@ extension AppFailureLocalization on AppFailure {
   String toLocalizedMessage(BuildContext context) {
     return switch (this) {
       ServerMessageFailure(:final message) => message,
-      NetworkFailure(:final error) =>
-        AppErrorHandler.getLocalizedMessage(context, error),
+      NetworkFailure(:final error) => AppErrorHandler.getLocalizedMessage(
+        context,
+        error,
+      ),
     };
   }
 }

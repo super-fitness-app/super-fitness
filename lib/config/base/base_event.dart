@@ -10,10 +10,7 @@ class DisplayError extends BaseEvent {
 
   const DisplayError(this.errorMsg, {this.failure});
 
-  factory DisplayError.fromFailure(
-    AppFailure failure, [
-    String? fallback,
-  ]) =>
+  factory DisplayError.fromFailure(AppFailure failure, [String? fallback]) =>
       DisplayError(
         failure is ServerMessageFailure ? failure.message : fallback,
         failure: failure,
