@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 
 class SocialAuthButtons extends StatelessWidget {
   final VoidCallback? onFacebookTap;
@@ -59,10 +60,10 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 80,
           child: Divider(
             color: AppColors.borderSubtle,
@@ -70,10 +71,10 @@ class OrDivider extends StatelessWidget {
             height: 1,
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 14),
           child: Text(
-            'Or',
+            AppStrings.or,
             style: TextStyle(
               color: AppColors.borderSubtle,
               fontSize: 13,
@@ -81,7 +82,7 @@ class OrDivider extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 80,
           child: Divider(
             color: AppColors.borderSubtle,

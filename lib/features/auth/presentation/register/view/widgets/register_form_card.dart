@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'already_have_account_row.dart';
 import 'register_fields.dart';
 import 'social_auth_buttons.dart';
@@ -67,7 +68,7 @@ class RegisterFormCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Register',
+                AppStrings.register,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -110,7 +111,7 @@ class RegisterFormCard extends StatelessWidget {
                           ),
                         )
                       : const Text(
-                          'Register',
+                          AppStrings.register,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,

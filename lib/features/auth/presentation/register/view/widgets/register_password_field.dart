@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'register_text_field.dart';
 
 class RegisterPasswordField extends StatefulWidget {
@@ -30,7 +31,7 @@ class _RegisterPasswordFieldState extends State<RegisterPasswordField> {
   Widget build(BuildContext context) {
     return RegisterTextField(
       controller: widget.controller,
-      hint: 'Password',
+      hint: AppStrings.password,
       obscureText: _obscureText,
       validator: widget.validator,
       onChanged: widget.onChanged,

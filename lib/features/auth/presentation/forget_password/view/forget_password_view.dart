@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 
 class ForgetPasswordView extends StatelessWidget {
@@ -12,7 +13,7 @@ class ForgetPasswordView extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Text(
-            'Forget Password',
+            AppStrings.forgetPassword,
             style: AppTextStyles.appTitle,
           ),
         ),

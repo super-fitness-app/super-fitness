@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 
 class AlreadyHaveAccountRow extends StatelessWidget {
   final VoidCallback onLoginTap;
@@ -15,7 +16,7 @@ class AlreadyHaveAccountRow extends StatelessWidget {
     return Center(
       child: RichText(
         text: TextSpan(
-          text: 'Already Have An Account ? ',
+          text: AppStrings.alreadyHaveAnAccount,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
@@ -23,7 +24,7 @@ class AlreadyHaveAccountRow extends StatelessWidget {
           ),
           children: [
             TextSpan(
-              text: 'Login',
+              text: AppStrings.login,
               style: const TextStyle(
                 color: AppColors.orangeBase, // exact same vibrant orange as Register button
                 fontWeight: FontWeight.bold,

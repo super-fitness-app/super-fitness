@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 
 class RegisterHeader extends StatelessWidget {
   const RegisterHeader({super.key});
@@ -25,7 +26,7 @@ class RegisterHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hey There',
+                AppStrings.heyThere,
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 16,
@@ -34,7 +35,7 @@ class RegisterHeader extends StatelessWidget {
               ),
               SizedBox(height: 6),
               Text(
-                'CREATE AN ACCOUNT',
+                AppStrings.createAnAccount,
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 20,

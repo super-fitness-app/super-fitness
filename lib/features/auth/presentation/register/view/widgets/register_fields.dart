@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
 import 'register_password_field.dart';
 import 'register_text_field.dart';
@@ -23,32 +24,32 @@ class RegisterFields extends StatelessWidget {
       children: [
         RegisterTextField(
           controller: firstNameController,
-          hint: 'First Name',
+          hint: AppStrings.firstName,
           prefixIcon: const Icon(Icons.person_outline),
           validator: (val) {
             final error = AppValidators.validateRequired(val);
-            return error != null ? 'First name is required' : null;
+            return error != null ? AppStrings.firstNameRequired : null;
           },
         ),
         const SizedBox(height: 20),
         RegisterTextField(
           controller: lastNameController,
-          hint: 'Last Name',
+          hint: AppStrings.lastName,
           prefixIcon: const Icon(Icons.person_outline),
           validator: (val) {
             final error = AppValidators.validateRequired(val);
-            return error != null ? 'Last name is required' : null;
+            return error != null ? AppStrings.lastNameRequired : null;
           },
         ),
         const SizedBox(height: 20),
         RegisterTextField(
           controller: emailController,
-          hint: 'Email',
+          hint: AppStrings.email,
           keyboardType: TextInputType.emailAddress,
           prefixIcon: const Icon(Icons.mail_outline),
           validator: (val) {
             final error = AppValidators.validateEmail(val);
-            return error != null ? 'Please enter a valid email' : null;
+            return error != null ? AppStrings.invalidEmail : null;
           },
         ),
         const SizedBox(height: 20),
@@ -56,7 +57,7 @@ class RegisterFields extends StatelessWidget {
           controller: passwordController,
           validator: (val) {
             final error = AppValidators.validatePassword(val);
-            return error != null ? 'Password must be at least 8 characters' : null;
+            return error != null ? AppStrings.passwordMinLength : null;
           },
         ),
       ],
