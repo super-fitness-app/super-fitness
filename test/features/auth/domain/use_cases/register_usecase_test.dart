@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/core/errors/app_failure.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
@@ -51,21 +50,24 @@ void main() {
       registerUseCase = RegisterUseCase(fakeAuthRepo);
     });
 
-    test('calls AuthRepo.register with correct request and returns Success',
-        () async {
-      fakeAuthRepo.resultToReturn = const Success(testEntity);
+    test(
+      'calls AuthRepo.register with correct request and returns Success',
+      () async {
+        fakeAuthRepo.resultToReturn = const Success(testEntity);
 
-      final result = await registerUseCase(testDto);
+        final result = await registerUseCase(testDto);
 
-      expect(fakeAuthRepo.passedRequest, testDto);
-      expect(result, isA<Success<RegisterEntity>>());
-      final success = result as Success<RegisterEntity>;
-      expect(success.data, testEntity);
-    });
+        expect(fakeAuthRepo.passedRequest, testDto);
+        expect(result, isA<Success<RegisterEntity>>());
+        final success = result as Success<RegisterEntity>;
+        expect(success.data, testEntity);
+      },
+    );
 
     test('returns FailureResponse when AuthRepo.register fails', () async {
-      fakeAuthRepo.resultToReturn =
-          const FailureResponse(ServerMessageFailure('Email already exists'));
+      fakeAuthRepo.resultToReturn = const FailureResponse(
+        ServerMessageFailure('Email already exists'),
+      );
 
       final result = await registerUseCase(testDto);
 
@@ -75,4 +77,3 @@ void main() {
     });
   });
 }
-

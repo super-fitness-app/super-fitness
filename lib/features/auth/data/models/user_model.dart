@@ -88,8 +88,5 @@ class UserModel {
     height: height,
     activityLevel: activityLevel,
     goal: goal,
-    photo: photo,
-    id: id,
-    createdAt: createdAt,
   );
 }
