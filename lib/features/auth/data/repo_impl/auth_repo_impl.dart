@@ -15,9 +15,7 @@ class AuthRepoImpl implements AuthRepo {
   AuthRepoImpl(this._authRemoteDataSource, this._authLocalDataSource);
 
   @override
-  Future<ApiResults<RegisterEntity>> register(
-    RegisterDto request,
-  ) {
+  Future<ApiResults<RegisterEntity>> register(RegisterDto request) {
     return safeCall<RegisterEntity>(() async {
       final response = await _authRemoteDataSource.register(request);
       await _authLocalDataSource.saveToken(response.token);
