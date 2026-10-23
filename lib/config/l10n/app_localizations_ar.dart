@@ -140,4 +140,16 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get onboardingSubtitle3 =>
       'توقف عن انتظار اللحظة المثالية. ابدأ الآن وتخلص من التردد لتصنع التغيير الحقيقي وتبني قوتك.';
+
+  @override
+  String get explore => 'استكشف';
+
+  @override
+  String get smartCoach => 'المدرب الذكي';
+
+  @override
+  String get workouts => 'التمارين';
+
+  @override
+  String get profile => 'الملف الشخصي';
 }

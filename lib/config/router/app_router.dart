@@ -7,13 +7,14 @@ import 'package:super_fitness/features/auth/presentation/forget_password/view/fo
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
+import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
 
 abstract final class AppRoutes {
-  static const login = '/';
-  static const loginAlias = '/login';
+  static const login = '/login';
   static const onboarding = '/onboarding';
   static const register = '/register';
   static const forgetPassword = '/forget-password';
+  static const main = '/main';
 }
 
 abstract final class AppRouter {
@@ -55,10 +56,6 @@ abstract final class AppRouter {
           builder: (context, state) => const LoginView(),
         ),
         GoRoute(
-          path: AppRoutes.loginAlias,
-          redirect: (context, state) => AppRoutes.login,
-        ),
-        GoRoute(
           path: AppRoutes.onboarding,
           parentNavigatorKey: _rootNavigatorKey,
           builder: (context, state) => const OnboardingView(),
@@ -72,6 +69,11 @@ abstract final class AppRouter {
           path: AppRoutes.forgetPassword,
           parentNavigatorKey: _rootNavigatorKey,
           builder: (context, state) => const ForgetPasswordView(),
+        ),
+        GoRoute(
+          path: AppRoutes.main,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const MainLayoutView(),
         ),
       ],
     );

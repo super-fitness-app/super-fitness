@@ -141,4 +141,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingSubtitle3 =>
       'Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve.';
+
+  @override
+  String get explore => 'Explore';
+
+  @override
+  String get smartCoach => 'Smart Coach';
+
+  @override
+  String get workouts => 'Workouts';
+
+  @override
+  String get profile => 'Profile';
 }

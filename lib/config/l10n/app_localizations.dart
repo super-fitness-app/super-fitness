@@ -331,6 +331,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve.'**
   String get onboardingSubtitle3;
+
+  /// No description provided for @explore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get explore;
+
+  /// No description provided for @smartCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Coach'**
+  String get smartCoach;
+
+  /// No description provided for @workouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Workouts'**
+  String get workouts;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
 }
 
 class _AppLocalizationsDelegate

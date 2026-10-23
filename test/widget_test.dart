@@ -7,27 +7,63 @@ import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
+import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 
+import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
-  @override
-  Future<void> save(String key, String value) async {}
+  final Map<String, String> _data = {};
 
   @override
-  Future<String> get(String key) async => '';
+  Future<void> save(String key, String value) async {
+    _data[key] = value;
+  }
 
   @override
-  Future<void> delete(String key) async {}
+  Future<String> get(String key) async => _data[key] ?? '';
+
+  @override
+  Future<void> delete(String key) async {
+    _data.remove(key);
+  }
 }
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
     testWidgets(
-      'renders SuperFitnessApp successfully with injected LocaleCubit',
+      'renders SuperFitnessApp and routes first-time user to OnboardingView',
       (WidgetTester tester) async {
         final storage = FakeStorageService();
         final localeCubit = LocaleCubit(storage);
+
+        if (getIt.isRegistered<StorageService>()) {
+          getIt.unregister<StorageService>();
+        }
+        getIt.registerSingleton<StorageService>(storage);
+
+        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MaterialApp), findsOneWidget);
+        expect(find.byType(OnboardingView), findsOneWidget);
+
+        await localeCubit.close();
+      },
+    );
+
+    testWidgets(
+      'renders SuperFitnessApp and routes returning user to LoginView',
+      (WidgetTester tester) async {
+        final storage = FakeStorageService();
+        await storage.save(AppConstants.hasSeenOnboardingKey, 'true');
+        final localeCubit = LocaleCubit(storage);
+
+        if (getIt.isRegistered<StorageService>()) {
+          getIt.unregister<StorageService>();
+        }
+        getIt.registerSingleton<StorageService>(storage);
 
         await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
         await tester.pumpAndSettle();

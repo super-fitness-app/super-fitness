@@ -45,5 +45,10 @@
   "onboardingTitle2": "Fitness Has Never Been So\nMuch Fun",
   "onboardingSubtitle2": "Turn workouts into an exciting journey with engaging challenges and routines that keep you motivated.",
   "onboardingTitle3": "NO MORE EXCUSES\nDo It Now",
-  "onboardingSubtitle3": "Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve."
+  "onboardingSubtitle3": "Stop waiting for the perfect moment. Take action today, break through barriers, and build the future you deserve.",
+
+  "explore": "Explore",
+  "smartCoach": "Smart Coach",
+  "workouts": "Workouts",
+  "profile": "Profile"
 }
