@@ -40,10 +40,10 @@ void main() {
       'ignores out of bounds or redundant ChangeTabIntent',
       build: () => cubit,
       act: (cubit) {
-        cubit.doEvent(const ChangeTabIntent(0)); // redundant (already 0)
-        cubit.doEvent(const ChangeTabIntent(-1)); // out of bounds
-        cubit.doEvent(const ChangeTabIntent(4)); // out of bounds
-        cubit.doEvent(Object()); // unexpected event
+        cubit.doEvent(const ChangeTabIntent(0));
+        cubit.doEvent(const ChangeTabIntent(-1));
+        cubit.doEvent(const ChangeTabIntent(4));
+        cubit.doEvent(Object());
       },
       expect: () => [],
     );

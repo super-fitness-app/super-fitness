@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_dimensions.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_buttons.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_indicator.dart';
@@ -33,7 +34,10 @@ class OnboardingContent extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsetsDirectional.fromSTEB(24, 28, 24, 28),
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: AppDimensions.onboardingContentPaddingHorizontal,
+            vertical: AppDimensions.onboardingContentPaddingVertical,
+          ),
           decoration: BoxDecoration(
             color: AppColors.surface.withValues(alpha: 0.3),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),

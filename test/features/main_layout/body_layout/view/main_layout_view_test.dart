@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/const/app_dimensions.dart';
 import 'package:super_fitness/core/const/app_icons.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
-import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floating_bottom_nav_bar.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/nav_bar_item_widget.dart';
+import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
 import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
 import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
@@ -134,7 +135,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final constrainedBox = tester.widget<ConstrainedBox>(
-        find.byKey(const Key('floating_nav_bar_constrained_box')),
+        find.byKey(const Key(AppConstants.floatingNavBarConstrainedBoxKey)),
       );
       expect(
         constrainedBox.constraints.maxWidth,

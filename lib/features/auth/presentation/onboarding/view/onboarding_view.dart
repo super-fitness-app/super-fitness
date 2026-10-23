@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
-import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
-import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
@@ -53,25 +51,15 @@ class _OnboardingViewState extends State<OnboardingView>
 
   @override
   void initState() {
-    _cubit = widget.cubit ?? _resolveCubit();
+    _cubit = widget.cubit ?? context.read<OnboardingCubit>();
     _pageController = PageController();
     super.initState();
-  }
-
-  OnboardingCubit _resolveCubit() {
-    if (getIt.isRegistered<OnboardingCubit>()) {
-      return getIt<OnboardingCubit>();
-    }
-    final storage = getIt.isRegistered<StorageService>()
-        ? getIt<StorageService>()
-        : _FallbackStorageService();
-    return OnboardingCubit(storage);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    if (widget.cubit == null) {
+    if (widget.cubit != null) {
       _cubit.close();
     }
     super.dispose();
@@ -121,7 +109,7 @@ class _OnboardingViewState extends State<OnboardingView>
                 onPageChanged: (index) =>
                     cubit.doEvent(PageChangedIntent(index)),
                 itemCount: _items.length,
-                itemBuilder: (context, index) => const SizedBox.expand(),
+                itemBuilder: (context, index) => const SizedBox.shrink(),
               ),
               if (currentIndex != _items.length - 1)
                 Align(
@@ -149,13 +137,4 @@ class _OnboardingViewState extends State<OnboardingView>
       },
     );
   }
-}
-
-class _FallbackStorageService implements StorageService {
-  @override
-  Future<void> save(String key, String value) async {}
-  @override
-  Future<String> get(String key) async => '';
-  @override
-  Future<void> delete(String key) async {}
 }

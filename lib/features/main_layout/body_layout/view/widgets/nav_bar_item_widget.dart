@@ -20,10 +20,9 @@ class NavBarItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
-        splashColor: AppColors.transparent,
-        highlightColor: AppColors.transparent,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 150),
           transitionBuilder: (child, animation) => FadeTransition(
@@ -39,7 +38,6 @@ class NavBarItemWidget extends StatelessWidget {
                     Image.asset(
                       iconPath,
                       color: AppColors.primary,
-                      colorBlendMode: BlendMode.srcIn,
                       width: AppDimensions.defaultIconSize,
                       height: AppDimensions.defaultIconSize,
                     ),
@@ -62,7 +60,6 @@ class NavBarItemWidget extends StatelessWidget {
                   child: Image.asset(
                     iconPath,
                     color: AppColors.grey30,
-                    colorBlendMode: BlendMode.srcIn,
                     width: AppDimensions.defaultIconSize,
                     height: AppDimensions.defaultIconSize,
                   ),

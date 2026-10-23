@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_dimensions.dart';
 
 class OnboardingCharacterSection extends StatelessWidget {
   final String imagePath;
@@ -19,7 +20,7 @@ class OnboardingCharacterSection extends StatelessWidget {
       top: topPadding,
       start: 0,
       end: 0,
-      bottom: 250,
+      bottom: AppDimensions.characterBottomOffset,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, animation) {
@@ -39,6 +40,8 @@ class OnboardingCharacterSection extends StatelessWidget {
           key: ValueKey<int>(index),
           fit: BoxFit.contain,
           alignment: Alignment.center,
+          errorBuilder: (context, error, stackTrace) =>
+              const SizedBox.shrink(),
         ),
       ),
     );

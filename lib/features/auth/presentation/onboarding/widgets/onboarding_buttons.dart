@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_dimensions.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/core/ui/widgets/app_button.dart';
 
@@ -64,7 +65,7 @@ class _PrimaryPillButton extends StatelessWidget {
     return AppButton(
       text: text,
       onPressed: onPressed,
-      width: isFullWidth ? double.infinity : 85,
+      width: isFullWidth ? double.infinity : AppDimensions.onboardingButtonWidth,
       height: 44,
       backgroundColor: AppColors.primary,
       textStyle: AppTextStyles.extraBold14.copyWith(color: AppColors.white),
@@ -81,7 +82,7 @@ class _OutlinedPillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 85,
+      width: AppDimensions.onboardingButtonWidth,
       height: 44,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(

@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
-import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_intent.dart';
-import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floating_bottom_nav_bar.dart';
+import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
 import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
 import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
@@ -31,20 +30,13 @@ class _MainLayoutViewState extends State<MainLayoutView>
 
   @override
   void initState() {
-    _cubit = widget.cubit ?? _resolveCubit();
+    _cubit = widget.cubit ?? context.read<MainLayoutCubit>();
     super.initState();
-  }
-
-  MainLayoutCubit _resolveCubit() {
-    if (getIt.isRegistered<MainLayoutCubit>()) {
-      return getIt<MainLayoutCubit>();
-    }
-    return MainLayoutCubit();
   }
 
   @override
   void dispose() {
-    if (widget.cubit == null) {
+    if (widget.cubit != null) {
       _cubit.close();
     }
     super.dispose();

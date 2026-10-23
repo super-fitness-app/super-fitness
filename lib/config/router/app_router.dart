@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
+import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
+import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
 
 abstract final class AppRoutes {
@@ -21,21 +24,15 @@ abstract final class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   static GoRouter createRouter({
-    StorageService? storageService,
+    required StorageService storageService,
     String initialLocation = AppRoutes.login,
   }) {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
       initialLocation: initialLocation,
       redirect: (context, state) async {
-        final storage = storageService ??
-            (getIt.isRegistered<StorageService>()
-                ? getIt<StorageService>()
-                : null);
-
-        if (storage == null) return null;
-
-        final hasSeen = await storage.get(AppConstants.hasSeenOnboardingKey);
+        final hasSeen =
+            await storageService.get(AppConstants.hasSeenOnboardingKey);
         final isGoingToOnboarding =
             state.matchedLocation == AppRoutes.onboarding;
 
@@ -58,7 +55,10 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.onboarding,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const OnboardingView(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<OnboardingCubit>(),
+            child: const OnboardingView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.register,
@@ -73,11 +73,15 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.main,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const MainLayoutView(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<MainLayoutCubit>(),
+            child: const MainLayoutView(),
+          ),
         ),
       ],
     );
   }
 
-  static final GoRouter router = createRouter();
+  static late final GoRouter router =
+      createRouter(storageService: getIt<StorageService>());
 }

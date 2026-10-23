@@ -19,22 +19,21 @@ class FloatingBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
-    final dynamicBottom = bottomInset > 0 ? bottomInset + 8 : 16.0;
 
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(
-          start: AppDimensions.bottomNavBarHorizontalMargin,
-          end: AppDimensions.bottomNavBarHorizontalMargin,
-          bottom: dynamicBottom,
-        ),
-        child: ConstrainedBox(
-          key: const Key(AppConstants.floatingNavBarConstrainedBoxKey),
-          constraints: const BoxConstraints(
-            maxWidth: AppDimensions.bottomNavBarMaxWidth,
+      child: SafeArea(
+        top: false,
+        minimum: const EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: AppDimensions.bottomNavBarHorizontalMargin,
           ),
+          child: ConstrainedBox(
+            key: const Key(AppConstants.floatingNavBarConstrainedBoxKey),
+            constraints: const BoxConstraints(
+              maxWidth: AppDimensions.bottomNavBarMaxWidth,
+            ),
           child: Container(
             height: AppDimensions.bottomNavBarHeight,
             decoration: BoxDecoration(
@@ -81,6 +80,7 @@ class FloatingBottomNavBar extends StatelessWidget {
                   onTap: () => onTabSelected(3),
                 ),
               ],
+            ),
             ),
           ),
         ),
