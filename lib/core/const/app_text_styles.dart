@@ -191,4 +191,11 @@ abstract final class AppTextStyles {
     fontSize: 5,
     color: AppColors.grey50,
   );
+
+  // Bottom Navigation Bar
+  static final TextStyle bottomNavSelected = GoogleFonts.balooThambi2(
+    fontWeight: FontWeight.w600,
+    fontSize: 12,
+    color: AppColors.primary,
+  );
 }

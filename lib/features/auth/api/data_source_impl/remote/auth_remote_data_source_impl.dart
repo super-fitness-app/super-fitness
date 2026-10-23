@@ -4,6 +4,7 @@ import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  // ignore: unused_field
   final AuthApiClient _authApiClient;
 
   AuthRemoteDataSourceImpl(this._authApiClient);
