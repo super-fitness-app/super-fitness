@@ -26,5 +26,10 @@ abstract final class AppStrings {
 
   // Forget Password
   static const String forgetPassword = 'Forget Password';
+
+  // Registration Flow Status Messages
+  static const String registeredSuccessfully = 'Registered successfully';
+  static const String missingRegistrationData =
+      'Please fill all required registration details';
 }
 
