@@ -59,9 +59,6 @@ class _OnboardingViewState extends State<OnboardingView>
   @override
   void dispose() {
     _pageController.dispose();
-    if (widget.cubit != null) {
-      _cubit.close();
-    }
     super.dispose();
   }
 

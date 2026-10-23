@@ -34,13 +34,7 @@ class _MainLayoutViewState extends State<MainLayoutView>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    if (widget.cubit != null) {
-      _cubit.close();
-    }
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {

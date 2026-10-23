@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
@@ -73,10 +75,28 @@ void main() {
     setUp(() {
       storageService = _MockStorageService();
       cubit = OnboardingCubit(storageService);
+
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+      getIt.registerSingleton<StorageService>(storageService);
+
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      getIt.registerFactory<OnboardingCubit>(
+        () => OnboardingCubit(getIt<StorageService>()),
+      );
     });
 
     tearDown(() async {
       await cubit.close();
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
     });
 
     testWidgets('renders extracted widgets and Page 1 initial state',
@@ -234,6 +254,46 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(OnboardingView), findsNothing);
+    });
+
+    testWidgets('Skip button is hidden on the final page slide',
+        (tester) async {
+      await tester.pumpWidget(_buildTestApp(cubit: cubit));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Skip'), findsOneWidget);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(find.text('Skip'), findsOneWidget);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(find.text('Skip'), findsNothing);
+      expect(find.text('Do IT'), findsOneWidget);
+    });
+
+    testWidgets('renders correct character image per page index',
+        (tester) async {
+      await tester.pumpWidget(_buildTestApp(cubit: cubit));
+      await tester.pumpAndSettle();
+
+      Finder findImage(String assetName) => find.byWidgetPredicate(
+            (w) =>
+                w is Image &&
+                w.image is AssetImage &&
+                (w.image as AssetImage).assetName == assetName,
+          );
+
+      expect(findImage(AppImages.onboarding1), findsOneWidget);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(findImage(AppImages.onboarding2), findsOneWidget);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(findImage(AppImages.onboarding3), findsOneWidget);
     });
 
     testWidgets('renders Arabic (RTL) localized content without overflow',

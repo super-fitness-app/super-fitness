@@ -25,7 +25,7 @@ abstract final class AppRouter {
 
   static GoRouter createRouter({
     required StorageService storageService,
-    String initialLocation = AppRoutes.login,
+    String initialLocation = AppRoutes.onboarding,
   }) {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
@@ -82,6 +82,6 @@ abstract final class AppRouter {
     );
   }
 
-  static late final GoRouter router =
+  static final GoRouter router =
       createRouter(storageService: getIt<StorageService>());
 }

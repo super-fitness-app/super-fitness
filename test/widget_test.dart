@@ -10,8 +10,11 @@ import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/main.dart';
+
+import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 
 class FakeStorageService implements StorageService {
   final Map<String, String> _data = {};
@@ -32,46 +35,64 @@ class FakeStorageService implements StorageService {
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
+    late FakeStorageService storage;
+    late LocaleCubit localeCubit;
+
+    setUp(() {
+      storage = FakeStorageService();
+      localeCubit = LocaleCubit(storage);
+
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+      getIt.registerSingleton<StorageService>(storage);
+
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      getIt.registerFactory<OnboardingCubit>(
+        () => OnboardingCubit(getIt<StorageService>()),
+      );
+    });
+
+    tearDown(() async {
+      await localeCubit.close();
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+    });
+
     testWidgets(
       'renders SuperFitnessApp and routes first-time user to OnboardingView',
       (WidgetTester tester) async {
-        final storage = FakeStorageService();
-        final localeCubit = LocaleCubit(storage);
+        final router = AppRouter.createRouter(storageService: storage);
 
-        if (getIt.isRegistered<StorageService>()) {
-          getIt.unregister<StorageService>();
-        }
-        getIt.registerSingleton<StorageService>(storage);
-
-        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(MaterialApp), findsOneWidget);
         expect(find.byType(OnboardingView), findsOneWidget);
-
-        await localeCubit.close();
       },
     );
 
     testWidgets(
       'renders SuperFitnessApp and routes returning user to LoginView',
       (WidgetTester tester) async {
-        final storage = FakeStorageService();
         await storage.save(AppConstants.hasSeenOnboardingKey, 'true');
-        final localeCubit = LocaleCubit(storage);
+        final router = AppRouter.createRouter(storageService: storage);
 
-        if (getIt.isRegistered<StorageService>()) {
-          getIt.unregister<StorageService>();
-        }
-        getIt.registerSingleton<StorageService>(storage);
-
-        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(MaterialApp), findsOneWidget);
         expect(find.byType(LoginView), findsOneWidget);
-
-        await localeCubit.close();
       },
     );
 
