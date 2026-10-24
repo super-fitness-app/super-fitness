@@ -7,4 +7,7 @@ abstract final class AppImages {
   static const String onboarding1 = '$_imagesPath/onboarding1.png';
   static const String onboarding2 = '$_imagesPath/onboarding2.png';
   static const String onboarding3 = '$_imagesPath/onboarding3.png';
+  static const String authBackground = 'assets/images/auth/auth_background.png';
+  static const String superFitnessLogo =
+      'assets/images/auth/super_fitness_logo.png';
 }
