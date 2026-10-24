@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_header.dart';
@@ -152,5 +153,41 @@ void main() {
       expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
       expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
     });
+
+    testWidgets(
+      'submits basic info intent and updates cubit state when form is valid',
+      (tester) async {
+        final testCubit = RegisterCubit();
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: RegisterView(cubit: testCubit),
+          ),
+        );
+
+        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
+        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
+        await tester.enterText(
+          find.byType(RegisterTextField).at(2),
+          'john.doe@example.com',
+        );
+        await tester.enterText(
+          find.byType(RegisterTextField).at(3),
+          'Password123!',
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(testCubit.state.data?.firstName, 'John');
+        expect(testCubit.state.data?.lastName, 'Doe');
+        expect(testCubit.state.data?.email, 'john.doe@example.com');
+        expect(testCubit.state.data?.password, 'Password123!');
+        expect(testCubit.state.data?.rePassword, 'Password123!');
+
+        testCubit.close();
+      },
+    );
   });
 }
