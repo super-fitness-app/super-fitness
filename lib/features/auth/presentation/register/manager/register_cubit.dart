@@ -16,7 +16,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   final RegisterUseCase? _registerUseCase;
 
   RegisterCubit([this._registerUseCase])
-      : super(const BaseState<RegisterData>.initial());
+    : super(const BaseState<RegisterData>.initial());
 
   @override
   void doEvent(Object event) {
@@ -178,12 +178,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
 
     final dto = data.toDto();
     if (dto == null) {
-      emit(
-        BaseState.error(
-          AppStrings.missingRegistrationData,
-          data: data,
-        ),
-      );
+      emit(BaseState.error(AppStrings.missingRegistrationData, data: data));
       emitEvent(const DisplayError(AppStrings.missingRegistrationData));
       return;
     }

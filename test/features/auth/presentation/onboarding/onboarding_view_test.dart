@@ -41,7 +41,8 @@ Widget _buildTestApp({
   Locale locale = const Locale('en'),
   GoRouter? router,
 }) {
-  final testRouter = router ??
+  final testRouter =
+      router ??
       GoRouter(
         initialLocation: AppRoutes.onboarding,
         routes: [
@@ -51,9 +52,8 @@ Widget _buildTestApp({
           ),
           GoRoute(
             path: AppRoutes.login,
-            builder: (context, state) => const Scaffold(
-              body: Text('Login Screen Mock'),
-            ),
+            builder: (context, state) =>
+                const Scaffold(body: Text('Login Screen Mock')),
           ),
         ],
       );
@@ -99,8 +99,9 @@ void main() {
       }
     });
 
-    testWidgets('renders extracted widgets and Page 1 initial state',
-        (tester) async {
+    testWidgets('renders extracted widgets and Page 1 initial state', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -125,8 +126,9 @@ void main() {
       expect(find.text('Back'), findsNothing);
     });
 
-    testWidgets('tapping Next dispatches PageChangedIntent to Page 2',
-        (tester) async {
+    testWidgets('tapping Next dispatches PageChangedIntent to Page 2', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -138,10 +140,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(cubit.state.data, equals(1));
-      expect(
-        find.text('Fitness Has Never Been So\nMuch Fun'),
-        findsOneWidget,
-      );
+      expect(find.text('Fitness Has Never Been So\nMuch Fun'), findsOneWidget);
       expect(find.text('Back'), findsOneWidget);
       expect(find.text('Next'), findsOneWidget);
     });
@@ -168,8 +167,9 @@ void main() {
       expect(find.text('Back'), findsNothing);
     });
 
-    testWidgets('finishing onboarding persists storage flag and navigates',
-        (tester) async {
+    testWidgets('finishing onboarding persists storage flag and navigates', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -188,14 +188,16 @@ void main() {
       await tester.tap(find.text('Do IT'));
       await tester.pumpAndSettle();
 
-      final hasSeen =
-          await storageService.get(AppConstants.hasSeenOnboardingKey);
+      final hasSeen = await storageService.get(
+        AppConstants.hasSeenOnboardingKey,
+      );
       expect(hasSeen, equals('true'));
       expect(find.text('Login Screen Mock'), findsOneWidget);
     });
 
-    testWidgets('skipping onboarding persists storage flag and navigates',
-        (tester) async {
+    testWidgets('skipping onboarding persists storage flag and navigates', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -206,14 +208,16 @@ void main() {
       await tester.tap(find.text('Skip'));
       await tester.pumpAndSettle();
 
-      final hasSeen =
-          await storageService.get(AppConstants.hasSeenOnboardingKey);
+      final hasSeen = await storageService.get(
+        AppConstants.hasSeenOnboardingKey,
+      );
       expect(hasSeen, equals('true'));
       expect(find.text('Login Screen Mock'), findsOneWidget);
     });
 
-    testWidgets('router guard redirects first-time user to Onboarding',
-        (tester) async {
+    testWidgets('router guard redirects first-time user to Onboarding', (
+      tester,
+    ) async {
       final freshStorage = _MockStorageService();
       final guardedRouter = AppRouter.createRouter(
         storageService: freshStorage,
@@ -233,8 +237,9 @@ void main() {
       expect(find.byType(OnboardingView), findsOneWidget);
     });
 
-    testWidgets('router guard allows returning user directly to Login',
-        (tester) async {
+    testWidgets('router guard allows returning user directly to Login', (
+      tester,
+    ) async {
       final returningStorage = _MockStorageService();
       await returningStorage.save(AppConstants.hasSeenOnboardingKey, 'true');
 
@@ -256,8 +261,9 @@ void main() {
       expect(find.byType(OnboardingView), findsNothing);
     });
 
-    testWidgets('Skip button is hidden on the final page slide',
-        (tester) async {
+    testWidgets('Skip button is hidden on the final page slide', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildTestApp(cubit: cubit));
       await tester.pumpAndSettle();
 
@@ -273,17 +279,18 @@ void main() {
       expect(find.text('Do IT'), findsOneWidget);
     });
 
-    testWidgets('renders correct character image per page index',
-        (tester) async {
+    testWidgets('renders correct character image per page index', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildTestApp(cubit: cubit));
       await tester.pumpAndSettle();
 
       Finder findImage(String assetName) => find.byWidgetPredicate(
-            (w) =>
-                w is Image &&
-                w.image is AssetImage &&
-                (w.image as AssetImage).assetName == assetName,
-          );
+        (w) =>
+            w is Image &&
+            w.image is AssetImage &&
+            (w.image as AssetImage).assetName == assetName,
+      );
 
       expect(findImage(AppImages.onboarding1), findsOneWidget);
 
@@ -296,16 +303,16 @@ void main() {
       expect(findImage(AppImages.onboarding3), findsOneWidget);
     });
 
-    testWidgets('renders Arabic (RTL) localized content without overflow',
-        (tester) async {
+    testWidgets('renders Arabic (RTL) localized content without overflow', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      await tester.pumpWidget(_buildTestApp(
-        cubit: cubit,
-        locale: const Locale('ar'),
-      ));
+      await tester.pumpWidget(
+        _buildTestApp(cubit: cubit, locale: const Locale('ar')),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('ثمن التميز\nهو الانضباط'), findsOneWidget);

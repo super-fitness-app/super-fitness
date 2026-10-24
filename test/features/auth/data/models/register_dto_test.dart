@@ -62,10 +62,7 @@ void main() {
     });
 
     test('copyWith updates specified fields only', () {
-      final updated = testDto.copyWith(
-        firstName: 'Johnny',
-        weight: 80,
-      );
+      final updated = testDto.copyWith(firstName: 'Johnny', weight: 80);
 
       expect(updated.firstName, 'Johnny');
       expect(updated.weight, 80);
@@ -92,4 +89,3 @@ void main() {
     });
   });
 }
-

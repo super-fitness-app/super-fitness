@@ -25,10 +25,8 @@ class NavBarItemWidget extends StatelessWidget {
         onTap: onTap,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 150),
-          transitionBuilder: (child, animation) => FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+          transitionBuilder: (child, animation) =>
+              FadeTransition(opacity: animation, child: child),
           child: isSelected
               ? Column(
                   key: const ValueKey(true),

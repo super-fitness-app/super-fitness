@@ -60,70 +60,73 @@ void main() {
       );
     });
 
-    testWidgets('shows validation errors when Register is clicked with empty fields', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_createTestWidget());
+    testWidgets(
+      'shows validation errors when Register is clicked with empty fields',
+      (tester) async {
+        await tester.pumpWidget(_createTestWidget());
 
-      // Tap register button
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+        // Tap register button
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
 
-      // Verify error messages appear
-      expect(find.text(AppStrings.firstNameRequired), findsOneWidget);
-      expect(find.text(AppStrings.lastNameRequired), findsOneWidget);
-      expect(find.text(AppStrings.invalidEmail), findsOneWidget);
-      expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
-    });
+        // Verify error messages appear
+        expect(find.text(AppStrings.firstNameRequired), findsOneWidget);
+        expect(find.text(AppStrings.lastNameRequired), findsOneWidget);
+        expect(find.text(AppStrings.invalidEmail), findsOneWidget);
+        expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
+      },
+    );
 
-    testWidgets('shows specific validation errors for invalid email and short password', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_createTestWidget());
+    testWidgets(
+      'shows specific validation errors for invalid email and short password',
+      (tester) async {
+        await tester.pumpWidget(_createTestWidget());
 
-      // Enter valid names but invalid email and short password
-      await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
-      await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
-      await tester.enterText(
-        find.byType(RegisterTextField).at(2),
-        'invalid-email',
-      );
-      await tester.enterText(find.byType(RegisterTextField).at(3), 'short');
+        // Enter valid names but invalid email and short password
+        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
+        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
+        await tester.enterText(
+          find.byType(RegisterTextField).at(2),
+          'invalid-email',
+        );
+        await tester.enterText(find.byType(RegisterTextField).at(3), 'short');
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
 
-      expect(find.text(AppStrings.firstNameRequired), findsNothing);
-      expect(find.text(AppStrings.lastNameRequired), findsNothing);
-      expect(find.text(AppStrings.invalidEmail), findsOneWidget);
-      expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
-    });
+        expect(find.text(AppStrings.firstNameRequired), findsNothing);
+        expect(find.text(AppStrings.lastNameRequired), findsNothing);
+        expect(find.text(AppStrings.invalidEmail), findsOneWidget);
+        expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
+      },
+    );
 
-    testWidgets('clears validation errors when valid text is entered into all fields', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_createTestWidget());
+    testWidgets(
+      'clears validation errors when valid text is entered into all fields',
+      (tester) async {
+        await tester.pumpWidget(_createTestWidget());
 
-      // Enter valid text in all 4 fields
-      await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
-      await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
-      await tester.enterText(
-        find.byType(RegisterTextField).at(2),
-        'john.doe@example.com',
-      );
-      await tester.enterText(
-        find.byType(RegisterTextField).at(3),
-        'Password123!',
-      );
+        // Enter valid text in all 4 fields
+        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
+        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
+        await tester.enterText(
+          find.byType(RegisterTextField).at(2),
+          'john.doe@example.com',
+        );
+        await tester.enterText(
+          find.byType(RegisterTextField).at(3),
+          'Password123!',
+        );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
 
-      expect(find.text(AppStrings.firstNameRequired), findsNothing);
-      expect(find.text(AppStrings.lastNameRequired), findsNothing);
-      expect(find.text(AppStrings.invalidEmail), findsNothing);
-      expect(find.text(AppStrings.passwordMinLength), findsNothing);
-    });
+        expect(find.text(AppStrings.firstNameRequired), findsNothing);
+        expect(find.text(AppStrings.lastNameRequired), findsNothing);
+        expect(find.text(AppStrings.invalidEmail), findsNothing);
+        expect(find.text(AppStrings.passwordMinLength), findsNothing);
+      },
+    );
 
     testWidgets('toggles password visibility icon when suffix icon is tapped', (
       tester,

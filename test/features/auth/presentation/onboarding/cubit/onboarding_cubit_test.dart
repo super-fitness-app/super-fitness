@@ -53,10 +53,7 @@ void main() {
         cubit.doEvent(const PageChangedIntent(1));
         cubit.doEvent(const PageChangedIntent(2));
       },
-      expect: () => [
-        BaseState.success(1),
-        BaseState.success(2),
-      ],
+      expect: () => [BaseState.success(1), BaseState.success(2)],
     );
 
     test('SkipOnboardingIntent saves flag and emits NavigateEvent', () async {
@@ -66,8 +63,9 @@ void main() {
       cubit.doEvent(const SkipOnboardingIntent());
       await Future<void>.delayed(const Duration(milliseconds: 50));
 
-      final hasSeen =
-          await storageService.get(AppConstants.hasSeenOnboardingKey);
+      final hasSeen = await storageService.get(
+        AppConstants.hasSeenOnboardingKey,
+      );
       expect(hasSeen, equals('true'));
       expect(events.length, equals(1));
       expect(events.first, isA<NavigateEvent>());
@@ -79,25 +77,28 @@ void main() {
       await subscription.cancel();
     });
 
-    test('CompleteOnboardingIntent saves flag and emits NavigateEvent',
-        () async {
-      final events = <BaseEvent>[];
-      final subscription = cubit.eventStream.listen(events.add);
+    test(
+      'CompleteOnboardingIntent saves flag and emits NavigateEvent',
+      () async {
+        final events = <BaseEvent>[];
+        final subscription = cubit.eventStream.listen(events.add);
 
-      cubit.doEvent(const CompleteOnboardingIntent());
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+        cubit.doEvent(const CompleteOnboardingIntent());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
 
-      final hasSeen =
-          await storageService.get(AppConstants.hasSeenOnboardingKey);
-      expect(hasSeen, equals('true'));
-      expect(events.length, equals(1));
-      expect(events.first, isA<NavigateEvent>());
-      expect(
-        (events.first as NavigateEvent).routeName,
-        equals(AppRoutes.login),
-      );
+        final hasSeen = await storageService.get(
+          AppConstants.hasSeenOnboardingKey,
+        );
+        expect(hasSeen, equals('true'));
+        expect(events.length, equals(1));
+        expect(events.first, isA<NavigateEvent>());
+        expect(
+          (events.first as NavigateEvent).routeName,
+          equals(AppRoutes.login),
+        );
 
-      await subscription.cancel();
-    });
+        await subscription.cancel();
+      },
+    );
   });
 }

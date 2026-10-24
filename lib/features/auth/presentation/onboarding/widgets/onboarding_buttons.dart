@@ -65,7 +65,9 @@ class _PrimaryPillButton extends StatelessWidget {
     return AppButton(
       text: text,
       onPressed: onPressed,
-      width: isFullWidth ? double.infinity : AppDimensions.onboardingButtonWidth,
+      width: isFullWidth
+          ? double.infinity
+          : AppDimensions.onboardingButtonWidth,
       height: 44,
       backgroundColor: AppColors.primary,
       textStyle: AppTextStyles.extraBold14.copyWith(color: AppColors.white),

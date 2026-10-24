@@ -36,10 +36,7 @@ void main() {
     });
 
     test('copyWith updates specified fields only', () {
-      final updated = userModel.copyWith(
-        firstName: 'Alexandra',
-        weight: 63,
-      );
+      final updated = userModel.copyWith(firstName: 'Alexandra', weight: 63);
 
       expect(updated.firstName, 'Alexandra');
       expect(updated.weight, 63);
@@ -58,4 +55,3 @@ void main() {
     });
   });
 }
-

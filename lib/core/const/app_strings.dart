@@ -32,4 +32,3 @@ abstract final class AppStrings {
   static const String missingRegistrationData =
       'Please fill all required registration details';
 }
-

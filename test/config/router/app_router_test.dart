@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
@@ -78,13 +78,16 @@ void main() {
           .map((r) => r.path)
           .toList();
 
-      expect(routePaths, containsAll([
-        AppRoutes.login,
-        AppRoutes.onboarding,
-        AppRoutes.register,
-        AppRoutes.forgetPassword,
-        AppRoutes.main,
-      ]));
+      expect(
+        routePaths,
+        containsAll([
+          AppRoutes.login,
+          AppRoutes.onboarding,
+          AppRoutes.register,
+          AppRoutes.forgetPassword,
+          AppRoutes.main,
+        ]),
+      );
     });
 
     testWidgets(
@@ -137,30 +140,29 @@ void main() {
       },
     );
 
-    testWidgets(
-      'redirect allows returning user directly to Login',
-      (tester) async {
-        await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
+    testWidgets('redirect allows returning user directly to Login', (
+      tester,
+    ) async {
+      await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
 
-        final router = AppRouter.createRouter(
-          storageService: storageService,
-          initialLocation: AppRoutes.login,
-        );
+      final router = AppRouter.createRouter(
+        storageService: storageService,
+        initialLocation: AppRoutes.login,
+      );
 
-        await tester.pumpWidget(
-          MaterialApp.router(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            routerConfig: router,
-          ),
-        );
-        await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        expect(
-          router.routeInformationProvider.value.uri.path,
-          equals(AppRoutes.login),
-        );
-      },
-    );
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        equals(AppRoutes.login),
+      );
+    });
   });
 }

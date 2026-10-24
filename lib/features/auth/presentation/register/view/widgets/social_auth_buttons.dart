@@ -42,11 +42,7 @@ class SocialAuthButtons extends StatelessWidget {
             const SizedBox(width: 18),
             SocialIconButton(
               onTap: onAppleTap,
-              child: const Icon(
-                Icons.apple,
-                color: Colors.white,
-                size: 22,
-              ),
+              child: const Icon(Icons.apple, color: Colors.white, size: 22),
             ),
           ],
         ),
@@ -99,11 +95,7 @@ class SocialIconButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
 
-  const SocialIconButton({
-    super.key,
-    required this.child,
-    this.onTap,
-  });
+  const SocialIconButton({super.key, required this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +107,7 @@ class SocialIconButton extends StatelessWidget {
         height: 40,
         decoration: const BoxDecoration(
           color: Color(0xFF1E1E1E), // solid dark grey background
-          shape: BoxShape.circle,   // perfectly circular
+          shape: BoxShape.circle, // perfectly circular
           // absolutely NO borders
         ),
         alignment: Alignment.center,

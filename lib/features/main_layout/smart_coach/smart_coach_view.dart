@@ -9,10 +9,7 @@ class SmartCoachView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Center(
-      child: Text(
-        l10n.smartCoach,
-        style: AppTextStyles.headline24,
-      ),
+      child: Text(l10n.smartCoach, style: AppTextStyles.headline24),
     );
   }
 }

@@ -31,8 +31,9 @@ abstract final class AppRouter {
       navigatorKey: _rootNavigatorKey,
       initialLocation: initialLocation,
       redirect: (context, state) async {
-        final hasSeen =
-            await storageService.get(AppConstants.hasSeenOnboardingKey);
+        final hasSeen = await storageService.get(
+          AppConstants.hasSeenOnboardingKey,
+        );
         final isGoingToOnboarding =
             state.matchedLocation == AppRoutes.onboarding;
 
@@ -82,6 +83,7 @@ abstract final class AppRouter {
     );
   }
 
-  static final GoRouter router =
-      createRouter(storageService: getIt<StorageService>());
+  static final GoRouter router = createRouter(
+    storageService: getIt<StorageService>(),
+  );
 }

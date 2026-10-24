@@ -83,29 +83,33 @@ void main() {
       authRepo = AuthRepoImpl(fakeRemoteDataSource, fakeLocalDataSource);
     });
 
-    test('register saves token locally and returns Success on valid remote response',
-        () async {
-      fakeRemoteDataSource.responseToReturn = testResponse;
+    test(
+      'register saves token locally and returns Success on valid remote response',
+      () async {
+        fakeRemoteDataSource.responseToReturn = testResponse;
 
-      final result = await authRepo.register(testDto);
+        final result = await authRepo.register(testDto);
 
-      expect(result, isA<Success<RegisterEntity>>());
-      final success = result as Success<RegisterEntity>;
-      expect(success.data.token, 'jwt_secure_token');
-      expect(fakeLocalDataSource.savedToken, 'jwt_secure_token');
-    });
+        expect(result, isA<Success<RegisterEntity>>());
+        final success = result as Success<RegisterEntity>;
+        expect(success.data.token, 'jwt_secure_token');
+        expect(fakeLocalDataSource.savedToken, 'jwt_secure_token');
+      },
+    );
 
-    test('register returns FailureResponse and does not save token on DioException',
-        () async {
-      fakeRemoteDataSource.exceptionToThrow = DioException(
-        requestOptions: RequestOptions(path: '/auth/signup'),
-        type: DioExceptionType.connectionTimeout,
-      );
+    test(
+      'register returns FailureResponse and does not save token on DioException',
+      () async {
+        fakeRemoteDataSource.exceptionToThrow = DioException(
+          requestOptions: RequestOptions(path: '/auth/signup'),
+          type: DioExceptionType.connectionTimeout,
+        );
 
-      final result = await authRepo.register(testDto);
+        final result = await authRepo.register(testDto);
 
-      expect(result, isA<FailureResponse<RegisterEntity>>());
-      expect(fakeLocalDataSource.savedToken, isNull);
-    });
+        expect(result, isA<FailureResponse<RegisterEntity>>());
+        expect(fakeLocalDataSource.savedToken, isNull);
+      },
+    );
   });
 }

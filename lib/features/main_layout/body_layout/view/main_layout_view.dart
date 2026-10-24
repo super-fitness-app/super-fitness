@@ -34,8 +34,6 @@ class _MainLayoutViewState extends State<MainLayoutView>
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainLayoutCubit, BaseState<int>>(

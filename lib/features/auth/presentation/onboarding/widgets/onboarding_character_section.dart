@@ -40,8 +40,7 @@ class OnboardingCharacterSection extends StatelessWidget {
           key: ValueKey<int>(index),
           fit: BoxFit.contain,
           alignment: Alignment.center,
-          errorBuilder: (context, error, stackTrace) =>
-              const SizedBox.shrink(),
+          errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
         ),
       ),
     );

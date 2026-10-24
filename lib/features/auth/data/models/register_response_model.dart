@@ -43,9 +43,6 @@ class RegisterResponseModel {
 
   Map<String, dynamic> toJson() => _$RegisterResponseModelToJson(this);
 
-  RegisterEntity toEntity() => RegisterEntity(
-    message: message,
-    token: token,
-    user: user.toEntity(),
-  );
+  RegisterEntity toEntity() =>
+      RegisterEntity(message: message, token: token, user: user.toEntity());
 }
