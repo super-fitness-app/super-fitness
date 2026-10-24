@@ -41,7 +41,7 @@ abstract final class AppRouter {
         }
 
         if (hasSeen == 'true' && isGoingToOnboarding) {
-          return AppRoutes.login;
+          return AppRoutes.register;
         }
 
         return null;

@@ -33,6 +33,6 @@ class OnboardingCubit extends BaseCubit<BaseState<int>, BaseEvent> {
 
   Future<void> _finishOnboarding() async {
     await _storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
-    emitEvent(const NavigateEvent(AppRoutes.login));
+    emitEvent(const NavigateEvent(AppRoutes.register));
   }
 }
