@@ -108,6 +108,18 @@ void main() {
             home: const LoginView(),
           ),
         );
+    testWidgets(
+      'LoginView renders with exact theme, styling, and text alignment',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.darkTheme,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: const Locale('en'),
+            home: const LoginView(),
+          ),
+        );
 
         await tester.pumpAndSettle();
 
