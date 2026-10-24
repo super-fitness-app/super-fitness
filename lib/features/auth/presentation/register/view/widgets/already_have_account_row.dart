@@ -23,8 +23,7 @@ class AlreadyHaveAccountRow extends StatelessWidget {
             TextSpan(
               text: AppStrings.login,
               style: const TextStyle(
-                color: AppColors
-                    .orangeBase, // exact same vibrant orange as Register button
+                color: AppColors.orangeBase,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
                 decoration: TextDecoration.underline,

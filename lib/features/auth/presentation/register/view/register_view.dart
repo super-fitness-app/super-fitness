@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
+import '../manager/register_cubit.dart';
 import 'widgets/register_form_card.dart';
 import 'widgets/register_header.dart';
 
@@ -39,7 +41,13 @@ class _RegisterViewState extends State<RegisterView> {
 
   void _onRegister() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Form is valid - trigger registration logic
+      context.read<RegisterCubit>().submitBasicInfoIntent(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+      context.push(AppRoutes.selectGender);
     }
   }
 

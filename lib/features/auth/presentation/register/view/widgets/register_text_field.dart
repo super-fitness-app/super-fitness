@@ -34,7 +34,7 @@ class RegisterTextField extends StatelessWidget {
       decoration: InputDecoration(
         isDense: true,
         filled: true,
-        fillColor: Colors.transparent, // Completely transparent, NO grey tint
+        fillColor: Colors.transparent,
         hintText: hint,
         hintStyle: TextStyle(
           color: Colors.white.withValues(alpha: 0.6),
