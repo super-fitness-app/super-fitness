@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
@@ -22,6 +24,10 @@ class FakeStorageService implements StorageService {
 }
 
 void main() {
+  setUpAll(() {
+    configureDependencies();
+  });
+
   group('Super Fitness App & LoginView Deep Widget Tests', () {
     testWidgets(
       'renders SuperFitnessApp successfully with injected LocaleCubit',
@@ -29,6 +35,7 @@ void main() {
         final storage = FakeStorageService();
         final localeCubit = LocaleCubit(storage);
 
+        AppRouter.router.go(AppRoutes.login);
         await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
         await tester.pumpAndSettle();
 
@@ -54,13 +61,11 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        // Verify Scaffold properties
         final scaffoldFinder = find.byType(Scaffold);
         expect(scaffoldFinder, findsOneWidget);
         final scaffold = tester.widget<Scaffold>(scaffoldFinder);
         expect(scaffold.backgroundColor, AppColors.background);
 
-        // Verify SafeArea and Padding
         expect(find.byType(SafeArea), findsOneWidget);
         final paddingFinder = find.descendant(
           of: find.byType(SafeArea),
@@ -68,7 +73,6 @@ void main() {
         );
         expect(paddingFinder, findsWidgets);
 
-        // Verify localized title text and typography
         final titleFinder = find.text('Welcome Back!');
         expect(titleFinder, findsOneWidget);
 
