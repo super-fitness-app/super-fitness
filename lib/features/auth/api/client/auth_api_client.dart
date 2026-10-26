@@ -1,7 +1,7 @@
+// ignore_for_file: unused_field
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:super_fitness/core/const/endpoints.dart';
 
 part 'auth_api_client.g.dart';
 
