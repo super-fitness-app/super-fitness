@@ -9,10 +9,7 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
   final GoogleSignIn _googleSignIn;
   final FirebaseAuth _firebaseAuth;
 
-  SocialAuthRemoteDataSourceImpl(
-    this._googleSignIn,
-    this._firebaseAuth,
-  );
+  SocialAuthRemoteDataSourceImpl(this._googleSignIn, this._firebaseAuth);
 
   @override
   Future<SocialAuthUserModel?> signInWithGoogle() async {
@@ -28,8 +25,8 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
       accessToken: googleAuth.accessToken,
     );
 
-    final UserCredential userCredential =
-        await _firebaseAuth.signInWithCredential(credential);
+    final UserCredential userCredential = await _firebaseAuth
+        .signInWithCredential(credential);
     final User? user = userCredential.user;
 
     if (user == null) {
@@ -46,14 +43,12 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
 
   @override
   Future<SocialAuthUserModel?> signInWithFacebook() {
+    /// Todo: Implement Facebook sign-in logic here
     throw UnimplementedError('Facebook sign in is not implemented yet');
   }
 
   @override
   Future<void> signOut() async {
-    await Future.wait([
-      _googleSignIn.signOut(),
-      _firebaseAuth.signOut(),
-    ]);
+    await Future.wait([_googleSignIn.signOut(), _firebaseAuth.signOut()]);
   }
 }
