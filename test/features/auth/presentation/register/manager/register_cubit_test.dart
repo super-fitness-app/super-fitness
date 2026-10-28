@@ -221,6 +221,67 @@ void main() {
         await subscription.cancel();
       },
     );
+
+    test(
+      'SignInWithGoogleEvent success generates deterministic password and saves user data in Cubit state',
+      () async {
+        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+
+        const googleUser = SocialAuthUserEntity(
+          id: '12345',
+          email: 'google.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        BaseEvent? receivedEvent;
+        final sub = testCubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        testCubit.signInWithGoogleIntent();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(testCubit.state.isLoading, isFalse);
+        expect(testCubit.state.data?.email, 'google.user@example.com');
+        expect(testCubit.state.data?.firstName, 'Jane');
+        expect(testCubit.state.data?.lastName, 'Doe');
+        expect(testCubit.state.data?.password, startsWith('SuperFit@2026#'));
+        expect(testCubit.state.data?.rePassword, startsWith('SuperFit@2026#'));
+        expect(receivedEvent, isA<DisplaySuccess>());
+
+        await sub.cancel();
+        await testCubit.close();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent failure emits failure state and DisplayError',
+      () async {
+        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+
+        fakeAuthRepo.googleResultToReturn = const Failure(
+          ServerMessageFailure('Google sign-in was cancelled'),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = testCubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        testCubit.signInWithGoogleIntent();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(testCubit.state.isLoading, isFalse);
+        expect(testCubit.state.failure, isA<ServerMessageFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+
+        await sub.cancel();
+        await testCubit.close();
+      },
+    );
   });
 
   group('RegisterData Model Tests', () {
@@ -282,64 +343,5 @@ void main() {
       expect(dto?.height, 180);
       expect(dto?.activityLevel, 'intermediate');
     });
-
-    test(
-      'SignInWithGoogleEvent success updates state with google user info and emits DisplaySuccess',
-      () async {
-        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
-
-        const googleUser = SocialAuthUserEntity(
-          id: '12345',
-          email: 'google.user@example.com',
-          displayName: 'Jane Doe',
-        );
-        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
-
-        BaseEvent? receivedEvent;
-        final sub = testCubit.eventStream.listen((event) {
-          receivedEvent = event;
-        });
-
-        testCubit.signInWithGoogleIntent();
-        await Future<void>.delayed(Duration.zero);
-
-        expect(testCubit.state.isLoading, isFalse);
-        expect(testCubit.state.data?.email, 'google.user@example.com');
-        expect(testCubit.state.data?.firstName, 'Jane');
-        expect(testCubit.state.data?.lastName, 'Doe');
-        expect(receivedEvent, isA<DisplaySuccess>());
-
-        await sub.cancel();
-        await testCubit.close();
-      },
-    );
-
-    test(
-      'SignInWithGoogleEvent failure emits failure state and DisplayError',
-      () async {
-        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
-
-        fakeAuthRepo.googleResultToReturn = const Failure(
-          ServerMessageFailure('Google sign-in was cancelled'),
-        );
-
-        BaseEvent? receivedEvent;
-        final sub = testCubit.eventStream.listen((event) {
-          receivedEvent = event;
-        });
-
-        testCubit.signInWithGoogleIntent();
-        await Future<void>.delayed(Duration.zero);
-
-        expect(testCubit.state.isLoading, isFalse);
-        expect(testCubit.state.failure, isA<ServerMessageFailure>());
-        expect(receivedEvent, isA<DisplayError>());
-
-        await sub.cancel();
-        await testCubit.close();
-      },
-    );
   });
 }
