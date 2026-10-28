@@ -115,24 +115,7 @@ class _RegisterViewState extends State<RegisterView>
               right: 0,
               child: Form(
                 key: _formKey,
-                child: BlocConsumer<RegisterCubit, RegisterState>(
-                  listener: (context, state) {
-                    final data = state.data;
-                    if (data != null) {
-                      if (data.firstName != null &&
-                          _firstNameController.text != data.firstName) {
-                        _firstNameController.text = data.firstName!;
-                      }
-                      if (data.lastName != null &&
-                          _lastNameController.text != data.lastName) {
-                        _lastNameController.text = data.lastName!;
-                      }
-                      if (data.email != null &&
-                          _emailController.text != data.email) {
-                        _emailController.text = data.email!;
-                      }
-                    }
-                  },
+                child: BlocBuilder<RegisterCubit, RegisterState>(
                   builder: (context, state) {
                     return RegisterFormCard(
                       firstNameController: _firstNameController,

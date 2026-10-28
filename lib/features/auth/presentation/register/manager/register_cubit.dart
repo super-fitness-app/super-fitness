@@ -5,6 +5,7 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
@@ -235,21 +236,34 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     final currentData = state.data ?? const RegisterData();
     emit(BaseState.loading(data: currentData));
 
-    final result = await _signInWithGoogleUseCase();
-    switch (result) {
+    final googleResult = await _signInWithGoogleUseCase();
+    switch (googleResult) {
       case Success(:final data):
+        // 1. Generate deterministic password: SuperFit@2026# + Hash(userId + secretKey)
+        final generatedPassword = PasswordGenerator.generate(data.id);
+
+        // 2. Parse display name into firstName and lastName
         final names = data.displayName.trim().split(' ');
         final firstName = names.isNotEmpty ? names.first : '';
         final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
+        // 3. Save name, email, and generated password into Cubit's state (RegisterData),
+        // exactly like the signup screen does!
         final updatedData = currentData.copyWith(
-          email: data.email,
           firstName: firstName.isNotEmpty ? firstName : currentData.firstName,
           lastName: lastName.isNotEmpty ? lastName : currentData.lastName,
+          email: data.email,
+          password: generatedPassword,
+          rePassword: generatedPassword,
         );
 
         emit(BaseState.success(updatedData));
-        emitEvent(DisplaySuccess('Signed in as ${data.displayName}'));
+        emitEvent(
+          const DisplaySuccess(
+            'Google account connected. Complete your profile.',
+          ),
+        );
+
       case FailureResponse(:final failure):
         emit(BaseState.failure(failure, data: currentData));
         emitEvent(DisplayError.fromFailure(failure));
