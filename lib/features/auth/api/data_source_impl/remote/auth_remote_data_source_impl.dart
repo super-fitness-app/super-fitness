@@ -6,6 +6,7 @@ import 'package:super_fitness/features/auth/data/models/register_response_model.
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  // ignore: unused_field
   final AuthApiClient _authApiClient;
 
   AuthRemoteDataSourceImpl(this._authApiClient);
