@@ -54,6 +54,11 @@ abstract final class AppTextStyles {
     fontSize: 20,
     color: AppColors.white,
   );
+  static final TextStyle bold20w800 = GoogleFonts.balooThambi2(
+    fontWeight: FontWeight.w800,
+    fontSize: 20,
+    color: AppColors.white,
+  );
 
   static final TextStyle bold20Inter = GoogleFonts.balooThambi2(
     fontWeight: FontWeight.w700,
@@ -71,6 +76,11 @@ abstract final class AppTextStyles {
   static final TextStyle regular16 = GoogleFonts.balooThambi2(
     fontWeight: FontWeight.w400,
     fontSize: 16,
+    color: AppColors.white,
+  );
+  static final TextStyle regular18 = GoogleFonts.balooThambi2(
+    fontWeight: FontWeight.w400,
+    fontSize: 18,
     color: AppColors.white,
   );
 
