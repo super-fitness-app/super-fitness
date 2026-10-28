@@ -83,6 +83,10 @@ class _RegisterViewState extends State<RegisterView>
     }
   }
 
+  void _onGoogleTap() {
+    cubit.signInWithGoogleIntent();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -111,7 +115,24 @@ class _RegisterViewState extends State<RegisterView>
               right: 0,
               child: Form(
                 key: _formKey,
-                child: BlocBuilder<RegisterCubit, RegisterState>(
+                child: BlocConsumer<RegisterCubit, RegisterState>(
+                  listener: (context, state) {
+                    final data = state.data;
+                    if (data != null) {
+                      if (data.firstName != null &&
+                          _firstNameController.text != data.firstName) {
+                        _firstNameController.text = data.firstName!;
+                      }
+                      if (data.lastName != null &&
+                          _lastNameController.text != data.lastName) {
+                        _lastNameController.text = data.lastName!;
+                      }
+                      if (data.email != null &&
+                          _emailController.text != data.email) {
+                        _emailController.text = data.email!;
+                      }
+                    }
+                  },
                   builder: (context, state) {
                     return RegisterFormCard(
                       firstNameController: _firstNameController,
@@ -121,6 +142,7 @@ class _RegisterViewState extends State<RegisterView>
                       isLoading: state.isLoading,
                       onRegisterPressed: _onRegister,
                       onLoginTap: _onLoginTap,
+                      onGoogleTap: _onGoogleTap,
                     );
                   },
                 ),

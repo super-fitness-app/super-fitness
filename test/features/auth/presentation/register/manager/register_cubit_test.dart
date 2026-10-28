@@ -3,18 +3,26 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
   RegisterDto? passedRequest;
+  ApiResults<SocialAuthUserEntity>? googleResultToReturn;
 
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
     passedRequest = request;
     return resultToReturn!;
+  }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return googleResultToReturn!;
   }
 }
 
@@ -274,5 +282,64 @@ void main() {
       expect(dto?.height, 180);
       expect(dto?.activityLevel, 'intermediate');
     });
+
+    test(
+      'SignInWithGoogleEvent success updates state with google user info and emits DisplaySuccess',
+      () async {
+        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+
+        const googleUser = SocialAuthUserEntity(
+          id: '12345',
+          email: 'google.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        BaseEvent? receivedEvent;
+        final sub = testCubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        testCubit.signInWithGoogleIntent();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(testCubit.state.isLoading, isFalse);
+        expect(testCubit.state.data?.email, 'google.user@example.com');
+        expect(testCubit.state.data?.firstName, 'Jane');
+        expect(testCubit.state.data?.lastName, 'Doe');
+        expect(receivedEvent, isA<DisplaySuccess>());
+
+        await sub.cancel();
+        await testCubit.close();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent failure emits failure state and DisplayError',
+      () async {
+        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+
+        fakeAuthRepo.googleResultToReturn = const Failure(
+          ServerMessageFailure('Google sign-in was cancelled'),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = testCubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        testCubit.signInWithGoogleIntent();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(testCubit.state.isLoading, isFalse);
+        expect(testCubit.state.failure, isA<ServerMessageFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+
+        await sub.cancel();
+        await testCubit.close();
+      },
+    );
   });
 }

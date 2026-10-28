@@ -73,3 +73,12 @@ final class SubmitFinalRegistrationEvent extends RegisterEvent {
 final class ResetRegistrationEvent extends RegisterEvent {
   const ResetRegistrationEvent();
 }
+
+// =============================================================================
+// Social Authentication Events
+// =============================================================================
+
+/// Google Sign-In Event
+final class SignInWithGoogleEvent extends RegisterEvent {
+  const SignInWithGoogleEvent();
+}

@@ -7,6 +7,7 @@ import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -14,15 +15,20 @@ part 'register_state.dart';
 @injectable
 class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   final RegisterUseCase? _registerUseCase;
+  final SignInWithGoogleUseCase? _signInWithGoogleUseCase;
 
-  RegisterCubit([this._registerUseCase])
-      : super(const BaseState<RegisterData>.initial());
+  RegisterCubit([
+    this._registerUseCase,
+    this._signInWithGoogleUseCase,
+  ]) : super(const BaseState<RegisterData>.initial());
 
   @override
   void doEvent(Object event) {
     switch (event) {
       case SubmitBasicInfoEvent():
         _onSubmitBasicInfo(event);
+      case SignInWithGoogleEvent():
+        _onSignInWithGoogle();
       case UpdateGenderEvent():
         _onUpdateGender(event);
       case UpdateAgeEvent():
@@ -217,5 +223,40 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
 
   void resetRegistrationIntent() {
     doEvent(const ResetRegistrationEvent());
+  }
+
+  // ===========================================================================
+  // Social Auth: Google Sign-In
+  // ===========================================================================
+
+  Future<void> _onSignInWithGoogle() async {
+    if (_signInWithGoogleUseCase == null) return;
+
+    final currentData = state.data ?? const RegisterData();
+    emit(BaseState.loading(data: currentData));
+
+    final result = await _signInWithGoogleUseCase();
+    switch (result) {
+      case Success(:final data):
+        final names = data.displayName.trim().split(' ');
+        final firstName = names.isNotEmpty ? names.first : '';
+        final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
+
+        final updatedData = currentData.copyWith(
+          email: data.email,
+          firstName: firstName.isNotEmpty ? firstName : currentData.firstName,
+          lastName: lastName.isNotEmpty ? lastName : currentData.lastName,
+        );
+
+        emit(BaseState.success(updatedData));
+        emitEvent(DisplaySuccess('Signed in as ${data.displayName}'));
+      case FailureResponse(:final failure):
+        emit(BaseState.failure(failure, data: currentData));
+        emitEvent(DisplayError.fromFailure(failure));
+    }
+  }
+
+  void signInWithGoogleIntent() {
+    doEvent(const SignInWithGoogleEvent());
   }
 }
