@@ -8,6 +8,7 @@ abstract final class AppRoutes {
   static const login = '/';
   static const register = '/register';
   static const forgetPassword = '/forget-password';
+  static const home = '/home';
 }
 
 abstract final class AppRouter {
