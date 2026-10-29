@@ -6,4 +6,6 @@ abstract final class AppConstants {
   static const String guestModeKey = 'guestModeKey';
   static const String localeArabic = 'ar';
   static const String localeEnglish = 'en';
+    static const String category = 'Category';
+  static const String mealId = 'mealId';
 }
