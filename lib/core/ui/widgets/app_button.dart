@@ -41,10 +41,7 @@ class AppButton extends StatelessWidget {
                   color: AppColors.white,
                 ),
               )
-            : Text(
-                text,
-                style: textStyle ?? AppTextStyles.extraBold14,
-              ),
+            : Text(text, style: textStyle ?? AppTextStyles.extraBold14),
       ),
     );
   }
