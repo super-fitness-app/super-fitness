@@ -31,5 +31,28 @@ abstract final class AppStrings {
   static const String registeredSuccessfully = 'Registered successfully';
   static const String missingRegistrationData =
       'Please fill all required registration details';
+
+  // Common
+  static const String emptyString = '';
+
+  // Social Auth Errors & Status Messages
+  static const String googleAccountIdMissing =
+      'Google account ID is missing. Please try again.';
+  static const String googleAccountConnected =
+      'Google account connected. Complete your profile.';
+  static const String firebaseUserNotFoundCode = 'user-not-found';
+  static const String firebaseUserCreationFailed =
+      'Firebase user creation failed after Google authentication';
+  static const String facebookNotImplemented =
+      'Facebook sign in is not implemented yet';
+
+  // Firebase Auth Error Messages
+  static const String accountDisabled = 'This account has been disabled.';
+  static const String invalidGoogleCredentials = 'Invalid Google credentials.';
+  static const String googleSignInNotEnabled =
+      'Google sign-in is not enabled.';
+  static const String accountExistsWithDifferentCredential =
+      'An account already exists with the same email address.';
+  static const String googleAuthFailed = 'Google authentication failed.';
 }
 

@@ -9,19 +9,20 @@ import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
-
 part 'register_event.dart';
 part 'register_state.dart';
 
 @injectable
 class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
-  final RegisterUseCase? _registerUseCase;
-  final SignInWithGoogleUseCase? _signInWithGoogleUseCase;
+  final RegisterUseCase _registerUseCase;
+  final SignInWithGoogleUseCase _signInWithGoogleUseCase;
+  final PasswordGenerator _passwordGenerator;
 
-  RegisterCubit([
+  RegisterCubit(
     this._registerUseCase,
     this._signInWithGoogleUseCase,
-  ]) : super(const BaseState<RegisterData>.initial());
+    this._passwordGenerator,
+  ) : super(const BaseState<RegisterData>.initial());
 
   @override
   void doEvent(Object event) {
@@ -185,17 +186,10 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
 
     final dto = data.toDto();
     if (dto == null) {
-      emit(
-        BaseState.error(
-          AppStrings.missingRegistrationData,
-          data: data,
-        ),
-      );
+      emit(BaseState.error(AppStrings.missingRegistrationData, data: data));
       emitEvent(const DisplayError(AppStrings.missingRegistrationData));
       return;
     }
-
-    if (_registerUseCase == null) return;
 
     emit(BaseState.loading(data: data));
 
@@ -231,16 +225,27 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
-    if (_signInWithGoogleUseCase == null) return;
-
     final currentData = state.data ?? const RegisterData();
     emit(BaseState.loading(data: currentData));
 
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
       case Success(:final data):
-        // 1. Generate deterministic password: SuperFit@2026# + Hash(userId + secretKey)
-        final generatedPassword = PasswordGenerator.generate(data.id);
+        // Validate Google user ID to prevent null/empty issues
+        final userId = data.id;
+        if (userId == null || userId.trim().isEmpty) {
+          emit(
+            BaseState.error(
+              AppStrings.googleAccountIdMissing,
+              data: currentData,
+            ),
+          );
+          emitEvent(const DisplayError(AppStrings.googleAccountIdMissing));
+          return;
+        }
+
+        // 1. Generate deterministic password: prefix + Hash(userId + secretKey)
+        final generatedPassword = _passwordGenerator.generate(userId);
 
         // 2. Parse display name into firstName and lastName
         final names = data.displayName.trim().split(' ');
@@ -259,9 +264,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
 
         emit(BaseState.success(updatedData));
         emitEvent(
-          const DisplaySuccess(
-            'Google account connected. Complete your profile.',
-          ),
+          const DisplaySuccess(AppStrings.googleAccountConnected),
         );
 
       case FailureResponse(:final failure):

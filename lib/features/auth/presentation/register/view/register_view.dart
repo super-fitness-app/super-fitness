@@ -37,12 +37,9 @@ class _RegisterViewState extends State<RegisterView>
     if (widget.cubit != null) {
       _cubit = widget.cubit!;
       _ownsCubit = false;
-    } else if (getIt.isRegistered<RegisterCubit>()) {
+    } else {
       _cubit = getIt<RegisterCubit>();
       _ownsCubit = false;
-    } else {
-      _cubit = RegisterCubit();
-      _ownsCubit = true;
     }
 
     super.initState();
