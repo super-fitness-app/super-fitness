@@ -29,7 +29,6 @@ class RegisterData extends Equatable {
     this.activityLevel,
   });
 
-  /// Check if initial step 1 data has been filled
   bool get isBasicInfoComplete =>
       firstName != null &&
       firstName!.trim().isNotEmpty &&
@@ -40,7 +39,6 @@ class RegisterData extends Equatable {
       password != null &&
       password!.isNotEmpty;
 
-  /// Check if all fields required for the final registration API payload are present
   bool get isComplete =>
       isBasicInfoComplete &&
       gender != null &&
@@ -53,7 +51,6 @@ class RegisterData extends Equatable {
       activityLevel != null &&
       activityLevel!.trim().isNotEmpty;
 
-  /// Maps the accumulated form data to [RegisterDto] for final API call
   RegisterDto? toDto() {
     if (!isComplete) return null;
     return RegisterDto(

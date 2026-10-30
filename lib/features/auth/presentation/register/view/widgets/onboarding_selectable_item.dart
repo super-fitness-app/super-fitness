@@ -24,7 +24,7 @@ class OnboardingSelectableItem extends StatelessWidget {
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
-            color: const Color(0x2EFFFFFF),
+            color: AppColors.itemBorder,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
               color: isSelected ? AppColors.orangeBase : Colors.white24,
@@ -37,7 +37,7 @@ class OnboardingSelectableItem extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),

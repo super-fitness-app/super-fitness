@@ -10,7 +10,14 @@ import 'widgets/onboarding_scaffold.dart';
 import 'widgets/onboarding_selectable_item.dart';
 
 class SelectGoalView extends StatefulWidget {
-  const SelectGoalView({super.key});
+  final VoidCallback? onNext;
+  final VoidCallback? onBack;
+
+  const SelectGoalView({
+    super.key,
+    this.onNext,
+    this.onBack,
+  });
 
   @override
   State<SelectGoalView> createState() => _SelectGoalViewState();
@@ -35,13 +42,18 @@ class _SelectGoalViewState extends State<SelectGoalView> {
 
   void _onNext() {
     if (_selectedGoal == null) return;
-    context.read<RegisterCubit>().updateGoalIntent(_selectedGoal!);
-    context.push(AppRoutes.selectActivity);
+    context.read<RegisterCubit>().doEvent(UpdateGoalEvent(_selectedGoal!));
+    if (widget.onNext != null) {
+      widget.onNext!();
+    } else {
+      context.push(AppRoutes.selectActivity);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      onBackTap: widget.onBack,
       stepImage: AppImages.step5,
       title: AppStrings.whatIsYourGoal,
       subtitle: AppStrings.personalizedPlanSubtitle,

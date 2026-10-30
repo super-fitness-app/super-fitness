@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 import 'package:super_fitness/features/auth/data/models/user_model.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 
@@ -7,19 +6,10 @@ export 'package:super_fitness/features/auth/data/models/user_model.dart';
 
 part 'register_response_model.g.dart';
 
-RegisterResponseModel registerResponseModelFromJson(String str) =>
-    RegisterResponseModel.fromJson(json.decode(str));
-
-String registerResponseModelToJson(RegisterResponseModel data) =>
-    json.encode(data.toJson());
-
 @JsonSerializable()
 class RegisterResponseModel {
-  @JsonKey(name: "message")
   final String message;
-  @JsonKey(name: "user")
   final UserModel user;
-  @JsonKey(name: "token")
   final String token;
 
   RegisterResponseModel({

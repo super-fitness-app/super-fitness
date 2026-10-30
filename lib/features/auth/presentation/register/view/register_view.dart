@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/register_form_card.dart';
@@ -41,13 +42,16 @@ class _RegisterViewState extends State<RegisterView> {
 
   void _onRegister() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<RegisterCubit>().submitBasicInfoIntent(
-            firstName: _firstNameController.text.trim(),
-            lastName: _lastNameController.text.trim(),
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
-      context.push(AppRoutes.selectGender);
+      final cubit = context.read<RegisterCubit>();
+      cubit.doEvent(
+        SubmitBasicInfoEvent(
+          firstName: _firstNameController.text.trim(),
+          lastName: _lastNameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
+      context.push(AppRoutes.completeRegister, extra: cubit);
     }
   }
 
@@ -66,7 +70,7 @@ class _RegisterViewState extends State<RegisterView> {
         fit: StackFit.expand,
         children: [
           Image.asset(AppImages.authBackground, fit: BoxFit.cover),
-          Container(color: const Color(0x801A1A1A)),
+          Container(color: AppColors.authOverlay),
           const Positioned(
             top: 0,
             left: 0,

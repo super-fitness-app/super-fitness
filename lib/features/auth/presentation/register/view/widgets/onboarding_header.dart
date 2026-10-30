@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 
 class OnboardingHeader extends StatelessWidget {
   final String stepImage;
@@ -22,7 +23,7 @@ class OnboardingHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 22,
             fontWeight: FontWeight.w900,
             letterSpacing: 0.5,
@@ -33,7 +34,7 @@ class OnboardingHeader extends StatelessWidget {
           Text(
             subtitle!,
             style: const TextStyle(
-              color: Color(0xFFA7A7A7),
+              color: AppColors.grey30,
               fontSize: 13,
               fontWeight: FontWeight.w400,
             ),

@@ -71,13 +71,15 @@ void main() {
       },
     );
 
-    test('submitBasicInfoIntent updates basic info through doEvent', () {
-      cubit.submitBasicInfoIntent(
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'jane.doe@example.com',
-        password: 'Password123!',
-        rePassword: 'Password123!',
+    test('SubmitBasicInfoEvent updates basic info through doEvent', () {
+      cubit.doEvent(
+        const SubmitBasicInfoEvent(
+          firstName: 'Jane',
+          lastName: 'Doe',
+          email: 'jane.doe@example.com',
+          password: 'Password123!',
+          rePassword: 'Password123!',
+        ),
       );
 
       expect(cubit.state.data?.firstName, 'Jane');
@@ -87,41 +89,41 @@ void main() {
       expect(cubit.state.data?.rePassword, 'Password123!');
     });
 
-    test('updateGenderIntent updates gender field in state', () {
-      cubit.updateGenderIntent('male');
+    test('UpdateGenderEvent updates gender field in state', () {
+      cubit.doEvent(const UpdateGenderEvent('male'));
       expect(cubit.state.data?.gender, 'male');
     });
 
-    test('updateAgeIntent updates age field in state', () {
-      cubit.updateAgeIntent(25);
+    test('UpdateAgeEvent updates age field in state', () {
+      cubit.doEvent(const UpdateAgeEvent(25));
       expect(cubit.state.data?.age, 25);
     });
 
-    test('updateWeightIntent updates weight field in state', () {
-      cubit.updateWeightIntent(75);
+    test('UpdateWeightEvent updates weight field in state', () {
+      cubit.doEvent(const UpdateWeightEvent(75));
       expect(cubit.state.data?.weight, 75);
     });
 
-    test('updateHeightIntent updates height field in state', () {
-      cubit.updateHeightIntent(180);
+    test('UpdateHeightEvent updates height field in state', () {
+      cubit.doEvent(const UpdateHeightEvent(180));
       expect(cubit.state.data?.height, 180);
     });
 
-    test('updateGoalIntent updates goal field in state', () {
-      cubit.updateGoalIntent('muscle');
+    test('UpdateGoalEvent updates goal field in state', () {
+      cubit.doEvent(const UpdateGoalEvent('muscle'));
       expect(cubit.state.data?.goal, 'muscle');
     });
 
-    test('updateActivityLevelIntent updates activityLevel field in state', () {
-      cubit.updateActivityLevelIntent('intermediate');
+    test('UpdateActivityLevelEvent updates activityLevel field in state', () {
+      cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
       expect(cubit.state.data?.activityLevel, 'intermediate');
     });
 
-    test('resetRegistrationIntent resets state to initial with null data', () {
-      cubit.updateGenderIntent('female');
+    test('ResetRegistrationEvent resets state to initial with null data', () {
+      cubit.doEvent(const UpdateGenderEvent('female'));
       expect(cubit.state.data?.gender, 'female');
 
-      cubit.resetRegistrationIntent();
+      cubit.doEvent(const ResetRegistrationEvent());
       expect(cubit.state.data, isNull);
       expect(cubit.state.isLoading, isFalse);
     });
@@ -132,14 +134,16 @@ void main() {
         final emittedEvents = <BaseEvent>[];
         final subscription = cubit.eventStream.listen(emittedEvents.add);
 
-        cubit.submitBasicInfoIntent(
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
-          password: 'Password123!',
+        cubit.doEvent(
+          const SubmitBasicInfoEvent(
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            password: 'Password123!',
+          ),
         );
 
-        cubit.submitFinalRegistrationIntent();
+        cubit.doEvent(const SubmitFinalRegistrationEvent());
         await Future<void>.delayed(Duration.zero);
 
         expect(cubit.state.failure, isNotNull);
@@ -156,21 +160,22 @@ void main() {
         final emittedEvents = <BaseEvent>[];
         final subscription = cubit.eventStream.listen(emittedEvents.add);
 
-        // Fill all 7 steps
-        cubit.submitBasicInfoIntent(
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          password: 'Password123!',
+        cubit.doEvent(
+          const SubmitBasicInfoEvent(
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            password: 'Password123!',
+          ),
         );
-        cubit.updateGenderIntent('male');
-        cubit.updateAgeIntent(25);
-        cubit.updateWeightIntent(75);
-        cubit.updateHeightIntent(180);
-        cubit.updateGoalIntent('muscle');
-        cubit.updateActivityLevelIntent('intermediate');
+        cubit.doEvent(const UpdateGenderEvent('male'));
+        cubit.doEvent(const UpdateAgeEvent(25));
+        cubit.doEvent(const UpdateWeightEvent(75));
+        cubit.doEvent(const UpdateHeightEvent(180));
+        cubit.doEvent(const UpdateGoalEvent('muscle'));
+        cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
 
-        cubit.submitFinalRegistrationIntent();
+        cubit.doEvent(const SubmitFinalRegistrationEvent());
         await Future<void>.delayed(Duration.zero);
 
         expect(fakeAuthRepo.passedRequest?.email, 'john.doe@example.com');
@@ -191,20 +196,22 @@ void main() {
         final emittedEvents = <BaseEvent>[];
         final subscription = cubit.eventStream.listen(emittedEvents.add);
 
-        cubit.submitBasicInfoIntent(
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          password: 'Password123!',
+        cubit.doEvent(
+          const SubmitBasicInfoEvent(
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            password: 'Password123!',
+          ),
         );
-        cubit.updateGenderIntent('male');
-        cubit.updateAgeIntent(25);
-        cubit.updateWeightIntent(75);
-        cubit.updateHeightIntent(180);
-        cubit.updateGoalIntent('muscle');
-        cubit.updateActivityLevelIntent('intermediate');
+        cubit.doEvent(const UpdateGenderEvent('male'));
+        cubit.doEvent(const UpdateAgeEvent(25));
+        cubit.doEvent(const UpdateWeightEvent(75));
+        cubit.doEvent(const UpdateHeightEvent(180));
+        cubit.doEvent(const UpdateGoalEvent('muscle'));
+        cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
 
-        cubit.submitFinalRegistrationIntent();
+        cubit.doEvent(const SubmitFinalRegistrationEvent());
         await Future<void>.delayed(Duration.zero);
 
         expect(cubit.state.failure, isNotNull);

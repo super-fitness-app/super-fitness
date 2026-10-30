@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'onboarding_header.dart';
 import 'onboarding_top_bar.dart';
@@ -32,7 +33,7 @@ class OnboardingScaffold extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(AppImages.authBackground, fit: BoxFit.cover),
-          Container(color: const Color(0x73000000)),
+          Container(color: AppColors.onboardingOverlay),
           SafeArea(
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
@@ -84,10 +85,10 @@ class _BlurredContentCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
           decoration: BoxDecoration(
-            color: const Color(0x331E1E1E),
+            color: AppColors.onboardingCard,
             borderRadius: BorderRadius.circular(32),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.white.withValues(alpha: 0.15),
               width: 1,
             ),
           ),

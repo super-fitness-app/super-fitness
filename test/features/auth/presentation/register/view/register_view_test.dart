@@ -3,8 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
@@ -12,6 +17,13 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/r
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_password_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_text_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/social_auth_buttons.dart';
+
+class FakeAuthRepo implements AuthRepo {
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+    return const FailureResponse(ServerMessageFailure(''));
+  }
+}
 
 Widget _createTestWidget(RegisterCubit cubit) {
   final router = GoRouter(
@@ -25,7 +37,7 @@ Widget _createTestWidget(RegisterCubit cubit) {
         ),
       ),
       GoRoute(
-        path: AppRoutes.selectGender,
+        path: AppRoutes.completeRegister,
         builder: (context, state) => const SizedBox(),
       ),
     ],
@@ -42,7 +54,7 @@ void main() {
   late RegisterCubit cubit;
 
   setUp(() {
-    cubit = RegisterCubit();
+    cubit = RegisterCubit(RegisterUseCase(FakeAuthRepo()));
   });
 
   tearDown(() {

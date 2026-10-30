@@ -10,7 +10,14 @@ import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
 
 class SelectHeightView extends StatefulWidget {
-  const SelectHeightView({super.key});
+  final VoidCallback? onNext;
+  final VoidCallback? onBack;
+
+  const SelectHeightView({
+    super.key,
+    this.onNext,
+    this.onBack,
+  });
 
   @override
   State<SelectHeightView> createState() => _SelectHeightViewState();
@@ -26,13 +33,18 @@ class _SelectHeightViewState extends State<SelectHeightView> {
   }
 
   void _onNext() {
-    context.read<RegisterCubit>().updateHeightIntent(_selectedHeight);
-    context.push(AppRoutes.selectGoal);
+    context.read<RegisterCubit>().doEvent(UpdateHeightEvent(_selectedHeight));
+    if (widget.onNext != null) {
+      widget.onNext!();
+    } else {
+      context.push(AppRoutes.selectGoal);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      onBackTap: widget.onBack,
       stepImage: AppImages.step4,
       title: AppStrings.whatIsYourHeight,
       subtitle: AppStrings.personalizedPlanSubtitle,

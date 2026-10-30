@@ -12,7 +12,12 @@ import 'widgets/onboarding_scaffold.dart';
 import 'widgets/onboarding_selectable_item.dart';
 
 class SelectActivityView extends StatefulWidget {
-  const SelectActivityView({super.key});
+  final VoidCallback? onBack;
+
+  const SelectActivityView({
+    super.key,
+    this.onBack,
+  });
 
   @override
   State<SelectActivityView> createState() => _SelectActivityViewState();
@@ -24,7 +29,6 @@ class _SelectActivityViewState extends State<SelectActivityView>
   RegisterCubit get cubit => context.read<RegisterCubit>();
 
   String? _selectedLevel;
-  bool _hasSubmitted = false;
 
   static const List<Map<String, String>> _levels = [
     {'label': AppStrings.rookie, 'value': 'level1'},
@@ -46,23 +50,18 @@ class _SelectActivityViewState extends State<SelectActivityView>
 
   void _onSubmit() {
     if (_selectedLevel == null) return;
-    _hasSubmitted = true;
-    cubit.updateActivityLevelIntent(_selectedLevel!);
-    cubit.submitFinalRegistrationIntent();
-  }
-
-  void _onStateChanged(BuildContext context, RegisterState state) {
-    if (_hasSubmitted && !state.isLoading && state.failure == null) {
-      _hasSubmitted = false;
-      context.go(AppRoutes.login);
-    }
+    cubit.doEvent(UpdateActivityLevelEvent(_selectedLevel!));
+    cubit.doEvent(const SubmitFinalRegistrationEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, RegisterState>(
-      listener: _onStateChanged,
+      listenWhen: (prev, curr) =>
+          prev.isLoading && !curr.isLoading && curr.failure == null,
+      listener: (context, state) => context.go(AppRoutes.login),
       child: OnboardingScaffold(
+        onBackTap: widget.onBack,
         stepImage: AppImages.step6,
         title: AppStrings.activityLevelTitle,
         content: Column(

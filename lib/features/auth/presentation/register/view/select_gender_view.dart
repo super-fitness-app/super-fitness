@@ -10,7 +10,14 @@ import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
 
 class SelectGenderView extends StatefulWidget {
-  const SelectGenderView({super.key});
+  final VoidCallback? onNext;
+  final VoidCallback? onBack;
+
+  const SelectGenderView({
+    super.key,
+    this.onNext,
+    this.onBack,
+  });
 
   @override
   State<SelectGenderView> createState() => _SelectGenderViewState();
@@ -31,13 +38,18 @@ class _SelectGenderViewState extends State<SelectGenderView> {
 
   void _onNext() {
     if (_selectedGender == null) return;
-    context.read<RegisterCubit>().updateGenderIntent(_selectedGender!);
-    context.push(AppRoutes.selectAge);
+    context.read<RegisterCubit>().doEvent(UpdateGenderEvent(_selectedGender!));
+    if (widget.onNext != null) {
+      widget.onNext!();
+    } else {
+      context.push(AppRoutes.selectAge);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      onBackTap: widget.onBack,
       stepImage: AppImages.step1,
       title: AppStrings.tellUsAboutYourself,
       subtitle: AppStrings.weNeedToKnowYourGender,

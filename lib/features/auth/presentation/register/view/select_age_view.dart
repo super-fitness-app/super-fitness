@@ -10,7 +10,14 @@ import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
 
 class SelectAgeView extends StatefulWidget {
-  const SelectAgeView({super.key});
+  final VoidCallback? onNext;
+  final VoidCallback? onBack;
+
+  const SelectAgeView({
+    super.key,
+    this.onNext,
+    this.onBack,
+  });
 
   @override
   State<SelectAgeView> createState() => _SelectAgeViewState();
@@ -26,13 +33,18 @@ class _SelectAgeViewState extends State<SelectAgeView> {
   }
 
   void _onNext() {
-    context.read<RegisterCubit>().updateAgeIntent(_selectedAge);
-    context.push(AppRoutes.selectWeight);
+    context.read<RegisterCubit>().doEvent(UpdateAgeEvent(_selectedAge));
+    if (widget.onNext != null) {
+      widget.onNext!();
+    } else {
+      context.push(AppRoutes.selectWeight);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      onBackTap: widget.onBack,
       stepImage: AppImages.step2,
       title: AppStrings.howOldAreYou,
       subtitle: AppStrings.personalizedPlanSubtitle,

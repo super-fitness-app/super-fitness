@@ -10,7 +10,14 @@ import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
 
 class SelectWeightView extends StatefulWidget {
-  const SelectWeightView({super.key});
+  final VoidCallback? onNext;
+  final VoidCallback? onBack;
+
+  const SelectWeightView({
+    super.key,
+    this.onNext,
+    this.onBack,
+  });
 
   @override
   State<SelectWeightView> createState() => _SelectWeightViewState();
@@ -26,13 +33,18 @@ class _SelectWeightViewState extends State<SelectWeightView> {
   }
 
   void _onDone() {
-    context.read<RegisterCubit>().updateWeightIntent(_selectedWeight);
-    context.push(AppRoutes.selectHeight);
+    context.read<RegisterCubit>().doEvent(UpdateWeightEvent(_selectedWeight));
+    if (widget.onNext != null) {
+      widget.onNext!();
+    } else {
+      context.push(AppRoutes.selectHeight);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      onBackTap: widget.onBack,
       stepImage: AppImages.step3,
       title: AppStrings.whatIsYourWeight,
       subtitle: AppStrings.personalizedPlanSubtitle,

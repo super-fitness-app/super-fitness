@@ -24,9 +24,9 @@ class OnboardingBottomButton extends StatelessWidget {
         onPressed: (isEnabled && !isLoading) ? onPressed : null,
         style: ElevatedButton.styleFrom(
           backgroundColor:
-              isEnabled ? AppColors.orangeBase : const Color(0xFF555555),
-          disabledBackgroundColor: const Color(0xFF444444),
-          foregroundColor: Colors.white,
+              isEnabled ? AppColors.orangeBase : AppColors.disabledButton,
+          disabledBackgroundColor: AppColors.disabledButtonBackground,
+          foregroundColor: AppColors.white,
           disabledForegroundColor: Colors.white60,
           shape: const StadiumBorder(),
           elevation: 0,
@@ -37,7 +37,7 @@ class OnboardingBottomButton extends StatelessWidget {
                 height: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               )
             : Text(

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/select_activity_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/select_age_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/select_gender_view.dart';
@@ -13,6 +19,13 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/g
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/horizontal_number_picker.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/onboarding_bottom_button.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/onboarding_selectable_item.dart';
+
+class FakeAuthRepo implements AuthRepo {
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+    return const FailureResponse(ServerMessageFailure(''));
+  }
+}
 
 Widget _wrapWithCubit(Widget child, RegisterCubit cubit) {
   return MaterialApp(
@@ -27,7 +40,7 @@ void main() {
   late RegisterCubit cubit;
 
   setUp(() {
-    cubit = RegisterCubit();
+    cubit = RegisterCubit(RegisterUseCase(FakeAuthRepo()));
   });
 
   tearDown(() {
@@ -163,6 +176,37 @@ void main() {
         ),
       );
       expect(button.onPressed, isNotNull);
+    });
+  });
+
+  group('CompleteRegisterView Widget Tests', () {
+    testWidgets('renders initial step SelectGenderView inside PageView', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithCubit(const CompleteRegisterView(), cubit),
+      );
+
+      expect(find.byType(PageView), findsOneWidget);
+      expect(find.byType(SelectGenderView), findsOneWidget);
+      expect(find.text(AppStrings.tellUsAboutYourself), findsOneWidget);
+    });
+
+    testWidgets('navigates to next step on pressing next after selection', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithCubit(const CompleteRegisterView(), cubit),
+      );
+
+      await tester.tap(find.text(AppStrings.male));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(AppStrings.next));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SelectAgeView), findsOneWidget);
+      expect(find.text(AppStrings.howOldAreYou), findsOneWidget);
     });
   });
 }
