@@ -109,17 +109,15 @@ class SocialIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
+      customBorder: const CircleBorder(),
+      child: Ink(
         width: 40,
         height: 40,
         decoration: const BoxDecoration(
           color: Color(0xFF1E1E1E), // solid dark grey background
-          shape: BoxShape.circle,   // perfectly circular
-          // absolutely NO borders
+          shape: BoxShape.circle, // perfectly circular
         ),
-        alignment: Alignment.center,
-        child: child,
+        child: Center(child: child),
       ),
     );
   }

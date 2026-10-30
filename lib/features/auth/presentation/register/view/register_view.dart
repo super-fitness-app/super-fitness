@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
-import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
@@ -25,23 +24,14 @@ class _RegisterViewState extends State<RegisterView>
   late final TextEditingController _lastNameController;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-
   late final RegisterCubit _cubit;
-  bool _ownsCubit = false;
 
   @override
   RegisterCubit get cubit => _cubit;
 
   @override
   void initState() {
-    if (widget.cubit != null) {
-      _cubit = widget.cubit!;
-      _ownsCubit = false;
-    } else {
-      _cubit = getIt<RegisterCubit>();
-      _ownsCubit = false;
-    }
-
+    _cubit = widget.cubit ?? context.read<RegisterCubit>();
     super.initState();
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
@@ -55,9 +45,6 @@ class _RegisterViewState extends State<RegisterView>
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    if (_ownsCubit) {
-      _cubit.close();
-    }
     super.dispose();
   }
 
@@ -86,51 +73,58 @@ class _RegisterViewState extends State<RegisterView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _cubit,
-      child: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(AppImages.authBackground, fit: BoxFit.cover),
-            Container(color: const Color(0x801A1A1A)),
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  child: RegisterHeader(),
-                ),
+    final content = Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(AppImages.authBackground, fit: BoxFit.cover),
+          Container(color: const Color(0x801A1A1A)),
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: RegisterHeader(),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Form(
-                key: _formKey,
-                child: BlocBuilder<RegisterCubit, RegisterState>(
-                  builder: (context, state) {
-                    return RegisterFormCard(
-                      firstNameController: _firstNameController,
-                      lastNameController: _lastNameController,
-                      emailController: _emailController,
-                      passwordController: _passwordController,
-                      isLoading: state.isLoading,
-                      onRegisterPressed: _onRegister,
-                      onLoginTap: _onLoginTap,
-                      onGoogleTap: _onGoogleTap,
-                    );
-                  },
-                ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Form(
+              key: _formKey,
+              child: BlocBuilder<RegisterCubit, RegisterState>(
+                bloc: widget.cubit != null ? _cubit : null,
+                builder: (context, state) {
+                  return RegisterFormCard(
+                    firstNameController: _firstNameController,
+                    lastNameController: _lastNameController,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    isLoading: state.isLoading,
+                    onRegisterPressed: _onRegister,
+                    onLoginTap: _onLoginTap,
+                    onGoogleTap: _onGoogleTap,
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
+    if (widget.cubit != null) {
+      return BlocProvider.value(
+        value: _cubit,
+        child: content,
+      );
+    }
+
+    return content;
   }
 }
