@@ -1,3 +1,4 @@
+// ignore_for_file: unused_field
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
