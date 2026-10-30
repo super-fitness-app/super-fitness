@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
-  RegisterDto? passedRequest;
+  RegisterParams? passedRequest;
 
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
     passedRequest = request;
     return resultToReturn!;
   }
@@ -27,7 +27,7 @@ void main() {
     late FakeAuthRepo fakeAuthRepo;
     late RegisterUseCase registerUseCase;
 
-    const testDto = RegisterDto(
+    const testParams = RegisterParams(
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -61,9 +61,9 @@ void main() {
       () async {
         fakeAuthRepo.resultToReturn = const Success(testEntity);
 
-        final result = await registerUseCase(testDto);
+        final result = await registerUseCase(testParams);
 
-        expect(fakeAuthRepo.passedRequest, testDto);
+        expect(fakeAuthRepo.passedRequest, testParams);
         expect(result, isA<Success<RegisterEntity>>());
         final success = result as Success<RegisterEntity>;
         expect(success.data, testEntity);
@@ -75,7 +75,7 @@ void main() {
         ServerMessageFailure('Email already exists'),
       );
 
-      final result = await registerUseCase(testDto);
+      final result = await registerUseCase(testParams);
 
       expect(result, isA<FailureResponse<RegisterEntity>>());
       final failure = result as FailureResponse<RegisterEntity>;

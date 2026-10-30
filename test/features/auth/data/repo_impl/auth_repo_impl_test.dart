@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/config/network/app_error.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/local/auth_local_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
@@ -10,14 +10,17 @@ import 'package:super_fitness/features/auth/data/models/register_response_model.
 import 'package:super_fitness/features/auth/data/models/social_auth_user_model.dart';
 import 'package:super_fitness/features/auth/data/repo_impl/auth_repo_impl.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 
 class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   RegisterResponseModel? responseToReturn;
   Exception? exceptionToThrow;
+  RegisterDto? capturedRequest;
 
   @override
   Future<RegisterResponseModel> register(RegisterDto request) async {
+    capturedRequest = request;
     if (exceptionToThrow != null) {
       throw exceptionToThrow!;
     }
@@ -70,7 +73,7 @@ void main() {
     late FakeSocialAuthRemoteDataSource fakeSocialRemoteDataSource;
     late AuthRepoImpl authRepo;
 
-    final testDto = RegisterDto(
+    const testParams = RegisterParams(
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -118,12 +121,16 @@ void main() {
         () async {
       fakeRemoteDataSource.responseToReturn = testResponse;
 
-      final result = await authRepo.register(testDto);
+      final result = await authRepo.register(testParams);
 
       expect(result, isA<Success<RegisterEntity>>());
       final success = result as Success<RegisterEntity>;
       expect(success.data.token, 'jwt_secure_token');
       expect(fakeLocalDataSource.savedToken, 'jwt_secure_token');
+      expect(
+        fakeRemoteDataSource.capturedRequest,
+        equals(RegisterDto.fromDomain(testParams)),
+      );
     });
 
     test('register returns FailureResponse and does not save token on DioException',
@@ -133,7 +140,7 @@ void main() {
         type: DioExceptionType.connectionTimeout,
       );
 
-      final result = await authRepo.register(testDto);
+      final result = await authRepo.register(testParams);
 
       expect(result, isA<FailureResponse<RegisterEntity>>());
       expect(fakeLocalDataSource.savedToken, isNull);
@@ -156,15 +163,15 @@ void main() {
       expect(success.data.displayName, 'John Doe');
     });
 
-    test('signInWithGoogle returns Failure with AppError.cancelled when remote returns null', () async {
+    test('signInWithGoogle returns Failure with CancelledFailure when remote returns null', () async {
       fakeSocialRemoteDataSource.responseToReturn = null;
 
       final result = await authRepo.signInWithGoogle();
 
       expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
       final failure = (result as FailureResponse<SocialAuthUserEntity>).failure;
-      expect(failure, isA<NetworkFailure>());
-      expect((failure as NetworkFailure).error, AppError.cancelled);
+      expect(failure, isA<CancelledFailure>());
+      expect((failure as CancelledFailure).message, AppStrings.signInCancelled);
     });
 
     test('signInWithGoogle returns FailureResponse when remote throws an exception', () async {

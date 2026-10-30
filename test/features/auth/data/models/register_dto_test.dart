@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 
 void main() {
   group('RegisterDto Tests', () {
@@ -16,6 +17,28 @@ void main() {
       goal: 'muscle',
       activityLevel: 'intermediate',
     );
+
+    test('fromDomain and toDomain convert correctly between DTO and Domain', () {
+      const params = RegisterParams(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'Password123!',
+        rePassword: 'Password123!',
+        gender: 'male',
+        height: 180,
+        weight: 75,
+        age: 25,
+        goal: 'muscle',
+        activityLevel: 'intermediate',
+      );
+
+      final dto = RegisterDto.fromDomain(params);
+      expect(dto, equals(testDto));
+
+      final convertedParams = dto.toDomain();
+      expect(convertedParams, equals(params));
+    });
 
     test('toJson generates correct JSON map', () {
       final json = testDto.toJson();

@@ -19,7 +19,40 @@ void main() {
       const s3 = ServerMessageFailure('Error 2');
       expect(s1, equals(s2));
       expect(s1, isNot(equals(s3)));
+
+      const c1 = CancelledFailure('Cancelled');
+      const c2 = CancelledFailure('Cancelled');
+      const c3 = CancelledFailure('Different');
+      expect(c1, equals(c2));
+      expect(c1, isNot(equals(c3)));
     });
+
+    testWidgets(
+      'CancelledFailure returns custom message or localized fallback',
+      (tester) async {
+        late String customCancelledMsg;
+        late String defaultCancelledMsg;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Builder(
+              builder: (context) {
+                const failure1 = CancelledFailure('User cancelled sign-in');
+                const failure2 = CancelledFailure();
+                customCancelledMsg = failure1.toLocalizedMessage(context);
+                defaultCancelledMsg = failure2.toLocalizedMessage(context);
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+
+        expect(customCancelledMsg, 'User cancelled sign-in');
+        expect(defaultCancelledMsg, isNotEmpty);
+      },
+    );
 
     testWidgets(
       'ServerMessageFailure returns custom message directly',
