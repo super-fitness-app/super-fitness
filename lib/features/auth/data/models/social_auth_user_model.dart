@@ -1,20 +1,13 @@
-import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 
 part 'social_auth_user_model.g.dart';
 
-SocialAuthUserModel socialAuthUserModelFromJson(String str) =>
-    SocialAuthUserModel.fromJson(json.decode(str));
-
-String socialAuthUserModelToJson(SocialAuthUserModel data) =>
-    json.encode(data.toJson());
-
 @JsonSerializable()
 class SocialAuthUserModel extends Equatable {
   @JsonKey(name: "id")
-  final String id;
+  final String? id;
   @JsonKey(name: "email")
   final String email;
   @JsonKey(name: "displayName")
@@ -23,7 +16,7 @@ class SocialAuthUserModel extends Equatable {
   final String? photoUrl;
 
   const SocialAuthUserModel({
-    required this.id,
+    this.id,
     required this.email,
     required this.displayName,
     this.photoUrl,

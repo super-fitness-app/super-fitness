@@ -1,13 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 part 'register_dto.g.dart';
-
-RegisterDto registerDtoFromJson(String str) =>
-    RegisterDto.fromJson(json.decode(str));
-
-String registerDtoToJson(RegisterDto data) => json.encode(data.toJson());
 
 @JsonSerializable()
 class RegisterDto extends Equatable {
