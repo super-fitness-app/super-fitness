@@ -23,10 +23,11 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     this._registerUseCase,
     this._signInWithGoogleUseCase,
     this._passwordGenerator,
-  ) : super(const BaseState<RegisterData>.initial());
+  ) : super(const RegisterState());
 
   @override
   void doEvent(Object event) {
+    if (event is! RegisterEvent) return;
     switch (event) {
       case SubmitBasicInfoEvent():
         _onSubmitBasicInfo(event);
@@ -48,8 +49,6 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         _onSubmitFinalRegistration();
       case ResetRegistrationEvent():
         _onResetRegistration();
-      default:
-        break;
     }
   }
 
@@ -58,7 +57,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onSubmitBasicInfo(SubmitBasicInfoEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
+    final updatedData = state.data.copyWith(
       firstName: event.firstName,
       lastName: event.lastName,
       email: event.email,
@@ -66,7 +65,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
       rePassword: event.rePassword ?? event.password,
     );
 
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: updatedData));
   }
 
   void submitBasicInfoIntent({
@@ -92,10 +91,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateGender(UpdateGenderEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      gender: event.gender,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(gender: event.gender)));
   }
 
   void updateGenderIntent(String gender) {
@@ -107,10 +103,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateAge(UpdateAgeEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      age: event.age,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(age: event.age)));
   }
 
   void updateAgeIntent(int age) {
@@ -122,10 +115,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateWeight(UpdateWeightEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      weight: event.weight,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(weight: event.weight)));
   }
 
   void updateWeightIntent(int weight) {
@@ -137,10 +127,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateHeight(UpdateHeightEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      height: event.height,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(height: event.height)));
   }
 
   void updateHeightIntent(int height) {
@@ -152,10 +139,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateGoal(UpdateGoalEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      goal: event.goal,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(goal: event.goal)));
   }
 
   void updateGoalIntent(String goal) {
@@ -167,10 +151,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateActivityLevel(UpdateActivityLevelEvent event) {
-    final updatedData = (state.data ?? const RegisterData()).copyWith(
-      activityLevel: event.activityLevel,
-    );
-    emit(BaseState.success(updatedData));
+    emit(state.copyWith(data: state.data.copyWith(activityLevel: event.activityLevel)));
   }
 
   void updateActivityLevelIntent(String activityLevel) {
@@ -182,39 +163,38 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSubmitFinalRegistration() async {
-    final data = state.data;
-    if (data == null) return;
-
-    final params = data.toParams();
+    final params = state.data.toParams();
     if (params == null) {
-      emit(BaseState.error(AppStrings.missingRegistrationData, data: data));
+      emit(
+        state.copyWith(
+          registerState: BaseState.error(AppStrings.missingRegistrationData),
+        ),
+      );
       emitEvent(const DisplayError(AppStrings.missingRegistrationData));
       return;
     }
 
-    emit(BaseState.loading(data: data));
+    emit(state.copyWith(registerState: BaseState.loading()));
 
     final result = await _registerUseCase(params);
     switch (result) {
       case Success():
-        emit(BaseState.success(data));
+        emit(state.copyWith(registerState: BaseState.success(null)));
         emitEvent(const DisplaySuccess(AppStrings.registeredSuccessfully));
       case FailureResponse(:final failure):
-        emit(BaseState.failure(failure, data: data));
+        emit(state.copyWith(registerState: BaseState.failure(failure)));
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
 
-  void submitFinalRegistrationIntent() {
-    doEvent(const SubmitFinalRegistrationEvent());
-  }
+  Future<void> submitFinalRegistrationIntent() => _onSubmitFinalRegistration();
 
   // ===========================================================================
   // Reset Flow
   // ===========================================================================
 
   void _onResetRegistration() {
-    emit(const BaseState<RegisterData>.initial());
+    emit(const RegisterState());
   }
 
   void resetRegistrationIntent() {
@@ -226,8 +206,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
-    final currentData = state.data ?? const RegisterData();
-    emit(BaseState.loading(data: currentData));
+    emit(state.copyWith(registerState: BaseState.loading()));
 
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
@@ -236,9 +215,8 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         final userId = data.id;
         if (userId == null || userId.trim().isEmpty) {
           emit(
-            BaseState.error(
-              AppStrings.googleAccountIdMissing,
-              data: currentData,
+            state.copyWith(
+              registerState: BaseState.error(AppStrings.googleAccountIdMissing),
             ),
           );
           emitEvent(const DisplayError(AppStrings.googleAccountIdMissing));
@@ -253,28 +231,30 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         final firstName = names.isNotEmpty ? names.first : '';
         final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
-        // 3. Save name, email, and generated password into Cubit's state (RegisterData),
-        // exactly like the signup screen does!
-        final updatedData = currentData.copyWith(
-          firstName: firstName.isNotEmpty ? firstName : currentData.firstName,
-          lastName: lastName.isNotEmpty ? lastName : currentData.lastName,
+        // 3. Save name, email, and generated password into Cubit's state (RegisterData)
+        final updatedData = state.data.copyWith(
+          firstName: firstName.isNotEmpty ? firstName : state.data.firstName,
+          lastName: lastName.isNotEmpty ? lastName : state.data.lastName,
           email: data.email,
           password: generatedPassword,
           rePassword: generatedPassword,
         );
 
-        emit(BaseState.success(updatedData));
+        emit(
+          state.copyWith(
+            data: updatedData,
+            registerState: BaseState.success(null),
+          ),
+        );
         emitEvent(
           const DisplaySuccess(AppStrings.googleAccountConnected),
         );
 
       case FailureResponse(:final failure):
-        emit(BaseState.failure(failure, data: currentData));
+        emit(state.copyWith(registerState: BaseState.failure(failure)));
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
 
-  void signInWithGoogleIntent() {
-    doEvent(const SignInWithGoogleEvent());
-  }
+  Future<void> signInWithGoogleIntent() => _onSignInWithGoogle();
 }

@@ -1,6 +1,30 @@
 part of 'register_cubit.dart';
 
-typedef RegisterState = BaseState<RegisterData>;
+class RegisterState extends Equatable {
+  final RegisterData data;
+  final BaseState registerState;
+
+  const RegisterState({
+    this.data = const RegisterData(),
+    this.registerState = const BaseState.initial(),
+  });
+
+  bool get isLoading => registerState.isLoading;
+  AppFailure? get failure => registerState.failure;
+
+  RegisterState copyWith({
+    RegisterData? data,
+    BaseState? registerState,
+  }) {
+    return RegisterState(
+      data: data ?? this.data,
+      registerState: registerState ?? this.registerState,
+    );
+  }
+
+  @override
+  List<Object?> get props => [data, registerState];
+}
 
 class RegisterData extends Equatable {
   final String? firstName;
@@ -53,10 +77,10 @@ class RegisterData extends Equatable {
       activityLevel != null &&
       activityLevel!.trim().isNotEmpty;
 
-  /// Maps the accumulated form data to [RegisterDto] for final API call
-  RegisterDto? toDto() {
+  /// Maps the accumulated form data to [RegisterParams] for final registration
+  RegisterParams? toParams() {
     if (!isComplete) return null;
-    return RegisterDto(
+    return RegisterParams(
       firstName: firstName!.trim(),
       lastName: lastName!.trim(),
       email: email!.trim(),
@@ -69,6 +93,12 @@ class RegisterData extends Equatable {
       goal: goal!.trim(),
       activityLevel: activityLevel!.trim(),
     );
+  }
+
+  /// Maps the accumulated form data to [RegisterDto] (delegates to [toParams])
+  RegisterDto? toDto() {
+    final params = toParams();
+    return params != null ? RegisterDto.fromDomain(params) : null;
   }
 
   RegisterData copyWith({
