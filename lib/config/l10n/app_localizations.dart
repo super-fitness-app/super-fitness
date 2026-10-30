@@ -272,6 +272,18 @@ abstract class AppLocalizations {
   /// **'Welcome Back!'**
   String get loginTitle;
 
+  /// No description provided for @alreadyHaveAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already Have An Account ? '**
+  String get alreadyHaveAnAccount;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
   /// No description provided for @onboardingSkip.
   ///
   /// In en, this message translates to:

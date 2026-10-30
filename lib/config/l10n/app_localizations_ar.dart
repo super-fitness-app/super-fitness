@@ -108,6 +108,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loginTitle => 'مرحباً بعودتك!';
 
   @override
+  String get alreadyHaveAnAccount => 'هل لديك حساب بالفعل؟ ';
+
+  @override
+  String get login => 'تسجيل الدخول';
+
+  @override
   String get onboardingSkip => 'تخطي';
 
   @override

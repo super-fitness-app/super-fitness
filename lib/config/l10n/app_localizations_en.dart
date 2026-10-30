@@ -110,6 +110,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Welcome Back!';
 
   @override
+  String get alreadyHaveAnAccount => 'Already Have An Account ? ';
+
+  @override
+  String get login => 'Login';
+
+  @override
   String get onboardingSkip => 'Skip';
 
   @override
