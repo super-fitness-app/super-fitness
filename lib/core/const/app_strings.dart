@@ -40,6 +40,7 @@ abstract final class AppStrings {
       'Google account ID is missing. Please try again.';
   static const String googleAccountConnected =
       'Google account connected. Complete your profile.';
+  static const String signInCancelled = 'Sign-in cancelled';
   static const String firebaseUserNotFoundCode = 'user-not-found';
   static const String firebaseUserCreationFailed =
       'Firebase user creation failed after Google authentication';

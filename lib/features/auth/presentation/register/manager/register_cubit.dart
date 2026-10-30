@@ -7,6 +7,7 @@ import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 part 'register_event.dart';
@@ -184,8 +185,8 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     final data = state.data;
     if (data == null) return;
 
-    final dto = data.toDto();
-    if (dto == null) {
+    final params = data.toParams();
+    if (params == null) {
       emit(BaseState.error(AppStrings.missingRegistrationData, data: data));
       emitEvent(const DisplayError(AppStrings.missingRegistrationData));
       return;
@@ -193,7 +194,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
 
     emit(BaseState.loading(data: data));
 
-    final result = await _registerUseCase(dto);
+    final result = await _registerUseCase(params);
     switch (result) {
       case Success():
         emit(BaseState.success(data));

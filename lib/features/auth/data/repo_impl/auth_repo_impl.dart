@@ -1,12 +1,13 @@
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/network/safe_call.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/local/auth_local_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 
@@ -25,9 +26,10 @@ class AuthRepoImpl implements AuthRepo {
   );
 
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterDto request) {
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) {
     return safeCall<RegisterEntity>(() async {
-      final response = await _authRemoteDataSource.register(request);
+      final dto = RegisterDto.fromDomain(request);
+      final response = await _authRemoteDataSource.register(dto);
       await _authLocalDataSource.saveToken(response.token);
       return Success(response.toEntity());
     });
@@ -39,7 +41,7 @@ class AuthRepoImpl implements AuthRepo {
       final response = await _socialAuthRemoteDataSource.signInWithGoogle();
 
       if (response == null) {
-        return const Failure(NetworkFailure(AppError.cancelled));
+        return const Failure(CancelledFailure(AppStrings.signInCancelled));
       }
       return Success(response.toEntity());
     });
