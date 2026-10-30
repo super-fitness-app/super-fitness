@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
-import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
@@ -12,11 +14,11 @@ import 'package:super_fitness/features/auth/presentation/register/manager/regist
 
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
-  RegisterDto? passedRequest;
+  RegisterParams? passedRequest;
   ApiResults<SocialAuthUserEntity>? googleResultToReturn;
 
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
     passedRequest = request;
     return resultToReturn!;
   }
@@ -31,6 +33,7 @@ void main() {
   group('RegisterCubit & Multi-step Registration Tests', () {
     late FakeAuthRepo fakeAuthRepo;
     late RegisterUseCase registerUseCase;
+    late SignInWithGoogleUseCase googleUseCase;
     late RegisterCubit cubit;
 
     const testEntity = RegisterEntity(
@@ -51,7 +54,7 @@ void main() {
     setUp(() {
       fakeAuthRepo = FakeAuthRepo();
       registerUseCase = RegisterUseCase(fakeAuthRepo);
-      final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
       cubit = RegisterCubit(
         registerUseCase,
         googleUseCase,
@@ -63,10 +66,11 @@ void main() {
       cubit.close();
     });
 
-    test('initial state uses BaseState.initial with null data', () {
+    test('initial state has default RegisterData and initial registerState', () {
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.failure, isNull);
-      expect(cubit.state.data, isNull);
+      expect(cubit.state.data, equals(const RegisterData()));
+      expect(cubit.state.registerState, equals(const BaseState.initial()));
     });
 
     test(
@@ -82,11 +86,11 @@ void main() {
         );
 
         expect(cubit.state.isLoading, isFalse);
-        expect(cubit.state.data?.firstName, 'John');
-        expect(cubit.state.data?.lastName, 'Doe');
-        expect(cubit.state.data?.email, 'john.doe@example.com');
-        expect(cubit.state.data?.password, 'Password123!');
-        expect(cubit.state.data?.rePassword, 'Password123!');
+        expect(cubit.state.data.firstName, 'John');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.email, 'john.doe@example.com');
+        expect(cubit.state.data.password, 'Password123!');
+        expect(cubit.state.data.rePassword, 'Password123!');
       },
     );
 
@@ -99,49 +103,49 @@ void main() {
         rePassword: 'Password123!',
       );
 
-      expect(cubit.state.data?.firstName, 'Jane');
-      expect(cubit.state.data?.lastName, 'Doe');
-      expect(cubit.state.data?.email, 'jane.doe@example.com');
-      expect(cubit.state.data?.password, 'Password123!');
-      expect(cubit.state.data?.rePassword, 'Password123!');
+      expect(cubit.state.data.firstName, 'Jane');
+      expect(cubit.state.data.lastName, 'Doe');
+      expect(cubit.state.data.email, 'jane.doe@example.com');
+      expect(cubit.state.data.password, 'Password123!');
+      expect(cubit.state.data.rePassword, 'Password123!');
     });
 
     test('updateGenderIntent updates gender field in state', () {
       cubit.updateGenderIntent('male');
-      expect(cubit.state.data?.gender, 'male');
+      expect(cubit.state.data.gender, 'male');
     });
 
     test('updateAgeIntent updates age field in state', () {
       cubit.updateAgeIntent(25);
-      expect(cubit.state.data?.age, 25);
+      expect(cubit.state.data.age, 25);
     });
 
     test('updateWeightIntent updates weight field in state', () {
       cubit.updateWeightIntent(75);
-      expect(cubit.state.data?.weight, 75);
+      expect(cubit.state.data.weight, 75);
     });
 
     test('updateHeightIntent updates height field in state', () {
       cubit.updateHeightIntent(180);
-      expect(cubit.state.data?.height, 180);
+      expect(cubit.state.data.height, 180);
     });
 
     test('updateGoalIntent updates goal field in state', () {
       cubit.updateGoalIntent('muscle');
-      expect(cubit.state.data?.goal, 'muscle');
+      expect(cubit.state.data.goal, 'muscle');
     });
 
     test('updateActivityLevelIntent updates activityLevel field in state', () {
       cubit.updateActivityLevelIntent('intermediate');
-      expect(cubit.state.data?.activityLevel, 'intermediate');
+      expect(cubit.state.data.activityLevel, 'intermediate');
     });
 
-    test('resetRegistrationIntent resets state to initial with null data', () {
+    test('resetRegistrationIntent resets state to initial with default data', () {
       cubit.updateGenderIntent('female');
-      expect(cubit.state.data?.gender, 'female');
+      expect(cubit.state.data.gender, 'female');
 
       cubit.resetRegistrationIntent();
-      expect(cubit.state.data, isNull);
+      expect(cubit.state.data, equals(const RegisterData()));
       expect(cubit.state.isLoading, isFalse);
     });
 
@@ -158,8 +162,8 @@ void main() {
           password: 'Password123!',
         );
 
-        cubit.submitFinalRegistrationIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(cubit.state.failure, isNotNull);
         expect(emittedEvents.any((e) => e is DisplayError), isTrue);
@@ -189,8 +193,8 @@ void main() {
         cubit.updateGoalIntent('muscle');
         cubit.updateActivityLevelIntent('intermediate');
 
-        cubit.submitFinalRegistrationIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(fakeAuthRepo.passedRequest?.email, 'john.doe@example.com');
         expect(fakeAuthRepo.passedRequest?.height, 180);
@@ -223,8 +227,8 @@ void main() {
         cubit.updateGoalIntent('muscle');
         cubit.updateActivityLevelIntent('intermediate');
 
-        cubit.submitFinalRegistrationIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(cubit.state.failure, isNotNull);
         expect(emittedEvents.any((e) => e is DisplayError), isTrue);
@@ -236,13 +240,6 @@ void main() {
     test(
       'SignInWithGoogleEvent success generates deterministic password and saves user data in Cubit state',
       () async {
-        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(
-          registerUseCase,
-          googleUseCase,
-          testPasswordGenerator,
-        );
-
         const googleUser = SocialAuthUserEntity(
           id: '12345',
           email: 'google.user@example.com',
@@ -251,36 +248,29 @@ void main() {
         fakeAuthRepo.googleResultToReturn = const Success(googleUser);
 
         BaseEvent? receivedEvent;
-        final sub = testCubit.eventStream.listen((event) {
+        final sub = cubit.eventStream.listen((event) {
           receivedEvent = event;
         });
 
-        testCubit.signInWithGoogleIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
 
-        expect(testCubit.state.isLoading, isFalse);
-        expect(testCubit.state.data?.email, 'google.user@example.com');
-        expect(testCubit.state.data?.firstName, 'Jane');
-        expect(testCubit.state.data?.lastName, 'Doe');
-        expect(testCubit.state.data?.password, startsWith('SuperFit@2026#'));
-        expect(testCubit.state.data?.rePassword, startsWith('SuperFit@2026#'));
+        final expectedPassword = testPasswordGenerator.generate('12345');
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.data.email, 'google.user@example.com');
+        expect(cubit.state.data.firstName, 'Jane');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.password, equals(expectedPassword));
+        expect(cubit.state.data.rePassword, equals(expectedPassword));
         expect(receivedEvent, isA<DisplaySuccess>());
 
         await sub.cancel();
-        await testCubit.close();
       },
     );
 
     test(
       'SignInWithGoogleEvent with null or empty ID emits error state and DisplayError',
       () async {
-        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(
-          registerUseCase,
-          googleUseCase,
-          testPasswordGenerator,
-        );
-
         const googleUser = SocialAuthUserEntity(
           id: null,
           email: 'google.user@example.com',
@@ -289,50 +279,67 @@ void main() {
         fakeAuthRepo.googleResultToReturn = const Success(googleUser);
 
         BaseEvent? receivedEvent;
-        final sub = testCubit.eventStream.listen((event) {
+        final sub = cubit.eventStream.listen((event) {
           receivedEvent = event;
         });
 
-        testCubit.signInWithGoogleIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
 
-        expect(testCubit.state.isLoading, isFalse);
-        expect(testCubit.state.failure, isNotNull);
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isNotNull);
         expect(receivedEvent, isA<DisplayError>());
 
         await sub.cancel();
-        await testCubit.close();
       },
     );
 
     test(
       'SignInWithGoogleEvent failure emits failure state and DisplayError',
       () async {
-        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(
-          registerUseCase,
-          googleUseCase,
-          testPasswordGenerator,
-        );
-
         fakeAuthRepo.googleResultToReturn = const Failure(
           ServerMessageFailure('Google sign-in was cancelled'),
         );
 
         BaseEvent? receivedEvent;
-        final sub = testCubit.eventStream.listen((event) {
+        final sub = cubit.eventStream.listen((event) {
           receivedEvent = event;
         });
 
-        testCubit.signInWithGoogleIntent();
-        await Future<void>.delayed(Duration.zero);
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
 
-        expect(testCubit.state.isLoading, isFalse);
-        expect(testCubit.state.failure, isA<ServerMessageFailure>());
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isA<ServerMessageFailure>());
         expect(receivedEvent, isA<DisplayError>());
 
         await sub.cancel();
-        await testCubit.close();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent with CancelledFailure emits failure state and DisplayError with cancellation message',
+      () async {
+        fakeAuthRepo.googleResultToReturn = const Failure(
+          CancelledFailure(AppStrings.signInCancelled),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isA<CancelledFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+        final displayError = receivedEvent as DisplayError;
+        expect(displayError.errorMsg, AppStrings.signInCancelled);
+        expect(displayError.failure, isA<CancelledFailure>());
+
+        await sub.cancel();
       },
     );
   });
@@ -375,7 +382,7 @@ void main() {
       expect(complete.isBasicInfoComplete, isTrue);
     });
 
-    test('isComplete and toDto validate full payload for API', () {
+    test('isComplete and toParams / toDto validate full payload for API', () {
       const completeData = RegisterData(
         firstName: 'John',
         lastName: 'Doe',
@@ -390,11 +397,100 @@ void main() {
       );
 
       expect(completeData.isComplete, isTrue);
+      final params = completeData.toParams();
+      expect(params, isNotNull);
+      expect(params?.firstName, 'John');
+      expect(params?.height, 180);
+      expect(params?.activityLevel, 'intermediate');
+
       final dto = completeData.toDto();
       expect(dto, isNotNull);
       expect(dto?.firstName, 'John');
       expect(dto?.height, 180);
       expect(dto?.activityLevel, 'intermediate');
+    });
+  });
+
+  group('RegisterState Tests', () {
+    test('supports value equality and copyWith correctly', () {
+      const state1 = RegisterState();
+      const state2 = RegisterState();
+      expect(state1, equals(state2));
+
+      final stateWithData = state1.copyWith(
+        data: const RegisterData(firstName: 'John'),
+      );
+      expect(stateWithData.data.firstName, 'John');
+      expect(stateWithData, isNot(equals(state1)));
+
+      final loadingState = state1.copyWith(
+        registerState: BaseState.loading(),
+      );
+      expect(loadingState.isLoading, isTrue);
+      expect(loadingState.failure, isNull);
+
+      final errorState = state1.copyWith(
+        registerState: BaseState.error('Failed'),
+      );
+      expect(errorState.isLoading, isFalse);
+      expect(errorState.failure, isNotNull);
+    });
+  });
+
+  group('RegisterEvent Equatable Tests', () {
+    test('subclasses support value equality correctly', () {
+      expect(
+        const SubmitBasicInfoEvent(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'j@d.com',
+          password: 'pass',
+        ),
+        equals(
+          const SubmitBasicInfoEvent(
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'j@d.com',
+            password: 'pass',
+          ),
+        ),
+      );
+      expect(
+        const UpdateGenderEvent('male'),
+        equals(const UpdateGenderEvent('male')),
+      );
+      expect(
+        const UpdateAgeEvent(25),
+        equals(const UpdateAgeEvent(25)),
+      );
+      expect(
+        const UpdateWeightEvent(70),
+        equals(const UpdateWeightEvent(70)),
+      );
+      expect(
+        const UpdateHeightEvent(175),
+        equals(const UpdateHeightEvent(175)),
+      );
+      expect(
+        const UpdateGoalEvent('muscle'),
+        equals(const UpdateGoalEvent('muscle')),
+      );
+      expect(
+        const UpdateActivityLevelEvent('high'),
+        equals(const UpdateActivityLevelEvent('high')),
+      );
+      expect(
+        const SubmitFinalRegistrationEvent(),
+        equals(const SubmitFinalRegistrationEvent()),
+      );
+      expect(
+        const ResetRegistrationEvent(),
+        equals(const ResetRegistrationEvent()),
+      );
+      expect(
+        const SignInWithGoogleEvent(),
+        equals(const SignInWithGoogleEvent()),
+      );
     });
   });
 }
