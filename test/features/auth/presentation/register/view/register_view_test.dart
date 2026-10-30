@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
+import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
@@ -9,6 +18,25 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/r
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_password_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_text_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/social_auth_buttons.dart';
+
+class FakeAuthRepo implements AuthRepo {
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async =>
+      throw UnimplementedError();
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      throw UnimplementedError();
+}
+
+RegisterCubit createTestCubit() {
+  final fakeRepo = FakeAuthRepo();
+  return RegisterCubit(
+    RegisterUseCase(fakeRepo),
+    SignInWithGoogleUseCase(fakeRepo),
+    const PasswordGenerator(),
+  );
+}
 
 Widget _createTestWidget() {
   return const MaterialApp(
@@ -20,6 +48,17 @@ Widget _createTestWidget() {
 
 void main() {
   group('RegisterView Widget Tests', () {
+    setUp(() {
+      if (!getIt.isRegistered<RegisterCubit>()) {
+        getIt.registerFactory<RegisterCubit>(() => createTestCubit());
+      }
+    });
+
+    tearDown(() {
+      if (getIt.isRegistered<RegisterCubit>()) {
+        getIt.unregister<RegisterCubit>();
+      }
+    });
     testWidgets('renders all register screen components correctly', (
       tester,
     ) async {
@@ -157,7 +196,7 @@ void main() {
     testWidgets(
       'submits basic info intent and updates cubit state when form is valid',
       (tester) async {
-        final testCubit = RegisterCubit();
+        final testCubit = createTestCubit();
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
@@ -42,10 +43,20 @@ void main() {
       ),
     );
 
+    const testPasswordGenerator = PasswordGenerator.custom(
+      secretKey: 'SuperFitnessSecretKey2026#',
+      prefix: 'SuperFit@2026#',
+    );
+
     setUp(() {
       fakeAuthRepo = FakeAuthRepo();
       registerUseCase = RegisterUseCase(fakeAuthRepo);
-      cubit = RegisterCubit(registerUseCase);
+      final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      cubit = RegisterCubit(
+        registerUseCase,
+        googleUseCase,
+        testPasswordGenerator,
+      );
     });
 
     tearDown(() {
@@ -226,7 +237,11 @@ void main() {
       'SignInWithGoogleEvent success generates deterministic password and saves user data in Cubit state',
       () async {
         final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+        final testCubit = RegisterCubit(
+          registerUseCase,
+          googleUseCase,
+          testPasswordGenerator,
+        );
 
         const googleUser = SocialAuthUserEntity(
           id: '12345',
@@ -257,10 +272,48 @@ void main() {
     );
 
     test(
+      'SignInWithGoogleEvent with null or empty ID emits error state and DisplayError',
+      () async {
+        final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+        final testCubit = RegisterCubit(
+          registerUseCase,
+          googleUseCase,
+          testPasswordGenerator,
+        );
+
+        const googleUser = SocialAuthUserEntity(
+          id: null,
+          email: 'google.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        BaseEvent? receivedEvent;
+        final sub = testCubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        testCubit.signInWithGoogleIntent();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(testCubit.state.isLoading, isFalse);
+        expect(testCubit.state.failure, isNotNull);
+        expect(receivedEvent, isA<DisplayError>());
+
+        await sub.cancel();
+        await testCubit.close();
+      },
+    );
+
+    test(
       'SignInWithGoogleEvent failure emits failure state and DisplayError',
       () async {
         final googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
-        final testCubit = RegisterCubit(registerUseCase, googleUseCase);
+        final testCubit = RegisterCubit(
+          registerUseCase,
+          googleUseCase,
+          testPasswordGenerator,
+        );
 
         fakeAuthRepo.googleResultToReturn = const Failure(
           ServerMessageFailure('Google sign-in was cancelled'),
