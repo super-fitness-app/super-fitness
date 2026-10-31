@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/horizontal_number_picker.dart';
 import 'widgets/onboarding_bottom_button.dart';
@@ -43,20 +43,22 @@ class _SelectAgeViewState extends State<SelectAgeView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return OnboardingScaffold(
       onBackTap: widget.onBack,
       stepImage: AppImages.step2,
-      title: AppStrings.howOldAreYou,
-      subtitle: AppStrings.personalizedPlanSubtitle,
+      title: l10n.howOldAreYou,
+      subtitle: l10n.personalizedPlanSubtitle,
       content: HorizontalNumberPicker(
         minValue: 12,
         maxValue: 99,
         initialValue: _selectedAge,
-        unitLabel: AppStrings.year,
+        unitLabel: l10n.year,
         onChanged: (age) => _selectedAge = age,
       ),
       bottomButton: OnboardingBottomButton(
-        label: AppStrings.next,
+        label: l10n.next,
         onPressed: _onNext,
       ),
     );

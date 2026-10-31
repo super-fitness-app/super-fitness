@@ -158,4 +158,135 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profile => 'الملف الشخصي';
+
+  @override
+  String get heyThere => 'مرحباً بك';
+
+  @override
+  String get createAnAccount => 'إنشاء حساب';
+
+  @override
+  String get register => 'تسجيل';
+
+  @override
+  String get firstName => 'الاسم الأول';
+
+  @override
+  String get lastName => 'اسم العائلة';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get firstNameRequired => 'الاسم الأول مطلوب';
+
+  @override
+  String get lastNameRequired => 'اسم العائلة مطلوب';
+
+  @override
+  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get passwordMinLength => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get forgetPassword => 'نسيت كلمة المرور';
+
+  @override
+  String get registeredSuccessfully => 'تم التسجيل بنجاح';
+
+  @override
+  String get missingRegistrationData =>
+      'يرجى إكمال جميع بيانات التسجيل المطلوبة';
+
+  @override
+  String get googleAccountIdMissing =>
+      'معرف حساب Google مفقود. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get googleAccountConnected =>
+      'تم ربط حساب Google. أكمل ملفك الشخصي.';
+
+  @override
+  String get tellUsAboutYourself => 'أخبرنا عن نفسك!';
+
+  @override
+  String get weNeedToKnowYourGender => 'نحتاج إلى معرفة جنسك';
+
+  @override
+  String get male => 'ذكر';
+
+  @override
+  String get female => 'أنثى';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get howOldAreYou => 'كم عمرك؟';
+
+  @override
+  String get personalizedPlanSubtitle =>
+      'هذا يساعدنا في إنشاء خطتك المخصصة';
+
+  @override
+  String get year => 'سنة';
+
+  @override
+  String get whatIsYourWeight => 'ما هو وزنك؟';
+
+  @override
+  String get kg => 'كجم';
+
+  @override
+  String get whatIsYourHeight => 'ما هو طولك؟';
+
+  @override
+  String get cm => 'سم';
+
+  @override
+  String get whatIsYourGoal => 'ما هو هدفك؟';
+
+  @override
+  String get gainWeight => 'زيادة الوزن';
+
+  @override
+  String get loseWeight => 'خسارة الوزن';
+
+  @override
+  String get getFitter => 'تحسين اللياقة';
+
+  @override
+  String get gainMoreFlexible => 'زيادة المرونة';
+
+  @override
+  String get learnTheBasic => 'تعلم الأساسيات';
+
+  @override
+  String get activityLevelTitle =>
+      'ما هو مستوى نشاطك\nالبدني المعتاد؟';
+
+  @override
+  String get rookie => 'مبتدئ جداً';
+
+  @override
+  String get beginner => 'مبتدئ';
+
+  @override
+  String get intermediate => 'متوسط';
+
+  @override
+  String get advance => 'متقدم';
+
+  @override
+  String get trueBeast => 'محترف رياضي';
 }

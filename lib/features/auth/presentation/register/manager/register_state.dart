@@ -1,39 +1,31 @@
 part of 'register_cubit.dart';
 
-enum RegisterStatus { initial, loading, success, failure }
-
 class RegisterState extends Equatable {
   final RegisterData data;
   final BaseState registerState;
-  final RegisterStatus status;
 
   const RegisterState({
     this.data = const RegisterData(),
     this.registerState = const BaseState.initial(),
-    this.status = RegisterStatus.initial,
   });
 
-  bool get isLoading =>
-      status == RegisterStatus.loading || registerState.isLoading;
-  bool get isSuccess => status == RegisterStatus.success;
-  bool get isFailure =>
-      status == RegisterStatus.failure || registerState.failure != null;
+  bool get isLoading => registerState.isLoading;
+  bool get isSuccess => registerState.isSuccess;
+  bool get isFailure => registerState.isFailure;
   AppFailure? get failure => registerState.failure;
 
   RegisterState copyWith({
     RegisterData? data,
     BaseState? registerState,
-    RegisterStatus? status,
   }) {
     return RegisterState(
       data: data ?? this.data,
       registerState: registerState ?? this.registerState,
-      status: status ?? this.status,
     );
   }
 
   @override
-  List<Object?> get props => [data, registerState, status];
+  List<Object?> get props => [data, registerState];
 }
 
 class RegisterData extends Equatable {

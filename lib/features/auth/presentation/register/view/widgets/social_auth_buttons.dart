@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 
 abstract final class SocialAuthKeys {
   static const facebook = Key('social_auth_facebook_button');
@@ -69,6 +69,8 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -80,11 +82,11 @@ class OrDivider extends StatelessWidget {
             height: 1,
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
-            AppStrings.or,
-            style: TextStyle(
+            l10n.or,
+            style: const TextStyle(
               color: AppColors.borderSubtle,
               fontSize: 13,
               fontWeight: FontWeight.w400,

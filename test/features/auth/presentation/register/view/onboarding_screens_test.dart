@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_state.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
@@ -10,6 +11,7 @@ import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
@@ -45,6 +47,9 @@ class FakeAuthRepo implements AuthRepo {
 
 Widget _wrapWithCubit(Widget child, RegisterCubit cubit) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('en'),
     home: BlocProvider<RegisterCubit>.value(
       value: cubit,
       child: child,
@@ -372,7 +377,13 @@ void main() {
           ],
         );
 
-        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        );
         await tester.pumpAndSettle();
 
         // Step 1: Select Gender
@@ -471,7 +482,13 @@ void main() {
           ],
         );
 
-        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        );
         await tester.pumpAndSettle();
 
         // Step 1: Gender
@@ -544,14 +561,25 @@ void main() {
           ],
         );
 
-        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        );
         await tester.pumpAndSettle();
 
         // Directly emit isSuccess from initial without going through loading
         testCubit.emit(
           testCubit.state.copyWith(
-            status: RegisterStatus.success,
-            registerState: BaseState.success(null),
+            registerState: BaseState.success(
+              const RegisterEntity(
+                message: 'success',
+                token: 'tok',
+                user: UserEntity(firstName: 'John', email: 'j@example.com'),
+              ),
+            ),
           ),
         );
         await tester.pumpAndSettle();

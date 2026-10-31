@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/horizontal_number_picker.dart';
 import 'widgets/onboarding_bottom_button.dart';
@@ -43,20 +43,22 @@ class _SelectWeightViewState extends State<SelectWeightView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return OnboardingScaffold(
       onBackTap: widget.onBack,
       stepImage: AppImages.step3,
-      title: AppStrings.whatIsYourWeight,
-      subtitle: AppStrings.personalizedPlanSubtitle,
+      title: l10n.whatIsYourWeight,
+      subtitle: l10n.personalizedPlanSubtitle,
       content: HorizontalNumberPicker(
         minValue: 30,
         maxValue: 220,
         initialValue: _selectedWeight,
-        unitLabel: AppStrings.kg,
+        unitLabel: l10n.kg,
         onChanged: (weight) => _selectedWeight = weight,
       ),
       bottomButton: OnboardingBottomButton(
-        label: AppStrings.done,
+        label: l10n.done,
         onPressed: _onDone,
       ),
     );

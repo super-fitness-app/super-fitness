@@ -367,6 +367,49 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
+
+  String get heyThere;
+  String get createAnAccount;
+  String get register;
+  String get firstName;
+  String get lastName;
+  String get email;
+  String get password;
+  String get firstNameRequired;
+  String get lastNameRequired;
+  String get invalidEmail;
+  String get passwordMinLength;
+  String get or;
+  String get forgetPassword;
+  String get registeredSuccessfully;
+  String get missingRegistrationData;
+  String get googleAccountIdMissing;
+  String get googleAccountConnected;
+  String get tellUsAboutYourself;
+  String get weNeedToKnowYourGender;
+  String get male;
+  String get female;
+  String get next;
+  String get done;
+  String get howOldAreYou;
+  String get personalizedPlanSubtitle;
+  String get year;
+  String get whatIsYourWeight;
+  String get kg;
+  String get whatIsYourHeight;
+  String get cm;
+  String get whatIsYourGoal;
+  String get gainWeight;
+  String get loseWeight;
+  String get getFitter;
+  String get gainMoreFlexible;
+  String get learnTheBasic;
+  String get activityLevelTitle;
+  String get rookie;
+  String get beginner;
+  String get intermediate;
+  String get advance;
+  String get trueBeast;
 }
 
 class _AppLocalizationsDelegate

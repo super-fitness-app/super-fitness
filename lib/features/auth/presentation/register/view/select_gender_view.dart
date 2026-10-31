@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/gender_option_button.dart';
 import 'widgets/onboarding_bottom_button.dart';
@@ -48,23 +48,25 @@ class _SelectGenderViewState extends State<SelectGenderView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return OnboardingScaffold(
       onBackTap: widget.onBack,
       stepImage: AppImages.step1,
-      title: AppStrings.tellUsAboutYourself,
-      subtitle: AppStrings.weNeedToKnowYourGender,
+      title: l10n.tellUsAboutYourself,
+      subtitle: l10n.weNeedToKnowYourGender,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           GenderOptionButton(
-            label: AppStrings.male,
+            label: l10n.male,
             icon: Icons.male,
             isSelected: _selectedGender == 'male',
             onTap: () => _onSelect('male'),
           ),
           const SizedBox(height: 20),
           GenderOptionButton(
-            label: AppStrings.female,
+            label: l10n.female,
             icon: Icons.female,
             isSelected: _selectedGender == 'female',
             onTap: () => _onSelect('female'),
@@ -72,7 +74,7 @@ class _SelectGenderViewState extends State<SelectGenderView> {
         ],
       ),
       bottomButton: OnboardingBottomButton(
-        label: AppStrings.next,
+        label: l10n.next,
         isEnabled: _selectedGender != null,
         onPressed: _onNext,
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
@@ -26,14 +26,6 @@ class SelectGoalView extends StatefulWidget {
 class _SelectGoalViewState extends State<SelectGoalView> {
   String? _selectedGoal;
 
-  static const List<String> _goals = [
-    AppStrings.gainWeight,
-    AppStrings.loseWeight,
-    AppStrings.getFitter,
-    AppStrings.gainMoreFlexible,
-    AppStrings.learnTheBasic,
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -52,14 +44,23 @@ class _SelectGoalViewState extends State<SelectGoalView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final goals = [
+      l10n.gainWeight,
+      l10n.loseWeight,
+      l10n.getFitter,
+      l10n.gainMoreFlexible,
+      l10n.learnTheBasic,
+    ];
+
     return OnboardingScaffold(
       onBackTap: widget.onBack,
       stepImage: AppImages.step5,
-      title: AppStrings.whatIsYourGoal,
-      subtitle: AppStrings.personalizedPlanSubtitle,
+      title: l10n.whatIsYourGoal,
+      subtitle: l10n.personalizedPlanSubtitle,
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: _goals.map((goal) {
+        children: goals.map((goal) {
           return OnboardingSelectableItem(
             label: goal,
             isSelected: _selectedGoal == goal,
@@ -68,7 +69,7 @@ class _SelectGoalViewState extends State<SelectGoalView> {
         }).toList(),
       ),
       bottomButton: OnboardingBottomButton(
-        label: AppStrings.next,
+        label: l10n.next,
         isEnabled: _selectedGoal != null,
         onPressed: _onNext,
       ),

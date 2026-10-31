@@ -30,22 +30,22 @@ class FakeAuthRepo implements AuthRepo {
   }
 }
 
+const testEntity = RegisterEntity(
+  message: 'success',
+  token: 'test_token',
+  user: UserEntity(
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+  ),
+);
+
 void main() {
   group('RegisterCubit & Multi-step Registration Tests', () {
     late FakeAuthRepo fakeAuthRepo;
     late RegisterUseCase registerUseCase;
     late SignInWithGoogleUseCase googleUseCase;
     late RegisterCubit cubit;
-
-    const testEntity = RegisterEntity(
-      message: 'success',
-      token: 'test_token',
-      user: UserEntity(
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-      ),
-    );
 
     const testPasswordGenerator = PasswordGenerator.custom(
       secretKey: 'SuperFitnessSecretKey2026#',
@@ -546,7 +546,7 @@ void main() {
       const state1 = RegisterState();
       const state2 = RegisterState();
       expect(state1, equals(state2));
-      expect(state1.status, RegisterStatus.initial);
+      expect(state1.isLoading, isFalse);
       expect(state1.isSuccess, isFalse);
       expect(state1.isFailure, isFalse);
 
@@ -557,7 +557,6 @@ void main() {
       expect(stateWithData, isNot(equals(state1)));
 
       final loadingState = state1.copyWith(
-        status: RegisterStatus.loading,
         registerState: BaseState.loading(),
       );
       expect(loadingState.isLoading, isTrue);
@@ -566,15 +565,13 @@ void main() {
       expect(loadingState.failure, isNull);
 
       final successState = state1.copyWith(
-        status: RegisterStatus.success,
-        registerState: BaseState.success(null),
+        registerState: BaseState.success(testEntity),
       );
       expect(successState.isLoading, isFalse);
       expect(successState.isSuccess, isTrue);
       expect(successState.isFailure, isFalse);
 
       final errorState = state1.copyWith(
-        status: RegisterStatus.failure,
         registerState: BaseState.error('Failed'),
       );
       expect(errorState.isLoading, isFalse);

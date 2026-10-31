@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
 import 'widgets/onboarding_bottom_button.dart';
 import 'widgets/onboarding_scaffold.dart';
@@ -22,14 +22,6 @@ class SelectActivityView extends StatefulWidget {
 class _SelectActivityViewState extends State<SelectActivityView> {
   String? _selectedLevel;
 
-  static const List<Map<String, String>> _levels = [
-    {'label': AppStrings.rookie, 'value': 'level1'},
-    {'label': AppStrings.beginner, 'value': 'level2'},
-    {'label': AppStrings.intermediate, 'value': 'level3'},
-    {'label': AppStrings.advance, 'value': 'level4'},
-    {'label': AppStrings.trueBeast, 'value': 'level5'},
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -49,13 +41,22 @@ class _SelectActivityViewState extends State<SelectActivityView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final levels = [
+      {'label': l10n.rookie, 'value': 'level1'},
+      {'label': l10n.beginner, 'value': 'level2'},
+      {'label': l10n.intermediate, 'value': 'level3'},
+      {'label': l10n.advance, 'value': 'level4'},
+      {'label': l10n.trueBeast, 'value': 'level5'},
+    ];
+
     return OnboardingScaffold(
       onBackTap: widget.onBack,
       stepImage: AppImages.step6,
-      title: AppStrings.activityLevelTitle,
+      title: l10n.activityLevelTitle,
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: _levels.map((item) {
+        children: levels.map((item) {
           final value = item['value']!;
           return OnboardingSelectableItem(
             label: item['label']!,
@@ -67,7 +68,7 @@ class _SelectActivityViewState extends State<SelectActivityView> {
       bottomButton: BlocBuilder<RegisterCubit, RegisterState>(
         builder: (context, state) {
           return OnboardingBottomButton(
-            label: AppStrings.next,
+            label: l10n.next,
             isEnabled: _selectedLevel != null,
             isLoading: state.isLoading,
             onPressed: _onSubmit,

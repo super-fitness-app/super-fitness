@@ -32,13 +32,11 @@ void main() {
         var appleTapped = false;
 
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SocialAuthButtons(
-                onFacebookTap: () => facebookTapped = true,
-                onGoogleTap: () => googleTapped = true,
-                onAppleTap: () => appleTapped = true,
-              ),
+          _wrapWithLocalization(
+            SocialAuthButtons(
+              onFacebookTap: () => facebookTapped = true,
+              onGoogleTap: () => googleTapped = true,
+              onAppleTap: () => appleTapped = true,
             ),
           ),
         );
@@ -100,10 +98,8 @@ void main() {
   group('RegisterHeader Widget Tests', () {
     testWidgets('renders logo, title, and subtitle', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: RegisterHeader(),
-          ),
+        _wrapWithLocalization(
+          const RegisterHeader(),
         ),
       );
 
@@ -162,11 +158,9 @@ void main() {
       final controller = TextEditingController(text: 'secret123');
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RegisterPasswordField(
-              controller: controller,
-            ),
+        _wrapWithLocalization(
+          RegisterPasswordField(
+            controller: controller,
           ),
         ),
       );
@@ -204,16 +198,12 @@ void main() {
       final passCtrl = TextEditingController();
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: RegisterFields(
-                firstNameController: firstCtrl,
-                lastNameController: lastCtrl,
-                emailController: emailCtrl,
-                passwordController: passCtrl,
-              ),
-            ),
+        _wrapWithLocalization(
+          RegisterFields(
+            firstNameController: firstCtrl,
+            lastNameController: lastCtrl,
+            emailController: emailCtrl,
+            passwordController: passCtrl,
           ),
         ),
       );

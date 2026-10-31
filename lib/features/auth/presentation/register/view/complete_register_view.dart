@@ -77,7 +77,9 @@ class _CompleteRegisterViewState extends State<CompleteRegisterView> {
       child: BlocListener<RegisterCubit, RegisterState>(
         listenWhen: (prev, curr) =>
             (curr.isSuccess && !prev.isSuccess) ||
-            (curr.isFailure && (prev.status != curr.status || prev.failure != curr.failure)),
+            (curr.isFailure &&
+                (prev.failure != curr.failure ||
+                    prev.registerState != curr.registerState)),
         listener: (context, state) {
           if (state.isSuccess) {
             context.go(AppRoutes.login);
