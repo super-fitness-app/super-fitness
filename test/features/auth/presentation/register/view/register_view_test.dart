@@ -21,6 +21,9 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/r
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_text_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/social_auth_buttons.dart';
 
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+
 class FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
@@ -28,6 +31,10 @@ class FakeAuthRepo implements AuthRepo {
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      throw UnimplementedError();
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
       throw UnimplementedError();
 }
 

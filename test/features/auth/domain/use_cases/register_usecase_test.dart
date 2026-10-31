@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 
@@ -18,6 +20,11 @@ class FakeAuthRepo implements AuthRepo {
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     throw UnimplementedError();
   }
 }

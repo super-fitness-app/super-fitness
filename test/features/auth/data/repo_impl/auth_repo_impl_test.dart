@@ -5,18 +5,24 @@ import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/local/auth_local_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
+import 'package:super_fitness/features/auth/data/models/login_response.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/data/models/register_response_model.dart';
+import 'package:super_fitness/features/auth/data/models/request/login_request.dart';
 import 'package:super_fitness/features/auth/data/models/social_auth_user_model.dart';
 import 'package:super_fitness/features/auth/data/repo_impl/auth_repo_impl.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 
 class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   RegisterResponseModel? responseToReturn;
+  LoginResponse? loginResponseToReturn;
   Exception? exceptionToThrow;
   RegisterDto? capturedRequest;
+  LoginRequest? capturedLoginRequest;
 
   @override
   Future<RegisterResponseModel> register(RegisterDto request) async {
@@ -25,6 +31,15 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
       throw exceptionToThrow!;
     }
     return responseToReturn!;
+  }
+
+  @override
+  Future<LoginResponse> login(LoginRequest request) async {
+    capturedLoginRequest = request;
+    if (exceptionToThrow != null) {
+      throw exceptionToThrow!;
+    }
+    return loginResponseToReturn!;
   }
 }
 
@@ -180,6 +195,57 @@ void main() {
       final result = await authRepo.signInWithGoogle();
 
       expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
+    });
+
+    group('AuthRepoImpl.login', () {
+      final testUser = LoginUser(
+        id: 'u1',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        email: 'jane@example.com',
+        gender: 'female',
+        age: 28,
+        weight: 60.0,
+        height: 165.0,
+        activityLevel: 'moderate',
+        goal: 'tone',
+        photo: 'pic.jpg',
+        createdAt: DateTime(2025, 1, 1),
+      );
+
+      test('returns Success<LoginEntity> on successful remote call', () async {
+        fakeRemoteDataSource.loginResponseToReturn = LoginResponse(
+          message: 'login success',
+          user: testUser,
+          token: 'token123',
+        );
+
+        const params = LoginParams(
+          email: 'jane@example.com',
+          password: 'Password1',
+        );
+
+        final result = await authRepo.login(params);
+
+        expect(result, isA<Success<LoginEntity>>());
+        final data = (result as Success<LoginEntity>).data;
+        expect(data.token, 'token123');
+        expect(data.user.email, 'jane@example.com');
+        expect(fakeRemoteDataSource.capturedLoginRequest?.email, 'jane@example.com');
+      });
+
+      test('returns FailureResponse on network exception', () async {
+        fakeRemoteDataSource.exceptionToThrow = Exception('Network fail');
+
+        const params = LoginParams(
+          email: 'jane@example.com',
+          password: 'Password1',
+        );
+
+        final result = await authRepo.login(params);
+
+        expect(result, isA<FailureResponse<LoginEntity>>());
+      });
     });
   });
 }

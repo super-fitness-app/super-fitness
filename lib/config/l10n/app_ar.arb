@@ -16,6 +16,7 @@
   "fileRequiredError": "يرجى تحميل الملف المطلوب",
   "dropdownRequiredError": "يرجى اختيار قيمة",
   "generalValidationError": "مدخلات غير صحيحة",
+  "invalidLoginPasswordError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم",
 
   "generalErrorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
   "connectionErrorMessage": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
@@ -49,5 +50,13 @@
   "explore": "استكشف",
   "smartCoach": "المدرب الذكي",
   "workouts": "التمارين",
-  "profile": "الملف الشخصي"
+  "profile": "الملف الشخصي",
+  "heyThere": "مرحباً",
+  "welcomeBack": "مرحباً بعودتك",
+  "login": "تسجيل الدخول",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "dontHaveAccount": "ليس لديك حساب بعد؟",
+  "register": "إنشاء حساب"
 }

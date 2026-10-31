@@ -8,6 +8,8 @@ import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_background.dart';
@@ -81,11 +83,21 @@ void main() {
       }
       getIt.registerSingleton<StorageService>(storageService);
 
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
       getIt.registerFactory<OnboardingCubit>(
         () => OnboardingCubit(getIt<StorageService>()),
+      );
+
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      getIt.registerFactory<LoginCubit>(
+        () => LoginView.createFallbackCubit(),
       );
     });
 

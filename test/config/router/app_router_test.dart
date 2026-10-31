@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
@@ -6,6 +6,8 @@ import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 
 class _MockStorageService implements StorageService {
@@ -43,9 +45,19 @@ void main() {
       getIt.registerFactory<OnboardingCubit>(
         () => OnboardingCubit(getIt<StorageService>()),
       );
+
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      getIt.registerFactory<LoginCubit>(
+        () => LoginView.createFallbackCubit(),
+      );
     });
 
     tearDown(() {
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }

@@ -84,8 +84,8 @@ class UserModel {
     email: email,
     gender: gender,
     age: age,
-    weight: weight,
-    height: height,
+    weight: weight.toDouble(),
+    height: height.toDouble(),
     activityLevel: activityLevel,
     goal: goal,
   );
