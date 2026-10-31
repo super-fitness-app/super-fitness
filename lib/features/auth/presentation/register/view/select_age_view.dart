@@ -29,7 +29,7 @@ class _SelectAgeViewState extends State<SelectAgeView> {
   @override
   void initState() {
     super.initState();
-    _selectedAge = context.read<RegisterCubit>().state.data?.age ?? 25;
+    _selectedAge = context.read<RegisterCubit>().state.data.age ?? 25;
   }
 
   void _onNext() {

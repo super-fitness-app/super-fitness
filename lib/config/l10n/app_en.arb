@@ -35,6 +35,8 @@
   "code500sMessage": "Server error. Please try again in a few moments.",
 
   "loginTitle": "Welcome Back!",
+  "alreadyHaveAnAccount": "Already Have An Account ? ",
+  "login": "Login",
 
   "onboardingSkip": "Skip",
   "onboardingNext": "Next",

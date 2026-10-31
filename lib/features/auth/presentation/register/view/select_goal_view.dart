@@ -37,7 +37,7 @@ class _SelectGoalViewState extends State<SelectGoalView> {
   @override
   void initState() {
     super.initState();
-    _selectedGoal = context.read<RegisterCubit>().state.data?.goal;
+    _selectedGoal = context.read<RegisterCubit>().state.data.goal;
   }
 
   void _onNext() {

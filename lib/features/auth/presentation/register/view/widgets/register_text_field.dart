@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class RegisterTextField extends StatelessWidget {
+  static const _borderRadius = BorderRadius.all(Radius.circular(50));
+  static const _defaultBorder = OutlineInputBorder(
+    borderRadius: _borderRadius,
+    borderSide: BorderSide(color: Colors.white, width: 1),
+  );
+  static const _errorBorder = OutlineInputBorder(
+    borderRadius: _borderRadius,
+    borderSide: BorderSide(color: Colors.redAccent, width: 1),
+  );
+
   final String hint;
   final Widget prefixIcon;
   final Widget? suffixIcon;
@@ -71,26 +81,11 @@ class RegisterTextField extends StatelessWidget {
           horizontal: 20,
           vertical: 14,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.white, width: 1),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.white, width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.white, width: 1),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
-        ),
+        border: _defaultBorder,
+        enabledBorder: _defaultBorder,
+        focusedBorder: _defaultBorder,
+        errorBorder: _errorBorder,
+        focusedErrorBorder: _errorBorder,
       ),
     );
   }

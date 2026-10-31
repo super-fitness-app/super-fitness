@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
-import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/select_activity_view.dart';
@@ -22,7 +25,12 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/o
 
 class FakeAuthRepo implements AuthRepo {
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
+    return const FailureResponse(ServerMessageFailure(''));
+  }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
     return const FailureResponse(ServerMessageFailure(''));
   }
 }
@@ -40,7 +48,12 @@ void main() {
   late RegisterCubit cubit;
 
   setUp(() {
-    cubit = RegisterCubit(RegisterUseCase(FakeAuthRepo()));
+    final fakeRepo = FakeAuthRepo();
+    cubit = RegisterCubit(
+      RegisterUseCase(fakeRepo),
+      SignInWithGoogleUseCase(fakeRepo),
+      const PasswordGenerator(),
+    );
   });
 
   tearDown(() {

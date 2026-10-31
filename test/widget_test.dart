@@ -11,8 +11,6 @@ import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 
-import 'package:super_fitness/config/di/di.dart';
-import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/main.dart';
 

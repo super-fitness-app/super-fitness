@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
-import '../manager/register_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'widgets/register_form_card.dart';
 import 'widgets/register_header.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final RegisterCubit? cubit;
+  const RegisterView({super.key, this.cubit});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _RegisterViewState extends State<RegisterView>
+    with BaseViewMixin<RegisterView, RegisterCubit, BaseEvent> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final RegisterCubit _cubit;
+
+  @override
+  RegisterCubit get cubit => _cubit;
 
   @override
   void initState() {
+    _cubit = widget.cubit ?? context.read<RegisterCubit>();
     super.initState();
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
@@ -42,14 +51,11 @@ class _RegisterViewState extends State<RegisterView> {
 
   void _onRegister() {
     if (_formKey.currentState?.validate() ?? false) {
-      final cubit = context.read<RegisterCubit>();
-      cubit.doEvent(
-        SubmitBasicInfoEvent(
-          firstName: _firstNameController.text.trim(),
-          lastName: _lastNameController.text.trim(),
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        ),
+      cubit.submitBasicInfoIntent(
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
       );
       context.push(AppRoutes.completeRegister, extra: cubit);
     }
@@ -63,9 +69,13 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
+  void _onGoogleTap() {
+    cubit.signInWithGoogleIntent();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final content = Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -89,18 +99,34 @@ class _RegisterViewState extends State<RegisterView> {
             right: 0,
             child: Form(
               key: _formKey,
-              child: RegisterFormCard(
-                firstNameController: _firstNameController,
-                lastNameController: _lastNameController,
-                emailController: _emailController,
-                passwordController: _passwordController,
-                onRegisterPressed: _onRegister,
-                onLoginTap: _onLoginTap,
+              child: BlocBuilder<RegisterCubit, RegisterState>(
+                bloc: widget.cubit != null ? _cubit : null,
+                builder: (context, state) {
+                  return RegisterFormCard(
+                    firstNameController: _firstNameController,
+                    lastNameController: _lastNameController,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    isLoading: state.isLoading,
+                    onRegisterPressed: _onRegister,
+                    onLoginTap: _onLoginTap,
+                    onGoogleTap: _onGoogleTap,
+                  );
+                },
               ),
             ),
           ),
         ],
       ),
     );
+
+    if (widget.cubit != null) {
+      return BlocProvider.value(
+        value: _cubit,
+        child: content,
+      );
+    }
+
+    return content;
   }
 }

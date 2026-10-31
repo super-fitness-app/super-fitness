@@ -41,7 +41,7 @@ class _SelectActivityViewState extends State<SelectActivityView>
   @override
   void initState() {
     super.initState();
-    _selectedLevel = cubit.state.data?.activityLevel;
+    _selectedLevel = cubit.state.data.activityLevel;
   }
 
   void _onSelect(String value) {

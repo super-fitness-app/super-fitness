@@ -29,7 +29,7 @@ class _SelectWeightViewState extends State<SelectWeightView> {
   @override
   void initState() {
     super.initState();
-    _selectedWeight = context.read<RegisterCubit>().state.data?.weight ?? 70;
+    _selectedWeight = context.read<RegisterCubit>().state.data.weight ?? 70;
   }
 
   void _onDone() {

@@ -29,7 +29,7 @@ class _SelectGenderViewState extends State<SelectGenderView> {
   @override
   void initState() {
     super.initState();
-    _selectedGender = context.read<RegisterCubit>().state.data?.gender;
+    _selectedGender = context.read<RegisterCubit>().state.data.gender;
   }
 
   void _onSelect(String gender) {

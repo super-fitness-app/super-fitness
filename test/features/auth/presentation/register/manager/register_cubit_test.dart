@@ -1,20 +1,31 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
-  RegisterDto? passedRequest;
+  RegisterParams? passedRequest;
+  ApiResults<SocialAuthUserEntity>? googleResultToReturn;
 
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterDto request) async {
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
     passedRequest = request;
     return resultToReturn!;
+  }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return googleResultToReturn!;
   }
 }
 
@@ -22,6 +33,7 @@ void main() {
   group('RegisterCubit & Multi-step Registration Tests', () {
     late FakeAuthRepo fakeAuthRepo;
     late RegisterUseCase registerUseCase;
+    late SignInWithGoogleUseCase googleUseCase;
     late RegisterCubit cubit;
 
     const testEntity = RegisterEntity(
@@ -34,20 +46,31 @@ void main() {
       ),
     );
 
+    const testPasswordGenerator = PasswordGenerator.custom(
+      secretKey: 'SuperFitnessSecretKey2026#',
+      prefix: 'SuperFit@2026#',
+    );
+
     setUp(() {
       fakeAuthRepo = FakeAuthRepo();
       registerUseCase = RegisterUseCase(fakeAuthRepo);
-      cubit = RegisterCubit(registerUseCase);
+      googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      cubit = RegisterCubit(
+        registerUseCase,
+        googleUseCase,
+        testPasswordGenerator,
+      );
     });
 
     tearDown(() {
       cubit.close();
     });
 
-    test('initial state uses BaseState.initial with null data', () {
+    test('initial state has default RegisterData and initial registerState', () {
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.failure, isNull);
-      expect(cubit.state.data, isNull);
+      expect(cubit.state.data, equals(const RegisterData()));
+      expect(cubit.state.registerState, equals(const BaseState.initial()));
     });
 
     test(
@@ -63,11 +86,11 @@ void main() {
         );
 
         expect(cubit.state.isLoading, isFalse);
-        expect(cubit.state.data?.firstName, 'John');
-        expect(cubit.state.data?.lastName, 'Doe');
-        expect(cubit.state.data?.email, 'john.doe@example.com');
-        expect(cubit.state.data?.password, 'Password123!');
-        expect(cubit.state.data?.rePassword, 'Password123!');
+        expect(cubit.state.data.firstName, 'John');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.email, 'john.doe@example.com');
+        expect(cubit.state.data.password, 'Password123!');
+        expect(cubit.state.data.rePassword, 'Password123!');
       },
     );
 
@@ -82,49 +105,49 @@ void main() {
         ),
       );
 
-      expect(cubit.state.data?.firstName, 'Jane');
-      expect(cubit.state.data?.lastName, 'Doe');
-      expect(cubit.state.data?.email, 'jane.doe@example.com');
-      expect(cubit.state.data?.password, 'Password123!');
-      expect(cubit.state.data?.rePassword, 'Password123!');
+      expect(cubit.state.data.firstName, 'Jane');
+      expect(cubit.state.data.lastName, 'Doe');
+      expect(cubit.state.data.email, 'jane.doe@example.com');
+      expect(cubit.state.data.password, 'Password123!');
+      expect(cubit.state.data.rePassword, 'Password123!');
     });
 
-    test('UpdateGenderEvent updates gender field in state', () {
-      cubit.doEvent(const UpdateGenderEvent('male'));
-      expect(cubit.state.data?.gender, 'male');
+    test('updateGenderIntent updates gender field in state', () {
+      cubit.updateGenderIntent('male');
+      expect(cubit.state.data.gender, 'male');
     });
 
-    test('UpdateAgeEvent updates age field in state', () {
-      cubit.doEvent(const UpdateAgeEvent(25));
-      expect(cubit.state.data?.age, 25);
+    test('updateAgeIntent updates age field in state', () {
+      cubit.updateAgeIntent(25);
+      expect(cubit.state.data.age, 25);
     });
 
-    test('UpdateWeightEvent updates weight field in state', () {
-      cubit.doEvent(const UpdateWeightEvent(75));
-      expect(cubit.state.data?.weight, 75);
+    test('updateWeightIntent updates weight field in state', () {
+      cubit.updateWeightIntent(75);
+      expect(cubit.state.data.weight, 75);
     });
 
-    test('UpdateHeightEvent updates height field in state', () {
-      cubit.doEvent(const UpdateHeightEvent(180));
-      expect(cubit.state.data?.height, 180);
+    test('updateHeightIntent updates height field in state', () {
+      cubit.updateHeightIntent(180);
+      expect(cubit.state.data.height, 180);
     });
 
-    test('UpdateGoalEvent updates goal field in state', () {
-      cubit.doEvent(const UpdateGoalEvent('muscle'));
-      expect(cubit.state.data?.goal, 'muscle');
+    test('updateGoalIntent updates goal field in state', () {
+      cubit.updateGoalIntent('muscle');
+      expect(cubit.state.data.goal, 'muscle');
     });
 
-    test('UpdateActivityLevelEvent updates activityLevel field in state', () {
-      cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
-      expect(cubit.state.data?.activityLevel, 'intermediate');
+    test('updateActivityLevelIntent updates activityLevel field in state', () {
+      cubit.updateActivityLevelIntent('intermediate');
+      expect(cubit.state.data.activityLevel, 'intermediate');
     });
 
-    test('ResetRegistrationEvent resets state to initial with null data', () {
-      cubit.doEvent(const UpdateGenderEvent('female'));
-      expect(cubit.state.data?.gender, 'female');
+    test('resetRegistrationIntent resets state to initial with default data', () {
+      cubit.updateGenderIntent('female');
+      expect(cubit.state.data.gender, 'female');
 
-      cubit.doEvent(const ResetRegistrationEvent());
-      expect(cubit.state.data, isNull);
+      cubit.resetRegistrationIntent();
+      expect(cubit.state.data, equals(const RegisterData()));
       expect(cubit.state.isLoading, isFalse);
     });
 
@@ -143,8 +166,8 @@ void main() {
           ),
         );
 
-        cubit.doEvent(const SubmitFinalRegistrationEvent());
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(cubit.state.failure, isNotNull);
         expect(emittedEvents.any((e) => e is DisplayError), isTrue);
@@ -175,8 +198,8 @@ void main() {
         cubit.doEvent(const UpdateGoalEvent('muscle'));
         cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
 
-        cubit.doEvent(const SubmitFinalRegistrationEvent());
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(fakeAuthRepo.passedRequest?.email, 'john.doe@example.com');
         expect(fakeAuthRepo.passedRequest?.height, 180);
@@ -211,13 +234,119 @@ void main() {
         cubit.doEvent(const UpdateGoalEvent('muscle'));
         cubit.doEvent(const UpdateActivityLevelEvent('intermediate'));
 
-        cubit.doEvent(const SubmitFinalRegistrationEvent());
-        await Future<void>.delayed(Duration.zero);
+        await cubit.submitFinalRegistrationIntent();
+        await Future.microtask(() {});
 
         expect(cubit.state.failure, isNotNull);
         expect(emittedEvents.any((e) => e is DisplayError), isTrue);
 
         await subscription.cancel();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent success generates deterministic password and saves user data in Cubit state',
+      () async {
+        const googleUser = SocialAuthUserEntity(
+          id: '12345',
+          email: 'google.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
+
+        final expectedPassword = testPasswordGenerator.generate('12345');
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.data.email, 'google.user@example.com');
+        expect(cubit.state.data.firstName, 'Jane');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.password, equals(expectedPassword));
+        expect(cubit.state.data.rePassword, equals(expectedPassword));
+        expect(receivedEvent, isA<DisplaySuccess>());
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent with null or empty ID emits error state and DisplayError',
+      () async {
+        const googleUser = SocialAuthUserEntity(
+          id: null,
+          email: 'google.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isNotNull);
+        expect(receivedEvent, isA<DisplayError>());
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent failure emits failure state and DisplayError',
+      () async {
+        fakeAuthRepo.googleResultToReturn = const Failure(
+          ServerMessageFailure('Google sign-in was cancelled'),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isA<ServerMessageFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent with CancelledFailure emits failure state and DisplayError with cancellation message',
+      () async {
+        fakeAuthRepo.googleResultToReturn = const Failure(
+          CancelledFailure(AppStrings.signInCancelled),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithGoogleIntent();
+        await Future.microtask(() {});
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isA<CancelledFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+        final displayError = receivedEvent as DisplayError;
+        expect(displayError.errorMsg, AppStrings.signInCancelled);
+        expect(displayError.failure, isA<CancelledFailure>());
+
+        await sub.cancel();
       },
     );
   });
@@ -232,24 +361,35 @@ void main() {
           email: 'john@example.com',
         );
 
-        final updatedWithGender = initial.copyWith(gender: 'male');
-        final updatedWithHeightAndWeight = updatedWithGender.copyWith(
-          height: 180,
-          weight: 75,
-        );
+        final withGender = initial.copyWith(gender: 'male');
+        expect(withGender.firstName, 'John');
+        expect(withGender.gender, 'male');
 
-        expect(updatedWithHeightAndWeight.firstName, 'John');
-        expect(updatedWithHeightAndWeight.lastName, 'Doe');
-        expect(updatedWithHeightAndWeight.email, 'john@example.com');
-        expect(updatedWithHeightAndWeight.gender, 'male');
-        expect(updatedWithHeightAndWeight.height, 180);
-        expect(updatedWithHeightAndWeight.weight, 75);
+        final withAge = withGender.copyWith(age: 25);
+        expect(withAge.firstName, 'John');
+        expect(withAge.gender, 'male');
+        expect(withAge.age, 25);
+
+        final withMetrics = withAge.copyWith(weight: 75, height: 180);
+        expect(withMetrics.weight, 75);
+        expect(withMetrics.height, 180);
+
+        final complete = withMetrics.copyWith(
+          goal: 'muscle',
+          activityLevel: 'intermediate',
+          password: 'Password123!',
+          rePassword: 'Password123!',
+        );
+        expect(complete.isComplete, isTrue);
       },
     );
 
     test('isBasicInfoComplete validates Step 1 fields correctly', () {
-      const incomplete = RegisterData(firstName: 'John');
-      expect(incomplete.isBasicInfoComplete, isFalse);
+      const empty = RegisterData();
+      expect(empty.isBasicInfoComplete, isFalse);
+
+      const partial = RegisterData(firstName: 'John');
+      expect(partial.isBasicInfoComplete, isFalse);
 
       const complete = RegisterData(
         firstName: 'John',
@@ -260,7 +400,7 @@ void main() {
       expect(complete.isBasicInfoComplete, isTrue);
     });
 
-    test('isComplete and toDto validate full payload for API', () {
+    test('isComplete and toParams / toDto validate full payload for API', () {
       const completeData = RegisterData(
         firstName: 'John',
         lastName: 'Doe',
@@ -275,11 +415,100 @@ void main() {
       );
 
       expect(completeData.isComplete, isTrue);
+      final params = completeData.toParams();
+      expect(params, isNotNull);
+      expect(params?.firstName, 'John');
+      expect(params?.height, 180);
+      expect(params?.activityLevel, 'intermediate');
+
       final dto = completeData.toDto();
       expect(dto, isNotNull);
       expect(dto?.firstName, 'John');
       expect(dto?.height, 180);
       expect(dto?.activityLevel, 'intermediate');
+    });
+  });
+
+  group('RegisterState Tests', () {
+    test('supports value equality and copyWith correctly', () {
+      const state1 = RegisterState();
+      const state2 = RegisterState();
+      expect(state1, equals(state2));
+
+      final stateWithData = state1.copyWith(
+        data: const RegisterData(firstName: 'John'),
+      );
+      expect(stateWithData.data.firstName, 'John');
+      expect(stateWithData, isNot(equals(state1)));
+
+      final loadingState = state1.copyWith(
+        registerState: BaseState.loading(),
+      );
+      expect(loadingState.isLoading, isTrue);
+      expect(loadingState.failure, isNull);
+
+      final errorState = state1.copyWith(
+        registerState: BaseState.error('Failed'),
+      );
+      expect(errorState.isLoading, isFalse);
+      expect(errorState.failure, isNotNull);
+    });
+  });
+
+  group('RegisterEvent Equatable Tests', () {
+    test('subclasses support value equality correctly', () {
+      expect(
+        const SubmitBasicInfoEvent(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'j@d.com',
+          password: 'pass',
+        ),
+        equals(
+          const SubmitBasicInfoEvent(
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'j@d.com',
+            password: 'pass',
+          ),
+        ),
+      );
+      expect(
+        const UpdateGenderEvent('male'),
+        equals(const UpdateGenderEvent('male')),
+      );
+      expect(
+        const UpdateAgeEvent(25),
+        equals(const UpdateAgeEvent(25)),
+      );
+      expect(
+        const UpdateWeightEvent(70),
+        equals(const UpdateWeightEvent(70)),
+      );
+      expect(
+        const UpdateHeightEvent(175),
+        equals(const UpdateHeightEvent(175)),
+      );
+      expect(
+        const UpdateGoalEvent('muscle'),
+        equals(const UpdateGoalEvent('muscle')),
+      );
+      expect(
+        const UpdateActivityLevelEvent('high'),
+        equals(const UpdateActivityLevelEvent('high')),
+      );
+      expect(
+        const SubmitFinalRegistrationEvent(),
+        equals(const SubmitFinalRegistrationEvent()),
+      );
+      expect(
+        const ResetRegistrationEvent(),
+        equals(const ResetRegistrationEvent()),
+      );
+      expect(
+        const SignInWithGoogleEvent(),
+        equals(const SignInWithGoogleEvent()),
+      );
     });
   });
 }

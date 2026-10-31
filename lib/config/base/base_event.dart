@@ -15,7 +15,11 @@ class DisplayError extends BaseEvent {
     String? fallback,
   ]) =>
       DisplayError(
-        failure is ServerMessageFailure ? failure.message : fallback,
+        switch (failure) {
+          ServerMessageFailure(:final message) => message,
+          CancelledFailure(:final message) => message ?? fallback,
+          _ => fallback,
+        },
         failure: failure,
       );
 }

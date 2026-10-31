@@ -29,7 +29,7 @@ class _SelectHeightViewState extends State<SelectHeightView> {
   @override
   void initState() {
     super.initState();
-    _selectedHeight = context.read<RegisterCubit>().state.data?.height ?? 170;
+    _selectedHeight = context.read<RegisterCubit>().state.data.height ?? 170;
   }
 
   void _onNext() {

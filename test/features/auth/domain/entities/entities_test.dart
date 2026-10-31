@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 
 void main() {
   group('Domain Entities Tests', () {
@@ -66,5 +67,65 @@ void main() {
         expect(entity1.props, equals(['success', 'token_123', entity1.user]));
       },
     );
+
+    test('RegisterParams supports value equality through props', () {
+      const params1 = RegisterParams(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        rePassword: 'Password123!',
+        gender: 'male',
+        height: 180,
+        weight: 75,
+        age: 25,
+        goal: 'muscle',
+        activityLevel: 'intermediate',
+      );
+
+      const params2 = RegisterParams(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        rePassword: 'Password123!',
+        gender: 'male',
+        height: 180,
+        weight: 75,
+        age: 25,
+        goal: 'muscle',
+        activityLevel: 'intermediate',
+      );
+
+      const params3 = RegisterParams(
+        firstName: 'Jane',
+        lastName: 'Doe',
+        email: 'jane@example.com',
+        password: 'Password123!',
+        rePassword: 'Password123!',
+        gender: 'female',
+        height: 165,
+        weight: 60,
+        age: 23,
+        goal: 'fitness',
+        activityLevel: 'beginner',
+      );
+
+      expect(params1, equals(params2));
+      expect(params1, isNot(equals(params3)));
+      expect(params1.props, equals([
+        'John',
+        'Doe',
+        'john@example.com',
+        'Password123!',
+        'Password123!',
+        'male',
+        180,
+        75,
+        25,
+        'muscle',
+        'intermediate',
+      ]));
+    });
   });
 }
