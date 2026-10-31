@@ -184,4 +184,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get register => 'Register';
+
+  @override
+  String get createAnAccount => 'CREATE AN ACCOUNT';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get firstNameRequired => 'First name is required';
+
+  @override
+  String get lastNameRequired => 'Last name is required';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
+  String get passwordMinLength => 'Password must be at least 8 characters';
+
+  @override
+  String get or => 'Or';
+
+  @override
+  String get forgetPassword => 'Forget Password';
+
+  @override
+  String get registeredSuccessfully => 'Registered successfully';
+
+  @override
+  String get missingRegistrationData =>
+      'Please fill all required registration details';
+
+  @override
+  String get googleAccountIdMissing =>
+      'Google account ID is missing. Please try again.';
+
+  @override
+  String get googleAccountConnected =>
+      'Google account connected. Complete your profile.';
+
+  @override
+  String get tellUsAboutYourself => 'TELL US ABOUT YOURSELF!';
+
+  @override
+  String get weNeedToKnowYourGender => 'We Need To Know Your Gender';
+
+  @override
+  String get male => 'Male';
+
+  @override
+  String get female => 'Female';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get howOldAreYou => 'HOW OLD ARE YOU ?';
+
+  @override
+  String get personalizedPlanSubtitle =>
+      'This Helps Us Create Your Personalized Plan';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get whatIsYourWeight => 'WHAT IS YOUR WEIGHT ?';
+
+  @override
+  String get kg => 'Kg';
+
+  @override
+  String get whatIsYourHeight => 'WHAT IS YOUR HIGHT ?';
+
+  @override
+  String get cm => 'CM';
+
+  @override
+  String get whatIsYourGoal => 'WHAT IS YOUR GOAL ?';
+
+  @override
+  String get gainWeight => 'Gain Weight';
+
+  @override
+  String get loseWeight => 'Lose Weight';
+
+  @override
+  String get getFitter => 'Get Fitter';
+
+  @override
+  String get gainMoreFlexible => 'Gain More Flexible';
+
+  @override
+  String get learnTheBasic => 'Learn The Basic';
+
+  @override
+  String get activityLevelTitle => 'YOUR REGULAR PHYSICAL\nACTIVITY LEVEL ?';
+
+  @override
+  String get rookie => 'Rookie';
+
+  @override
+  String get beginner => 'Beginner';
+
+  @override
+  String get intermediate => 'Intermediate';
+
+  @override
+  String get advance => 'Advance';
+
+  @override
+  String get trueBeast => 'True Beast';
 }

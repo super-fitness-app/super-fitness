@@ -101,6 +101,29 @@ void main() {
       expect(state1, isNot(equals(state3)));
     });
 
+    test('isSuccess and isFailure return correct boolean values', () {
+      const initial = BaseState<String>.initial();
+      expect(initial.isSuccess, isFalse);
+      expect(initial.isFailure, isFalse);
+
+      final loading = BaseState<String>.loading();
+      expect(loading.isSuccess, isFalse);
+      expect(loading.isFailure, isFalse);
+
+      final success = BaseState<String>.success('data');
+      expect(success.isSuccess, isTrue);
+      expect(success.isFailure, isFalse);
+
+      const failure = NetworkFailure(AppError.noConnection);
+      final failureState = BaseState<String>.failure(failure);
+      expect(failureState.isSuccess, isFalse);
+      expect(failureState.isFailure, isTrue);
+
+      final errorState = BaseState<String>.error('Error');
+      expect(errorState.isSuccess, isFalse);
+      expect(errorState.isFailure, isTrue);
+    });
+
     test('toString formats correctly', () {
       const state = BaseState<String>.initial();
       expect(

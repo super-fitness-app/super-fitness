@@ -7,11 +7,8 @@ part 'register_response_model.g.dart';
 
 @JsonSerializable()
 class RegisterResponseModel {
-  @JsonKey(name: "message")
   final String message;
-  @JsonKey(name: "user")
   final UserModel user;
-  @JsonKey(name: "token")
   final String token;
 
   RegisterResponseModel({

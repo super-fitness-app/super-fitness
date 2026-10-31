@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
+
+abstract final class SocialAuthKeys {
+  static const facebook = Key('social_auth_facebook_button');
+  static const google = Key('social_auth_google_button');
+  static const apple = Key('social_auth_apple_button');
+}
 
 class SocialAuthButtons extends StatelessWidget {
   final VoidCallback? onFacebookTap;
@@ -25,6 +31,7 @@ class SocialAuthButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SocialIconButton(
+              key: SocialAuthKeys.facebook,
               onTap: onFacebookTap,
               child: const CustomPaint(
                 size: Size(18, 18),
@@ -33,6 +40,7 @@ class SocialAuthButtons extends StatelessWidget {
             ),
             const SizedBox(width: 18),
             SocialIconButton(
+              key: SocialAuthKeys.google,
               onTap: onGoogleTap,
               child: const CustomPaint(
                 size: Size(18, 18),
@@ -41,6 +49,7 @@ class SocialAuthButtons extends StatelessWidget {
             ),
             const SizedBox(width: 18),
             SocialIconButton(
+              key: SocialAuthKeys.apple,
               onTap: onAppleTap,
               child: const Icon(
                 Icons.apple,
@@ -60,6 +69,8 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -71,11 +82,11 @@ class OrDivider extends StatelessWidget {
             height: 1,
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
-            AppStrings.or,
-            style: TextStyle(
+            l10n.or,
+            style: const TextStyle(
               color: AppColors.borderSubtle,
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -114,8 +125,8 @@ class SocialIconButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: const BoxDecoration(
-          color: Color(0xFF1E1E1E), // solid dark grey background
-          shape: BoxShape.circle, // perfectly circular
+          color: AppColors.socialButtonBackground,
+          shape: BoxShape.circle,
         ),
         child: Center(child: child),
       ),

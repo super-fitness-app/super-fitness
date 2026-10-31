@@ -4,7 +4,7 @@ import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -87,7 +87,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   // ===========================================================================
-  // Step 2: Gender
+  // Step 2: Gender Selection
   // ===========================================================================
 
   void _onUpdateGender(UpdateGenderEvent event) {
@@ -99,7 +99,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   // ===========================================================================
-  // Step 3: Age
+  // Step 3: Age Selection
   // ===========================================================================
 
   void _onUpdateAge(UpdateAgeEvent event) {
@@ -111,7 +111,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   // ===========================================================================
-  // Step 4: Weight
+  // Step 4: Weight Selection
   // ===========================================================================
 
   void _onUpdateWeight(UpdateWeightEvent event) {
@@ -123,7 +123,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   // ===========================================================================
-  // Step 5: Height
+  // Step 5: Height Selection
   // ===========================================================================
 
   void _onUpdateHeight(UpdateHeightEvent event) {
@@ -167,22 +167,34 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     if (params == null) {
       emit(
         state.copyWith(
-          registerState: BaseState.error(AppStrings.missingRegistrationData),
+          registerState: BaseState.error('Please fill all required registration details'),
         ),
       );
-      emitEvent(const DisplayError(AppStrings.missingRegistrationData));
+      emitEvent(const DisplayError('Please fill all required registration details'));
       return;
     }
 
-    emit(state.copyWith(registerState: BaseState.loading()));
+    emit(
+      state.copyWith(
+        registerState: BaseState.loading(),
+      ),
+    );
 
     final result = await _registerUseCase(params);
     switch (result) {
-      case Success():
-        emit(state.copyWith(registerState: BaseState.success(null)));
-        emitEvent(const DisplaySuccess(AppStrings.registeredSuccessfully));
+      case Success(:final data):
+        emit(
+          state.copyWith(
+            registerState: BaseState.success(data),
+          ),
+        );
+        emitEvent(const DisplaySuccess('Registered successfully'));
       case FailureResponse(:final failure):
-        emit(state.copyWith(registerState: BaseState.failure(failure)));
+        emit(
+          state.copyWith(
+            registerState: BaseState.failure(failure),
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
@@ -206,7 +218,11 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
-    emit(state.copyWith(registerState: BaseState.loading()));
+    emit(
+      state.copyWith(
+        registerState: BaseState.loading(),
+      ),
+    );
 
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
@@ -216,10 +232,10 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         if (userId == null || userId.trim().isEmpty) {
           emit(
             state.copyWith(
-              registerState: BaseState.error(AppStrings.googleAccountIdMissing),
+              registerState: BaseState.error('Google account ID is missing. Please try again.'),
             ),
           );
-          emitEvent(const DisplayError(AppStrings.googleAccountIdMissing));
+          emitEvent(const DisplayError('Google account ID is missing. Please try again.'));
           return;
         }
 
@@ -227,14 +243,18 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         final generatedPassword = _passwordGenerator.generate(userId);
 
         // 2. Parse display name into firstName and lastName
-        final names = data.displayName.trim().split(' ');
-        final firstName = names.isNotEmpty ? names.first : '';
-        final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
+        final names = data.displayName.trim().split(RegExp(r'\s+'));
+        final firstName = names.isNotEmpty && names.first.isNotEmpty
+            ? names.first
+            : (state.data.firstName ?? 'User');
+        final lastName = names.length > 1
+            ? names.sublist(1).join(' ')
+            : (state.data.lastName ?? firstName);
 
         // 3. Save name, email, and generated password into Cubit's state (RegisterData)
         final updatedData = state.data.copyWith(
-          firstName: firstName.isNotEmpty ? firstName : state.data.firstName,
-          lastName: lastName.isNotEmpty ? lastName : state.data.lastName,
+          firstName: firstName,
+          lastName: lastName,
           email: data.email,
           password: generatedPassword,
           rePassword: generatedPassword,
@@ -243,15 +263,22 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         emit(
           state.copyWith(
             data: updatedData,
-            registerState: BaseState.success(null),
+            registerState: const BaseState.initial(),
           ),
         );
         emitEvent(
-          const DisplaySuccess(AppStrings.googleAccountConnected),
+          const DisplaySuccess('Google account connected. Complete your profile.'),
+        );
+        emitEvent(
+          NavigateEvent(AppRoutes.completeRegister, extra: this),
         );
 
       case FailureResponse(:final failure):
-        emit(state.copyWith(registerState: BaseState.failure(failure)));
+        emit(
+          state.copyWith(
+            registerState: BaseState.failure(failure),
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/models/social_auth_user_model.dart';
 
@@ -42,8 +41,8 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
       // (Do NOT return null, as that conflates Firebase failures with user cancellations)
       if (user == null) {
         throw FirebaseAuthException(
-          code: AppStrings.firebaseUserNotFoundCode,
-          message: AppStrings.firebaseUserCreationFailed,
+          code: 'user-not-found',
+          message: 'Firebase user creation failed after Google authentication',
         );
       }
 
@@ -53,7 +52,7 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
         email: user.email ?? googleUser.email,
         displayName: (user.displayName != null && user.displayName!.isNotEmpty)
             ? user.displayName!
-            : (googleUser.displayName ?? AppStrings.emptyString),
+            : (googleUser.displayName ?? ''),
         photoUrl: user.photoURL ?? googleUser.photoUrl,
       );
     } on FirebaseAuthException {
@@ -68,7 +67,7 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
   @override
   Future<SocialAuthUserModel?> signInWithFacebook() {
     /// Todo: Implement Facebook sign-in logic here
-    throw UnimplementedError(AppStrings.facebookNotImplemented);
+    throw UnimplementedError('Facebook sign in is not implemented yet');
   }
 
   @override

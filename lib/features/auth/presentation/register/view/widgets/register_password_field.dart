@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'register_text_field.dart';
 
 class RegisterPasswordField extends StatefulWidget {
@@ -29,9 +29,11 @@ class _RegisterPasswordFieldState extends State<RegisterPasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return RegisterTextField(
       controller: widget.controller,
-      hint: AppStrings.password,
+      hint: l10n.password,
       obscureText: _obscureText,
       validator: widget.validator,
       onChanged: widget.onChanged,

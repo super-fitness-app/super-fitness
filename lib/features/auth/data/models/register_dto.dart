@@ -6,27 +6,16 @@ part 'register_dto.g.dart';
 
 @JsonSerializable()
 class RegisterDto extends Equatable {
-  @JsonKey(name: "firstName")
   final String firstName;
-  @JsonKey(name: "lastName")
   final String lastName;
-  @JsonKey(name: "email")
   final String email;
-  @JsonKey(name: "password")
   final String password;
-  @JsonKey(name: "rePassword")
   final String rePassword;
-  @JsonKey(name: "gender")
   final String gender;
-  @JsonKey(name: "height")
   final int height;
-  @JsonKey(name: "weight")
   final int weight;
-  @JsonKey(name: "age")
   final int age;
-  @JsonKey(name: "goal")
   final String goal;
-  @JsonKey(name: "activityLevel")
   final String activityLevel;
 
   const RegisterDto({

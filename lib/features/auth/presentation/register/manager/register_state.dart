@@ -10,6 +10,8 @@ class RegisterState extends Equatable {
   });
 
   bool get isLoading => registerState.isLoading;
+  bool get isSuccess => registerState.isSuccess;
+  bool get isFailure => registerState.isFailure;
   AppFailure? get failure => registerState.failure;
 
   RegisterState copyWith({
@@ -53,7 +55,6 @@ class RegisterData extends Equatable {
     this.activityLevel,
   });
 
-  /// Check if initial step 1 data has been filled
   bool get isBasicInfoComplete =>
       firstName != null &&
       firstName!.trim().isNotEmpty &&
@@ -64,7 +65,6 @@ class RegisterData extends Equatable {
       password != null &&
       password!.isNotEmpty;
 
-  /// Check if all fields required for the final registration API payload are present
   bool get isComplete =>
       isBasicInfoComplete &&
       gender != null &&

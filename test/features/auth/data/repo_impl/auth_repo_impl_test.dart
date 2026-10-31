@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/local/auth_local_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
@@ -186,7 +185,7 @@ void main() {
       expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
       final failure = (result as FailureResponse<SocialAuthUserEntity>).failure;
       expect(failure, isA<CancelledFailure>());
-      expect((failure as CancelledFailure).message, AppStrings.signInCancelled);
+      expect((failure as CancelledFailure).message, 'Sign-in cancelled');
     });
 
     test('signInWithGoogle returns FailureResponse when remote throws an exception', () async {

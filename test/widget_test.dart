@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
-import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
-import 'package:super_fitness/config/di/di.dart';
-import 'package:super_fitness/config/router/app_router.dart';
-import 'package:super_fitness/core/const/app_constants.dart';
-import 'package:super_fitness/main.dart';
-
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
+import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
   final Map<String, String> _data = {};
@@ -49,23 +48,23 @@ void main() {
       if (getIt.isRegistered<LoginCubit>()) {
         getIt.unregister<LoginCubit>();
       }
+      getIt.registerFactory<LoginCubit>(
+        () => LoginView.createFallbackCubit(),
+      );
+
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
       getIt.registerFactory<OnboardingCubit>(
         () => OnboardingCubit(getIt<StorageService>()),
       );
-
-      if (getIt.isRegistered<LoginCubit>()) {
-        getIt.unregister<LoginCubit>();
-      }
-      getIt.registerFactory<LoginCubit>(
-        () => LoginView.createFallbackCubit(),
-      );
     });
 
     tearDown(() async {
       await localeCubit.close();
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
