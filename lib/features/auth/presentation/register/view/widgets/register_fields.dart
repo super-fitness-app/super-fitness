@@ -4,6 +4,13 @@ import 'package:super_fitness/core/utils/app_validators.dart';
 import 'register_password_field.dart';
 import 'register_text_field.dart';
 
+abstract final class RegisterFieldsKeys {
+  static const firstName = Key('register_first_name_field');
+  static const lastName = Key('register_last_name_field');
+  static const email = Key('register_email_field');
+  static const password = Key('register_password_field');
+}
+
 class RegisterFields extends StatelessWidget {
   final TextEditingController? firstNameController;
   final TextEditingController? lastNameController;
@@ -23,6 +30,7 @@ class RegisterFields extends StatelessWidget {
     return Column(
       children: [
         RegisterTextField(
+          key: RegisterFieldsKeys.firstName,
           controller: firstNameController,
           hint: AppStrings.firstName,
           prefixIcon: const Icon(Icons.person_outline),
@@ -33,6 +41,7 @@ class RegisterFields extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         RegisterTextField(
+          key: RegisterFieldsKeys.lastName,
           controller: lastNameController,
           hint: AppStrings.lastName,
           prefixIcon: const Icon(Icons.person_outline),
@@ -43,6 +52,7 @@ class RegisterFields extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         RegisterTextField(
+          key: RegisterFieldsKeys.email,
           controller: emailController,
           hint: AppStrings.email,
           keyboardType: TextInputType.emailAddress,
@@ -54,6 +64,7 @@ class RegisterFields extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         RegisterPasswordField(
+          key: RegisterFieldsKeys.password,
           controller: passwordController,
           validator: (val) {
             final error = AppValidators.validatePassword(val);

@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 
+abstract final class SocialAuthKeys {
+  static const facebook = Key('social_auth_facebook_button');
+  static const google = Key('social_auth_google_button');
+  static const apple = Key('social_auth_apple_button');
+}
+
 class SocialAuthButtons extends StatelessWidget {
   final VoidCallback? onFacebookTap;
   final VoidCallback? onGoogleTap;
@@ -25,6 +31,7 @@ class SocialAuthButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SocialIconButton(
+              key: SocialAuthKeys.facebook,
               onTap: onFacebookTap,
               child: const CustomPaint(
                 size: Size(18, 18),
@@ -33,6 +40,7 @@ class SocialAuthButtons extends StatelessWidget {
             ),
             const SizedBox(width: 18),
             SocialIconButton(
+              key: SocialAuthKeys.google,
               onTap: onGoogleTap,
               child: const CustomPaint(
                 size: Size(18, 18),
@@ -41,6 +49,7 @@ class SocialAuthButtons extends StatelessWidget {
             ),
             const SizedBox(width: 18),
             SocialIconButton(
+              key: SocialAuthKeys.apple,
               onTap: onAppleTap,
               child: const Icon(
                 Icons.apple,

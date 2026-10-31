@@ -17,9 +17,9 @@ import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
+import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_fields.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_form_card.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_header.dart';
-import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_password_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_text_field.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/social_auth_buttons.dart';
 
@@ -45,16 +45,15 @@ RegisterCubit createTestCubit([FakeAuthRepo? repo]) {
   );
 }
 
-Widget _createTestWidget([RegisterCubit? testCubit]) {
-  final cubitToUse = testCubit ?? createTestCubit();
+Widget _createTestWidget(RegisterCubit testCubit) {
   final router = GoRouter(
     initialLocation: AppRoutes.register,
     routes: [
       GoRoute(
         path: AppRoutes.register,
         builder: (context, state) => BlocProvider<RegisterCubit>.value(
-          value: cubitToUse,
-          child: RegisterView(cubit: cubitToUse),
+          value: testCubit,
+          child: RegisterView(cubit: testCubit),
         ),
       ),
       GoRoute(
@@ -74,21 +73,13 @@ Widget _createTestWidget([RegisterCubit? testCubit]) {
 }
 
 void main() {
-  late RegisterCubit cubit;
-
-  setUp(() {
-    cubit = createTestCubit();
-  });
-
-  tearDown(() {
-    cubit.close();
-  });
-
   group('RegisterView Widget Tests', () {
     testWidgets(
       'reads cubit from BlocProvider when no cubit is passed to constructor',
       (tester) async {
         final testCubit = createTestCubit();
+        addTearDown(testCubit.close);
+
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -103,13 +94,15 @@ void main() {
         expect(find.byType(RegisterView), findsOneWidget);
         expect(find.byType(RegisterHeader), findsOneWidget);
         expect(find.byType(RegisterFormCard), findsOneWidget);
-        testCubit.close();
       },
     );
 
     testWidgets('renders all register screen components correctly', (
       tester,
     ) async {
+      final cubit = createTestCubit();
+      addTearDown(cubit.close);
+
       await tester.pumpWidget(_createTestWidget(cubit));
 
       expect(find.byType(RegisterHeader), findsOneWidget);
@@ -144,6 +137,9 @@ void main() {
     testWidgets(
       'shows validation errors when Register is clicked with empty fields',
       (tester) async {
+        final cubit = createTestCubit();
+        addTearDown(cubit.close);
+
         await tester.pumpWidget(_createTestWidget(cubit));
 
         await tester.tap(find.byType(ElevatedButton));
@@ -159,15 +155,27 @@ void main() {
     testWidgets(
       'shows specific validation errors for invalid email and short password',
       (tester) async {
+        final cubit = createTestCubit();
+        addTearDown(cubit.close);
+
         await tester.pumpWidget(_createTestWidget(cubit));
 
-        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
-        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
         await tester.enterText(
-          find.byType(RegisterTextField).at(2),
+          find.byKey(RegisterFieldsKeys.firstName),
+          'John',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.lastName),
+          'Doe',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.email),
           'invalid-email',
         );
-        await tester.enterText(find.byType(RegisterTextField).at(3), 'short');
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.password),
+          'short',
+        );
 
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
@@ -182,16 +190,25 @@ void main() {
     testWidgets(
       'clears validation errors when valid text is entered into all fields',
       (tester) async {
+        final cubit = createTestCubit();
+        addTearDown(cubit.close);
+
         await tester.pumpWidget(_createTestWidget(cubit));
 
-        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
-        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
         await tester.enterText(
-          find.byType(RegisterTextField).at(2),
+          find.byKey(RegisterFieldsKeys.firstName),
+          'John',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.lastName),
+          'Doe',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.email),
           'john.doe@example.com',
         );
         await tester.enterText(
-          find.byType(RegisterTextField).at(3),
+          find.byKey(RegisterFieldsKeys.password),
           'Password123!',
         );
 
@@ -208,13 +225,16 @@ void main() {
     testWidgets(
       'toggles password visibility icon when suffix icon is tapped',
       (tester) async {
+        final cubit = createTestCubit();
+        addTearDown(cubit.close);
+
         await tester.pumpWidget(_createTestWidget(cubit));
 
         expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
         expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
 
         final toggleButton = find.descendant(
-          of: find.byType(RegisterPasswordField),
+          of: find.byKey(RegisterFieldsKeys.password),
           matching: find.byType(IconButton),
         );
         await tester.tap(toggleButton);
@@ -234,16 +254,25 @@ void main() {
     testWidgets(
       'submits basic info intent and updates cubit state when form is valid',
       (tester) async {
+        final cubit = createTestCubit();
+        addTearDown(cubit.close);
+
         await tester.pumpWidget(_createTestWidget(cubit));
 
-        await tester.enterText(find.byType(RegisterTextField).at(0), 'John');
-        await tester.enterText(find.byType(RegisterTextField).at(1), 'Doe');
         await tester.enterText(
-          find.byType(RegisterTextField).at(2),
+          find.byKey(RegisterFieldsKeys.firstName),
+          'John',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.lastName),
+          'Doe',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.email),
           'john.doe@example.com',
         );
         await tester.enterText(
-          find.byType(RegisterTextField).at(3),
+          find.byKey(RegisterFieldsKeys.password),
           'Password123!',
         );
 
@@ -259,6 +288,47 @@ void main() {
     );
 
     testWidgets(
+      'submits basic info and navigates to completeRegister screen on valid form (happy path)',
+      (tester) async {
+        final fakeRepo = FakeAuthRepo();
+        final cubit = createTestCubit(fakeRepo);
+        addTearDown(cubit.close);
+
+        await tester.pumpWidget(_createTestWidget(cubit));
+
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.firstName),
+          'John',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.lastName),
+          'Doe',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.email),
+          'john.doe@example.com',
+        );
+        await tester.enterText(
+          find.byKey(RegisterFieldsKeys.password),
+          'Password123!',
+        );
+
+        // Tap register button
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        // Verify cubit received form data
+        expect(cubit.state.data.firstName, 'John');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.email, 'john.doe@example.com');
+        expect(cubit.state.data.password, 'Password123!');
+
+        // Verify happy path navigation to completeRegister route
+        expect(find.text('Complete Register Screen'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'tapping google icon connects google account and redirects to complete register screen',
       (tester) async {
         final fakeRepo = FakeAuthRepo();
@@ -270,11 +340,12 @@ void main() {
           ),
         );
         final testCubit = createTestCubit(fakeRepo);
+        addTearDown(testCubit.close);
 
         await tester.pumpWidget(_createTestWidget(testCubit));
 
-        // Find and tap the Google icon button (second social button)
-        final googleButton = find.byType(SocialIconButton).at(1);
+        // Find and tap the Google icon button using its semantic key
+        final googleButton = find.byKey(SocialAuthKeys.google);
         await tester.tap(googleButton);
         await tester.pumpAndSettle();
 
@@ -282,8 +353,6 @@ void main() {
         expect(testCubit.state.data.email, 'google.user@example.com');
         expect(testCubit.state.data.firstName, 'Google');
         expect(testCubit.state.data.lastName, 'User');
-
-        testCubit.close();
       },
     );
   });
