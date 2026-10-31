@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/network/safe_call.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/data/data_source/local/auth_local_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
@@ -41,7 +40,7 @@ class AuthRepoImpl implements AuthRepo {
       final response = await _socialAuthRemoteDataSource.signInWithGoogle();
 
       if (response == null) {
-        return const Failure(CancelledFailure(AppStrings.signInCancelled));
+        return const Failure(CancelledFailure('Sign-in cancelled'));
       }
       return Success(response.toEntity());
     });

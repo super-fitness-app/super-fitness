@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'widgets/register_form_card.dart';
@@ -56,6 +57,7 @@ class _RegisterViewState extends State<RegisterView>
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+      context.push(AppRoutes.completeRegister, extra: cubit);
     }
   }
 
@@ -78,7 +80,7 @@ class _RegisterViewState extends State<RegisterView>
         fit: StackFit.expand,
         children: [
           Image.asset(AppImages.authBackground, fit: BoxFit.cover),
-          Container(color: const Color(0x801A1A1A)),
+          Container(color: AppColors.authOverlay),
           const Positioned(
             top: 0,
             left: 0,
@@ -97,8 +99,30 @@ class _RegisterViewState extends State<RegisterView>
             right: 0,
             child: Form(
               key: _formKey,
-              child: BlocBuilder<RegisterCubit, RegisterState>(
+              child: BlocConsumer<RegisterCubit, RegisterState>(
                 bloc: widget.cubit != null ? _cubit : null,
+                listener: (context, state) {
+                  if (state.data.firstName != null &&
+                      state.data.firstName!.isNotEmpty &&
+                      _firstNameController.text != state.data.firstName) {
+                    _firstNameController.text = state.data.firstName!;
+                  }
+                  if (state.data.lastName != null &&
+                      state.data.lastName!.isNotEmpty &&
+                      _lastNameController.text != state.data.lastName) {
+                    _lastNameController.text = state.data.lastName!;
+                  }
+                  if (state.data.email != null &&
+                      state.data.email!.isNotEmpty &&
+                      _emailController.text != state.data.email) {
+                    _emailController.text = state.data.email!;
+                  }
+                  if (state.data.password != null &&
+                      state.data.password!.isNotEmpty &&
+                      _passwordController.text != state.data.password) {
+                    _passwordController.text = state.data.password!;
+                  }
+                },
                 builder: (context, state) {
                   return RegisterFormCard(
                     firstNameController: _firstNameController,

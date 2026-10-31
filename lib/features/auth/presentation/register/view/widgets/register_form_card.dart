@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'already_have_account_row.dart';
 import 'register_fields.dart';
 import 'social_auth_buttons.dart';
@@ -35,6 +35,7 @@ class RegisterFormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).padding.bottom;
+    final l10n = AppLocalizations.of(context)!;
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -67,10 +68,10 @@ class RegisterFormCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                AppStrings.register,
+              Text(
+                l10n.register,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -110,9 +111,9 @@ class RegisterFormCard extends StatelessWidget {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          AppStrings.register,
-                          style: TextStyle(
+                      : Text(
+                          l10n.register,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

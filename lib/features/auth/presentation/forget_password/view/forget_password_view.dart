@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 
 class ForgetPasswordView extends StatelessWidget {
@@ -8,11 +8,13 @@ class ForgetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
-          child: Text(AppStrings.forgetPassword, style: AppTextStyles.appTitle),
+          child: Text(l10n.forgetPassword, style: AppTextStyles.appTitle),
         ),
       ),
     );

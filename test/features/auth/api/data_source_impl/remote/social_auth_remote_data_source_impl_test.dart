@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/api/data_source_impl/remote/social_auth_remote_data_source_impl.dart';
 
 class FakeGoogleSignInAccount extends Fake implements GoogleSignInAccount {
@@ -223,12 +222,12 @@ void main() {
                 .having(
                   (e) => e.code,
                   'code',
-                  equals(AppStrings.firebaseUserNotFoundCode),
+                  equals('user-not-found'),
                 )
                 .having(
                   (e) => e.message,
                   'message',
-                  equals(AppStrings.firebaseUserCreationFailed),
+                  equals('Firebase user creation failed after Google authentication'),
                 ),
           ),
         );
@@ -284,7 +283,7 @@ void main() {
           isA<UnimplementedError>().having(
             (e) => e.message,
             'message',
-            equals(AppStrings.facebookNotImplemented),
+            equals('Facebook sign in is not implemented yet'),
           ),
         ),
       );

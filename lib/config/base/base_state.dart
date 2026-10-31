@@ -41,6 +41,9 @@ class BaseState<T> extends Equatable {
       ? (failure as ServerMessageFailure).message
       : null;
 
+  bool get isSuccess => !isLoading && failure == null && data != null;
+  bool get isFailure => !isLoading && failure != null;
+
   BaseState<T> copyWith({
     bool? isLoading,
     Object? data = unset,

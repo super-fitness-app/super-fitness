@@ -9,6 +9,7 @@ import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
@@ -17,6 +18,13 @@ abstract final class AppRoutes {
   static const login = '/login';
   static const onboarding = '/onboarding';
   static const register = '/register';
+  static const completeRegister = '/complete-register';
+  static const selectGender = '/complete-register';
+  static const selectAge = '/complete-register';
+  static const selectWeight = '/complete-register';
+  static const selectHeight = '/complete-register';
+  static const selectGoal = '/complete-register';
+  static const selectActivity = '/complete-register';
   static const forgetPassword = '/forget-password';
   static const home = '/home';
   static const main = '/main';
@@ -70,6 +78,19 @@ abstract final class AppRouter {
             create: (_) => getIt<RegisterCubit>(),
             child: const RegisterView(),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.completeRegister,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final cubit = state.extra is RegisterCubit
+                ? state.extra! as RegisterCubit
+                : getIt<RegisterCubit>();
+            return BlocProvider.value(
+              value: cubit,
+              child: const CompleteRegisterView(),
+            );
+          },
         ),
         GoRoute(
           path: AppRoutes.forgetPassword,
