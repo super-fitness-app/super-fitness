@@ -14,5 +14,7 @@ abstract interface class SessionService {
   });
   Future<String> getToken();
   Future<String> getRefreshToken();
+  Future<void> saveUserData(String userData);
+  Future<String> getUserData();
   Future<void> clearSession();
 }

@@ -153,4 +153,10 @@ class _FallbackSessionService implements SessionService {
     required String token,
     required String refreshToken,
   }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {}
+
+  @override
+  Future<String> getUserData() async => '';
 }

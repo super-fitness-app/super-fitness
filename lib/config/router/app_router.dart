@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
@@ -36,6 +37,7 @@ abstract final class AppRouter {
 
   static GoRouter createRouter({
     required StorageService storageService,
+    SessionService? sessionService,
     String initialLocation = AppRoutes.onboarding,
   }) {
     return GoRouter(
@@ -52,8 +54,21 @@ abstract final class AppRouter {
           return AppRoutes.onboarding;
         }
 
-        if (hasSeen == 'true' && isGoingToOnboarding) {
-          return AppRoutes.login;
+        if (hasSeen == 'true') {
+          final token = sessionService != null
+              ? await sessionService.getToken()
+              : await storageService.get(AppConstants.storageTokenKey);
+          final isAuthenticated = token.isNotEmpty;
+
+          if (isAuthenticated) {
+            if (isGoingToOnboarding || state.matchedLocation == AppRoutes.login) {
+              return AppRoutes.main;
+            }
+          } else {
+            if (isGoingToOnboarding) {
+              return AppRoutes.login;
+            }
+          }
         }
 
         return null;
@@ -115,5 +130,8 @@ abstract final class AppRouter {
 
   static final GoRouter router = createRouter(
     storageService: getIt<StorageService>(),
+    sessionService: getIt.isRegistered<SessionService>()
+        ? getIt<SessionService>()
+        : null,
   );
 }

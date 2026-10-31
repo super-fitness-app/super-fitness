@@ -9,6 +9,7 @@ import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
+import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 
 class _MockStorageService implements StorageService {
   final Map<String, String> data = {};
@@ -172,6 +173,42 @@ void main() {
           router.routeInformationProvider.value.uri.path,
           equals(AppRoutes.login),
         );
+      },
+    );
+
+    testWidgets(
+      'redirect sends returning authenticated user directly to Main',
+      (tester) async {
+        await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
+        await storageService.save(AppConstants.storageTokenKey, 'valid_token');
+
+        if (getIt.isRegistered<MainLayoutCubit>()) {
+          getIt.unregister<MainLayoutCubit>();
+        }
+        getIt.registerFactory<MainLayoutCubit>(() => MainLayoutCubit());
+
+        final router = AppRouter.createRouter(
+          storageService: storageService,
+          initialLocation: AppRoutes.login,
+        );
+
+        await tester.pumpWidget(
+          MaterialApp.router(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          router.routeInformationProvider.value.uri.path,
+          equals(AppRoutes.main),
+        );
+
+        if (getIt.isRegistered<MainLayoutCubit>()) {
+          getIt.unregister<MainLayoutCubit>();
+        }
       },
     );
   });

@@ -35,6 +35,7 @@ class _FakeSessionService implements SessionService {
   String? savedToken;
   String? savedRefreshToken;
   bool? savedRememberMe;
+  String? savedUserData;
 
   @override
   Future<void> saveTokens({
@@ -75,6 +76,14 @@ class _FakeSessionService implements SessionService {
     required String token,
     required String refreshToken,
   }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {
+    savedUserData = userData;
+  }
+
+  @override
+  Future<String> getUserData() async => savedUserData ?? '';
 }
 
 void main() {
@@ -158,7 +167,19 @@ void main() {
       expect(cubit.state.isLoading, false);
     });
 
-    test('SubmitLoginEvent on success saves tokens and emits NavigateEvent',
+    test('SubmitLoginEvent emits invalidLoginPassword when password is weak',
+        () async {
+      cubit.doEvent(const EmailChangedEvent('valid@example.com'));
+      cubit.doEvent(const PasswordChangedEvent('invalid'));
+
+      cubit.doEvent(const SubmitLoginEvent());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(cubit.state.emailError, isNull);
+      expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
+    });
+
+    test('SubmitLoginEvent on success saves tokens, user data and emits NavigateEvent',
         () async {
       fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
 
@@ -173,6 +194,7 @@ void main() {
 
       expect(cubit.state.loginApiState.data, testLoginEntity);
       expect(fakeSessionService.savedToken, 'jwt_token_alex');
+      expect(fakeSessionService.savedUserData, contains('alex@example.com'));
       expect(events.length, 1);
       expect(events.first, isA<NavigateEvent>());
       expect((events.first as NavigateEvent).routeName, AppRoutes.main);

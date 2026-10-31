@@ -35,6 +35,42 @@ class UserEntity extends Equatable {
 
   String get fullName => '${firstName ?? ''} ${lastName ?? ''}'.trim();
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'email': email,
+    'password': password,
+    'rePassword': rePassword,
+    'gender': gender,
+    'age': age,
+    'weight': weight,
+    'height': height,
+    'activityLevel': activityLevel,
+    'goal': goal,
+    'photo': photo,
+    'createdAt': createdAt?.toIso8601String(),
+  };
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
+    id: json['id'] as String?,
+    firstName: json['firstName'] as String?,
+    lastName: json['lastName'] as String?,
+    email: json['email'] as String?,
+    password: json['password'] as String?,
+    rePassword: json['rePassword'] as String?,
+    gender: json['gender'] as String?,
+    age: (json['age'] as num?)?.toInt(),
+    weight: (json['weight'] as num?)?.toDouble(),
+    height: (json['height'] as num?)?.toDouble(),
+    activityLevel: json['activityLevel'] as String?,
+    goal: json['goal'] as String?,
+    photo: json['photo'] as String?,
+    createdAt: json['createdAt'] != null
+        ? DateTime.tryParse(json['createdAt'] as String)
+        : null,
+  );
+
   @override
   List<Object?> get props => [
     id,

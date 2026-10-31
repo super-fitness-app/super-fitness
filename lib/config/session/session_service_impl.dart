@@ -95,6 +95,16 @@ class SessionServiceImpl implements SessionService {
   }
 
   @override
+  Future<void> saveUserData(String userData) async {
+    await _storage.save(AppConstants.userDataKey, userData);
+  }
+
+  @override
+  Future<String> getUserData() async {
+    return await _storage.get(AppConstants.userDataKey);
+  }
+
+  @override
   Future<void> clearSession() async {
     _inMemoryToken = null;
     _inMemoryRefreshToken = null;
@@ -103,5 +113,6 @@ class SessionServiceImpl implements SessionService {
     await _storage.delete(AppConstants.storageRefreshTokenKey);
     await _storage.delete(AppConstants.rememberMeKey);
     await _storage.delete(AppConstants.guestModeKey);
+    await _storage.delete(AppConstants.userDataKey);
   }
 }

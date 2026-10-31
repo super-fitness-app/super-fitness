@@ -8,6 +8,7 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/ui/widgets/app_button.dart';
 import 'package:super_fitness/core/ui/widgets/app_text_field.dart';
+import 'package:super_fitness/core/utils/app_validators.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -41,6 +42,7 @@ class _FakeAuthRepo implements AuthRepo {
 
 class _FakeSessionService implements SessionService {
   String? savedToken;
+  String? savedUserData;
 
   @override
   Future<void> saveTokens({
@@ -70,6 +72,14 @@ class _FakeSessionService implements SessionService {
     required String token,
     required String refreshToken,
   }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {
+    savedUserData = userData;
+  }
+
+  @override
+  Future<String> getUserData() async => savedUserData ?? '';
 }
 
 void main() {
@@ -170,9 +180,33 @@ void main() {
 
       expect(cubit.state.emailError, isNotNull);
       expect(cubit.state.passwordError, isNotNull);
+      expect(find.text('This field is required'), findsWidgets);
     });
 
-    testWidgets('submitting valid credentials triggers loading state',
+    testWidgets('entering invalid password displays localized error message in UI',
+        (tester) async {
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'user@example.com');
+      await tester.enterText(textFields.at(1), 'short');
+      await tester.pump();
+
+      final loginBtnFinder = find.byType(AppButton);
+      await tester.tap(loginBtnFinder);
+      await tester.pumpAndSettle();
+
+      expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
+      expect(
+        find.text(
+          'Password must be at least 6 characters with an uppercase letter and a number',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('submitting valid credentials triggers loading state and persists session',
         (tester) async {
       final testUser = UserEntity(
         id: 'u1',
@@ -208,6 +242,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(fakeSessionService.savedToken, 'token_xyz');
+      expect(fakeSessionService.savedUserData, contains('test@example.com'));
       expect(find.text('Main'), findsOneWidget);
     });
   });

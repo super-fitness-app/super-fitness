@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/ui/extensions/validation_error_extension.dart';
 import 'package:super_fitness/core/ui/widgets/app_button.dart';
 import 'package:super_fitness/core/ui/widgets/app_text_field.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
@@ -27,6 +28,7 @@ class LoginForm extends StatelessWidget {
               hint: l10n.email,
               keyboardType: TextInputType.emailAddress,
               prefixIcon: const Icon(Icons.email_outlined),
+              errorText: state.emailError?.toLocalizedMessage(context),
               errorValidator: (_) => state.emailError,
               onChanged: (val) =>
                   context.read<LoginCubit>().doEvent(EmailChangedEvent(val)),
@@ -48,6 +50,7 @@ class LoginForm extends StatelessWidget {
                   color: AppColors.white,
                 ),
               ),
+              errorText: state.passwordError?.toLocalizedMessage(context),
               errorValidator: (_) => state.passwordError,
               onChanged: (val) =>
                   context.read<LoginCubit>().doEvent(PasswordChangedEvent(val)),

@@ -51,6 +51,12 @@ class FakeSessionService implements SessionService {
     savedToken = token;
     savedRefreshToken = refreshToken;
   }
+
+  @override
+  Future<void> saveUserData(String userData) async {}
+
+  @override
+  Future<String> getUserData() async => '';
 }
 
 void main() {

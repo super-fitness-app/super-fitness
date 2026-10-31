@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
@@ -82,6 +84,7 @@ class LoginCubit extends BaseCubit<LoginState, BaseEvent> {
           refreshToken: '',
           rememberMe: true,
         );
+        await _sessionService.saveUserData(jsonEncode(data.user.toJson()));
         emit(state.copyWith(loginApiState: BaseState.success(data)));
         emitEvent(const NavigateEvent(AppRoutes.main));
       case FailureResponse<LoginEntity>(:final failure):
