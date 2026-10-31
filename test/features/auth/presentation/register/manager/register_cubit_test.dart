@@ -546,6 +546,9 @@ void main() {
       const state1 = RegisterState();
       const state2 = RegisterState();
       expect(state1, equals(state2));
+      expect(state1.status, RegisterStatus.initial);
+      expect(state1.isSuccess, isFalse);
+      expect(state1.isFailure, isFalse);
 
       final stateWithData = state1.copyWith(
         data: const RegisterData(firstName: 'John'),
@@ -554,15 +557,29 @@ void main() {
       expect(stateWithData, isNot(equals(state1)));
 
       final loadingState = state1.copyWith(
+        status: RegisterStatus.loading,
         registerState: BaseState.loading(),
       );
       expect(loadingState.isLoading, isTrue);
+      expect(loadingState.isSuccess, isFalse);
+      expect(loadingState.isFailure, isFalse);
       expect(loadingState.failure, isNull);
 
+      final successState = state1.copyWith(
+        status: RegisterStatus.success,
+        registerState: BaseState.success(null),
+      );
+      expect(successState.isLoading, isFalse);
+      expect(successState.isSuccess, isTrue);
+      expect(successState.isFailure, isFalse);
+
       final errorState = state1.copyWith(
+        status: RegisterStatus.failure,
         registerState: BaseState.error('Failed'),
       );
       expect(errorState.isLoading, isFalse);
+      expect(errorState.isSuccess, isFalse);
+      expect(errorState.isFailure, isTrue);
       expect(errorState.failure, isNotNull);
     });
   });

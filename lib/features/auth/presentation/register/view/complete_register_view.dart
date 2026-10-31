@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/ui/extensions/app_failure_extension.dart';
 import '../manager/register_cubit.dart';
 import 'select_activity_view.dart';
 import 'select_age_view.dart';
@@ -60,8 +63,25 @@ class _CompleteRegisterViewState extends State<CompleteRegisterView> {
       },
       child: BlocListener<RegisterCubit, RegisterState>(
         listenWhen: (prev, curr) =>
-            prev.isLoading && !curr.isLoading && curr.failure == null,
-        listener: (context, state) => context.go(AppRoutes.login),
+            (curr.isSuccess && !prev.isSuccess) ||
+            (curr.isFailure && (prev.status != curr.status || prev.failure != curr.failure)),
+        listener: (context, state) {
+          if (state.isSuccess) {
+            context.go(AppRoutes.login);
+          } else if (state.isFailure) {
+            final failure = state.failure;
+            final message = failure?.toLocalizedMessage(context) ??
+                state.registerState.errorMessage ??
+                AppLocalizations.of(context)?.generalErrorMessage ??
+                '';
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+        },
         child: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),

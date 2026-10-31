@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:super_fitness/config/base/base_event.dart';
-import 'package:super_fitness/config/base/base_view_mixin.dart';
-import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 import '../manager/register_cubit.dart';
@@ -23,11 +19,7 @@ class SelectActivityView extends StatefulWidget {
   State<SelectActivityView> createState() => _SelectActivityViewState();
 }
 
-class _SelectActivityViewState extends State<SelectActivityView>
-    with BaseViewMixin<SelectActivityView, RegisterCubit, BaseEvent> {
-  @override
-  RegisterCubit get cubit => context.read<RegisterCubit>();
-
+class _SelectActivityViewState extends State<SelectActivityView> {
   String? _selectedLevel;
 
   static const List<Map<String, String>> _levels = [
@@ -41,7 +33,7 @@ class _SelectActivityViewState extends State<SelectActivityView>
   @override
   void initState() {
     super.initState();
-    _selectedLevel = cubit.state.data.activityLevel;
+    _selectedLevel = context.read<RegisterCubit>().state.data.activityLevel;
   }
 
   void _onSelect(String value) {
@@ -50,41 +42,37 @@ class _SelectActivityViewState extends State<SelectActivityView>
 
   void _onSubmit() {
     if (_selectedLevel == null) return;
+    final cubit = context.read<RegisterCubit>();
     cubit.doEvent(UpdateActivityLevelEvent(_selectedLevel!));
     cubit.doEvent(const SubmitFinalRegistrationEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterCubit, RegisterState>(
-      listenWhen: (prev, curr) =>
-          prev.isLoading && !curr.isLoading && curr.failure == null,
-      listener: (context, state) => context.go(AppRoutes.login),
-      child: OnboardingScaffold(
-        onBackTap: widget.onBack,
-        stepImage: AppImages.step6,
-        title: AppStrings.activityLevelTitle,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: _levels.map((item) {
-            final value = item['value']!;
-            return OnboardingSelectableItem(
-              label: item['label']!,
-              isSelected: _selectedLevel == value,
-              onTap: () => _onSelect(value),
-            );
-          }).toList(),
-        ),
-        bottomButton: BlocBuilder<RegisterCubit, RegisterState>(
-          builder: (context, state) {
-            return OnboardingBottomButton(
-              label: AppStrings.next,
-              isEnabled: _selectedLevel != null,
-              isLoading: state.isLoading,
-              onPressed: _onSubmit,
-            );
-          },
-        ),
+    return OnboardingScaffold(
+      onBackTap: widget.onBack,
+      stepImage: AppImages.step6,
+      title: AppStrings.activityLevelTitle,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: _levels.map((item) {
+          final value = item['value']!;
+          return OnboardingSelectableItem(
+            label: item['label']!,
+            isSelected: _selectedLevel == value,
+            onTap: () => _onSelect(value),
+          );
+        }).toList(),
+      ),
+      bottomButton: BlocBuilder<RegisterCubit, RegisterState>(
+        builder: (context, state) {
+          return OnboardingBottomButton(
+            label: AppStrings.next,
+            isEnabled: _selectedLevel != null,
+            isLoading: state.isLoading,
+            onPressed: _onSubmit,
+          );
+        },
       ),
     );
   }

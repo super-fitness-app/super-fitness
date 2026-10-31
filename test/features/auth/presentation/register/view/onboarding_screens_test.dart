@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
@@ -358,6 +359,142 @@ void main() {
         expect(fakeRepo.passedRequest?.email, 'john@example.com');
 
         // Verify redirected to Login Screen Mock via BlocListener
+        expect(find.text('Login Screen Mock'), findsOneWidget);
+
+        testCubit.close();
+      },
+    );
+
+    testWidgets(
+      'displays error SnackBar when final registration fails',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final fakeRepo = FakeAuthRepo();
+        fakeRepo.registerResultToReturn = const FailureResponse(
+          ServerMessageFailure('Email already exists'),
+        );
+        final testCubit = RegisterCubit(
+          RegisterUseCase(fakeRepo),
+          SignInWithGoogleUseCase(fakeRepo),
+          const PasswordGenerator(),
+        );
+
+        testCubit.submitBasicInfoIntent(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'Password123!',
+        );
+
+        final router = GoRouter(
+          initialLocation: AppRoutes.completeRegister,
+          routes: [
+            GoRoute(
+              path: AppRoutes.completeRegister,
+              builder: (context, state) => BlocProvider.value(
+                value: testCubit,
+                child: const CompleteRegisterView(),
+              ),
+            ),
+            GoRoute(
+              path: AppRoutes.login,
+              builder: (context, state) => const Scaffold(
+                body: Text('Login Screen Mock'),
+              ),
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+        await tester.pumpAndSettle();
+
+        // Step 1: Gender
+        await tester.tap(find.text(AppStrings.male));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 2: Age
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 3: Weight
+        await tester.tap(find.text(AppStrings.done));
+        await tester.pumpAndSettle();
+
+        // Step 4: Height
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 5: Goal
+        await tester.tap(find.text(AppStrings.getFitter));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 6: Activity Level
+        await tester.tap(find.text(AppStrings.intermediate));
+        await tester.pumpAndSettle();
+
+        // Submit on final step
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Verify SnackBar shown with error message
+        expect(find.text('Email already exists'), findsOneWidget);
+        // Verify NOT navigated to login
+        expect(find.text('Login Screen Mock'), findsNothing);
+
+        testCubit.close();
+      },
+    );
+
+    testWidgets(
+      'navigates to login on direct isSuccess transition without intermediate loading state',
+      (tester) async {
+        final fakeRepo = FakeAuthRepo();
+        final testCubit = RegisterCubit(
+          RegisterUseCase(fakeRepo),
+          SignInWithGoogleUseCase(fakeRepo),
+          const PasswordGenerator(),
+        );
+
+        final router = GoRouter(
+          initialLocation: AppRoutes.completeRegister,
+          routes: [
+            GoRoute(
+              path: AppRoutes.completeRegister,
+              builder: (context, state) => BlocProvider.value(
+                value: testCubit,
+                child: const CompleteRegisterView(),
+              ),
+            ),
+            GoRoute(
+              path: AppRoutes.login,
+              builder: (context, state) => const Scaffold(
+                body: Text('Login Screen Mock'),
+              ),
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+        await tester.pumpAndSettle();
+
+        // Directly emit isSuccess from initial without going through loading
+        testCubit.emit(
+          testCubit.state.copyWith(
+            status: RegisterStatus.success,
+            registerState: BaseState.success(null),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Must successfully navigate to login
         expect(find.text('Login Screen Mock'), findsOneWidget);
 
         testCubit.close();

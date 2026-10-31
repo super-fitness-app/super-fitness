@@ -168,6 +168,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     if (params == null) {
       emit(
         state.copyWith(
+          status: RegisterStatus.failure,
           registerState: BaseState.error(AppStrings.missingRegistrationData),
         ),
       );
@@ -175,15 +176,30 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
       return;
     }
 
-    emit(state.copyWith(registerState: BaseState.loading()));
+    emit(
+      state.copyWith(
+        status: RegisterStatus.loading,
+        registerState: BaseState.loading(),
+      ),
+    );
 
     final result = await _registerUseCase(params);
     switch (result) {
       case Success():
-        emit(state.copyWith(registerState: BaseState.success(null)));
+        emit(
+          state.copyWith(
+            status: RegisterStatus.success,
+            registerState: BaseState.success(null),
+          ),
+        );
         emitEvent(const DisplaySuccess(AppStrings.registeredSuccessfully));
       case FailureResponse(:final failure):
-        emit(state.copyWith(registerState: BaseState.failure(failure)));
+        emit(
+          state.copyWith(
+            status: RegisterStatus.failure,
+            registerState: BaseState.failure(failure),
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
@@ -207,7 +223,12 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
-    emit(state.copyWith(registerState: BaseState.loading()));
+    emit(
+      state.copyWith(
+        status: RegisterStatus.loading,
+        registerState: BaseState.loading(),
+      ),
+    );
 
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
@@ -217,6 +238,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         if (userId == null || userId.trim().isEmpty) {
           emit(
             state.copyWith(
+              status: RegisterStatus.failure,
               registerState: BaseState.error(AppStrings.googleAccountIdMissing),
             ),
           );
@@ -248,6 +270,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         emit(
           state.copyWith(
             data: updatedData,
+            status: RegisterStatus.initial,
             registerState: BaseState.success(null),
           ),
         );
@@ -259,7 +282,12 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         );
 
       case FailureResponse(:final failure):
-        emit(state.copyWith(registerState: BaseState.failure(failure)));
+        emit(
+          state.copyWith(
+            status: RegisterStatus.failure,
+            registerState: BaseState.failure(failure),
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
