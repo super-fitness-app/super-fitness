@@ -273,8 +273,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnTheBasic => 'Learn The Basic';
 
   @override
-  String get activityLevelTitle =>
-      'YOUR REGULAR PHYSICAL\nACTIVITY LEVEL ?';
+  String get activityLevelTitle => 'YOUR REGULAR PHYSICAL\nACTIVITY LEVEL ?';
 
   @override
   String get rookie => 'Rookie';

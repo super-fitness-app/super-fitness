@@ -190,7 +190,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
-  String get passwordMinLength => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+  String get passwordMinLength =>
+      'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
 
   @override
   String get or => 'أو';
@@ -210,8 +211,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'معرف حساب Google مفقود. يرجى المحاولة مرة أخرى.';
 
   @override
-  String get googleAccountConnected =>
-      'تم ربط حساب Google. أكمل ملفك الشخصي.';
+  String get googleAccountConnected => 'تم ربط حساب Google. أكمل ملفك الشخصي.';
 
   @override
   String get tellUsAboutYourself => 'أخبرنا عن نفسك!';
@@ -235,8 +235,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get howOldAreYou => 'كم عمرك؟';
 
   @override
-  String get personalizedPlanSubtitle =>
-      'هذا يساعدنا في إنشاء خطتك المخصصة';
+  String get personalizedPlanSubtitle => 'هذا يساعدنا في إنشاء خطتك المخصصة';
 
   @override
   String get year => 'سنة';
@@ -272,8 +271,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get learnTheBasic => 'تعلم الأساسيات';
 
   @override
-  String get activityLevelTitle =>
-      'ما هو مستوى نشاطك\nالبدني المعتاد؟';
+  String get activityLevelTitle => 'ما هو مستوى نشاطك\nالبدني المعتاد؟';
 
   @override
   String get rookie => 'مبتدئ جداً';
