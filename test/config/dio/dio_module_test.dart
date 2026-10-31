@@ -22,7 +22,7 @@ class _FakeSessionService implements SessionService {
   @override
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   }) async {}
 

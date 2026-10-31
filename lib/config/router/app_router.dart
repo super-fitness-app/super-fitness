@@ -37,7 +37,7 @@ abstract final class AppRouter {
 
   static GoRouter createRouter({
     required StorageService storageService,
-    SessionService? sessionService,
+    required SessionService sessionService,
     String initialLocation = AppRoutes.onboarding,
   }) {
     return GoRouter(
@@ -54,12 +54,17 @@ abstract final class AppRouter {
           return AppRoutes.onboarding;
         }
 
-        if (hasSeen == 'true') {
-          final token = sessionService != null
-              ? await sessionService.getToken()
-              : await storageService.get(AppConstants.storageTokenKey);
-          final isAuthenticated = token.isNotEmpty;
+        final token = await sessionService.getToken();
+        final isAuthenticated = token.isNotEmpty;
+        final isGoingToProtected =
+            state.matchedLocation == AppRoutes.main ||
+            state.matchedLocation == AppRoutes.home;
 
+        if (!isAuthenticated && isGoingToProtected) {
+          return AppRoutes.login;
+        }
+
+        if (hasSeen == 'true') {
           if (isAuthenticated) {
             if (isGoingToOnboarding || state.matchedLocation == AppRoutes.login) {
               return AppRoutes.main;
@@ -128,10 +133,8 @@ abstract final class AppRouter {
     );
   }
 
-  static final GoRouter router = createRouter(
+  static GoRouter get router => createRouter(
     storageService: getIt<StorageService>(),
-    sessionService: getIt.isRegistered<SessionService>()
-        ? getIt<SessionService>()
-        : null,
+    sessionService: getIt<SessionService>(),
   );
 }

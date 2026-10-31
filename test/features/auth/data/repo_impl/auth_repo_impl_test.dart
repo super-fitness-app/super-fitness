@@ -230,6 +230,10 @@ void main() {
         final data = (result as Success<LoginEntity>).data;
         expect(data.token, 'token123');
         expect(data.user.email, 'jane@example.com');
+        expect(data.message, 'login success');
+        expect(data.user.id, 'u1');
+        expect(data.user.weight, 60.0);
+        expect(data.user.height, 165.0);
         expect(fakeRemoteDataSource.capturedLoginRequest?.email, 'jane@example.com');
       });
 

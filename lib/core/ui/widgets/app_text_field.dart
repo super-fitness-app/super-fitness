@@ -8,6 +8,7 @@ class AppTextField extends StatelessWidget {
   final String label;
   final String hint;
   final String? errorText;
+  final int errorMaxLines;
   final TextEditingController? controller;
   final ValidationError? Function(String?)? errorValidator;
   final void Function(String)? onChanged;
@@ -25,6 +26,7 @@ class AppTextField extends StatelessWidget {
     required this.label,
     required this.hint,
     this.errorText,
+    this.errorMaxLines = 1,
     this.controller,
     this.errorValidator,
     this.onChanged,
@@ -56,7 +58,7 @@ class AppTextField extends StatelessWidget {
       },
       decoration: InputDecoration(
         errorText: errorText,
-        errorMaxLines: 3,
+        errorMaxLines: errorMaxLines,
         fillColor: fillColor,
         labelText: label.isNotEmpty ? label : null,
         hintText: hint.isNotEmpty ? hint : label,

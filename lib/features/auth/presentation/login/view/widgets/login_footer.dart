@@ -20,13 +20,17 @@ class LoginFooter extends StatelessWidget {
             color: AppColors.white,
           ),
         ),
-        GestureDetector(
+        InkWell(
+          borderRadius: BorderRadius.circular(4),
           onTap: () => context.push(AppRoutes.register),
-          child: Text(
-            l10n.register,
-            style: AppTextStyles.medium13.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w700,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            child: Text(
+              l10n.register,
+              style: AppTextStyles.medium13.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),

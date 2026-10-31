@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +15,7 @@ import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
@@ -25,9 +28,11 @@ import 'package:super_fitness/features/auth/presentation/login/view/widgets/logi
 
 class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
+  Completer<ApiResults<LoginEntity>>? completer;
 
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
+    if (completer != null) return completer!.future;
     return resultToReturn!;
   }
 
@@ -47,7 +52,7 @@ class _FakeSessionService implements SessionService {
   @override
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   }) async {
     savedToken = token;
@@ -174,8 +179,7 @@ void main() {
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
 
-      final loginBtnFinder = find.byType(AppButton);
-      await tester.tap(loginBtnFinder);
+      await tester.tap(find.byKey(const Key('loginSubmitButton')));
       await tester.pumpAndSettle();
 
       expect(cubit.state.emailError, isNotNull);
@@ -188,13 +192,17 @@ void main() {
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
 
-      final textFields = find.byType(TextFormField);
-      await tester.enterText(textFields.at(0), 'user@example.com');
-      await tester.enterText(textFields.at(1), 'short');
+      await tester.enterText(
+        find.byKey(const Key('loginEmailField')),
+        'user@example.com',
+      );
+      await tester.enterText(
+        find.byKey(const Key('loginPasswordField')),
+        'short',
+      );
       await tester.pump();
 
-      final loginBtnFinder = find.byType(AppButton);
-      await tester.tap(loginBtnFinder);
+      await tester.tap(find.byKey(const Key('loginSubmitButton')));
       await tester.pumpAndSettle();
 
       expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
@@ -206,7 +214,7 @@ void main() {
       );
     });
 
-    testWidgets('submitting valid credentials triggers loading state and persists session',
+    testWidgets('submitting valid credentials shows loading indicator and navigates on success',
         (tester) async {
       final testUser = UserEntity(
         id: 'u1',
@@ -222,23 +230,37 @@ void main() {
         photo: 'pic.png',
         createdAt: DateTime(2025, 1, 1),
       );
-      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
-        LoginEntity(
-          message: 'OK',
-          user: testUser,
-          token: 'token_xyz',
-        ),
-      );
+      final loginCompleter = Completer<ApiResults<LoginEntity>>();
+      fakeAuthRepo.completer = loginCompleter;
 
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
 
-      final textFields = find.byType(TextFormField);
-      await tester.enterText(textFields.at(0), 'test@example.com');
-      await tester.enterText(textFields.at(1), 'ValidPass1');
+      await tester.enterText(
+        find.byKey(const Key('loginEmailField')),
+        'test@example.com',
+      );
+      await tester.enterText(
+        find.byKey(const Key('loginPasswordField')),
+        'ValidPass1',
+      );
       await tester.pump();
 
-      await tester.tap(find.byType(AppButton));
+      await tester.tap(find.byKey(const Key('loginSubmitButton')));
+      await tester.pump();
+
+      // Loading indicator should appear on AppButton
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      loginCompleter.complete(
+        Success<LoginEntity>(
+          LoginEntity(
+            message: 'OK',
+            user: testUser,
+            token: 'token_xyz',
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(fakeSessionService.savedToken, 'token_xyz');

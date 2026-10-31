@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';

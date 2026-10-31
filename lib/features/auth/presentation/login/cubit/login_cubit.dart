@@ -8,6 +8,7 @@ import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
+import 'package:super_fitness/features/auth/data/mapper/auth_mapper.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
@@ -81,10 +82,11 @@ class LoginCubit extends BaseCubit<LoginState, BaseEvent> {
       case Success<LoginEntity>(:final data):
         await _sessionService.saveTokens(
           token: data.token,
-          refreshToken: '',
           rememberMe: true,
         );
-        await _sessionService.saveUserData(jsonEncode(data.user.toJson()));
+        await _sessionService.saveUserData(
+          jsonEncode(AuthMapper.userEntityToJson(data.user)),
+        );
         emit(state.copyWith(loginApiState: BaseState.success(data)));
         emitEvent(const NavigateEvent(AppRoutes.main));
       case FailureResponse<LoginEntity>(:final failure):

@@ -38,7 +38,7 @@ class SessionServiceImpl implements SessionService {
   @override
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   }) async {
     _inMemoryToken = token;
@@ -46,7 +46,9 @@ class SessionServiceImpl implements SessionService {
 
     if (rememberMe) {
       await _storage.save(AppConstants.storageTokenKey, token);
-      await _storage.save(AppConstants.storageRefreshTokenKey, refreshToken);
+      if (refreshToken != null) {
+        await _storage.save(AppConstants.storageRefreshTokenKey, refreshToken);
+      }
     } else {
       await _storage.delete(AppConstants.storageTokenKey);
       await _storage.delete(AppConstants.storageRefreshTokenKey);
@@ -100,8 +102,8 @@ class SessionServiceImpl implements SessionService {
   }
 
   @override
-  Future<String> getUserData() async {
-    return await _storage.get(AppConstants.userDataKey);
+  Future<String> getUserData() {
+    return _storage.get(AppConstants.userDataKey);
   }
 
   @override

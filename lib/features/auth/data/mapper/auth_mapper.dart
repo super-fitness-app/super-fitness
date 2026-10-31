@@ -1,4 +1,5 @@
 import 'package:super_fitness/features/auth/data/models/login_response.dart';
+import 'package:super_fitness/features/auth/data/models/user_model.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 
@@ -23,4 +24,13 @@ abstract final class AuthMapper {
       ),
     );
   }
+
+  static UserModel userEntityToModel(UserEntity entity) =>
+      UserModel.fromEntity(entity);
+
+  static Map<String, dynamic> userEntityToJson(UserEntity entity) =>
+      UserModel.fromEntity(entity).toJson();
+
+  static UserEntity userEntityFromJson(Map<String, dynamic> json) =>
+      UserModel.fromJson(json).toEntity();
 }

@@ -24,6 +24,7 @@ class LoginForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AppTextField(
+              key: const Key('loginEmailField'),
               label: l10n.email,
               hint: l10n.email,
               keyboardType: TextInputType.emailAddress,
@@ -35,8 +36,10 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AppTextField(
+              key: const Key('loginPasswordField'),
               label: l10n.password,
               hint: l10n.password,
+              errorMaxLines: 3,
               obscureText: !state.isPasswordVisible,
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
@@ -59,6 +62,7 @@ class LoginForm extends StatelessWidget {
             const ForgotPasswordButton(),
             const SizedBox(height: 28),
             AppButton(
+              key: const Key('loginSubmitButton'),
               text: l10n.login,
               isLoading: state.isLoading,
               onPressed: () =>

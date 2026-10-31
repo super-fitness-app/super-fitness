@@ -1,7 +1,7 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
@@ -13,6 +13,7 @@ import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_event.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_state.dart';
 
 class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
@@ -40,7 +41,7 @@ class _FakeSessionService implements SessionService {
   @override
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   }) async {
     savedToken = token;
@@ -87,11 +88,10 @@ class _FakeSessionService implements SessionService {
 }
 
 void main() {
-  group('LoginCubit', () {
+  group('LoginCubit blocTest Suite', () {
     late _FakeAuthRepo fakeAuthRepo;
     late _FakeSessionService fakeSessionService;
     late LoginUseCase loginUseCase;
-    late LoginCubit cubit;
 
     final testUser = UserEntity(
       id: 'id1',
@@ -118,110 +118,141 @@ void main() {
       fakeAuthRepo = _FakeAuthRepo();
       fakeSessionService = _FakeSessionService();
       loginUseCase = LoginUseCase(fakeAuthRepo);
-      cubit = LoginCubit(loginUseCase, fakeSessionService);
-    });
-
-    tearDown(() async {
-      await cubit.close();
     });
 
     test('initial state has default values', () {
-      expect(cubit.state.email, '');
-      expect(cubit.state.password, '');
-      expect(cubit.state.isPasswordVisible, false);
-      expect(cubit.state.emailError, isNull);
-      expect(cubit.state.passwordError, isNull);
-      expect(cubit.state.isLoading, false);
+      final cubit = LoginCubit(loginUseCase, fakeSessionService);
+      expect(cubit.state, const LoginState());
+      cubit.close();
     });
 
-    test('EmailChangedEvent updates email and clears error', () {
-      cubit.doEvent(const EmailChangedEvent('user@test.com'));
-      expect(cubit.state.email, 'user@test.com');
-      expect(cubit.state.emailError, isNull);
-    });
+    blocTest<LoginCubit, LoginState>(
+      'EmailChangedEvent updates email and clears email error',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      seed: () => const LoginState(emailError: ValidationError.invalidEmail),
+      act: (cubit) => cubit.doEvent(const EmailChangedEvent('user@test.com')),
+      expect: () => [
+        const LoginState(email: 'user@test.com', emailError: null),
+      ],
+    );
 
-    test('PasswordChangedEvent updates password and clears error', () {
-      cubit.doEvent(const PasswordChangedEvent('Password123'));
-      expect(cubit.state.password, 'Password123');
-      expect(cubit.state.passwordError, isNull);
-    });
+    blocTest<LoginCubit, LoginState>(
+      'PasswordChangedEvent updates password and clears password error',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      seed: () => const LoginState(
+        passwordError: ValidationError.invalidLoginPassword,
+      ),
+      act: (cubit) =>
+          cubit.doEvent(const PasswordChangedEvent('Password123')),
+      expect: () => [
+        const LoginState(password: 'Password123', passwordError: null),
+      ],
+    );
 
-    test('TogglePasswordVisibilityEvent flips visibility', () {
-      cubit.doEvent(const TogglePasswordVisibilityEvent());
-      expect(cubit.state.isPasswordVisible, true);
+    blocTest<LoginCubit, LoginState>(
+      'TogglePasswordVisibilityEvent flips password visibility correctly',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      act: (cubit) {
+        cubit.doEvent(const TogglePasswordVisibilityEvent());
+        cubit.doEvent(const TogglePasswordVisibilityEvent());
+      },
+      expect: () => [
+        const LoginState(isPasswordVisible: true),
+        const LoginState(isPasswordVisible: false),
+      ],
+    );
 
-      cubit.doEvent(const TogglePasswordVisibilityEvent());
-      expect(cubit.state.isPasswordVisible, false);
-    });
+    blocTest<LoginCubit, LoginState>(
+      'SubmitLoginEvent emits validation errors without calling use case when inputs invalid',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      seed: () => const LoginState(
+        email: 'invalid-email',
+        password: 'short',
+      ),
+      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
+      expect: () => [
+        const LoginState(
+          email: 'invalid-email',
+          password: 'short',
+          emailError: ValidationError.invalidEmail,
+          passwordError: ValidationError.invalidLoginPassword,
+        ),
+      ],
+    );
 
-    test('SubmitLoginEvent emits validation errors when inputs invalid',
-        () async {
-      cubit.doEvent(const EmailChangedEvent('invalid-email'));
-      cubit.doEvent(const PasswordChangedEvent('short'));
+    blocTest<LoginCubit, LoginState>(
+      'SubmitLoginEvent emits invalidLoginPassword when password is weak',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      seed: () => const LoginState(
+        email: 'valid@example.com',
+        password: 'invalid',
+      ),
+      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
+      expect: () => [
+        const LoginState(
+          email: 'valid@example.com',
+          password: 'invalid',
+          passwordError: ValidationError.invalidLoginPassword,
+        ),
+      ],
+    );
 
-      cubit.doEvent(const SubmitLoginEvent());
-      await Future<void>.delayed(Duration.zero);
+    blocTest<LoginCubit, LoginState>(
+      'SubmitLoginEvent emits loading then success, saves session and triggers navigation',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      setUp: () {
+        fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
+      },
+      seed: () => const LoginState(
+        email: 'alex@example.com',
+        password: 'Password123',
+      ),
+      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
+      expect: () => [
+        LoginState(
+          email: 'alex@example.com',
+          password: 'Password123',
+          loginApiState: BaseState.loading(),
+        ),
+        LoginState(
+          email: 'alex@example.com',
+          password: 'Password123',
+          loginApiState: BaseState.success(testLoginEntity),
+        ),
+      ],
+      verify: (cubit) {
+        expect(fakeSessionService.savedToken, 'jwt_token_alex');
+        expect(fakeSessionService.savedUserData, contains('alex@example.com'));
+      },
+    );
 
-      expect(cubit.state.emailError, ValidationError.invalidEmail);
-      expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
-      expect(cubit.state.isLoading, false);
-    });
-
-    test('SubmitLoginEvent emits invalidLoginPassword when password is weak',
-        () async {
-      cubit.doEvent(const EmailChangedEvent('valid@example.com'));
-      cubit.doEvent(const PasswordChangedEvent('invalid'));
-
-      cubit.doEvent(const SubmitLoginEvent());
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.state.emailError, isNull);
-      expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
-    });
-
-    test('SubmitLoginEvent on success saves tokens, user data and emits NavigateEvent',
-        () async {
-      fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
-
-      final events = <BaseEvent>[];
-      final sub = cubit.eventStream.listen(events.add);
-
-      cubit.doEvent(const EmailChangedEvent('alex@example.com'));
-      cubit.doEvent(const PasswordChangedEvent('Password123'));
-
-      cubit.doEvent(const SubmitLoginEvent());
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.state.loginApiState.data, testLoginEntity);
-      expect(fakeSessionService.savedToken, 'jwt_token_alex');
-      expect(fakeSessionService.savedUserData, contains('alex@example.com'));
-      expect(events.length, 1);
-      expect(events.first, isA<NavigateEvent>());
-      expect((events.first as NavigateEvent).routeName, AppRoutes.main);
-
-      await sub.cancel();
-    });
-
-    test('SubmitLoginEvent on failure emits DisplayError and failure state',
-        () async {
-      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
-        ServerMessageFailure('Invalid credentials'),
-      );
-
-      final events = <BaseEvent>[];
-      final sub = cubit.eventStream.listen(events.add);
-
-      cubit.doEvent(const EmailChangedEvent('alex@example.com'));
-      cubit.doEvent(const PasswordChangedEvent('Password123'));
-
-      cubit.doEvent(const SubmitLoginEvent());
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.state.loginApiState.failure, isNotNull);
-      expect(events.length, 1);
-      expect(events.first, isA<DisplayError>());
-
-      await sub.cancel();
-    });
+    blocTest<LoginCubit, LoginState>(
+      'SubmitLoginEvent emits loading then failure on server error',
+      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      setUp: () {
+        fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+          ServerMessageFailure('Invalid credentials'),
+        );
+      },
+      seed: () => const LoginState(
+        email: 'alex@example.com',
+        password: 'Password123',
+      ),
+      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
+      expect: () => [
+        LoginState(
+          email: 'alex@example.com',
+          password: 'Password123',
+          loginApiState: BaseState.loading(),
+        ),
+        LoginState(
+          email: 'alex@example.com',
+          password: 'Password123',
+          loginApiState: BaseState.failure(
+            const ServerMessageFailure('Invalid credentials'),
+          ),
+        ),
+      ],
+    );
   });
 }

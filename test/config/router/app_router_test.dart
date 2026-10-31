@@ -3,11 +3,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
-import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 
@@ -15,30 +24,93 @@ class _MockStorageService implements StorageService {
   final Map<String, String> data = {};
 
   @override
-  Future<void> save(String key, String value) async {
-    data[key] = value;
-  }
+  Future<void> save(String key, String value) async => data[key] = value;
 
   @override
   Future<String> get(String key) async => data[key] ?? '';
 
   @override
-  Future<void> delete(String key) async {
-    data.remove(key);
-  }
+  Future<void> delete(String key) async => data.remove(key);
+}
+
+class _MockSessionService implements SessionService {
+  String currentToken = '';
+
+  @override
+  Future<void> saveTokens({
+    required String token,
+    String? refreshToken,
+    bool rememberMe = true,
+  }) async => currentToken = token;
+
+  @override
+  Future<String> getToken() async => currentToken;
+
+  @override
+  Future<void> clearSession() async => currentToken = '';
+
+  @override
+  Future<String> getRefreshToken() async => '';
+
+  @override
+  Future<bool> isGuest() async => false;
+
+  @override
+  Future<bool> isRemembered() async => true;
+
+  @override
+  Future<void> setGuestMode(bool value) async {}
+
+  @override
+  Future<void> setRememberMe(bool value) async {}
+
+  @override
+  Future<void> updateTokens({
+    required String token,
+    required String refreshToken,
+  }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {}
+
+  @override
+  Future<String> getUserData() async => '';
+}
+
+class _FakeAuthRepo implements AuthRepo {
+  const _FakeAuthRepo();
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
 }
 
 void main() {
   group('AppRouter Configuration & Redirect Guard Tests', () {
     late _MockStorageService storageService;
+    late _MockSessionService sessionService;
 
     setUp(() {
       storageService = _MockStorageService();
+      sessionService = _MockSessionService();
 
       if (getIt.isRegistered<StorageService>()) {
         getIt.unregister<StorageService>();
       }
       getIt.registerSingleton<StorageService>(storageService);
+
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+      getIt.registerSingleton<SessionService>(sessionService);
 
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
@@ -51,7 +123,10 @@ void main() {
         getIt.unregister<LoginCubit>();
       }
       getIt.registerFactory<LoginCubit>(
-        () => LoginView.createFallbackCubit(),
+        () => LoginCubit(
+          LoginUseCase(const _FakeAuthRepo()),
+          getIt<SessionService>(),
+        ),
       );
     });
 
@@ -62,6 +137,9 @@ void main() {
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
       if (getIt.isRegistered<StorageService>()) {
         getIt.unregister<StorageService>();
       }
@@ -70,6 +148,7 @@ void main() {
     test('createRouter returns GoRouter with expected initialLocation', () {
       final router = AppRouter.createRouter(
         storageService: storageService,
+        sessionService: sessionService,
         initialLocation: AppRoutes.login,
       );
 
@@ -83,6 +162,7 @@ void main() {
     test('router configuration contains all expected route paths', () {
       final router = AppRouter.createRouter(
         storageService: storageService,
+        sessionService: sessionService,
         initialLocation: AppRoutes.login,
       );
 
@@ -105,6 +185,7 @@ void main() {
       (tester) async {
         final router = AppRouter.createRouter(
           storageService: storageService,
+          sessionService: sessionService,
           initialLocation: AppRoutes.login,
         );
 
@@ -125,13 +206,15 @@ void main() {
     );
 
     testWidgets(
-      'redirect sends returning user to Login when initialLocation is Onboarding',
+      'redirect sends unauthenticated user to Login when attempting to access Main',
       (tester) async {
         await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
+        sessionService.currentToken = '';
 
         final router = AppRouter.createRouter(
           storageService: storageService,
-          initialLocation: AppRoutes.onboarding,
+          sessionService: sessionService,
+          initialLocation: AppRoutes.main,
         );
 
         await tester.pumpWidget(
@@ -151,13 +234,14 @@ void main() {
     );
 
     testWidgets(
-      'redirect allows returning user directly to Login',
+      'redirect sends returning user to Login when initialLocation is Onboarding',
       (tester) async {
         await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
 
         final router = AppRouter.createRouter(
           storageService: storageService,
-          initialLocation: AppRoutes.login,
+          sessionService: sessionService,
+          initialLocation: AppRoutes.onboarding,
         );
 
         await tester.pumpWidget(
@@ -180,7 +264,7 @@ void main() {
       'redirect sends returning authenticated user directly to Main',
       (tester) async {
         await storageService.save(AppConstants.hasSeenOnboardingKey, 'true');
-        await storageService.save(AppConstants.storageTokenKey, 'valid_token');
+        sessionService.currentToken = 'valid_token';
 
         if (getIt.isRegistered<MainLayoutCubit>()) {
           getIt.unregister<MainLayoutCubit>();
@@ -189,6 +273,7 @@ void main() {
 
         final router = AppRouter.createRouter(
           storageService: storageService,
+          sessionService: sessionService,
           initialLocation: AppRoutes.login,
         );
 

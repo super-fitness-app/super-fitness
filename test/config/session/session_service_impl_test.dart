@@ -57,7 +57,6 @@ void main() {
       expect(await sessionService.isGuest(), isTrue);
       expect(storage.data[AppConstants.guestModeKey], 'true');
 
-      // Tokens in memory should have been cleared
       expect(await sessionService.getToken(), isEmpty);
       expect(await sessionService.getRefreshToken(), isEmpty);
 
@@ -77,6 +76,19 @@ void main() {
       expect(await sessionService.getRefreshToken(), 'test_refresh');
       expect(storage.data[AppConstants.storageTokenKey], 'test_token');
       expect(storage.data[AppConstants.storageRefreshTokenKey], 'test_refresh');
+    });
+
+    test('saveTokens with optional refreshToken omitted stores only token',
+        () async {
+      await sessionService.saveTokens(
+        token: 'token_only',
+        rememberMe: true,
+      );
+
+      expect(await sessionService.getToken(), 'token_only');
+      expect(await sessionService.getRefreshToken(), isEmpty);
+      expect(storage.data[AppConstants.storageTokenKey], 'token_only');
+      expect(storage.data[AppConstants.storageRefreshTokenKey], isNull);
     });
 
     test('saveTokens with rememberMe=false deletes from storage but keeps in memory',
