@@ -67,6 +67,82 @@ void main() {
       cubit.close();
     });
 
+    test('doEvent ignores non-RegisterEvent without updating state', () {
+      final initialState = cubit.state;
+      cubit.doEvent('NonRegisterEventString');
+      expect(cubit.state, equals(initialState));
+    });
+
+    test('submitBasicInfoIntent sets custom rePassword when provided', () {
+      cubit.submitBasicInfoIntent(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        rePassword: 'CustomRePassword123!',
+      );
+
+      expect(cubit.state.data.firstName, 'John');
+      expect(cubit.state.data.lastName, 'Doe');
+      expect(cubit.state.data.email, 'john@example.com');
+      expect(cubit.state.data.password, 'Password123!');
+      expect(cubit.state.data.rePassword, 'CustomRePassword123!');
+    });
+
+    test(
+      'SignInWithGoogleEvent parses multi-word display name into firstName and compound lastName',
+      () async {
+        const googleUser = SocialAuthUserEntity(
+          id: 'google-multi-123',
+          email: 'multi@example.com',
+          displayName: 'John Michael Doe',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+
+        expect(cubit.state.data.firstName, 'John');
+        expect(cubit.state.data.lastName, 'Michael Doe');
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent parses single-word display name into identical firstName and lastName',
+      () async {
+        const googleUser = SocialAuthUserEntity(
+          id: 'google-single-123',
+          email: 'single@example.com',
+          displayName: 'Cher',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+
+        expect(cubit.state.data.firstName, 'Cher');
+        expect(cubit.state.data.lastName, 'Cher');
+      },
+    );
+
+    test(
+      'SignInWithGoogleEvent fallback to default User when display name is whitespace',
+      () async {
+        const googleUser = SocialAuthUserEntity(
+          id: 'google-empty-123',
+          email: 'empty@example.com',
+          displayName: '   ',
+        );
+        fakeAuthRepo.googleResultToReturn = const Success(googleUser);
+
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+
+        expect(cubit.state.data.firstName, 'User');
+        expect(cubit.state.data.lastName, 'User');
+      },
+    );
+
     test('initial state has default RegisterData and initial registerState', () {
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.failure, isNull);
@@ -434,6 +510,34 @@ void main() {
       expect(dto?.firstName, 'John');
       expect(dto?.height, 180);
       expect(dto?.activityLevel, 'intermediate');
+    });
+
+    test('toParams and toDto return null when any required field is missing', () {
+      const missingGender = RegisterData(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        height: 180,
+        weight: 75,
+        age: 25,
+        goal: 'muscle',
+        activityLevel: 'intermediate',
+      );
+      expect(missingGender.isComplete, isFalse);
+      expect(missingGender.toParams(), isNull);
+      expect(missingGender.toDto(), isNull);
+
+      const missingMetrics = RegisterData(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        gender: 'male',
+      );
+      expect(missingMetrics.isComplete, isFalse);
+      expect(missingMetrics.toParams(), isNull);
+      expect(missingMetrics.toDto(), isNull);
     });
   });
 
