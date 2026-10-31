@@ -1,10 +1,9 @@
-part of 'exercise_cubit.dart';
+// part of 'exercise_cubit.dart';
 
-abstract base class ExerciseEvent extends FeatureEvent {
-  const ExerciseEvent();
-}
+// abstract base class ExerciseEvent extends FeatureEvent {
+//   const ExerciseEvent();
+// }
 
-final class GetExerciseDataEvent extends ExerciseEvent {
-  const GetExerciseDataEvent();
-}
-
+// final class GetExerciseDataEvent extends ExerciseEvent {
+//   const GetExerciseDataEvent();
+// }

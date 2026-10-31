@@ -12,4 +12,3 @@ class HomeData extends Equatable {
   @override
   List<Object?> get props => [];
 }
-

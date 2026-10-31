@@ -7,5 +7,8 @@ class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
   final MealsApiClient _mealsApiClient;
 
   MealsRemoteDataSourceImpl(this._mealsApiClient);
+  Future<MealsApiClient> getallhome() async {
+    final response = _mealsApiClient;
+    return response;
+  }
 }
-

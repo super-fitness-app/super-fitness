@@ -7,4 +7,3 @@ abstract base class WorkoutEvent extends FeatureEvent {
 final class GetWorkoutsEvent extends WorkoutEvent {
   const GetWorkoutsEvent();
 }
-

@@ -63,4 +63,3 @@ class _WorkoutViewState extends State<WorkoutView>
     );
   }
 }
-

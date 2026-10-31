@@ -63,4 +63,3 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
     );
   }
 }
-

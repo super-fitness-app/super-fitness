@@ -7,5 +7,8 @@ class MealsRepoImpl implements MealsRepo {
   final MealsRemoteDataSource _mealsRemoteDataSource;
 
   MealsRepoImpl(this._mealsRemoteDataSource);
+  Future<MealsRemoteDataSource> getallhome() async {
+    final response = _mealsRemoteDataSource;
+    return response;
+  }
 }
-
