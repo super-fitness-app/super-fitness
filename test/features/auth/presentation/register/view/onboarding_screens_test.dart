@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/l10n/app_localizations_en.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -58,6 +58,7 @@ Widget _wrapWithCubit(Widget child, RegisterCubit cubit) {
 }
 
 void main() {
+  final l10n = AppLocalizationsEn();
   late RegisterCubit cubit;
 
   setUp(() {
@@ -79,11 +80,11 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectGenderView(), cubit));
 
-      expect(find.text(AppStrings.tellUsAboutYourself), findsOneWidget);
-      expect(find.text(AppStrings.weNeedToKnowYourGender), findsOneWidget);
+      expect(find.text(l10n.tellUsAboutYourself), findsOneWidget);
+      expect(find.text(l10n.weNeedToKnowYourGender), findsOneWidget);
       expect(find.byType(GenderOptionButton), findsNWidgets(2));
-      expect(find.text(AppStrings.male), findsOneWidget);
-      expect(find.text(AppStrings.female), findsOneWidget);
+      expect(find.text(l10n.male), findsOneWidget);
+      expect(find.text(l10n.female), findsOneWidget);
       expect(find.byType(OnboardingBottomButton), findsOneWidget);
     });
 
@@ -100,7 +101,7 @@ void main() {
       );
       expect(nextButton.onPressed, isNull);
 
-      await tester.tap(find.text(AppStrings.male));
+      await tester.tap(find.text(l10n.male));
       await tester.pumpAndSettle();
 
       final enabledButton = tester.widget<ElevatedButton>(
@@ -119,10 +120,10 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectAgeView(), cubit));
 
-      expect(find.text(AppStrings.howOldAreYou), findsOneWidget);
-      expect(find.text(AppStrings.personalizedPlanSubtitle), findsOneWidget);
+      expect(find.text(l10n.howOldAreYou), findsOneWidget);
+      expect(find.text(l10n.personalizedPlanSubtitle), findsOneWidget);
       expect(find.byType(HorizontalNumberPicker), findsOneWidget);
-      expect(find.text(AppStrings.year), findsOneWidget);
+      expect(find.text(l10n.year), findsOneWidget);
     });
   });
 
@@ -132,10 +133,10 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectWeightView(), cubit));
 
-      expect(find.text(AppStrings.whatIsYourWeight), findsOneWidget);
+      expect(find.text(l10n.whatIsYourWeight), findsOneWidget);
       expect(find.byType(HorizontalNumberPicker), findsOneWidget);
-      expect(find.text(AppStrings.kg), findsOneWidget);
-      expect(find.text(AppStrings.done), findsOneWidget);
+      expect(find.text(l10n.kg), findsOneWidget);
+      expect(find.text(l10n.done), findsOneWidget);
     });
   });
 
@@ -145,10 +146,10 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectHeightView(), cubit));
 
-      expect(find.text(AppStrings.whatIsYourHeight), findsOneWidget);
+      expect(find.text(l10n.whatIsYourHeight), findsOneWidget);
       expect(find.byType(HorizontalNumberPicker), findsOneWidget);
-      expect(find.text(AppStrings.cm), findsOneWidget);
-      expect(find.text(AppStrings.next), findsOneWidget);
+      expect(find.text(l10n.cm), findsOneWidget);
+      expect(find.text(l10n.next), findsOneWidget);
     });
   });
 
@@ -158,12 +159,12 @@ void main() {
     ) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectGoalView(), cubit));
 
-      expect(find.text(AppStrings.whatIsYourGoal), findsOneWidget);
+      expect(find.text(l10n.whatIsYourGoal), findsOneWidget);
       expect(find.byType(OnboardingSelectableItem), findsNWidgets(5));
-      expect(find.text(AppStrings.gainWeight), findsOneWidget);
-      expect(find.text(AppStrings.loseWeight), findsOneWidget);
+      expect(find.text(l10n.gainWeight), findsOneWidget);
+      expect(find.text(l10n.loseWeight), findsOneWidget);
 
-      await tester.tap(find.text(AppStrings.getFitter));
+      await tester.tap(find.text(l10n.getFitter));
       await tester.pumpAndSettle();
 
       final button = tester.widget<ElevatedButton>(
@@ -184,15 +185,15 @@ void main() {
         _wrapWithCubit(const SelectActivityView(), cubit),
       );
 
-      expect(find.text(AppStrings.activityLevelTitle), findsOneWidget);
+      expect(find.text(l10n.activityLevelTitle), findsOneWidget);
       expect(find.byType(OnboardingSelectableItem), findsNWidgets(5));
-      expect(find.text(AppStrings.rookie), findsOneWidget);
-      expect(find.text(AppStrings.beginner), findsOneWidget);
-      expect(find.text(AppStrings.intermediate), findsOneWidget);
-      expect(find.text(AppStrings.advance), findsOneWidget);
-      expect(find.text(AppStrings.trueBeast), findsOneWidget);
+      expect(find.text(l10n.rookie), findsOneWidget);
+      expect(find.text(l10n.beginner), findsOneWidget);
+      expect(find.text(l10n.intermediate), findsOneWidget);
+      expect(find.text(l10n.advance), findsOneWidget);
+      expect(find.text(l10n.trueBeast), findsOneWidget);
 
-      await tester.tap(find.text(AppStrings.intermediate));
+      await tester.tap(find.text(l10n.intermediate));
       await tester.pumpAndSettle();
 
       final button = tester.widget<ElevatedButton>(
@@ -215,7 +216,7 @@ void main() {
 
       expect(find.byType(PageView), findsOneWidget);
       expect(find.byType(SelectGenderView), findsOneWidget);
-      expect(find.text(AppStrings.tellUsAboutYourself), findsOneWidget);
+      expect(find.text(l10n.tellUsAboutYourself), findsOneWidget);
     });
 
     testWidgets(
@@ -232,37 +233,37 @@ void main() {
 
         // Step 1: Select Gender
         expect(find.byType(SelectGenderView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.male));
+        await tester.tap(find.text(l10n.male));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 2: Select Age
         expect(find.byType(SelectAgeView), findsOneWidget);
-        expect(find.text(AppStrings.howOldAreYou), findsOneWidget);
-        await tester.tap(find.text(AppStrings.next));
+        expect(find.text(l10n.howOldAreYou), findsOneWidget);
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 3: Select Weight
         expect(find.byType(SelectWeightView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.done));
+        await tester.tap(find.text(l10n.done));
         await tester.pumpAndSettle();
 
         // Step 4: Select Height
         expect(find.byType(SelectHeightView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 5: Select Goal
         expect(find.byType(SelectGoalView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.getFitter));
+        await tester.tap(find.text(l10n.getFitter));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 6: Select Activity Level
         expect(find.byType(SelectActivityView), findsOneWidget);
-        expect(find.text(AppStrings.activityLevelTitle), findsOneWidget);
+        expect(find.text(l10n.activityLevelTitle), findsOneWidget);
 
         // Verify final submission button is initially disabled
         final nextButtonBefore = tester.widget<ElevatedButton>(
@@ -274,7 +275,7 @@ void main() {
         expect(nextButtonBefore.onPressed, isNull);
 
         // Select an activity level
-        await tester.tap(find.text(AppStrings.intermediate));
+        await tester.tap(find.text(l10n.intermediate));
         await tester.pumpAndSettle();
 
         // Verify final submission button is now enabled and callable
@@ -287,12 +288,12 @@ void main() {
         expect(nextButtonAfter.onPressed, isNotNull);
 
         // Call the final button
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Verify cubit accumulated data across the full navigation chain
         expect(cubit.state.data.gender, 'male');
-        expect(cubit.state.data.goal, AppStrings.getFitter);
+        expect(cubit.state.data.goal, l10n.getFitter);
         expect(cubit.state.data.activityLevel, 'level3');
       },
     );
@@ -305,9 +306,9 @@ void main() {
         );
 
         // Advance to Step 2
-        await tester.tap(find.text(AppStrings.male));
+        await tester.tap(find.text(l10n.male));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         expect(find.byType(SelectAgeView), findsOneWidget);
@@ -388,45 +389,45 @@ void main() {
 
         // Step 1: Select Gender
         expect(find.byType(SelectGenderView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.male));
+        await tester.tap(find.text(l10n.male));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 2: Select Age
         expect(find.byType(SelectAgeView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 3: Select Weight
         expect(find.byType(SelectWeightView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.done));
+        await tester.tap(find.text(l10n.done));
         await tester.pumpAndSettle();
 
         // Step 4: Select Height
         expect(find.byType(SelectHeightView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 5: Select Goal
         expect(find.byType(SelectGoalView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.getFitter));
+        await tester.tap(find.text(l10n.getFitter));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 6: Select Activity Level
         expect(find.byType(SelectActivityView), findsOneWidget);
-        await tester.tap(find.text(AppStrings.intermediate));
+        await tester.tap(find.text(l10n.intermediate));
         await tester.pumpAndSettle();
 
         // Submit on final step
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Verify cubit state data
         expect(testCubit.state.data.gender, 'male');
-        expect(testCubit.state.data.goal, AppStrings.getFitter);
+        expect(testCubit.state.data.goal, l10n.getFitter);
         expect(testCubit.state.data.activityLevel, 'level3');
         expect(fakeRepo.passedRequest, isNotNull);
         expect(fakeRepo.passedRequest?.email, 'john@example.com');
@@ -492,35 +493,35 @@ void main() {
         await tester.pumpAndSettle();
 
         // Step 1: Gender
-        await tester.tap(find.text(AppStrings.male));
+        await tester.tap(find.text(l10n.male));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 2: Age
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 3: Weight
-        await tester.tap(find.text(AppStrings.done));
+        await tester.tap(find.text(l10n.done));
         await tester.pumpAndSettle();
 
         // Step 4: Height
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 5: Goal
-        await tester.tap(find.text(AppStrings.getFitter));
+        await tester.tap(find.text(l10n.getFitter));
         await tester.pumpAndSettle();
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Step 6: Activity Level
-        await tester.tap(find.text(AppStrings.intermediate));
+        await tester.tap(find.text(l10n.intermediate));
         await tester.pumpAndSettle();
 
         // Submit on final step
-        await tester.tap(find.text(AppStrings.next));
+        await tester.tap(find.text(l10n.next));
         await tester.pumpAndSettle();
 
         // Verify SnackBar shown with error message

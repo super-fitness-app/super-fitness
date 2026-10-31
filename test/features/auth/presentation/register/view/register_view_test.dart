@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/l10n/app_localizations_en.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -73,6 +73,8 @@ Widget _createTestWidget(RegisterCubit testCubit) {
 }
 
 void main() {
+  final l10n = AppLocalizationsEn();
+
   group('RegisterView Widget Tests', () {
     testWidgets(
       'reads cubit from BlocProvider when no cubit is passed to constructor',
@@ -106,19 +108,19 @@ void main() {
       await tester.pumpWidget(_createTestWidget(cubit));
 
       expect(find.byType(RegisterHeader), findsOneWidget);
-      expect(find.text(AppStrings.heyThere), findsOneWidget);
-      expect(find.text(AppStrings.createAnAccount), findsOneWidget);
+      expect(find.text(l10n.heyThere), findsOneWidget);
+      expect(find.text(l10n.createAnAccount), findsOneWidget);
 
-      expect(find.text(AppStrings.register), findsNWidgets(2));
+      expect(find.text(l10n.register), findsNWidgets(2));
 
       expect(find.byType(RegisterTextField), findsNWidgets(4));
-      expect(find.text(AppStrings.firstName), findsOneWidget);
-      expect(find.text(AppStrings.lastName), findsOneWidget);
-      expect(find.text(AppStrings.email), findsOneWidget);
-      expect(find.text(AppStrings.password), findsOneWidget);
+      expect(find.text(l10n.firstName), findsOneWidget);
+      expect(find.text(l10n.lastName), findsOneWidget);
+      expect(find.text(l10n.email), findsOneWidget);
+      expect(find.text(l10n.password), findsOneWidget);
 
       expect(find.byType(SocialAuthButtons), findsOneWidget);
-      expect(find.text(AppStrings.or), findsOneWidget);
+      expect(find.text(l10n.or), findsOneWidget);
       expect(find.byType(SocialIconButton), findsNWidgets(3));
 
       expect(find.byType(ElevatedButton), findsOneWidget);
@@ -128,7 +130,7 @@ void main() {
         find.byWidgetPredicate(
           (widget) =>
               widget is RichText &&
-              widget.text.toPlainText().contains(AppStrings.login),
+              widget.text.toPlainText().contains(l10n.login),
         ),
         findsOneWidget,
       );
@@ -145,10 +147,10 @@ void main() {
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
-        expect(find.text(AppStrings.firstNameRequired), findsOneWidget);
-        expect(find.text(AppStrings.lastNameRequired), findsOneWidget);
-        expect(find.text(AppStrings.invalidEmail), findsOneWidget);
-        expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
+        expect(find.text(l10n.firstNameRequired), findsOneWidget);
+        expect(find.text(l10n.lastNameRequired), findsOneWidget);
+        expect(find.text(l10n.invalidEmail), findsOneWidget);
+        expect(find.text(l10n.passwordMinLength), findsOneWidget);
       },
     );
 
@@ -180,10 +182,10 @@ void main() {
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
-        expect(find.text(AppStrings.firstNameRequired), findsNothing);
-        expect(find.text(AppStrings.lastNameRequired), findsNothing);
-        expect(find.text(AppStrings.invalidEmail), findsOneWidget);
-        expect(find.text(AppStrings.passwordMinLength), findsOneWidget);
+        expect(find.text(l10n.firstNameRequired), findsNothing);
+        expect(find.text(l10n.lastNameRequired), findsNothing);
+        expect(find.text(l10n.invalidEmail), findsOneWidget);
+        expect(find.text(l10n.passwordMinLength), findsOneWidget);
       },
     );
 
@@ -215,10 +217,10 @@ void main() {
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
-        expect(find.text(AppStrings.firstNameRequired), findsNothing);
-        expect(find.text(AppStrings.lastNameRequired), findsNothing);
-        expect(find.text(AppStrings.invalidEmail), findsNothing);
-        expect(find.text(AppStrings.passwordMinLength), findsNothing);
+        expect(find.text(l10n.firstNameRequired), findsNothing);
+        expect(find.text(l10n.lastNameRequired), findsNothing);
+        expect(find.text(l10n.invalidEmail), findsNothing);
+        expect(find.text(l10n.passwordMinLength), findsNothing);
       },
     );
 

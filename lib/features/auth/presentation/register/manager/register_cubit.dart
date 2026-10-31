@@ -5,7 +5,6 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -168,10 +167,10 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     if (params == null) {
       emit(
         state.copyWith(
-          registerState: BaseState.error(AppStrings.missingRegistrationData),
+          registerState: BaseState.error('Please fill all required registration details'),
         ),
       );
-      emitEvent(const DisplayError(AppStrings.missingRegistrationData));
+      emitEvent(const DisplayError('Please fill all required registration details'));
       return;
     }
 
@@ -189,7 +188,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
             registerState: BaseState.success(data),
           ),
         );
-        emitEvent(const DisplaySuccess(AppStrings.registeredSuccessfully));
+        emitEvent(const DisplaySuccess('Registered successfully'));
       case FailureResponse(:final failure):
         emit(
           state.copyWith(
@@ -233,10 +232,10 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         if (userId == null || userId.trim().isEmpty) {
           emit(
             state.copyWith(
-              registerState: BaseState.error(AppStrings.googleAccountIdMissing),
+              registerState: BaseState.error('Google account ID is missing. Please try again.'),
             ),
           );
-          emitEvent(const DisplayError(AppStrings.googleAccountIdMissing));
+          emitEvent(const DisplayError('Google account ID is missing. Please try again.'));
           return;
         }
 
@@ -268,7 +267,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
           ),
         );
         emitEvent(
-          const DisplaySuccess(AppStrings.googleAccountConnected),
+          const DisplaySuccess('Google account connected. Complete your profile.'),
         );
         emitEvent(
           NavigateEvent(AppRoutes.completeRegister, extra: this),

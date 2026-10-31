@@ -3,7 +3,6 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -412,7 +411,7 @@ void main() {
       'SignInWithGoogleEvent with CancelledFailure emits failure state and DisplayError with cancellation message',
       () async {
         fakeAuthRepo.googleResultToReturn = const Failure(
-          CancelledFailure(AppStrings.signInCancelled),
+          CancelledFailure('Sign-in cancelled'),
         );
 
         BaseEvent? receivedEvent;
@@ -427,7 +426,7 @@ void main() {
         expect(cubit.state.failure, isA<CancelledFailure>());
         expect(receivedEvent, isA<DisplayError>());
         final displayError = receivedEvent as DisplayError;
-        expect(displayError.errorMsg, AppStrings.signInCancelled);
+        expect(displayError.errorMsg, 'Sign-in cancelled');
         expect(displayError.failure, isA<CancelledFailure>());
 
         await sub.cancel();

@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/l10n/app_localizations_en.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_fields.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_form_card.dart';
@@ -23,6 +23,8 @@ Widget _wrapWithLocalization(Widget child) {
 }
 
 void main() {
+  final l10n = AppLocalizationsEn();
+
   group('SocialAuthButtons & SocialIconButton Widget Tests', () {
     testWidgets(
       'renders OrDivider, three social buttons, and triggers all callbacks',
@@ -42,7 +44,7 @@ void main() {
         );
 
         expect(find.byType(OrDivider), findsOneWidget);
-        expect(find.text(AppStrings.or), findsOneWidget);
+        expect(find.text(l10n.or), findsOneWidget);
         expect(find.byType(SocialIconButton), findsNWidgets(3));
 
         // Tap Facebook
@@ -103,8 +105,8 @@ void main() {
         ),
       );
 
-      expect(find.text(AppStrings.heyThere), findsOneWidget);
-      expect(find.text(AppStrings.createAnAccount), findsOneWidget);
+      expect(find.text(l10n.heyThere), findsOneWidget);
+      expect(find.text(l10n.createAnAccount), findsOneWidget);
       expect(find.byType(Image), findsOneWidget);
     });
   });
@@ -208,10 +210,10 @@ void main() {
         ),
       );
 
-      expect(find.text(AppStrings.firstName), findsOneWidget);
-      expect(find.text(AppStrings.lastName), findsOneWidget);
-      expect(find.text(AppStrings.email), findsOneWidget);
-      expect(find.text(AppStrings.password), findsOneWidget);
+      expect(find.text(l10n.firstName), findsOneWidget);
+      expect(find.text(l10n.lastName), findsOneWidget);
+      expect(find.text(l10n.email), findsOneWidget);
+      expect(find.text(l10n.password), findsOneWidget);
 
       firstCtrl.dispose();
       lastCtrl.dispose();
@@ -243,7 +245,7 @@ void main() {
         ),
       );
 
-      expect(find.text(AppStrings.register), findsNWidgets(2)); // Title and Button
+      expect(find.text(l10n.register), findsNWidgets(2)); // Title and Button
       expect(find.byType(RegisterFields), findsOneWidget);
       expect(find.byType(SocialAuthButtons), findsOneWidget);
 
