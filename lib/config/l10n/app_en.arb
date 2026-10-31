@@ -19,6 +19,7 @@
   "fileRequiredError": "Please upload the required file",
   "dropdownRequiredError": "Please select an option",
   "generalValidationError": "Invalid input",
+  "invalidLoginPasswordError": "Password must be at least 6 characters with an uppercase letter and a number",
 
   "generalErrorMessage": "Something went wrong. Please try again later.",
   "connectionErrorMessage": "Connection timed out. Please check your internet connection.",
@@ -34,5 +35,13 @@
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
 
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+  "heyThere": "Hey There",
+  "welcomeBack": "WELCOME BACK",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot Password ?",
+  "dontHaveAccount": "Don't Have An Account Yet ?",
+  "register": "Register"
 }

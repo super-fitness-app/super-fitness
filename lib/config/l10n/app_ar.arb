@@ -1,5 +1,6 @@
 {
   "@@locale": "ar",
+  "appName": "سوبر فيتنس",
 
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
@@ -15,6 +16,7 @@
   "fileRequiredError": "يرجى تحميل الملف المطلوب",
   "dropdownRequiredError": "يرجى اختيار قيمة",
   "generalValidationError": "مدخلات غير صحيحة",
+  "invalidLoginPasswordError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم",
 
   "generalErrorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
   "connectionErrorMessage": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
@@ -30,5 +32,13 @@
   "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
   "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
 
-  "loginTitle": "مرحباً بعودتك!"
+  "loginTitle": "مرحباً بعودتك!",
+  "heyThere": "مرحباً",
+  "welcomeBack": "مرحباً بعودتك",
+  "login": "تسجيل الدخول",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "dontHaveAccount": "ليس لديك حساب بعد؟",
+  "register": "إنشاء حساب"
 }

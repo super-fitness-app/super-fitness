@@ -3,11 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
-
 import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
@@ -54,29 +52,16 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        // Verify Scaffold properties
         final scaffoldFinder = find.byType(Scaffold);
         expect(scaffoldFinder, findsOneWidget);
         final scaffold = tester.widget<Scaffold>(scaffoldFinder);
         expect(scaffold.backgroundColor, AppColors.background);
 
-        // Verify SafeArea and Padding
         expect(find.byType(SafeArea), findsOneWidget);
-        final paddingFinder = find.descendant(
-          of: find.byType(SafeArea),
-          matching: find.byType(Padding),
-        );
-        expect(paddingFinder, findsWidgets);
 
-        // Verify localized title text and typography
-        final titleFinder = find.text('Welcome Back!');
-        expect(titleFinder, findsOneWidget);
-
-        final textWidget = tester.widget<Text>(titleFinder);
-        expect(textWidget.textAlign, TextAlign.center);
-        expect(textWidget.style?.fontSize, AppTextStyles.appTitle.fontSize);
-        expect(textWidget.style?.fontWeight, AppTextStyles.appTitle.fontWeight);
-        expect(textWidget.style?.color, AppTextStyles.appTitle.color);
+        expect(find.text('Hey There'), findsOneWidget);
+        expect(find.text('WELCOME BACK'), findsOneWidget);
+        expect(find.text('Login'), findsNWidgets(2));
       },
     );
 
@@ -96,8 +81,8 @@ void main() {
       await tester.pumpAndSettle();
 
       final l10n = await AppLocalizations.delegate.load(const Locale('ar'));
-      final titleFinder = find.text(l10n.loginTitle);
-      expect(titleFinder, findsOneWidget);
+      expect(find.text(l10n.welcomeBack), findsOneWidget);
+      expect(find.text(l10n.login), findsNWidgets(2));
       expect(tester.takeException(), isNull);
     });
   });

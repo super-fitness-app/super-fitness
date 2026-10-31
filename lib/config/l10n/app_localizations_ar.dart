@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'Super Fitness';
+  String get appName => 'سوبر فيتنس';
 
   @override
   String get emptyValidationError => 'هذا الحقل مطلوب';
@@ -59,6 +59,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get generalValidationError => 'مدخلات غير صحيحة';
 
   @override
+  String get invalidLoginPasswordError =>
+      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم';
+
+  @override
   String get generalErrorMessage =>
       'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
 
@@ -106,4 +110,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginTitle => 'مرحباً بعودتك!';
+
+  @override
+  String get heyThere => 'مرحباً';
+
+  @override
+  String get welcomeBack => 'مرحباً بعودتك';
+
+  @override
+  String get login => 'تسجيل الدخول';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب بعد؟';
+
+  @override
+  String get register => 'إنشاء حساب';
 }

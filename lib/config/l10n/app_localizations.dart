@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Invalid input'**
   String get generalValidationError;
 
+  /// No description provided for @invalidLoginPasswordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters with an uppercase letter and a number'**
+  String get invalidLoginPasswordError;
+
   /// No description provided for @generalErrorMessage.
   ///
   /// In en, this message translates to:
@@ -271,6 +277,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome Back!'**
   String get loginTitle;
+
+  /// No description provided for @heyThere.
+  ///
+  /// In en, this message translates to:
+  /// **'Hey There'**
+  String get heyThere;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'WELCOME BACK'**
+  String get welcomeBack;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password ?'**
+  String get forgotPassword;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t Have An Account Yet ?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
 }
 
 class _AppLocalizationsDelegate
