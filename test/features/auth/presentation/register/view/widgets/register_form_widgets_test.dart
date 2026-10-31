@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
+import 'package:super_fitness/features/auth/presentation/register/view/widgets/already_have_account_row.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_fields.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_form_card.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/register_header.dart';
@@ -259,8 +260,11 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       expect(registerPressed, isTrue);
 
-      final richTextFinder = find.byType(RichText);
-      final richText = tester.widget<RichText>(richTextFinder.first);
+      final richTextFinder = find.descendant(
+        of: find.byType(AlreadyHaveAccountRow),
+        matching: find.byType(RichText),
+      );
+      final richText = tester.widget<RichText>(richTextFinder);
       final textSpan = richText.text as TextSpan;
       final loginSpan = textSpan.children!.first as TextSpan;
       (loginSpan.recognizer! as TapGestureRecognizer).onTap?.call();
