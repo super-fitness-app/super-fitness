@@ -99,8 +99,30 @@ class _RegisterViewState extends State<RegisterView>
             right: 0,
             child: Form(
               key: _formKey,
-              child: BlocBuilder<RegisterCubit, RegisterState>(
+              child: BlocConsumer<RegisterCubit, RegisterState>(
                 bloc: widget.cubit != null ? _cubit : null,
+                listener: (context, state) {
+                  if (state.data.firstName != null &&
+                      state.data.firstName!.isNotEmpty &&
+                      _firstNameController.text != state.data.firstName) {
+                    _firstNameController.text = state.data.firstName!;
+                  }
+                  if (state.data.lastName != null &&
+                      state.data.lastName!.isNotEmpty &&
+                      _lastNameController.text != state.data.lastName) {
+                    _lastNameController.text = state.data.lastName!;
+                  }
+                  if (state.data.email != null &&
+                      state.data.email!.isNotEmpty &&
+                      _emailController.text != state.data.email) {
+                    _emailController.text = state.data.email!;
+                  }
+                  if (state.data.password != null &&
+                      state.data.password!.isNotEmpty &&
+                      _passwordController.text != state.data.password) {
+                    _passwordController.text = state.data.password!;
+                  }
+                },
                 builder: (context, state) {
                   return RegisterFormCard(
                     firstNameController: _firstNameController,

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
@@ -245,7 +246,7 @@ void main() {
     );
 
     test(
-      'SignInWithGoogleEvent success generates deterministic password and saves user data in Cubit state',
+      'SignInWithGoogleEvent success generates deterministic password, saves user data in Cubit state, and emits DisplaySuccess & NavigateEvent to complete register',
       () async {
         const googleUser = SocialAuthUserEntity(
           id: '12345',
@@ -254,13 +255,11 @@ void main() {
         );
         fakeAuthRepo.googleResultToReturn = const Success(googleUser);
 
-        BaseEvent? receivedEvent;
-        final sub = cubit.eventStream.listen((event) {
-          receivedEvent = event;
-        });
+        final receivedEvents = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(receivedEvents.add);
 
         await cubit.signInWithGoogleIntent();
-        await Future.microtask(() {});
+        await pumpEventQueue();
 
         final expectedPassword = testPasswordGenerator.generate('12345');
         expect(cubit.state.isLoading, isFalse);
@@ -269,7 +268,16 @@ void main() {
         expect(cubit.state.data.lastName, 'Doe');
         expect(cubit.state.data.password, equals(expectedPassword));
         expect(cubit.state.data.rePassword, equals(expectedPassword));
-        expect(receivedEvent, isA<DisplaySuccess>());
+        expect(receivedEvents, contains(isA<DisplaySuccess>()));
+        expect(
+          receivedEvents.any(
+            (e) =>
+                e is NavigateEvent &&
+                e.routeName == AppRoutes.completeRegister &&
+                e.extra == cubit,
+          ),
+          isTrue,
+        );
 
         await sub.cancel();
       },
@@ -291,7 +299,7 @@ void main() {
         });
 
         await cubit.signInWithGoogleIntent();
-        await Future.microtask(() {});
+        await pumpEventQueue();
 
         expect(cubit.state.isLoading, isFalse);
         expect(cubit.state.failure, isNotNull);
@@ -314,7 +322,7 @@ void main() {
         });
 
         await cubit.signInWithGoogleIntent();
-        await Future.microtask(() {});
+        await pumpEventQueue();
 
         expect(cubit.state.isLoading, isFalse);
         expect(cubit.state.failure, isA<ServerMessageFailure>());
@@ -337,7 +345,7 @@ void main() {
         });
 
         await cubit.signInWithGoogleIntent();
-        await Future.microtask(() {});
+        await pumpEventQueue();
 
         expect(cubit.state.isLoading, isFalse);
         expect(cubit.state.failure, isA<CancelledFailure>());

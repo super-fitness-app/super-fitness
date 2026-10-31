@@ -24,17 +24,20 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/r
 import 'package:super_fitness/features/auth/presentation/register/view/widgets/social_auth_buttons.dart';
 
 class FakeAuthRepo implements AuthRepo {
+  ApiResults<RegisterEntity>? registerResultToReturn;
+  ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
-      throw UnimplementedError();
+      registerResultToReturn ?? (throw UnimplementedError());
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
-      throw UnimplementedError();
+      googleResultToReturn ?? (throw UnimplementedError());
 }
 
-RegisterCubit createTestCubit() {
-  final fakeRepo = FakeAuthRepo();
+RegisterCubit createTestCubit([FakeAuthRepo? repo]) {
+  final fakeRepo = repo ?? FakeAuthRepo();
   return RegisterCubit(
     RegisterUseCase(fakeRepo),
     SignInWithGoogleUseCase(fakeRepo),
@@ -56,7 +59,9 @@ Widget _createTestWidget([RegisterCubit? testCubit]) {
       ),
       GoRoute(
         path: AppRoutes.completeRegister,
-        builder: (context, state) => const SizedBox(),
+        builder: (context, state) => const Scaffold(
+          body: Text('Complete Register Screen'),
+        ),
       ),
     ],
   );
@@ -250,6 +255,35 @@ void main() {
         expect(cubit.state.data.email, 'john.doe@example.com');
         expect(cubit.state.data.password, 'Password123!');
         expect(cubit.state.data.rePassword, 'Password123!');
+      },
+    );
+
+    testWidgets(
+      'tapping google icon connects google account and redirects to complete register screen',
+      (tester) async {
+        final fakeRepo = FakeAuthRepo();
+        fakeRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'google-user-123',
+            email: 'google.user@example.com',
+            displayName: 'Google User',
+          ),
+        );
+        final testCubit = createTestCubit(fakeRepo);
+
+        await tester.pumpWidget(_createTestWidget(testCubit));
+
+        // Find and tap the Google icon button (second social button)
+        final googleButton = find.byType(SocialIconButton).at(1);
+        await tester.tap(googleButton);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Complete Register Screen'), findsOneWidget);
+        expect(testCubit.state.data.email, 'google.user@example.com');
+        expect(testCubit.state.data.firstName, 'Google');
+        expect(testCubit.state.data.lastName, 'User');
+
+        testCubit.close();
       },
     );
   });

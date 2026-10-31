@@ -4,6 +4,7 @@ import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_strings.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
@@ -227,14 +228,18 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         final generatedPassword = _passwordGenerator.generate(userId);
 
         // 2. Parse display name into firstName and lastName
-        final names = data.displayName.trim().split(' ');
-        final firstName = names.isNotEmpty ? names.first : '';
-        final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
+        final names = data.displayName.trim().split(RegExp(r'\s+'));
+        final firstName = names.isNotEmpty && names.first.isNotEmpty
+            ? names.first
+            : (state.data.firstName ?? 'User');
+        final lastName = names.length > 1
+            ? names.sublist(1).join(' ')
+            : (state.data.lastName ?? firstName);
 
         // 3. Save name, email, and generated password into Cubit's state (RegisterData)
         final updatedData = state.data.copyWith(
-          firstName: firstName.isNotEmpty ? firstName : state.data.firstName,
-          lastName: lastName.isNotEmpty ? lastName : state.data.lastName,
+          firstName: firstName,
+          lastName: lastName,
           email: data.email,
           password: generatedPassword,
           rePassword: generatedPassword,
@@ -248,6 +253,9 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         );
         emitEvent(
           const DisplaySuccess(AppStrings.googleAccountConnected),
+        );
+        emitEvent(
+          NavigateEvent(AppRoutes.completeRegister, extra: this),
         );
 
       case FailureResponse(:final failure):
