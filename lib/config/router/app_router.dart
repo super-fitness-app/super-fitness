@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
+import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
@@ -14,6 +17,7 @@ abstract final class AppRoutes {
   static const exercise = '/exercise';
   static const food = '/food';
   static const foodDetails = '/food-details';
+  static const exerciseview = '/exercise-details';
 }
 
 abstract final class AppRouter {
@@ -21,8 +25,16 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.exerciseview,
     routes: [
+      GoRoute(
+        path: AppRoutes.exerciseview,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<ExerciseCubit>(),
+          child: const ExerciseView(),
+        ),
+      ),
       GoRoute(
         path: AppRoutes.login,
         parentNavigatorKey: _rootNavigatorKey,
