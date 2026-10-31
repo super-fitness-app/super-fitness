@@ -30,15 +30,15 @@ void main() {
 
       expect(find.text('Male'), findsOneWidget);
       expect(find.byIcon(Icons.male), findsOneWidget);
+      expect(find.byType(InkWell), findsOneWidget);
 
-      final container = tester.widget<Container>(
+      final material = tester.widget<Material>(
         find.descendant(
           of: find.byType(GenderOptionButton),
-          matching: find.byType(Container),
+          matching: find.byType(Material),
         ),
       );
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, AppColors.orangeBase);
+      expect(material.color, AppColors.orangeBase);
 
       await tester.tap(find.byType(GenderOptionButton));
       expect(tapped, isTrue);
@@ -58,14 +58,13 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(
+      final material = tester.widget<Material>(
         find.descendant(
           of: find.byType(GenderOptionButton),
-          matching: find.byType(Container),
+          matching: find.byType(Material),
         ),
       );
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, Colors.transparent);
+      expect(material.color, Colors.transparent);
     });
   });
 
@@ -271,7 +270,8 @@ void main() {
       );
 
       expect(find.byType(Image), findsNWidgets(2));
-      await tester.tap(find.byType(GestureDetector));
+      expect(find.byType(IconButton), findsOneWidget);
+      await tester.tap(find.byType(IconButton));
       expect(backTapped, isTrue);
     });
   });

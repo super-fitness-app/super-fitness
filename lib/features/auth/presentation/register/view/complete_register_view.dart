@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/ui/extensions/app_failure_extension.dart';
 import '../manager/register_cubit.dart';
 import 'select_activity_view.dart';
@@ -28,6 +29,18 @@ class _CompleteRegisterViewState extends State<CompleteRegisterView> {
   void initState() {
     super.initState();
     _pageController = PageController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage(AppImages.authBackground), context);
+    precacheImage(const AssetImage(AppImages.step1), context);
+    precacheImage(const AssetImage(AppImages.step2), context);
+    precacheImage(const AssetImage(AppImages.step3), context);
+    precacheImage(const AssetImage(AppImages.step4), context);
+    precacheImage(const AssetImage(AppImages.step5), context);
+    precacheImage(const AssetImage(AppImages.step6), context);
   }
 
   @override

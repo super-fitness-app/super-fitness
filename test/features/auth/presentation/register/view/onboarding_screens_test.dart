@@ -213,22 +213,84 @@ void main() {
       expect(find.text(AppStrings.tellUsAboutYourself), findsOneWidget);
     });
 
-    testWidgets('navigates to next step on pressing next after selection', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        _wrapWithCubit(const CompleteRegisterView(), cubit),
-      );
+    testWidgets(
+      'navigates sequentially through all 6 steps and verifies final submission button is enabled and callable',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.tap(find.text(AppStrings.male));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          _wrapWithCubit(const CompleteRegisterView(), cubit),
+        );
 
-      await tester.tap(find.text(AppStrings.next));
-      await tester.pumpAndSettle();
+        // Step 1: Select Gender
+        expect(find.byType(SelectGenderView), findsOneWidget);
+        await tester.tap(find.text(AppStrings.male));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(SelectAgeView), findsOneWidget);
-      expect(find.text(AppStrings.howOldAreYou), findsOneWidget);
-    });
+        // Step 2: Select Age
+        expect(find.byType(SelectAgeView), findsOneWidget);
+        expect(find.text(AppStrings.howOldAreYou), findsOneWidget);
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 3: Select Weight
+        expect(find.byType(SelectWeightView), findsOneWidget);
+        await tester.tap(find.text(AppStrings.done));
+        await tester.pumpAndSettle();
+
+        // Step 4: Select Height
+        expect(find.byType(SelectHeightView), findsOneWidget);
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 5: Select Goal
+        expect(find.byType(SelectGoalView), findsOneWidget);
+        await tester.tap(find.text(AppStrings.getFitter));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Step 6: Select Activity Level
+        expect(find.byType(SelectActivityView), findsOneWidget);
+        expect(find.text(AppStrings.activityLevelTitle), findsOneWidget);
+
+        // Verify final submission button is initially disabled
+        final nextButtonBefore = tester.widget<ElevatedButton>(
+          find.descendant(
+            of: find.byType(OnboardingBottomButton),
+            matching: find.byType(ElevatedButton),
+          ),
+        );
+        expect(nextButtonBefore.onPressed, isNull);
+
+        // Select an activity level
+        await tester.tap(find.text(AppStrings.intermediate));
+        await tester.pumpAndSettle();
+
+        // Verify final submission button is now enabled and callable
+        final nextButtonAfter = tester.widget<ElevatedButton>(
+          find.descendant(
+            of: find.byType(OnboardingBottomButton),
+            matching: find.byType(ElevatedButton),
+          ),
+        );
+        expect(nextButtonAfter.onPressed, isNotNull);
+
+        // Call the final button
+        await tester.tap(find.text(AppStrings.next));
+        await tester.pumpAndSettle();
+
+        // Verify cubit accumulated data across the full navigation chain
+        expect(cubit.state.data.gender, 'male');
+        expect(cubit.state.data.goal, AppStrings.getFitter);
+        expect(cubit.state.data.activityLevel, 'level3');
+      },
+    );
 
     testWidgets(
       'tapping back button on step 2 returns to step 1',
@@ -248,7 +310,7 @@ void main() {
         // Tap back button
         final backButton = find.descendant(
           of: find.byType(OnboardingTopBar),
-          matching: find.byType(GestureDetector),
+          matching: find.byType(IconButton),
         );
         await tester.tap(backButton.first);
         await tester.pumpAndSettle();

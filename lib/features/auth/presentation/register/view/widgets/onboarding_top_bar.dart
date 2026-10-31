@@ -14,12 +14,15 @@ class OnboardingTopBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: onBackTap ?? () => context.pop(),
-            child: Image.asset(AppImages.back, width: 36, height: 36),
+          IconButton(
+            onPressed: onBackTap ?? () => context.pop(),
+            icon: Image.asset(AppImages.back, width: 36, height: 36),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            splashRadius: 24,
           ),
           Image.asset(AppImages.superFitnessLogo, height: 36),
-          const SizedBox(width: 36),
+          const SizedBox(width: 48),
         ],
       ),
     );

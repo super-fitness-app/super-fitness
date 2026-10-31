@@ -5,7 +5,7 @@ import 'package:super_fitness/core/const/app_images.dart';
 import 'onboarding_header.dart';
 import 'onboarding_top_bar.dart';
 
-class OnboardingScaffold extends StatelessWidget {
+class OnboardingScaffold extends StatefulWidget {
   final String stepImage;
   final String title;
   final String? subtitle;
@@ -24,6 +24,18 @@ class OnboardingScaffold extends StatelessWidget {
   });
 
   @override
+  State<OnboardingScaffold> createState() => _OnboardingScaffoldState();
+}
+
+class _OnboardingScaffoldState extends State<OnboardingScaffold> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage(AppImages.authBackground), context);
+    precacheImage(AssetImage(widget.stepImage), context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final topGap = (screenHeight * 0.08).clamp(32.0, 72.0);
@@ -32,7 +44,12 @@ class OnboardingScaffold extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(AppImages.authBackground, fit: BoxFit.cover),
+          const RepaintBoundary(
+            child: Image(
+              image: AssetImage(AppImages.authBackground),
+              fit: BoxFit.cover,
+            ),
+          ),
           Container(color: AppColors.onboardingOverlay),
           SafeArea(
             child: SingleChildScrollView(
@@ -42,17 +59,17 @@ class OnboardingScaffold extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    OnboardingTopBar(onBackTap: onBackTap),
+                    OnboardingTopBar(onBackTap: widget.onBackTap),
                     SizedBox(height: topGap),
                     OnboardingHeader(
-                      stepImage: stepImage,
-                      title: title,
-                      subtitle: subtitle,
+                      stepImage: widget.stepImage,
+                      title: widget.title,
+                      subtitle: widget.subtitle,
                     ),
                     const SizedBox(height: 20),
                     _BlurredContentCard(
-                      content: content,
-                      bottomButton: bottomButton,
+                      content: widget.content,
+                      bottomButton: widget.bottomButton,
                     ),
                     const SizedBox(height: 40),
                   ],
