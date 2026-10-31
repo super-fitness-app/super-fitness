@@ -11,7 +11,6 @@ import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
-import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
@@ -36,7 +35,8 @@ class FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
     passedRequest = request;
-    return registerResultToReturn ?? const FailureResponse(ServerMessageFailure(''));
+    return registerResultToReturn ??
+        const FailureResponse(ServerMessageFailure(''));
   }
 
   @override
@@ -50,10 +50,7 @@ Widget _wrapWithCubit(Widget child, RegisterCubit cubit) {
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: const Locale('en'),
-    home: BlocProvider<RegisterCubit>.value(
-      value: cubit,
-      child: child,
-    ),
+    home: BlocProvider<RegisterCubit>.value(value: cubit, child: child),
   );
 }
 
@@ -115,9 +112,7 @@ void main() {
   });
 
   group('SelectAgeView Widget Tests', () {
-    testWidgets('renders age screen with horizontal picker', (
-      tester,
-    ) async {
+    testWidgets('renders age screen with horizontal picker', (tester) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectAgeView(), cubit));
 
       expect(find.text(l10n.howOldAreYou), findsOneWidget);
@@ -128,22 +123,23 @@ void main() {
   });
 
   group('SelectWeightView Widget Tests', () {
-    testWidgets('renders weight screen with horizontal picker and Done button', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_wrapWithCubit(const SelectWeightView(), cubit));
+    testWidgets(
+      'renders weight screen with horizontal picker and Done button',
+      (tester) async {
+        await tester.pumpWidget(
+          _wrapWithCubit(const SelectWeightView(), cubit),
+        );
 
-      expect(find.text(l10n.whatIsYourWeight), findsOneWidget);
-      expect(find.byType(HorizontalNumberPicker), findsOneWidget);
-      expect(find.text(l10n.kg), findsOneWidget);
-      expect(find.text(l10n.done), findsOneWidget);
-    });
+        expect(find.text(l10n.whatIsYourWeight), findsOneWidget);
+        expect(find.byType(HorizontalNumberPicker), findsOneWidget);
+        expect(find.text(l10n.kg), findsOneWidget);
+        expect(find.text(l10n.done), findsOneWidget);
+      },
+    );
   });
 
   group('SelectHeightView Widget Tests', () {
-    testWidgets('renders height screen with horizontal picker', (
-      tester,
-    ) async {
+    testWidgets('renders height screen with horizontal picker', (tester) async {
       await tester.pumpWidget(_wrapWithCubit(const SelectHeightView(), cubit));
 
       expect(find.text(l10n.whatIsYourHeight), findsOneWidget);
@@ -298,32 +294,31 @@ void main() {
       },
     );
 
-    testWidgets(
-      'tapping back button on step 2 returns to step 1',
-      (tester) async {
-        await tester.pumpWidget(
-          _wrapWithCubit(const CompleteRegisterView(), cubit),
-        );
+    testWidgets('tapping back button on step 2 returns to step 1', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithCubit(const CompleteRegisterView(), cubit),
+      );
 
-        // Advance to Step 2
-        await tester.tap(find.text(l10n.male));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      // Advance to Step 2
+      await tester.tap(find.text(l10n.male));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        expect(find.byType(SelectAgeView), findsOneWidget);
+      expect(find.byType(SelectAgeView), findsOneWidget);
 
-        // Tap back button
-        final backButton = find.descendant(
-          of: find.byType(OnboardingTopBar),
-          matching: find.byType(IconButton),
-        );
-        await tester.tap(backButton.first);
-        await tester.pumpAndSettle();
+      // Tap back button
+      final backButton = find.descendant(
+        of: find.byType(OnboardingTopBar),
+        matching: find.byType(IconButton),
+      );
+      await tester.tap(backButton.first);
+      await tester.pumpAndSettle();
 
-        expect(find.byType(SelectGenderView), findsOneWidget);
-      },
-    );
+      expect(find.byType(SelectGenderView), findsOneWidget);
+    });
 
     testWidgets(
       'navigates through all 6 steps and submits final registration',
@@ -371,9 +366,8 @@ void main() {
             ),
             GoRoute(
               path: AppRoutes.login,
-              builder: (context, state) => const Scaffold(
-                body: Text('Login Screen Mock'),
-              ),
+              builder: (context, state) =>
+                  const Scaffold(body: Text('Login Screen Mock')),
             ),
           ],
         );
@@ -439,99 +433,97 @@ void main() {
       },
     );
 
-    testWidgets(
-      'displays error SnackBar when final registration fails',
-      (tester) async {
-        tester.view.physicalSize = const Size(1080, 2400);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.resetPhysicalSize);
-        addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets('displays error SnackBar when final registration fails', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
-        final fakeRepo = FakeAuthRepo();
-        fakeRepo.registerResultToReturn = const FailureResponse(
-          ServerMessageFailure('Email already exists'),
-        );
-        final testCubit = RegisterCubit(
-          RegisterUseCase(fakeRepo),
-          SignInWithGoogleUseCase(fakeRepo),
-          const PasswordGenerator(),
-        );
+      final fakeRepo = FakeAuthRepo();
+      fakeRepo.registerResultToReturn = const FailureResponse(
+        ServerMessageFailure('Email already exists'),
+      );
+      final testCubit = RegisterCubit(
+        RegisterUseCase(fakeRepo),
+        SignInWithGoogleUseCase(fakeRepo),
+        const PasswordGenerator(),
+      );
 
-        testCubit.submitBasicInfoIntent(
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com',
-          password: 'Password123!',
-        );
+      testCubit.submitBasicInfoIntent(
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+      );
 
-        final router = GoRouter(
-          initialLocation: AppRoutes.completeRegister,
-          routes: [
-            GoRoute(
-              path: AppRoutes.completeRegister,
-              builder: (context, state) => BlocProvider.value(
-                value: testCubit,
-                child: const CompleteRegisterView(),
-              ),
+      final router = GoRouter(
+        initialLocation: AppRoutes.completeRegister,
+        routes: [
+          GoRoute(
+            path: AppRoutes.completeRegister,
+            builder: (context, state) => BlocProvider.value(
+              value: testCubit,
+              child: const CompleteRegisterView(),
             ),
-            GoRoute(
-              path: AppRoutes.login,
-              builder: (context, state) => const Scaffold(
-                body: Text('Login Screen Mock'),
-              ),
-            ),
-          ],
-        );
-
-        await tester.pumpWidget(
-          MaterialApp.router(
-            routerConfig: router,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
           ),
-        );
-        await tester.pumpAndSettle();
+          GoRoute(
+            path: AppRoutes.login,
+            builder: (context, state) =>
+                const Scaffold(body: Text('Login Screen Mock')),
+          ),
+        ],
+      );
 
-        // Step 1: Gender
-        await tester.tap(find.text(l10n.male));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        // Step 2: Age
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      // Step 1: Gender
+      await tester.tap(find.text(l10n.male));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        // Step 3: Weight
-        await tester.tap(find.text(l10n.done));
-        await tester.pumpAndSettle();
+      // Step 2: Age
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        // Step 4: Height
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      // Step 3: Weight
+      await tester.tap(find.text(l10n.done));
+      await tester.pumpAndSettle();
 
-        // Step 5: Goal
-        await tester.tap(find.text(l10n.getFitter));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      // Step 4: Height
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        // Step 6: Activity Level
-        await tester.tap(find.text(l10n.intermediate));
-        await tester.pumpAndSettle();
+      // Step 5: Goal
+      await tester.tap(find.text(l10n.getFitter));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        // Submit on final step
-        await tester.tap(find.text(l10n.next));
-        await tester.pumpAndSettle();
+      // Step 6: Activity Level
+      await tester.tap(find.text(l10n.intermediate));
+      await tester.pumpAndSettle();
 
-        // Verify SnackBar shown with error message
-        expect(find.text('Email already exists'), findsOneWidget);
-        // Verify NOT navigated to login
-        expect(find.text('Login Screen Mock'), findsNothing);
+      // Submit on final step
+      await tester.tap(find.text(l10n.next));
+      await tester.pumpAndSettle();
 
-        testCubit.close();
-      },
-    );
+      // Verify SnackBar shown with error message
+      expect(find.text('Email already exists'), findsOneWidget);
+      // Verify NOT navigated to login
+      expect(find.text('Login Screen Mock'), findsNothing);
+
+      testCubit.close();
+    });
 
     testWidgets(
       'navigates to login on direct isSuccess transition without intermediate loading state',
@@ -555,9 +547,8 @@ void main() {
             ),
             GoRoute(
               path: AppRoutes.login,
-              builder: (context, state) => const Scaffold(
-                body: Text('Login Screen Mock'),
-              ),
+              builder: (context, state) =>
+                  const Scaffold(body: Text('Login Screen Mock')),
             ),
           ],
         );
