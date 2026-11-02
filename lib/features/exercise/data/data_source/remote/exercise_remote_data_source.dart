@@ -1,7 +1,7 @@
 import 'package:super_fitness/features/exercise/data/model/exercise_models/difficulty_levels_response_model.dart';
 import 'package:super_fitness/features/exercise/data/model/exercise_models/exercise_response_model.dart';
 
-abstract class ExerciseRemoteDataSource {
+abstract interface class ExerciseRemoteDataSource {
   Future<DifficultyLevelsResponseModel> getAllDifficultyLevels({
     required String language,
   });
