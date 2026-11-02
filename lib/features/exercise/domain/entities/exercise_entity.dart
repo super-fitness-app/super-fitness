@@ -1,4 +1,6 @@
-class ExerciseEntity {
+import 'package:equatable/equatable.dart';
+
+class ExerciseEntity extends Equatable {
   final String id;
   final String exercise;
   final String? shortYoutubeDemonstration;
@@ -70,4 +72,42 @@ class ExerciseEntity {
     this.shortYoutubeDemonstrationLink,
     this.inDepthYoutubeExplanationLink,
   });
+
+  @override
+  List<Object?> get props => [
+    id,
+    exercise,
+    shortYoutubeDemonstration,
+    inDepthYoutubeExplanation,
+    difficultyLevel,
+    targetMuscleGroup,
+    primeMoverMuscle,
+    secondaryMuscle,
+    tertiaryMuscle,
+    primaryEquipment,
+    primaryItems,
+    secondaryEquipment,
+    secondaryItems,
+    posture,
+    singleOrDoubleArm,
+    continuousOrAlternatingArms,
+    grip,
+    loadPositionEnding,
+    continuousOrAlternatingLegs,
+    footElevation,
+    combinationExercises,
+    movementPattern1,
+    movementPattern2,
+    movementPattern3,
+    planeOfMotion1,
+    planeOfMotion2,
+    planeOfMotion3,
+    bodyRegion,
+    forceType,
+    mechanics,
+    laterality,
+    primaryExerciseClassification,
+    shortYoutubeDemonstrationLink,
+    inDepthYoutubeExplanationLink,
+  ];
 }
