@@ -59,6 +59,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generalValidationError => 'Invalid input';
 
   @override
+  String get invalidLoginPasswordError =>
+      'Password must be at least 6 characters with an uppercase letter and a number';
+
+  @override
   String get generalErrorMessage =>
       'Something went wrong. Please try again later.';
 
@@ -164,22 +168,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get heyThere => 'Hey There';
 
   @override
-  String get createAnAccount => 'CREATE AN ACCOUNT';
-
-  @override
-  String get register => 'Register';
-
-  @override
-  String get firstName => 'First Name';
-
-  @override
-  String get lastName => 'Last Name';
+  String get welcomeBack => 'WELCOME BACK';
 
   @override
   String get email => 'Email';
 
   @override
   String get password => 'Password';
+
+  @override
+  String get forgotPassword => 'Forgot Password ?';
+
+  @override
+  String get dontHaveAccount => 'Don\'t Have An Account Yet ?';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get createAnAccount => 'CREATE AN ACCOUNT';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
 
   @override
   String get firstNameRequired => 'First name is required';

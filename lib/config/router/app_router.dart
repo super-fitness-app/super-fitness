@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
@@ -35,6 +37,7 @@ abstract final class AppRouter {
 
   static GoRouter createRouter({
     required StorageService storageService,
+    required SessionService sessionService,
     String initialLocation = AppRoutes.onboarding,
   }) {
     return GoRouter(
@@ -51,8 +54,26 @@ abstract final class AppRouter {
           return AppRoutes.onboarding;
         }
 
-        if (hasSeen == 'true' && isGoingToOnboarding) {
+        final token = await sessionService.getToken();
+        final isAuthenticated = token.isNotEmpty;
+        final isGoingToProtected =
+            state.matchedLocation == AppRoutes.main ||
+            state.matchedLocation == AppRoutes.home;
+
+        if (!isAuthenticated && isGoingToProtected) {
           return AppRoutes.login;
+        }
+
+        if (hasSeen == 'true') {
+          if (isAuthenticated) {
+            if (isGoingToOnboarding || state.matchedLocation == AppRoutes.login) {
+              return AppRoutes.main;
+            }
+          } else {
+            if (isGoingToOnboarding) {
+              return AppRoutes.login;
+            }
+          }
         }
 
         return null;
@@ -61,7 +82,10 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.login,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const LoginView(),
+          builder: (context, state) => BlocProvider<LoginCubit>(
+            create: (_) => getIt<LoginCubit>(),
+            child: const LoginView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.onboarding,
@@ -109,7 +133,8 @@ abstract final class AppRouter {
     );
   }
 
-  static final GoRouter router = createRouter(
+  static GoRouter get router => createRouter(
     storageService: getIt<StorageService>(),
+    sessionService: getIt<SessionService>(),
   );
 }

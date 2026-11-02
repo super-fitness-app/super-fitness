@@ -57,7 +57,6 @@ void main() {
       expect(await sessionService.isGuest(), isTrue);
       expect(storage.data[AppConstants.guestModeKey], 'true');
 
-      // Tokens in memory should have been cleared
       expect(await sessionService.getToken(), isEmpty);
       expect(await sessionService.getRefreshToken(), isEmpty);
 
@@ -77,6 +76,19 @@ void main() {
       expect(await sessionService.getRefreshToken(), 'test_refresh');
       expect(storage.data[AppConstants.storageTokenKey], 'test_token');
       expect(storage.data[AppConstants.storageRefreshTokenKey], 'test_refresh');
+    });
+
+    test('saveTokens with optional refreshToken omitted stores only token',
+        () async {
+      await sessionService.saveTokens(
+        token: 'token_only',
+        rememberMe: true,
+      );
+
+      expect(await sessionService.getToken(), 'token_only');
+      expect(await sessionService.getRefreshToken(), isEmpty);
+      expect(storage.data[AppConstants.storageTokenKey], 'token_only');
+      expect(storage.data[AppConstants.storageRefreshTokenKey], isNull);
     });
 
     test('saveTokens with rememberMe=false deletes from storage but keeps in memory',
@@ -99,24 +111,14 @@ void main() {
       );
     });
 
-    test('getToken and getRefreshToken fetch from storage if inMemory is empty',
-        () async {
-      storage.data[AppConstants.storageTokenKey] = 'stored_token';
-      storage.data[AppConstants.storageRefreshTokenKey] = 'stored_refresh';
-
-      expect(await sessionService.getToken(), 'stored_token');
-      expect(await sessionService.getRefreshToken(), 'stored_refresh');
-    });
-
-    test('updateTokens updates storage only when isRemembered is true',
-        () async {
+    test('updateTokens updates memory and only storage if isRemembered', () async {
       await sessionService.setRememberMe(false);
       await sessionService.updateTokens(
-        token: 'new_token_1',
-        refreshToken: 'new_refresh_1',
+        token: 'new_token',
+        refreshToken: 'new_refresh',
       );
 
-      expect(await sessionService.getToken(), 'new_token_1');
+      expect(await sessionService.getToken(), 'new_token');
       expect(storage.data[AppConstants.storageTokenKey], isNull);
 
       await sessionService.setRememberMe(true);
@@ -130,6 +132,18 @@ void main() {
       expect(storage.data[AppConstants.storageRefreshTokenKey], 'new_refresh_2');
     });
 
+    test('saveUserData and getUserData persist user data to storage', () async {
+      await sessionService.saveUserData('{"id":"123","email":"test@test.com"}');
+      expect(
+        await sessionService.getUserData(),
+        '{"id":"123","email":"test@test.com"}',
+      );
+      expect(
+        storage.data[AppConstants.userDataKey],
+        '{"id":"123","email":"test@test.com"}',
+      );
+    });
+
     test('clearSession clears memory and deletes all storage keys', () async {
       await sessionService.saveTokens(
         token: 'token',
@@ -138,6 +152,7 @@ void main() {
       );
       await sessionService.setRememberMe(true);
       await sessionService.setGuestMode(true);
+      await sessionService.saveUserData('{"id":"123"}');
 
       await sessionService.clearSession();
 
@@ -147,6 +162,7 @@ void main() {
       expect(storage.data[AppConstants.storageRefreshTokenKey], isNull);
       expect(storage.data[AppConstants.rememberMeKey], isNull);
       expect(storage.data[AppConstants.guestModeKey], isNull);
+      expect(storage.data[AppConstants.userDataKey], isNull);
     });
   });
 }

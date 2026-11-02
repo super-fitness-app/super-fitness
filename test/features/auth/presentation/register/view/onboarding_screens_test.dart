@@ -10,7 +10,9 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
@@ -41,6 +43,11 @@ class FakeAuthRepo implements AuthRepo {
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return const FailureResponse(ServerMessageFailure(''));
+  }
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     return const FailureResponse(ServerMessageFailure(''));
   }
 }

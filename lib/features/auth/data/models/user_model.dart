@@ -16,9 +16,9 @@ class UserModel {
   @JsonKey(name: "age")
   final int age;
   @JsonKey(name: "weight")
-  final int weight;
+  final double? weight;
   @JsonKey(name: "height")
-  final int height;
+  final double? height;
   @JsonKey(name: "activityLevel")
   final String activityLevel;
   @JsonKey(name: "goal")
@@ -36,8 +36,8 @@ class UserModel {
     required this.email,
     required this.gender,
     required this.age,
-    required this.weight,
-    required this.height,
+    this.weight,
+    this.height,
     required this.activityLevel,
     required this.goal,
     required this.photo,
@@ -51,8 +51,8 @@ class UserModel {
     String? email,
     String? gender,
     int? age,
-    int? weight,
-    int? height,
+    double? weight,
+    double? height,
     String? activityLevel,
     String? goal,
     String? photo,
@@ -78,7 +78,23 @@ class UserModel {
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
+  factory UserModel.fromEntity(UserEntity entity) => UserModel(
+    firstName: entity.firstName ?? '',
+    lastName: entity.lastName ?? '',
+    email: entity.email ?? '',
+    gender: entity.gender ?? '',
+    age: entity.age ?? 0,
+    weight: entity.weight,
+    height: entity.height,
+    activityLevel: entity.activityLevel ?? '',
+    goal: entity.goal ?? '',
+    photo: entity.photo ?? '',
+    id: entity.id ?? '',
+    createdAt: entity.createdAt ?? DateTime.now(),
+  );
+
   UserEntity toEntity() => UserEntity(
+    id: id,
     firstName: firstName,
     lastName: lastName,
     email: email,
@@ -88,5 +104,7 @@ class UserModel {
     height: height,
     activityLevel: activityLevel,
     goal: goal,
+    photo: photo,
+    createdAt: createdAt,
   );
 }

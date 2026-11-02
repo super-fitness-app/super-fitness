@@ -12,6 +12,9 @@ import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.da
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
   RegisterParams? passedRequest;
@@ -26,6 +29,11 @@ class FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
     return googleResultToReturn!;
+  }
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async {
+    throw UnimplementedError();
   }
 }
 

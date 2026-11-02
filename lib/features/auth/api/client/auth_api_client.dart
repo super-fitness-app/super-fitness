@@ -5,6 +5,8 @@ import 'package:retrofit/retrofit.dart';
 import 'package:super_fitness/core/const/endpoints.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/data/models/register_response_model.dart';
+import 'package:super_fitness/features/auth/data/models/login_response.dart';
+import 'package:super_fitness/features/auth/data/models/request/login_request.dart';
 
 part 'auth_api_client.g.dart';
 
@@ -16,4 +18,9 @@ abstract class AuthApiClient {
 
   @POST(Endpoints.register)
   Future<RegisterResponseModel> register(@Body() RegisterDto request);
+
+   @POST(Endpoints.loginEndPoint)
+  Future<LoginResponse> login(
+    @Body() LoginRequest request,
+  );
 }

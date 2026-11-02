@@ -59,6 +59,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get generalValidationError => 'مدخلات غير صحيحة';
 
   @override
+  String get invalidLoginPasswordError =>
+      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم';
+
+  @override
   String get generalErrorMessage =>
       'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
 
@@ -163,22 +167,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get heyThere => 'مرحباً بك';
 
   @override
-  String get createAnAccount => 'إنشاء حساب';
-
-  @override
-  String get register => 'تسجيل';
-
-  @override
-  String get firstName => 'الاسم الأول';
-
-  @override
-  String get lastName => 'اسم العائلة';
+  String get welcomeBack => 'مرحباً بعودتك';
 
   @override
   String get email => 'البريد الإلكتروني';
 
   @override
   String get password => 'كلمة المرور';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب بعد؟';
+
+  @override
+  String get register => 'تسجيل';
+
+  @override
+  String get createAnAccount => 'إنشاء حساب';
+
+  @override
+  String get firstName => 'الاسم الأول';
+
+  @override
+  String get lastName => 'اسم العائلة';
 
   @override
   String get firstNameRequired => 'الاسم الأول مطلوب';

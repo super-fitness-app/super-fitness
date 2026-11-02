@@ -7,7 +7,18 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/const/app_images.dart';
+import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
+import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_background.dart';
@@ -16,6 +27,44 @@ import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onbo
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_content.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_indicator.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/widgets/onboarding_top_bar.dart';
+
+class _MockSessionService implements SessionService {
+  @override
+  Future<void> saveTokens({required String token, String? refreshToken, bool rememberMe = true}) async {}
+  @override
+  Future<String> getToken() async => '';
+  @override
+  Future<void> clearSession() async {}
+  @override
+  Future<String> getRefreshToken() async => '';
+  @override
+  Future<bool> isGuest() async => false;
+  @override
+  Future<bool> isRemembered() async => true;
+  @override
+  Future<void> setGuestMode(bool value) async {}
+  @override
+  Future<void> setRememberMe(bool value) async {}
+  @override
+  Future<void> updateTokens({required String token, required String refreshToken}) async {}
+  @override
+  Future<void> saveUserData(String userData) async {}
+  @override
+  Future<String> getUserData() async => '';
+}
+
+class _FakeAuthRepo implements AuthRepo {
+  const _FakeAuthRepo();
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+}
 
 class _MockStorageService implements StorageService {
   final Map<String, String> data = {};
@@ -80,17 +129,37 @@ void main() {
         getIt.unregister<StorageService>();
       }
       getIt.registerSingleton<StorageService>(storageService);
-
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
       getIt.registerFactory<OnboardingCubit>(
         () => OnboardingCubit(getIt<StorageService>()),
       );
+
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+      getIt.registerSingleton<SessionService>(_MockSessionService());
+
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      getIt.registerFactory<LoginCubit>(
+        () => LoginCubit(
+          LoginUseCase(const _FakeAuthRepo()),
+          getIt<SessionService>(),
+        ),
+      );
     });
 
     tearDown(() async {
       await cubit.close();
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
@@ -217,6 +286,7 @@ void main() {
       final freshStorage = _MockStorageService();
       final guardedRouter = AppRouter.createRouter(
         storageService: freshStorage,
+        sessionService: getIt<SessionService>(),
         initialLocation: AppRoutes.login,
       );
 
@@ -240,6 +310,7 @@ void main() {
 
       final guardedRouter = AppRouter.createRouter(
         storageService: returningStorage,
+        sessionService: getIt<SessionService>(),
         initialLocation: AppRoutes.login,
       );
 

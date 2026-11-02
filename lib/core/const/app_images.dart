@@ -12,6 +12,8 @@ abstract final class AppImages {
   static const String onboarding1 = '$_imagesPath/onboarding1.png';
   static const String onboarding2 = '$_imagesPath/onboarding2.png';
   static const String onboarding3 = '$_imagesPath/onboarding3.png';
+  static const String appLogo = '$_imagesPath/app_icon.png';
+  static const String background = '$_imagesPath/background.png';
 
   static const String step1 = 'assets/images/auth/Group 11.png';
   static const String step2 = 'assets/images/auth/Group 12.png';

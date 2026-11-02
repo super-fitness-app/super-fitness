@@ -7,6 +7,8 @@ import 'package:super_fitness/core/utils/app_validators.dart';
 class AppTextField extends StatelessWidget {
   final String label;
   final String hint;
+  final String? errorText;
+  final int errorMaxLines;
   final TextEditingController? controller;
   final ValidationError? Function(String?)? errorValidator;
   final void Function(String)? onChanged;
@@ -23,6 +25,8 @@ class AppTextField extends StatelessWidget {
     super.key,
     required this.label,
     required this.hint,
+    this.errorText,
+    this.errorMaxLines = 1,
     this.controller,
     this.errorValidator,
     this.onChanged,
@@ -53,6 +57,8 @@ class AppTextField extends StatelessWidget {
         return error.toLocalizedMessage(context);
       },
       decoration: InputDecoration(
+        errorText: errorText,
+        errorMaxLines: errorMaxLines,
         fillColor: fillColor,
         labelText: label.isNotEmpty ? label : null,
         hintText: hint.isNotEmpty ? hint : label,

@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Invalid input'**
   String get generalValidationError;
 
+  /// No description provided for @invalidLoginPasswordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters with an uppercase letter and a number'**
+  String get invalidLoginPasswordError;
+
   /// No description provided for @generalErrorMessage.
   ///
   /// In en, this message translates to:
@@ -374,29 +380,11 @@ abstract class AppLocalizations {
   /// **'Hey There'**
   String get heyThere;
 
-  /// No description provided for @createAnAccount.
+  /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
-  /// **'CREATE AN ACCOUNT'**
-  String get createAnAccount;
-
-  /// No description provided for @register.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get register;
-
-  /// No description provided for @firstName.
-  ///
-  /// In en, this message translates to:
-  /// **'First Name'**
-  String get firstName;
-
-  /// No description provided for @lastName.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Name'**
-  String get lastName;
+  /// **'WELCOME BACK'**
+  String get welcomeBack;
 
   /// No description provided for @email.
   ///
@@ -409,6 +397,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password'**
   String get password;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password ?'**
+  String get forgotPassword;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t Have An Account Yet ?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @createAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'CREATE AN ACCOUNT'**
+  String get createAnAccount;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
 
   /// No description provided for @firstNameRequired.
   ///
