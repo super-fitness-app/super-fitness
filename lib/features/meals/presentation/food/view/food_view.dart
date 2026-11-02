@@ -43,8 +43,8 @@ class _FoodViewState extends State<FoodView>
       _cubit = getIt<FoodCubit>();
       _ownsCubit = false;
     } else {
-      _cubit = FoodCubit(getIt(), getIt());
-      _ownsCubit = true;
+      _cubit = context.read<FoodCubit>();
+      _ownsCubit = false;
     }
   }
 
