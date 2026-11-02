@@ -271,6 +271,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome Back!'**
   String get loginTitle;
+
+  /// Exercise duration in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} Min'**
+  String durationMinutes(int minutes);
+
+  /// Exercise calories
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} Cal'**
+  String calories(int calories);
+
+  /// No description provided for @beginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get beginner;
+
+  /// No description provided for @intermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get intermediate;
+
+  /// No description provided for @advanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
+
+  /// No description provided for @failedToLoadExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load exercises'**
+  String get failedToLoadExercises;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noExercisesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises found'**
+  String get noExercisesFound;
 }
 
 class _AppLocalizationsDelegate

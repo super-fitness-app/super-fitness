@@ -29,6 +29,31 @@
   "code422Message": "خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.",
   "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
   "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
-
-  "loginTitle": "مرحباً بعودتك!"
+  "loginTitle": "مرحباً بعودتك!",
+  "chestExercise": "تمارين الصدر",
+  "exerciseDescription": "ابدأ رحلتك الرياضية مع تمارين الصدر.",
+  "durationMinutes": "{minutes} دقيقة",
+  "@durationMinutes": {
+    "description": "مدة التمرين بالدقائق",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} سعرة حرارية",
+  "@calories": {
+    "description": "عدد السعرات الحرارية",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "beginner": "مبتدئ",
+  "intermediate": "متوسط",
+  "advanced": "متقدم",
+  "failedToLoadExercises": "فشل تحميل التمارين",
+  "retry": "إعادة المحاولة",
+  "noExercisesFound": "لم يتم العثور على تمارين"
 }

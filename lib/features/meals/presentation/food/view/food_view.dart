@@ -63,4 +63,3 @@ class _FoodViewState extends State<FoodView>
     );
   }
 }
-

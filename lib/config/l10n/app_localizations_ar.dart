@@ -106,4 +106,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginTitle => 'مرحباً بعودتك!';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories سعرة حرارية';
+  }
+
+  @override
+  String get beginner => 'مبتدئ';
+
+  @override
+  String get intermediate => 'متوسط';
+
+  @override
+  String get advanced => 'متقدم';
+
+  @override
+  String get failedToLoadExercises => 'فشل تحميل التمارين';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get noExercisesFound => 'لم يتم العثور على تمارين';
 }

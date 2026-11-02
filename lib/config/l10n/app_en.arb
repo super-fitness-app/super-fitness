@@ -33,6 +33,29 @@
   "code422Message": "Validation error. Please verify your inputs.",
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
-
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+  "durationMinutes": "{minutes} Min",
+  "@durationMinutes": {
+    "description": "Exercise duration in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} Cal",
+  "@calories": {
+    "description": "Exercise calories",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "advanced": "Advanced",
+  "failedToLoadExercises": "Failed to load exercises",
+  "retry": "Retry",
+  "noExercisesFound": "No exercises found"
 }
