@@ -6,24 +6,21 @@ abstract final class AppColors {
   static const Color primaryDark = Color(0xFFCC0E00);
   static const Color primaryLight = Color(0xFFFF8D66);
   static const Color orangeBase = Color(0xFFFF4100);
-  static const Color orangeButton = Color(0xFFFF6A00); 
+  static const Color orangeButton = Color(0xFFFF6A00);
 
   // Orange MaterialColor Swatch
-  static const MaterialColor orange = MaterialColor(
-    0xFFFF541A,
-    <int, Color>{
-      50: Color(0xFFFFECE5),
-      100: Color(0xFFFFD9CC),
-      200: Color(0xFFFFC6B2),
-      300: Color(0xFFFFB399),
-      400: Color(0xFFFFA080),
-      500: Color(0xFFFF8D66),
-      600: Color(0xFFFF7A4D),
-      700: Color(0xFFFF6733),
-      800: Color(0xFFFF541A),
-      900: Color(0xFFE52800),
-    },
-  );
+  static const MaterialColor orange = MaterialColor(0xFFFF541A, <int, Color>{
+    50: Color(0xFFFFECE5),
+    100: Color(0xFFFFD9CC),
+    200: Color(0xFFFFC6B2),
+    300: Color(0xFFFFB399),
+    400: Color(0xFFFFA080),
+    500: Color(0xFFFF8D66),
+    600: Color(0xFFFF7A4D),
+    700: Color(0xFFFF6733),
+    800: Color(0xFFFF541A),
+    900: Color(0xFFE52800),
+  });
 
   // Backward-compatible getter aliases for orange tints
   static Color get orange50 => orange[50]!;

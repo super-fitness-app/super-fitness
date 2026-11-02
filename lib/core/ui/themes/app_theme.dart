@@ -34,7 +34,9 @@ abstract final class AppTheme {
       selectedColor: AppColors.primary,
       disabledColor: AppColors.grey70,
       labelStyle: AppTextStyles.regular12.copyWith(color: AppColors.white),
-      secondaryLabelStyle: AppTextStyles.regular12.copyWith(color: AppColors.white),
+      secondaryLabelStyle: AppTextStyles.regular12.copyWith(
+        color: AppColors.white,
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: const StadiumBorder(),
       side: BorderSide.none,
