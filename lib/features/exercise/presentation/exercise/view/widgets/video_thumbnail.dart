@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 
 class VideoThumbnail extends StatelessWidget {
   final String videoUrl;
-  final VoidCallback? onTap;
 
-  const VideoThumbnail({super.key, required this.videoUrl, this.onTap});
+  const VideoThumbnail({super.key, required this.videoUrl});
 
   String? get thumbnailUrl {
     final uri = Uri.tryParse(videoUrl);
@@ -35,27 +34,24 @@ class VideoThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     final thumbnail = thumbnailUrl;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            if (thumbnail != null)
-              Positioned.fill(
-                child: CachedNetworkImage(
-                  imageUrl: thumbnail,
-                  fit: BoxFit.cover,
-                  placeholder: (_, _) =>
-                      const Center(child: CircularProgressIndicator()),
-                  errorWidget: (_, _, _) => const Icon(Icons.broken_image),
-                ),
-              )
-            else
-              const Center(child: Icon(Icons.video_library)),
-          ],
-        ),
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (thumbnail != null)
+            Positioned.fill(
+              child: CachedNetworkImage(
+                imageUrl: thumbnail,
+                fit: BoxFit.cover,
+                placeholder: (_, _) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (_, _, _) => const Icon(Icons.broken_image),
+              ),
+            )
+          else
+            const Center(child: Icon(Icons.video_library)),
+        ],
       ),
     );
   }

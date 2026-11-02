@@ -37,12 +37,14 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
     switch (result) {
       case Success<List<ExerciseEntity>>():
         final currentData = state.data ?? const ExerciseData();
+
         emit(
           ExerciseState.success(currentData.copyWith(exercises: result.data)),
         );
 
       case FailureResponse<List<ExerciseEntity>>():
         emit(ExerciseState.failure(result.failure, data: state.data));
+        emitEvent(DisplayError.fromFailure(result.failure));
     }
   }
 
@@ -54,10 +56,12 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
     switch (result) {
       case Success<List<DifficultyLevelEntity>>():
         final currentData = state.data ?? const ExerciseData();
+
         emit(ExerciseState.success(currentData.copyWith(levels: result.data)));
 
       case FailureResponse<List<DifficultyLevelEntity>>():
         emit(ExerciseState.failure(result.failure, data: state.data));
+        emitEvent(DisplayError.fromFailure(result.failure));
     }
   }
 
@@ -66,6 +70,7 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
     switch (event) {
       case GetAllDifficultyLevelsEvent():
         _getAllDifficultyLevels(language: event.language);
+
       case GetExercisesByMuscleAndDifficultyEvent():
         _getExercisesByMuscleAndDifficulty(
           difficultyLevelId: event.difficultyLevelId,

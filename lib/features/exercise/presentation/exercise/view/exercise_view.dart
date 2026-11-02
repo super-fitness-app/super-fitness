@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
@@ -12,6 +14,7 @@ import 'package:super_fitness/features/exercise/presentation/exercise/manager/ex
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_state.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/exercise_header.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/exercise_list_view.dart';
+import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/get_duration_and_calories.dart';
 
 class ExerciseView extends StatefulWidget {
   final ExerciseCubit? cubit;
@@ -31,28 +34,12 @@ class _ExerciseViewState extends State<ExerciseView>
 
   @override
   ExerciseCubit get cubit => _cubit;
-  // String get primeMoverMuscleId => widget.primeMoverMuscleId;
+  // String get _primeMoverMuscleId => widget.primeMoverMuscleId;
   static const String _primeMoverMuscleId = '69d982ef85f6bfa972bf2248';
-
-  void _loadExercisesForTab(int index) {
-    final levels = _cubit.state.data?.levels ?? [];
-
-    if (levels.isEmpty) return;
-
-    final difficultyLevelId = levels[index].id;
-
-    _cubit.doEvent(
-      GetExercisesByMuscleAndDifficultyEvent(
-        language: 'en',
-        primeMoverMuscleId: _primeMoverMuscleId,
-        difficultyLevelId: difficultyLevelId,
-      ),
-    );
-  }
+  StreamSubscription<ExerciseState>? _stateSubscription;
 
   @override
   void initState() {
-    // Initialize the Cubit before BaseViewMixin accesses it.
     if (widget.cubit != null) {
       _cubit = widget.cubit!;
       _ownsCubit = false;
@@ -61,25 +48,52 @@ class _ExerciseViewState extends State<ExerciseView>
       _ownsCubit = true;
     }
 
-    // Call this only after _cubit has been initialized.
     super.initState();
 
-    _loadInitialData();
+    _listenToDifficultyLevels();
+
+    if (_cubit.state.data?.levels.isNotEmpty == true) {
+      _loadExercisesForTab(0);
+    } else {
+      _cubit.doEvent(GetAllDifficultyLevelsEvent(language: 'en'));
+    }
   }
 
-  Future<void> _loadInitialData() async {
-    _cubit.doEvent(GetAllDifficultyLevelsEvent(language: 'en'));
+  void _listenToDifficultyLevels() {
+    _stateSubscription = _cubit.stream.listen((state) {
+      final levels = state.data?.levels ?? [];
 
-    if (!mounted) return;
+      if (levels.isNotEmpty) {
+        _stateSubscription?.cancel();
+        _stateSubscription = null;
 
-    _loadExercisesForTab(0);
+        _loadExercisesForTab(0);
+      }
+    });
+  }
+
+  void _loadExercisesForTab(int index) {
+    final levels = _cubit.state.data?.levels ?? [];
+
+    if (index < 0 || index >= levels.length) return;
+
+    _cubit.doEvent(
+      GetExercisesByMuscleAndDifficultyEvent(
+        language: 'en',
+        primeMoverMuscleId: _primeMoverMuscleId,
+        difficultyLevelId: levels[index].id,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _stateSubscription?.cancel();
+
     if (_ownsCubit) {
       _cubit.close();
     }
+
     super.dispose();
   }
 
@@ -99,7 +113,7 @@ class _ExerciseViewState extends State<ExerciseView>
               left: 0,
               right: 0,
               child: SizedBox(
-                height: 355,
+                height: MediaQuery.sizeOf(context).height * 0.42,
                 child: Image.asset(AppImages.bodyBuilder, fit: BoxFit.cover),
               ),
             ),
@@ -161,45 +175,7 @@ class _ExerciseViewState extends State<ExerciseView>
 
                       const SizedBox(height: 12),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.grey),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Text(
-                              localization.durationMinutes(30),
-                              style: AppTextStyles.regular12.copyWith(
-                                color: AppColors.white,
-                              ),
-                            ),
-                          ),
-
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.grey),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Text(
-                              localization.calories(123),
-                              style: AppTextStyles.regular12.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      GetDurationAndCalories(localization: localization),
 
                       const SizedBox(height: 10),
 
@@ -262,8 +238,7 @@ class _ExerciseViewState extends State<ExerciseView>
                                     _cubit.doEvent(
                                       GetExercisesByMuscleAndDifficultyEvent(
                                         language: 'en',
-                                        primeMoverMuscleId:
-                                            '69d982ef85f6bfa972bf2248',
+                                        primeMoverMuscleId: _primeMoverMuscleId,
                                         difficultyLevelId:
                                             state.data?.levels.first.id ?? '',
                                       ),

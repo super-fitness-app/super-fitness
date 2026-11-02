@@ -35,7 +35,6 @@ class ExerciseListView extends StatelessWidget {
                   width: 120,
                   child: VideoThumbnail(
                     videoUrl: exercise.shortYoutubeDemonstrationLink ?? '',
-                    onTap: () {},
                   ),
                 ),
                 const SizedBox(width: 12),
