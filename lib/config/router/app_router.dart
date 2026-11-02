@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
@@ -14,6 +15,8 @@ abstract final class AppRoutes {
   static const exercise = '/exercise';
   static const food = '/food';
   static const foodDetails = '/food-details';
+  static const exerciseview = '/exercise-details';
+  static const appVideoPlayer = '/app-video-player';
 }
 
 abstract final class AppRouter {
@@ -23,6 +26,22 @@ abstract final class AppRouter {
     navigatorKey: _rootNavigatorKey,
     initialLocation: AppRoutes.login,
     routes: [
+      GoRoute(
+        path: AppRoutes.exerciseview,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ExerciseView(),
+      ),
+      GoRoute(
+        path: AppRoutes.appVideoPlayer,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+
+          final videoUrl = args['videoUrl'] as String;
+          final title = args['title'] as String;
+          return AppVideoPlayer(videoUrl: videoUrl, title: title);
+        },
+      ),
       GoRoute(
         path: AppRoutes.login,
         parentNavigatorKey: _rootNavigatorKey,
