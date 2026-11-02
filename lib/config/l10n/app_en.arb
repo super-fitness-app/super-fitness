@@ -34,5 +34,12 @@
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
 
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+  "foodRecommendation": "Food Recommendation",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "noMealsFound": "No meals found",
+  "retry": "Retry",
+  "failedToLoadMeals": "Failed to load meals"
 }

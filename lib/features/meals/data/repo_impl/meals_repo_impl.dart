@@ -1,7 +1,6 @@
-import 'dart:nativewrappers/_internal/vm/bin/vmservice_io.dart' as AppError;
-
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/network/safe_call.dart';
 import 'package:super_fitness/features/meals/data/data_source/remote/meals_remote_data_source.dart';
 import 'package:super_fitness/features/meals/data/mapper/meals_mapper.dart';
@@ -48,7 +47,7 @@ class MealsRepoImpl implements MealsRepo {
       final meal = response.meals?.first;
 
       if (meal == null) {
-        return Failure(ServerMessageFailure(AppError.server));
+        return Failure(const NetworkFailure(AppError.server));
       }
 
       return Success(_mealsMapper.mapMealDetailsToEntity(meal));

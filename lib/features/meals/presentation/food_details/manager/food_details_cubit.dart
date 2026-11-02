@@ -10,6 +10,7 @@ part 'food_details_state.dart';
 
 @injectable
 class FoodDetailsCubit extends BaseCubit<FoodDetailsState, BaseEvent> {
+  // ignore: unused_field
   final MealsRepo? _mealsRepo;
 
   FoodDetailsCubit([this._mealsRepo])

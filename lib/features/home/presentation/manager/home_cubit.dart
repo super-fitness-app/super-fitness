@@ -10,6 +10,7 @@ part 'home_state.dart';
 
 @injectable
 class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
+  // ignore: unused_field
   final HomeRepo? _homeRepo;
 
   HomeCubit([this._homeRepo]) : super(const BaseState<HomeData>.initial());

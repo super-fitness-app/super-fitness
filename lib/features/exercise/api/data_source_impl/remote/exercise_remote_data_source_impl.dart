@@ -4,6 +4,7 @@ import 'package:super_fitness/features/exercise/data/data_source/remote/exercise
 
 @Injectable(as: ExerciseRemoteDataSource)
 class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
+  // ignore: unused_field
   final ExerciseApiClient _exerciseApiClient;
 
   ExerciseRemoteDataSourceImpl(this._exerciseApiClient);

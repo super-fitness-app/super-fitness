@@ -1,4 +1,6 @@
-class MealEntity {
+import 'package:equatable/equatable.dart';
+
+class MealEntity extends Equatable {
   final String? id;
   final String? name;
   final String? imageUrl;
@@ -8,4 +10,7 @@ class MealEntity {
     this.name,
     this.imageUrl,
   });
+
+  @override
+  List<Object?> get props => [id, name, imageUrl];
 }

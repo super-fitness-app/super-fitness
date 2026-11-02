@@ -4,6 +4,7 @@ import 'package:super_fitness/features/home/data/data_source/remote/home_remote_
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
+  // ignore: unused_field
   final HomeApiClient _homeApiClient;
 
   HomeRemoteDataSourceImpl(this._homeApiClient);

@@ -1,5 +1,6 @@
 {
   "@@locale": "ar",
+  "appName": "سوبر فيتنس",
 
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
@@ -30,5 +31,12 @@
   "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
   "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
 
-  "loginTitle": "مرحباً بعودتك!"
+  "loginTitle": "مرحباً بعودتك!",
+  "foodRecommendation": "توصيات الطعام",
+  "breakfast": "فطور",
+  "lunch": "غداء",
+  "dinner": "عشاء",
+  "noMealsFound": "لم يتم العثور على وجبات",
+  "retry": "إعادة المحاولة",
+  "failedToLoadMeals": "فشل في تحميل الوجبات"
 }

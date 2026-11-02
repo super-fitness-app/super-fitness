@@ -10,6 +10,7 @@ part 'exercise_state.dart';
 
 @injectable
 class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
+  // ignore: unused_field
   final ExerciseRepo? _exerciseRepo;
 
   ExerciseCubit([this._exerciseRepo])
