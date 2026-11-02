@@ -108,4 +108,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginTitle => 'Welcome Back!';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes Min';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories Cal';
+  }
+
+  @override
+  String get beginner => 'Beginner';
+
+  @override
+  String get intermediate => 'Intermediate';
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get failedToLoadExercises => 'Failed to load exercises';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get noExercisesFound => 'No exercises found';
 }

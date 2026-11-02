@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/features/exercise/domain/entities/exercise_entity.dart';
-import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
-import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/video_player.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/video_thumbnail.dart';
 
 class ExerciseListView extends StatelessWidget {
-  final List<MuscleEntity> muscles;
   final List<ExerciseEntity> exercises;
 
-  const ExerciseListView({
-    super.key,
-    required this.muscles,
-    required this.exercises,
-  });
+  const ExerciseListView({super.key, required this.exercises});
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +58,12 @@ class ExerciseListView extends StatelessWidget {
                     exercise.inDepthYoutubeExplanationLink!.isNotEmpty)
                   GestureDetector(
                     onTap: () {
-                      final videoUrl = exercise.inDepthYoutubeExplanationLink!;
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              ExerciseVideoPlayer(videoUrl: videoUrl),
-                        ),
+                      context.push(
+                        AppRoutes.appVideoPlayer,
+                        extra: {
+                          'videoUrl': exercise.inDepthYoutubeExplanationLink!,
+                          'title': exercise.exercise,
+                        },
                       );
                     },
                     child: Container(

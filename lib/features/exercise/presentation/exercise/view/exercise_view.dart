@@ -3,17 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_cubit.dart';
+import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_event.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_state.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/exercise_header.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/widgets/exercise_list_view.dart';
 
 class ExerciseView extends StatefulWidget {
   final ExerciseCubit? cubit;
-
+  // final String primeMoverMuscleId;
+  // final String bodyBuilderExerciseImage;
+  // final String exerciseName;
   const ExerciseView({super.key, this.cubit});
 
   @override
@@ -27,13 +31,8 @@ class _ExerciseViewState extends State<ExerciseView>
 
   @override
   ExerciseCubit get cubit => _cubit;
+  // String get primeMoverMuscleId => widget.primeMoverMuscleId;
   static const String _primeMoverMuscleId = '69d982ef85f6bfa972bf2248';
-
-  // static const List<String> _difficultyIds = [
-  //   '69d982ed85f6bfa972bf2216',
-  //   '69d982ed85f6bfa972bf221c',
-  //   '69d982ed85f6bfa972bf2222',
-  // ];
 
   void _loadExercisesForTab(int index) {
     final levels = _cubit.state.data?.levels ?? [];
@@ -42,10 +41,12 @@ class _ExerciseViewState extends State<ExerciseView>
 
     final difficultyLevelId = levels[index].id;
 
-    _cubit.getExercisesByMuscleAndDifficulty(
-      language: 'en',
-      primeMoverMuscleId: _primeMoverMuscleId,
-      difficultyLevelId: difficultyLevelId,
+    _cubit.doEvent(
+      GetExercisesByMuscleAndDifficultyEvent(
+        language: 'en',
+        primeMoverMuscleId: _primeMoverMuscleId,
+        difficultyLevelId: difficultyLevelId,
+      ),
     );
   }
 
@@ -67,7 +68,7 @@ class _ExerciseViewState extends State<ExerciseView>
   }
 
   Future<void> _loadInitialData() async {
-    await _cubit.getAllDifficultyLevels(language: 'en');
+    _cubit.doEvent(GetAllDifficultyLevelsEvent(language: 'en'));
 
     if (!mounted) return;
 
@@ -84,6 +85,7 @@ class _ExerciseViewState extends State<ExerciseView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -108,7 +110,7 @@ class _ExerciseViewState extends State<ExerciseView>
               right: 0,
               child: Container(
                 height: 355,
-                color: const Color.fromARGB(85, 0, 0, 0),
+                color: AppColors.black.withValues(alpha: 0.3),
               ),
             ),
 
@@ -172,7 +174,7 @@ class _ExerciseViewState extends State<ExerciseView>
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
-                              '30 Min',
+                              localization.durationMinutes(30),
                               style: AppTextStyles.regular12.copyWith(
                                 color: AppColors.white,
                               ),
@@ -189,7 +191,7 @@ class _ExerciseViewState extends State<ExerciseView>
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
-                              '120 Cal',
+                              localization.calories(123),
                               style: AppTextStyles.regular12.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
@@ -209,7 +211,7 @@ class _ExerciseViewState extends State<ExerciseView>
                           vertical: 5,
                         ),
                         indicatorSize: TabBarIndicatorSize.tab,
-                        dividerColor: Colors.transparent,
+                        dividerColor: AppColors.transparent,
                         indicator: BoxDecoration(
                           color: AppColors.orange,
                           borderRadius: BorderRadius.circular(33),
@@ -220,10 +222,10 @@ class _ExerciseViewState extends State<ExerciseView>
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
-                        tabs: const [
-                          Tab(text: 'Beginner'),
-                          Tab(text: 'Intermediate'),
-                          Tab(text: 'Advanced'),
+                        tabs: [
+                          Tab(text: localization.beginner),
+                          Tab(text: localization.intermediate),
+                          Tab(text: localization.advanced),
                         ],
                       ),
                     ],
@@ -250,22 +252,24 @@ class _ExerciseViewState extends State<ExerciseView>
                               children: [
                                 Text(
                                   state.errorMessage ??
-                                      'Failed to load exercises',
+                                      localization.failedToLoadExercises,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyles.regular16,
                                 ),
                                 const SizedBox(height: 12),
                                 ElevatedButton(
                                   onPressed: () {
-                                    _cubit.getExercisesByMuscleAndDifficulty(
-                                      language: 'en',
-                                      primeMoverMuscleId:
-                                          '69d982ef85f6bfa972bf2248',
-                                      difficultyLevelId:
-                                          '69d982ed85f6bfa972bf2222',
+                                    _cubit.doEvent(
+                                      GetExercisesByMuscleAndDifficultyEvent(
+                                        language: 'en',
+                                        primeMoverMuscleId:
+                                            '69d982ef85f6bfa972bf2248',
+                                        difficultyLevelId:
+                                            state.data?.levels.first.id ?? '',
+                                      ),
                                     );
                                   },
-                                  child: const Text('Retry'),
+                                  child: Text(localization.retry),
                                 ),
                               ],
                             ),
@@ -274,18 +278,14 @@ class _ExerciseViewState extends State<ExerciseView>
 
                         // Initial or success state
                         final exercises = state.data?.exercises ?? [];
-                        final muscles = state.data?.muscles ?? [];
 
                         if (exercises.isEmpty) {
-                          return const Center(
-                            child: Text('No exercises found'),
+                          return Center(
+                            child: Text(localization.noExercisesFound),
                           );
                         }
 
-                        return ExerciseListView(
-                          muscles: muscles,
-                          exercises: exercises,
-                        );
+                        return ExerciseListView(exercises: exercises);
                       },
                     ),
                   ),

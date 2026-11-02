@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
@@ -18,6 +19,7 @@ abstract final class AppRoutes {
   static const food = '/food';
   static const foodDetails = '/food-details';
   static const exerciseview = '/exercise-details';
+  static const appVideoPlayer = '/app-video-player';
 }
 
 abstract final class AppRouter {
@@ -25,7 +27,7 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.exerciseview,
+    initialLocation: AppRoutes.login,
     routes: [
       GoRoute(
         path: AppRoutes.exerciseview,
@@ -34,6 +36,17 @@ abstract final class AppRouter {
           create: (context) => getIt<ExerciseCubit>(),
           child: const ExerciseView(),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.appVideoPlayer,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+
+          final videoUrl = args['videoUrl'] as String;
+          final title = args['title'] as String;
+          return AppVideoPlayer(videoUrl: videoUrl, title: title);
+        },
       ),
       GoRoute(
         path: AppRoutes.login,

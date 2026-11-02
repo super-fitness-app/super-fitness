@@ -1,9 +1,19 @@
-// part of 'exercise_cubit.dart';
+sealed class ExerciseEvent {}
 
-// abstract base class ExerciseEvent extends FeatureEvent {
-//   const ExerciseEvent();
-// }
+class GetExercisesByMuscleAndDifficultyEvent extends ExerciseEvent {
+  final String language;
+  final String difficultyLevelId;
+  final String primeMoverMuscleId;
 
-// final class GetExerciseDataEvent extends ExerciseEvent {
-//   const GetExerciseDataEvent();
-// }
+  GetExercisesByMuscleAndDifficultyEvent({
+    required this.language,
+    required this.difficultyLevelId,
+    required this.primeMoverMuscleId,
+  });
+}
+
+class GetAllDifficultyLevelsEvent extends ExerciseEvent {
+  final String language;
+
+  GetAllDifficultyLevelsEvent({required this.language});
+}

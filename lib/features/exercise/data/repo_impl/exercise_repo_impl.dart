@@ -4,7 +4,6 @@ import 'package:super_fitness/config/network/safe_call.dart';
 import 'package:super_fitness/features/exercise/data/data_source/remote/exercise_remote_data_source.dart';
 import 'package:super_fitness/features/exercise/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/exercise_entity.dart';
-import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/domain/repo/exercise_repo.dart';
 
 @Injectable(as: ExerciseRepo)
@@ -22,18 +21,6 @@ class ExerciseRepoImpl implements ExerciseRepo {
         language: language,
       );
       return Success(response.levels.map((e) => e.toEntity()).toList());
-    });
-  }
-
-  @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(
-    String muscleGroupId,
-  ) {
-    return safeCall(() async {
-      final response = await _exerciseRemoteDataSource.getMusclesByGroup(
-        muscleGroupId: muscleGroupId,
-      );
-      return Success(response.muscles.map((e) => e.toEntity()).toList());
     });
   }
 

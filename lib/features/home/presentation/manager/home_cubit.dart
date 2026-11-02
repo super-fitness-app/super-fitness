@@ -23,11 +23,10 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
         break;
     }
   }
-//  remove this code make it like you want 
-  Future<HomeRepo?> _onGetHomeData(GetHomeDataEvent event) async{
-     
+
+  //  remove this code make it like you want
+  Future<HomeRepo?> _onGetHomeData(GetHomeDataEvent event) async {
     final response = _homeRepo;
     return response;
- 
   }
 }

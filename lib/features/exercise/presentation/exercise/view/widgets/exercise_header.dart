@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 
 class ExerciseHeader extends StatelessWidget {
@@ -14,7 +15,10 @@ class ExerciseHeader extends StatelessWidget {
         shape: BoxShape.circle,
       ),
 
-      child: Icon(Icons.skip_previous),
+      child: GestureDetector(
+        onTap: () => context.pop(),
+        child: Icon(Icons.skip_previous),
+      ),
     );
   }
 }
