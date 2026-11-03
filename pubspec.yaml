@@ -48,6 +48,7 @@ dependencies:
   retrofit: ^4.9.0
   flutter_native_splash: ^2.4.8
   flutter_launcher_icons: ^0.14.4
+  youtube_player_flutter: ^10.0.1
 
 dev_dependencies:
   bloc_test: ^10.0.0

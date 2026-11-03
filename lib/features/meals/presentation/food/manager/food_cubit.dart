@@ -107,7 +107,7 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
   }
 
   void _onMealClicked(MealEntity meal) {
-    emitEvent(NavigateEvent(AppRoutes.foodDetails, extra: meal));
+    emitEvent(NavigateEvent(AppRoutes.foodDetails, extra: meal.id ?? ''));
   }
 
   Future<void> _onRefreshFood() async {

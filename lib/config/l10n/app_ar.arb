@@ -38,5 +38,14 @@
   "dinner": "عشاء",
   "noMealsFound": "لم يتم العثور على وجبات",
   "retry": "إعادة المحاولة",
-  "failedToLoadMeals": "فشل في تحميل الوجبات"
+  "failedToLoadMeals": "فشل في تحميل الوجبات",
+  "foodDetails": "تفاصيل الوجبة",
+  "ingredients": "المكونات",
+  "energy": "طاقة",
+  "protein": "بروتين",
+  "carbs": "كربوهيدرات",
+  "fat": "دهون",
+  "failedToLoadMealDetails": "فشل في تحميل تفاصيل الوجبة",
+  "playVideo": "تشغيل الفيديو",
+  "noIngredientsAvailable": "لا توجد مكونات متوفرة"
 }

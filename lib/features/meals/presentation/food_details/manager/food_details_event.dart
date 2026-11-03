@@ -1,10 +1,10 @@
 part of 'food_details_cubit.dart';
 
-abstract base class FoodDetailsEvent extends FeatureEvent {
+sealed class FoodDetailsEvent extends FeatureEvent {
   const FoodDetailsEvent();
 }
 
-final class GetFoodDetailsDataEvent extends FoodDetailsEvent {
-  const GetFoodDetailsDataEvent();
+final class LoadMealDetailsEvent extends FoodDetailsEvent {
+  final String mealId;
+  const LoadMealDetailsEvent(this.mealId);
 }
-

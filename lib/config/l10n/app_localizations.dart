@@ -313,6 +313,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load meals'**
   String get failedToLoadMeals;
+
+  /// No description provided for @foodDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Details'**
+  String get foodDetails;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get ingredients;
+
+  /// No description provided for @energy.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy'**
+  String get energy;
+
+  /// No description provided for @protein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get protein;
+
+  /// No description provided for @carbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get carbs;
+
+  /// No description provided for @fat.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get fat;
+
+  /// No description provided for @failedToLoadMealDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load meal details'**
+  String get failedToLoadMealDetails;
+
+  /// No description provided for @playVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Video'**
+  String get playVideo;
+
+  /// No description provided for @noIngredientsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No ingredients available'**
+  String get noIngredientsAvailable;
 }
 
 class _AppLocalizationsDelegate

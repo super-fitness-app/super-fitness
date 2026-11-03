@@ -197,7 +197,7 @@ void main() {
       expect(events.length, 1);
       final navEvent = events.first as NavigateEvent;
       expect(navEvent.routeName, AppRoutes.foodDetails);
-      expect(navEvent.extra, meal);
+      expect(navEvent.extra, meal.id);
 
       await sub.cancel();
       await cubit.close();
