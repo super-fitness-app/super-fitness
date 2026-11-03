@@ -5,7 +5,18 @@ import 'package:super_fitness/core/const/app_dimensions.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 
 class FoodDetailsMacroPills extends StatelessWidget {
-  const FoodDetailsMacroPills({super.key});
+  final String energy;
+  final String protein;
+  final String carbs;
+  final String fat;
+
+  const FoodDetailsMacroPills({
+    super.key,
+    required this.energy,
+    required this.protein,
+    required this.carbs,
+    required this.fat,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +24,10 @@ class FoodDetailsMacroPills extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _MacroPill(value: '100 K', label: l10n.energy),
-        _MacroPill(value: '15 G', label: l10n.protein),
-        _MacroPill(value: '58 G', label: l10n.carbs),
-        _MacroPill(value: '20 G', label: l10n.fat),
+        _MacroPill(value: energy, label: l10n.energy),
+        _MacroPill(value: protein, label: l10n.protein),
+        _MacroPill(value: carbs, label: l10n.carbs),
+        _MacroPill(value: fat, label: l10n.fat),
       ],
     );
   }

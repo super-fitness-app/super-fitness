@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
-import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_dimensions.dart';
 import 'package:super_fitness/core/const/app_images.dart';
@@ -33,50 +32,14 @@ class FoodDetailsView extends StatefulWidget {
 class _FoodDetailsViewState extends State<FoodDetailsView>
     with BaseViewMixin<FoodDetailsView, FoodDetailsCubit, BaseEvent> {
   late final FoodDetailsCubit _cubit;
-  bool _ownsCubit = false;
 
   @override
   FoodDetailsCubit get cubit => _cubit;
 
   @override
   void initState() {
-    _initCubit();
+    _cubit = widget.cubit ?? context.read<FoodDetailsCubit>();
     super.initState();
-    _triggerInitialLoad();
-  }
-
-  void _initCubit() {
-    if (widget.cubit != null) {
-      _cubit = widget.cubit!;
-      _ownsCubit = false;
-      return;
-    }
-    try {
-      _cubit = context.read<FoodDetailsCubit>();
-      _ownsCubit = false;
-    } catch (_) {
-      _cubit = getIt<FoodDetailsCubit>();
-      _ownsCubit = true;
-    }
-  }
-
-  void _triggerInitialLoad() {
-    final id = widget.mealId;
-    if (id != null &&
-        id.isNotEmpty &&
-        _cubit.state.data == null &&
-        _cubit.state.failure == null &&
-        !_cubit.state.isLoading) {
-      _cubit.doEvent(LoadMealDetailsEvent(id));
-    }
-  }
-
-  @override
-  void dispose() {
-    if (_ownsCubit) {
-      _cubit.close();
-    }
-    super.dispose();
   }
 
   void _onRetry() {
@@ -88,33 +51,30 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _cubit,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            const _FoodDetailsBackgroundLayer(),
-            BlocBuilder<FoodDetailsCubit, FoodDetailsState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const FoodDetailsShimmer();
-                }
-                if (state.failure != null && state.data == null) {
-                  return FoodDetailsErrorView(
-                    failure: state.failure,
-                    onRetry: _onRetry,
-                  );
-                }
-                if (state.data != null) {
-                  return _FoodDetailsContent(meal: state.data!);
-                }
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const _FoodDetailsBackgroundLayer(),
+          BlocBuilder<FoodDetailsCubit, FoodDetailsState>(
+            builder: (context, state) {
+              if (state.isLoading) {
                 return const FoodDetailsShimmer();
-              },
-            ),
-          ],
-        ),
+              }
+              if (state.failure != null && state.data == null) {
+                return FoodDetailsErrorView(
+                  failure: state.failure,
+                  onRetry: _onRetry,
+                );
+              }
+              if (state.data != null) {
+                return _FoodDetailsContent(meal: state.data!);
+              }
+              return const FoodDetailsShimmer();
+            },
+          ),
+        ],
       ),
     );
   }
@@ -180,7 +140,12 @@ class _FoodDetailsContent extends StatelessWidget {
                   instructions: meal.instructions,
                 ),
                 const SizedBox(height: 20),
-                const FoodDetailsMacroPills(),
+                FoodDetailsMacroPills(
+                  energy: meal.energy,
+                  protein: meal.protein,
+                  carbs: meal.carbs,
+                  fat: meal.fat,
+                ),
                 const SizedBox(height: 28),
                 FoodDetailsIngredientsSection(
                   ingredients: meal.ingredients,

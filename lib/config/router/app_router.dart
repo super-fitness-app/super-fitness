@@ -76,9 +76,12 @@ abstract final class AppRouter {
         path: AppRoutes.appVideoPlayer,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>;
-          final videoUrl = args['videoUrl'] as String;
-          final title = args['title'] as String;
+          final args = state.extra as Map<String, dynamic>?;
+          final videoUrl = args?['videoUrl'] as String?;
+          final title = args?['title'] as String?;
+          if (videoUrl == null || title == null) {
+            return const SizedBox.shrink();
+          }
           return AppVideoPlayer(videoUrl: videoUrl, title: title);
         },
       ),

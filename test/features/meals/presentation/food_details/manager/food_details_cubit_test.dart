@@ -45,6 +45,10 @@ void main() {
       instructions: 'Bake it well',
       imageUrl: 'https://example.com/image.jpg',
       youtubeUrl: 'https://www.youtube.com/watch?v=vZy-7UyPdjM',
+      energy: '200 K',
+      protein: '10 G',
+      carbs: '40 G',
+      fat: '15 G',
       ingredients: [
         MealIngredientEntity(name: 'Eggs', measure: '4'),
         MealIngredientEntity(name: 'Sugar', measure: '200g'),
@@ -79,6 +83,26 @@ void main() {
     );
 
     blocTest<FoodDetailsCubit, FoodDetailsState>(
+      'handles meal with empty ingredients cleanly',
+      build: () {
+        const emptyIngredientsMeal = MealDetailsEntity(
+          id: '123',
+          name: 'Simple Broth',
+          ingredients: [],
+        );
+        repo.mealDetailsResult = const Success(emptyIngredientsMeal);
+        return FoodDetailsCubit(useCase);
+      },
+      act: (cubit) => cubit.doEvent(const LoadMealDetailsEvent('123')),
+      expect: () => [
+        const BaseState<MealDetailsEntity>.loading(),
+        const BaseState<MealDetailsEntity>.success(
+          MealDetailsEntity(id: '123', name: 'Simple Broth', ingredients: []),
+        ),
+      ],
+    );
+
+    blocTest<FoodDetailsCubit, FoodDetailsState>(
       'LoadMealDetailsEvent emits [loading, failure] on error',
       build: () {
         repo.mealDetailsResult =
@@ -98,16 +122,14 @@ void main() {
       repo.mealDetailsResult =
           const Failure(NetworkFailure(AppError.noConnection));
       final cubit = FoodDetailsCubit(useCase);
-      final events = <BaseEvent>[];
-      final sub = cubit.eventStream.listen(events.add);
+
+      expectLater(
+        cubit.eventStream,
+        emits(isA<DisplayError>()),
+      );
 
       cubit.doEvent(const LoadMealDetailsEvent('53380'));
-      await Future<void>.delayed(Duration.zero);
-
-      expect(events.length, 1);
-      expect(events.first, isA<DisplayError>());
-
-      await sub.cancel();
+      await cubit.stream.firstWhere((s) => s.failure != null);
       await cubit.close();
     });
   });

@@ -1,11 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/app_error.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/errors/app_failure.dart';
 import 'package:super_fitness/features/meals/domain/entities/meal_details_entity.dart';
 import 'package:super_fitness/features/meals/presentation/food_details/manager/food_details_cubit.dart';
@@ -46,6 +48,10 @@ void main() {
       instructions: 'Preheat oven to 180C',
       imageUrl: '',
       youtubeUrl: 'https://www.youtube.com/watch?v=vZy-7UyPdjM',
+      energy: '100 K',
+      protein: '15 G',
+      carbs: '58 G',
+      fat: '20 G',
       ingredients: [
         MealIngredientEntity(name: 'Eggs', measure: '4'),
         MealIngredientEntity(name: 'Sugar', measure: '200g'),
@@ -55,25 +61,18 @@ void main() {
     testWidgets('Renders background layer with blur and overlay',
         (tester) async {
       final cubit = MockFoodDetailsCubit(const BaseState.loading());
-
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
 
       expect(find.byType(BackdropFilter), findsOneWidget);
-      final backdrop = tester.widget<BackdropFilter>(
-        find.byType(BackdropFilter),
-      );
-      expect(
-        backdrop.filter,
-        ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-      );
+      final backdrop = tester.widget<BackdropFilter>(find.byType(BackdropFilter));
+      expect(backdrop.filter, ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0));
       await cubit.close();
     });
 
     testWidgets('FoodDetailsShimmer is displayed during loading state',
         (tester) async {
       final cubit = MockFoodDetailsCubit(const BaseState.loading());
-
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
 
@@ -84,7 +83,6 @@ void main() {
     testWidgets('Renders header, macro pills, and ingredients on success',
         (tester) async {
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
-
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
 
@@ -94,9 +92,53 @@ void main() {
 
       expect(find.text('Apple cake'), findsOneWidget);
       expect(find.text('100 K'), findsOneWidget);
-      expect(find.text('Energy'), findsOneWidget);
+      expect(find.text('15 G'), findsOneWidget);
+      expect(find.text('58 G'), findsOneWidget);
+      expect(find.text('20 G'), findsOneWidget);
       expect(find.text('Eggs'), findsOneWidget);
       expect(find.text('4'), findsOneWidget);
+      await cubit.close();
+    });
+
+    testWidgets('Tapping play button triggers video player navigation',
+        (tester) async {
+      final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
+      Map<String, dynamic>? capturedArgs;
+
+      final testRouter = GoRouter(
+        initialLocation: '/',
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, _) => FoodDetailsView(cubit: cubit),
+          ),
+          GoRoute(
+            path: AppRoutes.appVideoPlayer,
+            builder: (_, state) {
+              capturedArgs = state.extra as Map<String, dynamic>?;
+              return const Scaffold(body: Text('VideoPlayerPage'));
+            },
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: testRouter,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pump();
+
+      final playButton = find.byIcon(Icons.play_arrow_rounded);
+      expect(playButton, findsOneWidget);
+      await tester.tap(playButton);
+      await tester.pumpAndSettle();
+
+      expect(capturedArgs, isNotNull);
+      expect(capturedArgs!['videoUrl'], testMeal.youtubeUrl);
+      expect(capturedArgs!['title'], testMeal.name);
       await cubit.close();
     });
 
@@ -124,11 +166,7 @@ void main() {
     testWidgets('RTL Arabic layout renders successfully without overflow',
         (tester) async {
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
-
-      await tester.pumpWidget(_buildTestWidget(
-        cubit,
-        locale: const Locale('ar'),
-      ));
+      await tester.pumpWidget(_buildTestWidget(cubit, locale: const Locale('ar')));
       await tester.pump();
 
       expect(find.byType(FoodDetailsHeader), findsOneWidget);
