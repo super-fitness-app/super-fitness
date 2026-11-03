@@ -1,6 +1,6 @@
 part of 'food_cubit.dart';
 
-sealed class FoodEvent extends FeatureEvent {
+sealed class FoodEvent {
   const FoodEvent();
 }
 
@@ -25,4 +25,3 @@ final class MealClickedEvent extends FoodEvent {
 final class RefreshFoodEvent extends FoodEvent {
   const RefreshFoodEvent();
 }
-

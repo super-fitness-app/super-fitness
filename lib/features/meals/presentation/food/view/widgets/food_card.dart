@@ -125,9 +125,9 @@ class _CardTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PositionedDirectional(
-      start: 12,
-      end: 12,
-      bottom: 16,
+      start: AppDimensions.cardHorizontalPadding,
+      end: AppDimensions.cardHorizontalPadding,
+      bottom: AppDimensions.cardBottomPadding,
       child: Text(
         title,
         style: AppTextStyles.bold16,

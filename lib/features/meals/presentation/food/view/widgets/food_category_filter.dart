@@ -26,10 +26,12 @@ class FoodCategoryFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final names = _categoryNames;
     return SizedBox(
-      height: 48,
+      height: 52,
       child: ListView.separated(
-        padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: AppDimensions.defaultScreenPadding,
+        padding: const EdgeInsetsDirectional.only(
+          start: AppDimensions.defaultScreenPadding,
+          end: AppDimensions.defaultScreenPadding,
+          bottom: AppDimensions.categoryBottomPadding,
         ),
         scrollDirection: Axis.horizontal,
         itemCount: names.length,

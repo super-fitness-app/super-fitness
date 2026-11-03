@@ -7,7 +7,11 @@ import 'package:super_fitness/features/meals/presentation/food_details/manager/f
 
 class FoodDetailsView extends StatefulWidget {
   final FoodDetailsCubit? cubit;
-  const FoodDetailsView({super.key, this.cubit});
+
+  const FoodDetailsView({
+    super.key,
+    this.cubit,
+  });
 
   @override
   State<FoodDetailsView> createState() => _FoodDetailsViewState();
@@ -23,6 +27,11 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
 
   @override
   void initState() {
+    _initCubit();
+    super.initState();
+  }
+
+  void _initCubit() {
     if (widget.cubit != null) {
       _cubit = widget.cubit!;
       _ownsCubit = false;
@@ -30,10 +39,9 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
       _cubit = getIt<FoodDetailsCubit>();
       _ownsCubit = false;
     } else {
-      _cubit = FoodDetailsCubit();
-      _ownsCubit = true;
+      _cubit = context.read<FoodDetailsCubit>();
+      _ownsCubit = false;
     }
-    super.initState();
   }
 
   @override
@@ -48,19 +56,11 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _cubit,
-      child: Scaffold(
-        body: SafeArea(
-          child: BlocBuilder<FoodDetailsCubit, FoodDetailsState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return const Center(child: Text('Food Details Screen'));
-            },
-          ),
+      child: const Scaffold(
+        body: Center(
+          child: Text('Food Details'),
         ),
       ),
     );
   }
 }
-

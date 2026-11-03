@@ -19,6 +19,8 @@ class MealDetailsResponse {
 
 @JsonSerializable()
 class MealDetails {
+  static const int maxIngredientCount = 20;
+
   @JsonKey(name: 'idMeal')
   final String? id;
 
@@ -100,20 +102,18 @@ class MealDetails {
       imageSource: meal.imageSource,
       creativeCommonsConfirmed: meal.creativeCommonsConfirmed,
       dateModified: meal.dateModified,
-      ingredients: List.generate(20, (index) {
-        final number = index + 1;
-        final ingredient = json['strIngredient$number'] as String?;
-        final measure = json['strMeasure$number'] as String?;
-
-        return MealIngredient(
-          name: ingredient?.trim().isNotEmpty == true
-              ? ingredient!.trim()
-              : null,
-          measure: measure?.trim().isNotEmpty == true
-              ? measure!.trim()
-              : null,
-        );
-      }).where((item) => item.name != null).toList(),
+      ingredients: [
+        for (var i = 1; i <= maxIngredientCount; i++)
+          if (json['strIngredient$i'] is String &&
+              (json['strIngredient$i'] as String).trim().isNotEmpty)
+            MealIngredient(
+              name: (json['strIngredient$i'] as String).trim(),
+              measure: (json['strMeasure$i'] is String &&
+                      (json['strMeasure$i'] as String).trim().isNotEmpty)
+                  ? (json['strMeasure$i'] as String).trim()
+                  : null,
+            ),
+      ],
     );
   }
 

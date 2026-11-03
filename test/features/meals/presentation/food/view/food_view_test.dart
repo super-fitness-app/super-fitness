@@ -22,7 +22,10 @@ class MockFoodCubit extends BaseCubit<FoodState, BaseEvent>
   void doEvent(Object event) => dispatchedEvents.add(event);
 }
 
-Widget _buildTestWidget(MockFoodCubit cubit, {Locale locale = const Locale('en')}) {
+Widget _buildTestWidget(
+  MockFoodCubit cubit, {
+  Locale locale = const Locale('en'),
+}) {
   return MaterialApp(
     locale: locale,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -44,16 +47,33 @@ void main() {
       MealEntity(id: '2', name: 'Grilled Chicken', imageUrl: ''),
     ];
 
-    testWidgets('renders category and meals shimmer when state isLoading is true',
+    testWidgets('FoodCategoryShimmer is displayed while categories are loading',
         (tester) async {
       final cubit = MockFoodCubit(
-        const FoodState(baseState: BaseState.loading()),
+        const FoodState(baseState: BaseState.loading(), categories: []),
       );
 
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
 
       expect(find.byType(FoodCategoryShimmer), findsOneWidget);
+      await cubit.close();
+    });
+
+    testWidgets(
+        'FoodShimmerLoading is displayed across grid while meals are loading',
+        (tester) async {
+      final cubit = MockFoodCubit(
+        const FoodState(
+          baseState: BaseState.loading(),
+          categories: testCategories,
+          displayedMeals: [],
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(cubit));
+      await tester.pump();
+
       expect(find.byType(FoodShimmerLoading), findsOneWidget);
       await cubit.close();
     });
@@ -70,7 +90,8 @@ void main() {
       );
 
       await tester.pumpWidget(_buildTestWidget(cubit));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(FoodHeaderSection), findsOneWidget);
       expect(find.byKey(const Key('food_header_back_button')), findsOneWidget);
@@ -82,9 +103,8 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('tapping category tag dispatches SelectCategoryEvent', (
-      tester,
-    ) async {
+    testWidgets('tapping dynamic category items dispatches SelectCategoryEvent',
+        (tester) async {
       final cubit = MockFoodCubit(
         const FoodState(
           baseState: BaseState.success(testMeals),
@@ -95,7 +115,8 @@ void main() {
       );
 
       await tester.pumpWidget(_buildTestWidget(cubit));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.text('Breakfast'));
       await tester.pump();
@@ -109,10 +130,10 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('scrolling near bottom dispatches LoadMoreMealsEvent', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(800, 1200);
+    testWidgets(
+        'scrolling near bottom dynamically dispatches LoadMoreMealsEvent',
+        (tester) async {
+      tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
         tester.view.resetPhysicalSize();
@@ -133,10 +154,15 @@ void main() {
       );
 
       await tester.pumpWidget(_buildTestWidget(cubit));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -3500));
-      await tester.pumpAndSettle();
+      final scrollable = find.byType(CustomScrollView);
+      for (var i = 0; i < 15; i++) {
+        await tester.drag(scrollable, const Offset(0, -400));
+        await tester.pump();
+        if (cubit.dispatchedEvents.any((e) => e is LoadMoreMealsEvent)) break;
+      }
 
       expect(
         cubit.dispatchedEvents.any((e) => e is LoadMoreMealsEvent),
@@ -145,9 +171,8 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('tapping meal card dispatches MealClickedEvent', (
-      tester,
-    ) async {
+    testWidgets('tapping meal cards dispatches MealClickedEvent',
+        (tester) async {
       final cubit = MockFoodCubit(
         const FoodState(
           baseState: BaseState.success(testMeals),
@@ -158,7 +183,8 @@ void main() {
       );
 
       await tester.pumpWidget(_buildTestWidget(cubit));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       await tester.tap(find.byType(FoodCard).first);
       await tester.pump();
@@ -172,9 +198,8 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('renders correctly in Arabic RTL without error', (
-      tester,
-    ) async {
+    testWidgets('renders correctly in Arabic RTL without error',
+        (tester) async {
       final cubit = MockFoodCubit(
         const FoodState(
           baseState: BaseState.success(testMeals),
@@ -187,7 +212,8 @@ void main() {
       await tester.pumpWidget(
         _buildTestWidget(cubit, locale: const Locale('ar')),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('توصيات الطعام'), findsOneWidget);
       await cubit.close();

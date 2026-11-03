@@ -15,15 +15,17 @@ class FoodHeaderSection extends StatelessWidget {
         horizontal: AppDimensions.defaultScreenPadding,
         vertical: AppDimensions.defaultScreenPadding,
       ),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          const _HeaderBackButton(),
-          const SizedBox(width: AppDimensions.defaultScreenPadding),
-          Expanded(
-            child: Text(
-              localizations.foodRecommendation,
-              style: AppTextStyles.bold24,
-            ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: const _HeaderBackButton(),
+          ),
+          Text(
+            localizations.foodRecommendation,
+            style: AppTextStyles.bold24,
+            textAlign: TextAlign.center,
           ),
         ],
       ),

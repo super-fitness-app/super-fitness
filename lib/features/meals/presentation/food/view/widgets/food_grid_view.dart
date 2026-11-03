@@ -48,20 +48,10 @@ class _FoodGridViewState extends State<FoodGridView> {
       _controller = ScrollController();
       _ownsController = true;
     }
-    _controller.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_controller.hasClients &&
-        _controller.position.pixels >=
-            _controller.position.maxScrollExtent - 200) {
-      widget.onLoadMore();
-    }
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_onScroll);
     if (_ownsController) {
       _controller.dispose();
     }
@@ -117,6 +107,8 @@ class _MealsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       controller: controller,
+      // AlwaysScrollableScrollPhysics is required to ensure pull-to-refresh
+      // and scrolling gestures work even when items do not exceed the viewport.
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         SliverPadding(
@@ -165,5 +157,3 @@ class _BottomLoader extends StatelessWidget {
     );
   }
 }
-
-

@@ -41,12 +41,18 @@ class MealsMapper {
       imageUrl: meal.imageUrl,
       youtubeUrl: meal.youtubeUrl,
       sourceUrl: meal.sourceUrl,
-      ingredients: meal.ingredients.map((ingredient) {
-        return MealIngredientEntity(
-          name: ingredient.name!,
-          measure: ingredient.measure,
-        );
-      }).toList(),
+      ingredients: meal.ingredients
+          .where((ingredient) {
+            final name = ingredient.name?.trim();
+            return name != null && name.isNotEmpty;
+          })
+          .map((ingredient) {
+            return MealIngredientEntity(
+              name: ingredient.name?.trim() ?? '',
+              measure: ingredient.measure?.trim(),
+            );
+          })
+          .toList(),
     );
   }
 }

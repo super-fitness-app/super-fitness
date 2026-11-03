@@ -2,7 +2,7 @@ import 'package:super_fitness/features/meals/data/models/categories_response.dar
 import 'package:super_fitness/features/meals/data/models/meals_details_response.dart';
 import 'package:super_fitness/features/meals/data/models/meals_response.dart';
 
-abstract class MealsRemoteDataSource {
+abstract interface class MealsRemoteDataSource {
   Future<CategoriesResponse> getCategories();
 
   Future<MealsResponse> getMealsByCategory(String category);

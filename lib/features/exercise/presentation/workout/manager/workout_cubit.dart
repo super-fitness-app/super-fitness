@@ -3,18 +3,13 @@ import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
-import 'package:super_fitness/features/exercise/domain/repo/exercise_repo.dart';
 
 part 'workout_event.dart';
 part 'workout_state.dart';
 
 @injectable
 class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
-  // ignore: unused_field
-  final ExerciseRepo? _exerciseRepo;
-
-  WorkoutCubit([this._exerciseRepo])
-      : super(const BaseState<WorkoutData>.initial());
+  WorkoutCubit() : super(const BaseState<WorkoutData>.initial());
 
   @override
   void doEvent(Object event) {
@@ -28,4 +23,3 @@ class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
 
   void _onGetWorkouts(GetWorkoutsEvent event) {}
 }
-
