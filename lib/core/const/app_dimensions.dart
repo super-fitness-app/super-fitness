@@ -11,7 +11,7 @@ abstract final class AppDimensions {
   static const double cardHorizontalPadding = 12;
   static const double cardBottomPadding = 16;
   static const double categoryBottomPadding = 8;
-  static const double macroPillSize = 64;
+  static const double macroPillSize = 68;
   static const double headerBackButtonSize = 40;
   static const double spacing8 = 8;
   static const double blurRadius8 = 8;

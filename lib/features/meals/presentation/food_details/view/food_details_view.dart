@@ -58,6 +58,7 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
         children: [
           const _FoodDetailsBackgroundLayer(),
           BlocBuilder<FoodDetailsCubit, FoodDetailsState>(
+            bloc: _cubit,
             builder: (context, state) {
               if (state.isLoading) {
                 return const FoodDetailsShimmer();

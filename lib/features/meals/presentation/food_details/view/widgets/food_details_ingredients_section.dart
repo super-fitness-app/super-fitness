@@ -37,7 +37,11 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title, style: AppTextStyles.bold20);
+    return Text(
+      title,
+      style: AppTextStyles.bold20,
+      textAlign: TextAlign.start,
+    );
   }
 }
 
@@ -51,6 +55,7 @@ class _EmptyIngredients extends StatelessWidget {
     return Text(
       message,
       style: AppTextStyles.regular13.copyWith(color: AppColors.grey30),
+      textAlign: TextAlign.start,
     );
   }
 }
@@ -103,6 +108,7 @@ class _IngredientRow extends StatelessWidget {
               ingredient.name,
               style: AppTextStyles.medium16,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.start,
             ),
           ),
           if (ingredient.measure != null &&
@@ -111,6 +117,7 @@ class _IngredientRow extends StatelessWidget {
             Text(
               ingredient.measure!.trim(),
               style: AppTextStyles.medium14.copyWith(color: AppColors.primary),
+              textAlign: TextAlign.end,
             ),
           ],
         ],

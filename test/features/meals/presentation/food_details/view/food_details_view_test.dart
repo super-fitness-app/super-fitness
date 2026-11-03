@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_cubit.dart';
@@ -36,7 +37,10 @@ Widget _buildTestWidget(
     locale: locale,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: FoodDetailsView(cubit: cubit, mealId: mealId),
+    home: BlocProvider<FoodDetailsCubit>.value(
+      value: cubit,
+      child: FoodDetailsView(cubit: cubit, mealId: mealId),
+    ),
   );
 }
 
@@ -82,6 +86,13 @@ void main() {
 
     testWidgets('Renders header, macro pills, and ingredients on success',
         (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
@@ -110,7 +121,10 @@ void main() {
         routes: [
           GoRoute(
             path: '/',
-            builder: (_, _) => FoodDetailsView(cubit: cubit),
+            builder: (_, _) => BlocProvider<FoodDetailsCubit>.value(
+              value: cubit,
+              child: FoodDetailsView(cubit: cubit),
+            ),
           ),
           GoRoute(
             path: AppRoutes.appVideoPlayer,
@@ -134,7 +148,8 @@ void main() {
       final playButton = find.byIcon(Icons.play_arrow_rounded);
       expect(playButton, findsOneWidget);
       await tester.tap(playButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(capturedArgs, isNotNull);
       expect(capturedArgs!['videoUrl'], testMeal.youtubeUrl);
@@ -165,13 +180,21 @@ void main() {
 
     testWidgets('RTL Arabic layout renders successfully without overflow',
         (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
       await tester.pumpWidget(_buildTestWidget(cubit, locale: const Locale('ar')));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(FoodDetailsHeader), findsOneWidget);
       expect(find.text('طاقة'), findsOneWidget);
       expect(find.text('المكونات'), findsOneWidget);
+      expect(tester.takeException(), isNull);
       await cubit.close();
     });
   });
