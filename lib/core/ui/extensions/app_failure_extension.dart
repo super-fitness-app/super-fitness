@@ -10,6 +10,7 @@ extension AppFailureLocalization on AppFailure {
         context,
         error,
       ),
+      CancelledFailure(:final message) => message ?? 'Sign-in cancelled',
     };
   }
 }

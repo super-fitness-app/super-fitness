@@ -1,40 +1,191 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
+import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_text_styles.dart';
+import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
-import 'package:super_fitness/features/auth/presentation/view/login.dart';
+import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
+import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
+import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
+import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
+import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
 import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
-  @override
-  Future<void> save(String key, String value) async {}
+  final Map<String, String> _data = {};
 
   @override
-  Future<String> get(String key) async => '';
+  Future<void> save(String key, String value) async => _data[key] = value;
 
   @override
-  Future<void> delete(String key) async {}
+  Future<String> get(String key) async => _data[key] ?? '';
+
+  @override
+  Future<void> delete(String key) async => _data.remove(key);
+}
+
+class FakeSessionService implements SessionService {
+  String token = '';
+
+  @override
+  Future<void> saveTokens({
+    required String token,
+    String? refreshToken,
+    bool rememberMe = true,
+  }) async => this.token = token;
+
+  @override
+  Future<String> getToken() async => token;
+
+  @override
+  Future<void> clearSession() async => token = '';
+
+  @override
+  Future<String> getRefreshToken() async => '';
+
+  @override
+  Future<bool> isGuest() async => false;
+
+  @override
+  Future<bool> isRemembered() async => true;
+
+  @override
+  Future<void> setGuestMode(bool value) async {}
+
+  @override
+  Future<void> setRememberMe(bool value) async {}
+
+  @override
+  Future<void> updateTokens({
+    required String token,
+    required String refreshToken,
+  }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {}
+
+  @override
+  Future<String> getUserData() async => '';
+}
+
+class _FakeAuthRepo implements AuthRepo {
+  const _FakeAuthRepo();
+
+  @override
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
 }
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
-    testWidgets(
-      'renders SuperFitnessApp successfully with injected LocaleCubit',
-      (WidgetTester tester) async {
-        final storage = FakeStorageService();
-        final localeCubit = LocaleCubit(storage);
+    late FakeStorageService storage;
+    late FakeSessionService sessionService;
+    late LocaleCubit localeCubit;
 
-        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
+    setUp(() {
+      storage = FakeStorageService();
+      sessionService = FakeSessionService();
+      localeCubit = LocaleCubit(storage);
+
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+      getIt.registerSingleton<StorageService>(storage);
+
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+      getIt.registerSingleton<SessionService>(sessionService);
+
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      getIt.registerFactory<LoginCubit>(
+        () => LoginCubit(
+          LoginUseCase(const _FakeAuthRepo()),
+          getIt<SessionService>(),
+        ),
+      );
+
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      getIt.registerFactory<OnboardingCubit>(
+        () => OnboardingCubit(getIt<StorageService>()),
+      );
+    });
+
+    tearDown(() async {
+      await localeCubit.close();
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+    });
+
+    testWidgets(
+      'renders SuperFitnessApp and routes first-time user to OnboardingView',
+      (WidgetTester tester) async {
+        final router = AppRouter.createRouter(
+          storageService: storage,
+          sessionService: sessionService,
+        );
+
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MaterialApp), findsOneWidget);
+        expect(find.byType(OnboardingView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders SuperFitnessApp and routes returning user to LoginView',
+      (WidgetTester tester) async {
+        await storage.save(AppConstants.hasSeenOnboardingKey, 'true');
+        final router = AppRouter.createRouter(
+          storageService: storage,
+          sessionService: sessionService,
+        );
+
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(MaterialApp), findsOneWidget);
         expect(find.byType(LoginView), findsOneWidget);
-
-        await localeCubit.close();
       },
     );
 
@@ -47,35 +198,22 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             locale: const Locale('en'),
-            home: const LoginView(),
+            home: LoginView(cubit: getIt<LoginCubit>()),
           ),
         );
 
         await tester.pumpAndSettle();
 
-        // Verify Scaffold properties
         final scaffoldFinder = find.byType(Scaffold);
         expect(scaffoldFinder, findsOneWidget);
         final scaffold = tester.widget<Scaffold>(scaffoldFinder);
         expect(scaffold.backgroundColor, AppColors.background);
 
-        // Verify SafeArea and Padding
         expect(find.byType(SafeArea), findsOneWidget);
-        final paddingFinder = find.descendant(
-          of: find.byType(SafeArea),
-          matching: find.byType(Padding),
-        );
-        expect(paddingFinder, findsWidgets);
 
-        // Verify localized title text and typography
-        final titleFinder = find.text('Welcome Back!');
-        expect(titleFinder, findsOneWidget);
-
-        final textWidget = tester.widget<Text>(titleFinder);
-        expect(textWidget.textAlign, TextAlign.center);
-        expect(textWidget.style?.fontSize, AppTextStyles.appTitle.fontSize);
-        expect(textWidget.style?.fontWeight, AppTextStyles.appTitle.fontWeight);
-        expect(textWidget.style?.color, AppTextStyles.appTitle.color);
+        expect(find.text('Hey There'), findsOneWidget);
+        expect(find.text('WELCOME BACK'), findsOneWidget);
+        expect(find.text('Login'), findsNWidgets(2));
       },
     );
 
@@ -88,15 +226,15 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('ar'),
-          home: const LoginView(),
+          home: LoginView(cubit: getIt<LoginCubit>()),
         ),
       );
 
       await tester.pumpAndSettle();
 
       final l10n = await AppLocalizations.delegate.load(const Locale('ar'));
-      final titleFinder = find.text(l10n.loginTitle);
-      expect(titleFinder, findsOneWidget);
+      expect(find.text(l10n.welcomeBack), findsOneWidget);
+      expect(find.text(l10n.login), findsNWidgets(2));
       expect(tester.takeException(), isNull);
     });
   });

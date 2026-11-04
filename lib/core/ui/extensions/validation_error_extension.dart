@@ -22,6 +22,7 @@ extension ValidationErrorLocalization on ValidationError {
       ValidationError.passwordMismatch => l10n.passwordMismatchError,
       ValidationError.fileRequired => l10n.fileRequiredError,
       ValidationError.dropdownRequired => l10n.dropdownRequiredError,
+      ValidationError.invalidLoginPassword => l10n.invalidLoginPasswordError,
     };
   }
 }

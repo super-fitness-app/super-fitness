@@ -187,6 +187,52 @@ void main() {
       });
     });
 
+    group('validateLoginPassword', () {
+      test('returns empty for null or empty input', () {
+        expect(
+          AppValidators.validateLoginPassword(null),
+          ValidationError.empty,
+        );
+        expect(AppValidators.validateLoginPassword(''), ValidationError.empty);
+      });
+
+      test('returns invalidLoginPassword when shorter than 6 characters', () {
+        expect(
+          AppValidators.validateLoginPassword('Ab1'),
+          ValidationError.invalidLoginPassword,
+        );
+        expect(
+          AppValidators.validateLoginPassword('Ab123'),
+          ValidationError.invalidLoginPassword,
+        );
+      });
+
+      test('returns invalidLoginPassword when missing uppercase letter', () {
+        expect(
+          AppValidators.validateLoginPassword('password123'),
+          ValidationError.invalidLoginPassword,
+        );
+      });
+
+      test('returns invalidLoginPassword when missing number', () {
+        expect(
+          AppValidators.validateLoginPassword('Password'),
+          ValidationError.invalidLoginPassword,
+        );
+      });
+
+      test(
+        'returns null for valid login passwords (>= 6 chars, uppercase, digit)',
+        () {
+          expect(AppValidators.validateLoginPassword('Pass12'), isNull);
+          expect(
+            AppValidators.validateLoginPassword('ValidPassword123!'),
+            isNull,
+          );
+        },
+      );
+    });
+
     group('validatePasswordDetailed', () {
       test('returns granular failure reasons accurately', () {
         expect(
