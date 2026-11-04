@@ -7,6 +7,8 @@ import 'package:super_fitness/core/utils/app_validators.dart';
 class AppTextField extends StatelessWidget {
   final String label;
   final String hint;
+  final String? errorText;
+  final int errorMaxLines;
   final TextEditingController? controller;
   final ValidationError? Function(String?)? errorValidator;
   final void Function(String)? onChanged;
@@ -15,11 +17,16 @@ class AppTextField extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final Color? fillColor;
+  final TextStyle? hintStyle;
+  final TextStyle? style;
 
   const AppTextField({
     super.key,
     required this.label,
     required this.hint,
+    this.errorText,
+    this.errorMaxLines = 1,
     this.controller,
     this.errorValidator,
     this.onChanged,
@@ -28,6 +35,9 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.readOnly = false,
     this.keyboardType,
+    this.fillColor,
+    this.hintStyle,
+    this.style,
   });
 
   @override
@@ -38,6 +48,7 @@ class AppTextField extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
+      style: style,
       validator: (val) {
         final error = errorValidator?.call(val);
         if (error == null || !context.mounted) return null;
@@ -46,8 +57,12 @@ class AppTextField extends StatelessWidget {
         return error.toLocalizedMessage(context);
       },
       decoration: InputDecoration(
+        errorText: errorText,
+        errorMaxLines: errorMaxLines,
+        fillColor: fillColor,
         labelText: label.isNotEmpty ? label : null,
         hintText: hint.isNotEmpty ? hint : label,
+        hintStyle: hintStyle,
         prefixIcon: prefixIcon != null
             ? _AppFieldPrefixIcon(child: prefixIcon!)
             : null,
