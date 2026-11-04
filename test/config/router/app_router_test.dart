@@ -9,6 +9,7 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -16,6 +17,7 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
@@ -126,6 +128,8 @@ void main() {
         () => LoginCubit(
           LoginUseCase(const _FakeAuthRepo()),
           getIt<SessionService>(),
+          SignInWithGoogleUseCase(const _FakeAuthRepo()),
+          const PasswordGenerator(),
         ),
       );
     });

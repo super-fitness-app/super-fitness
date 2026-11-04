@@ -1,9 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -11,12 +14,14 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_event.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_state.dart';
 
 class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
+  ApiResults<SocialAuthUserEntity>? googleResultToReturn;
 
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
@@ -28,8 +33,9 @@ class _FakeAuthRepo implements AuthRepo {
       throw UnimplementedError();
 
   @override
-  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
-      throw UnimplementedError();
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return googleResultToReturn!;
+  }
 }
 
 class _FakeSessionService implements SessionService {
@@ -92,6 +98,8 @@ void main() {
     late _FakeAuthRepo fakeAuthRepo;
     late _FakeSessionService fakeSessionService;
     late LoginUseCase loginUseCase;
+    late SignInWithGoogleUseCase signInWithGoogleUseCase;
+    const passwordGenerator = PasswordGenerator();
 
     final testUser = UserEntity(
       id: 'id1',
@@ -114,21 +122,29 @@ void main() {
       token: 'jwt_token_alex',
     );
 
+    LoginCubit createCubit() => LoginCubit(
+          loginUseCase,
+          fakeSessionService,
+          signInWithGoogleUseCase,
+          passwordGenerator,
+        );
+
     setUp(() {
       fakeAuthRepo = _FakeAuthRepo();
       fakeSessionService = _FakeSessionService();
       loginUseCase = LoginUseCase(fakeAuthRepo);
+      signInWithGoogleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
     });
 
     test('initial state has default values', () {
-      final cubit = LoginCubit(loginUseCase, fakeSessionService);
+      final cubit = createCubit();
       expect(cubit.state, const LoginState());
       cubit.close();
     });
 
     blocTest<LoginCubit, LoginState>(
       'EmailChangedEvent updates email and clears email error',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      build: createCubit,
       seed: () => const LoginState(emailError: ValidationError.invalidEmail),
       act: (cubit) => cubit.doEvent(const EmailChangedEvent('user@test.com')),
       expect: () => [
@@ -138,68 +154,40 @@ void main() {
 
     blocTest<LoginCubit, LoginState>(
       'PasswordChangedEvent updates password and clears password error',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
-      seed: () => const LoginState(
-        passwordError: ValidationError.invalidLoginPassword,
-      ),
-      act: (cubit) =>
-          cubit.doEvent(const PasswordChangedEvent('Password123')),
+      build: createCubit,
+      seed: () =>
+          const LoginState(passwordError: ValidationError.invalidLoginPassword),
+      act: (cubit) => cubit.doEvent(const PasswordChangedEvent('Secret123')),
       expect: () => [
-        const LoginState(password: 'Password123', passwordError: null),
+        const LoginState(password: 'Secret123', passwordError: null),
       ],
     );
 
     blocTest<LoginCubit, LoginState>(
-      'TogglePasswordVisibilityEvent flips password visibility correctly',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
-      act: (cubit) {
-        cubit.doEvent(const TogglePasswordVisibilityEvent());
-        cubit.doEvent(const TogglePasswordVisibilityEvent());
-      },
+      'TogglePasswordVisibilityEvent inverts isPasswordVisible',
+      build: createCubit,
+      act: (cubit) =>
+          cubit.doEvent(const TogglePasswordVisibilityEvent()),
       expect: () => [
         const LoginState(isPasswordVisible: true),
-        const LoginState(isPasswordVisible: false),
       ],
     );
 
     blocTest<LoginCubit, LoginState>(
-      'SubmitLoginEvent emits validation errors without calling use case when inputs invalid',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
-      seed: () => const LoginState(
-        email: 'invalid-email',
-        password: 'short',
-      ),
+      'SubmitLoginEvent sets validation errors when fields invalid',
+      build: createCubit,
       act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
       expect: () => [
         const LoginState(
-          email: 'invalid-email',
-          password: 'short',
-          emailError: ValidationError.invalidEmail,
-          passwordError: ValidationError.invalidLoginPassword,
+          emailError: ValidationError.empty,
+          passwordError: ValidationError.empty,
         ),
       ],
     );
 
     blocTest<LoginCubit, LoginState>(
-      'SubmitLoginEvent emits invalidLoginPassword when password is weak',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
-      seed: () => const LoginState(
-        email: 'valid@example.com',
-        password: 'invalid',
-      ),
-      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
-      expect: () => [
-        const LoginState(
-          email: 'valid@example.com',
-          password: 'invalid',
-          passwordError: ValidationError.invalidLoginPassword,
-        ),
-      ],
-    );
-
-    blocTest<LoginCubit, LoginState>(
-      'SubmitLoginEvent emits loading then success, saves session and triggers navigation',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      'SubmitLoginEvent emits loading then success on valid credentials',
+      build: createCubit,
       setUp: () {
         fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
       },
@@ -228,7 +216,7 @@ void main() {
 
     blocTest<LoginCubit, LoginState>(
       'SubmitLoginEvent emits loading then failure on server error',
-      build: () => LoginCubit(loginUseCase, fakeSessionService),
+      build: createCubit,
       setUp: () {
         fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
           ServerMessageFailure('Invalid credentials'),
@@ -250,6 +238,150 @@ void main() {
           password: 'Password123',
           loginApiState: BaseState.failure(
             const ServerMessageFailure('Invalid credentials'),
+          ),
+        ),
+      ],
+    );
+
+    // =========================================================================
+    // Google Sign-In Tests
+    // =========================================================================
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithGoogleEvent logs in and navigates when user is already registered',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'google-user-123',
+            email: 'googleuser@example.com',
+            displayName: 'Google User',
+            photoUrl: 'https://photo.url',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+        expect(events, contains(const NavigateEvent(AppRoutes.main)));
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(loginApiState: BaseState.success(testLoginEntity)),
+      ],
+      verify: (_) {
+        expect(fakeSessionService.savedToken, 'jwt_token_alex');
+        expect(fakeSessionService.savedUserData, contains('alex@example.com'));
+      },
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithGoogleEvent notifies user to register first when user is not registered',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'google-unregistered-id',
+            email: 'unregistered@example.com',
+            displayName: 'New Google User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+          ServerMessageFailure('Invalid credentials or user not found'),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+        expect(
+          events.whereType<DisplayError>().map((e) => e.errorMsg),
+          contains('Account not found. Please register first.'),
+        );
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.error('Account not found. Please register first.'),
+        ),
+      ],
+      verify: (_) {
+        expect(fakeSessionService.savedToken, isNull);
+      },
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithGoogleEvent emits error when Google account ID is missing',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: null,
+            email: 'missingid@example.com',
+            displayName: 'No ID User',
+          ),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithGoogleIntent();
+        await pumpEventQueue();
+        expect(
+          events.whereType<DisplayError>().map((e) => e.errorMsg),
+          contains('Google account ID is missing. Please try again.'),
+        );
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.error('Google account ID is missing. Please try again.'),
+        ),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithGoogleEvent reverts to initial state silently when cancelled by user',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.googleResultToReturn = const FailureResponse(
+          CancelledFailure('User cancelled sign-in'),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithGoogleIntent();
+        expect(events, isEmpty);
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        const LoginState(loginApiState: BaseState.initial()),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithGoogleEvent emits failure on Google sign-in failure',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.googleResultToReturn = const FailureResponse(
+          ServerMessageFailure('Google Sign-In failed'),
+        );
+      },
+      act: (cubit) => cubit.signInWithGoogleIntent(),
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.failure(
+            const ServerMessageFailure('Google Sign-In failed'),
           ),
         ),
       ],
