@@ -228,6 +228,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Google account connected. Complete your profile.';
 
   @override
+  String get accountNotFoundRegisterFirst =>
+      'Account not found. Please register first.';
+
+  @override
   String get tellUsAboutYourself => 'TELL US ABOUT YOURSELF!';
 
   @override

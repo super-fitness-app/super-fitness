@@ -494,6 +494,12 @@ abstract class AppLocalizations {
   /// **'Google account connected. Complete your profile.'**
   String get googleAccountConnected;
 
+  /// No description provided for @accountNotFoundRegisterFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Account not found. Please register first.'**
+  String get accountNotFoundRegisterFirst;
+
   /// No description provided for @tellUsAboutYourself.
   ///
   /// In en, this message translates to:

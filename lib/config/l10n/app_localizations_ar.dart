@@ -227,6 +227,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get googleAccountConnected => 'تم ربط حساب Google. أكمل ملفك الشخصي.';
 
   @override
+  String get accountNotFoundRegisterFirst =>
+      'الحساب غير موجود. يرجى إنشاء حساب أولاً.';
+
+  @override
   String get tellUsAboutYourself => 'أخبرنا عن نفسك!';
 
   @override
