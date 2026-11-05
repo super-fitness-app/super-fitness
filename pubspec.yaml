@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.4.1
   bloc: ^9.2.1
   dio: ^5.10.0
   equatable: ^2.1.0
@@ -47,6 +48,7 @@ dependencies:
   retrofit: ^4.9.0
   flutter_native_splash: ^2.4.8
   flutter_launcher_icons: ^0.14.4
+  youtube_player_flutter: ^10.0.1
 
 dev_dependencies:
   bloc_test: ^10.0.0

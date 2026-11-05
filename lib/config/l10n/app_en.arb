@@ -34,5 +34,21 @@
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
 
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+  "foodRecommendation": "Food Recommendation",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "noMealsFound": "No meals found",
+  "retry": "Retry",
+  "failedToLoadMeals": "Failed to load meals",
+  "foodDetails": "Food Details",
+  "ingredients": "Ingredients",
+  "energy": "Energy",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "fat": "Fat",
+  "failedToLoadMealDetails": "Failed to load meal details",
+  "playVideo": "Play Video",
+  "noIngredientsAvailable": "No ingredients available"
 }

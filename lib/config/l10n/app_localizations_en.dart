@@ -108,4 +108,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginTitle => 'Welcome Back!';
+
+  @override
+  String get foodRecommendation => 'Food Recommendation';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get noMealsFound => 'No meals found';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get failedToLoadMeals => 'Failed to load meals';
+
+  @override
+  String get foodDetails => 'Food Details';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get energy => 'Energy';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fat => 'Fat';
+
+  @override
+  String get failedToLoadMealDetails => 'Failed to load meal details';
+
+  @override
+  String get playVideo => 'Play Video';
+
+  @override
+  String get noIngredientsAvailable => 'No ingredients available';
 }
