@@ -1,6 +1,6 @@
 part of 'food_details_cubit.dart';
 
-sealed class FoodDetailsEvent extends FeatureEvent {
+sealed class FoodDetailsEvent {
   const FoodDetailsEvent();
 }
 
