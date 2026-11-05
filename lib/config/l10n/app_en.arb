@@ -41,5 +41,14 @@
   "dinner": "Dinner",
   "noMealsFound": "No meals found",
   "retry": "Retry",
-  "failedToLoadMeals": "Failed to load meals"
+  "failedToLoadMeals": "Failed to load meals",
+  "foodDetails": "Food Details",
+  "ingredients": "Ingredients",
+  "energy": "Energy",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "fat": "Fat",
+  "failedToLoadMealDetails": "Failed to load meal details",
+  "playVideo": "Play Video",
+  "noIngredientsAvailable": "No ingredients available"
 }

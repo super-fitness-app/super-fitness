@@ -10,6 +10,10 @@ class MealDetailsEntity extends Equatable {
   final String? youtubeUrl;
   final String? sourceUrl;
   final List<MealIngredientEntity> ingredients;
+  final String energy;
+  final String protein;
+  final String carbs;
+  final String fat;
 
   const MealDetailsEntity({
     this.id,
@@ -21,6 +25,10 @@ class MealDetailsEntity extends Equatable {
     this.youtubeUrl,
     this.sourceUrl,
     this.ingredients = const [],
+    this.energy = '100 K',
+    this.protein = '15 G',
+    this.carbs = '58 G',
+    this.fat = '20 G',
   });
 
   @override
@@ -34,6 +42,10 @@ class MealDetailsEntity extends Equatable {
         youtubeUrl,
         sourceUrl,
         ingredients,
+        energy,
+        protein,
+        carbs,
+        fat,
       ];
 }
 

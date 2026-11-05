@@ -129,4 +129,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToLoadMeals => 'Failed to load meals';
+
+  @override
+  String get foodDetails => 'Food Details';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get energy => 'Energy';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fat => 'Fat';
+
+  @override
+  String get failedToLoadMealDetails => 'Failed to load meal details';
+
+  @override
+  String get playVideo => 'Play Video';
+
+  @override
+  String get noIngredientsAvailable => 'No ingredients available';
 }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/config/base/base_cubit.dart';
+import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_state.dart';
+import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
@@ -7,6 +11,9 @@ import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
+import 'package:super_fitness/features/meals/domain/entities/meal_details_entity.dart';
+import 'package:super_fitness/features/meals/presentation/food/manager/food_cubit.dart';
+import 'package:super_fitness/features/meals/presentation/food_details/manager/food_details_cubit.dart';
 import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
@@ -20,9 +27,44 @@ class FakeStorageService implements StorageService {
   Future<void> delete(String key) async {}
 }
 
+class FakeFoodCubit extends BaseCubit<FoodState, BaseEvent>
+    implements FoodCubit {
+  FakeFoodCubit() : super(const FoodState());
+
+  @override
+  void doEvent(Object event) {}
+}
+
+class FakeFoodDetailsCubit extends BaseCubit<FoodDetailsState, BaseEvent>
+    implements FoodDetailsCubit {
+  FakeFoodDetailsCubit() : super(const BaseState<MealDetailsEntity>.initial());
+
+  @override
+  void doEvent(Object event) {}
+}
+
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
-    testWidgets('renders SuperFitnessApp successfully with injected LocaleCubit',
+    setUp(() {
+      if (!getIt.isRegistered<FoodCubit>()) {
+        getIt.registerFactory<FoodCubit>(() => FakeFoodCubit());
+      }
+      if (!getIt.isRegistered<FoodDetailsCubit>()) {
+        getIt.registerFactory<FoodDetailsCubit>(() => FakeFoodDetailsCubit());
+      }
+    });
+
+    tearDown(() {
+      if (getIt.isRegistered<FoodCubit>()) {
+        getIt.unregister<FoodCubit>();
+      }
+      if (getIt.isRegistered<FoodDetailsCubit>()) {
+        getIt.unregister<FoodDetailsCubit>();
+      }
+    });
+
+    testWidgets(
+        'renders SuperFitnessApp successfully with injected LocaleCubit',
         (WidgetTester tester) async {
       final storage = FakeStorageService();
       final localeCubit = LocaleCubit(storage);
@@ -36,7 +78,8 @@ void main() {
       await localeCubit.close();
     });
 
-    testWidgets('LoginView renders with exact theme, styling, and text alignment',
+    testWidgets(
+        'LoginView renders with exact theme, styling, and text alignment',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -50,13 +93,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // Verify Scaffold properties
       final scaffoldFinder = find.byType(Scaffold);
       expect(scaffoldFinder, findsOneWidget);
       final scaffold = tester.widget<Scaffold>(scaffoldFinder);
       expect(scaffold.backgroundColor, AppColors.background);
 
-      // Verify SafeArea and Padding
       expect(find.byType(SafeArea), findsOneWidget);
       final paddingFinder = find.descendant(
         of: find.byType(SafeArea),
@@ -64,7 +105,6 @@ void main() {
       );
       expect(paddingFinder, findsWidgets);
 
-      // Verify localized title text and typography
       final titleFinder = find.text('Welcome Back!');
       expect(titleFinder, findsOneWidget);
 
