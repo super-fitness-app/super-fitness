@@ -10,10 +10,13 @@ part 'exercise_state.dart';
 
 @injectable
 class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
-  final ExerciseRepo? _exerciseRepo;
+  ExerciseCubit(ExerciseRepo exerciseRepo)
+    : _exerciseRepo = exerciseRepo,
+      super(const BaseState<ExerciseData>.initial());
 
-  ExerciseCubit([this._exerciseRepo])
-      : super(const BaseState<ExerciseData>.initial());
+  final ExerciseRepo _exerciseRepo;
+
+  ExerciseRepo get repo => _exerciseRepo;
 
   @override
   void doEvent(Object event) {
@@ -27,4 +30,3 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
 
   void _onGetExerciseData(GetExerciseDataEvent event) {}
 }
-

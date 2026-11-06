@@ -16,7 +16,8 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() =>
       safeCall(() async {
         final response = await _exerciseApiClient.getMuscleGroups();
-        final entities = response.musclesGroup
+        final entities =
+            response.musclesGroup
                 ?.where((m) => m.id != null && m.name != null)
                 .map((m) => m.toEntity())
                 .toList() ??
@@ -27,9 +28,9 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   @override
   Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(String groupId) =>
       safeCall(() async {
-        final response =
-            await _exerciseApiClient.getMusclesByGroup(groupId);
-        final entities = response.muscles
+        final response = await _exerciseApiClient.getMusclesByGroup(groupId);
+        final entities =
+            response.muscles
                 ?.where((m) => m.id != null && m.name != null)
                 .map((m) => m.toEntity())
                 .toList() ??

@@ -50,24 +50,32 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.transparent,
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.white,
-            width: 1.2,
+    return Material(
+      color: AppColors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        splashColor: AppColors.primary.withValues(alpha: 0.3),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary : AppColors.transparent,
+            border: Border.all(
+              color: isSelected ? AppColors.primary : AppColors.white,
+              width: 1.2,
+            ),
+            borderRadius: BorderRadius.circular(20),
           ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 14,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 14,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
           ),
         ),
       ),

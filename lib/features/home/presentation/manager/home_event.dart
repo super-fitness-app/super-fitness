@@ -7,4 +7,3 @@ abstract base class HomeEvent extends FeatureEvent {
 final class GetHomeDataEvent extends HomeEvent {
   const GetHomeDataEvent();
 }
-

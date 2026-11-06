@@ -17,10 +17,8 @@ class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
   final GetMuscleGroupsUseCase _getMuscleGroupsUseCase;
   final GetMusclesByGroupUseCase _getMusclesByGroupUseCase;
 
-  WorkoutCubit(
-    this._getMuscleGroupsUseCase,
-    this._getMusclesByGroupUseCase,
-  ) : super(const BaseState<WorkoutData>.initial());
+  WorkoutCubit(this._getMuscleGroupsUseCase, this._getMusclesByGroupUseCase)
+    : super(const BaseState<WorkoutData>.initial());
 
   @override
   void doEvent(Object event) {

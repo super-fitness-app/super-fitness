@@ -7,5 +7,6 @@ class MealsRepoImpl implements MealsRepo {
   final MealsRemoteDataSource _mealsRemoteDataSource;
 
   MealsRepoImpl(this._mealsRemoteDataSource);
-}
 
+  MealsRemoteDataSource get remoteDataSource => _mealsRemoteDataSource;
+}

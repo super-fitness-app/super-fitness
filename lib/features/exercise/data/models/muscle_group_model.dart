@@ -16,8 +16,6 @@ class MuscleGroupModel {
 
   Map<String, dynamic> toJson() => _$MuscleGroupModelToJson(this);
 
-  MuscleGroupEntity toEntity() => MuscleGroupEntity(
-        id: id ?? '',
-        name: name ?? '',
-      );
+  MuscleGroupEntity toEntity() =>
+      MuscleGroupEntity(id: id ?? '', name: name ?? '');
 }

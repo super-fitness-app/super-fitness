@@ -16,32 +16,14 @@ class ExerciseView extends StatefulWidget {
 class _ExerciseViewState extends State<ExerciseView>
     with BaseViewMixin<ExerciseView, ExerciseCubit, BaseEvent> {
   late final ExerciseCubit _cubit;
-  bool _ownsCubit = false;
 
   @override
   ExerciseCubit get cubit => _cubit;
 
   @override
   void initState() {
-    if (widget.cubit != null) {
-      _cubit = widget.cubit!;
-      _ownsCubit = false;
-    } else if (getIt.isRegistered<ExerciseCubit>()) {
-      _cubit = getIt<ExerciseCubit>();
-      _ownsCubit = false;
-    } else {
-      _cubit = ExerciseCubit();
-      _ownsCubit = true;
-    }
+    _cubit = widget.cubit ?? getIt<ExerciseCubit>();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (_ownsCubit) {
-      _cubit.close();
-    }
-    super.dispose();
   }
 
   @override
@@ -63,4 +45,3 @@ class _ExerciseViewState extends State<ExerciseView>
     );
   }
 }
-

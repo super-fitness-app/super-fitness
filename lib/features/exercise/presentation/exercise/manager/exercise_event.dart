@@ -7,4 +7,3 @@ abstract base class ExerciseEvent extends FeatureEvent {
 final class GetExerciseDataEvent extends ExerciseEvent {
   const GetExerciseDataEvent();
 }
-

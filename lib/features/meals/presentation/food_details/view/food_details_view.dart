@@ -16,32 +16,14 @@ class FoodDetailsView extends StatefulWidget {
 class _FoodDetailsViewState extends State<FoodDetailsView>
     with BaseViewMixin<FoodDetailsView, FoodDetailsCubit, BaseEvent> {
   late final FoodDetailsCubit _cubit;
-  bool _ownsCubit = false;
 
   @override
   FoodDetailsCubit get cubit => _cubit;
 
   @override
   void initState() {
-    if (widget.cubit != null) {
-      _cubit = widget.cubit!;
-      _ownsCubit = false;
-    } else if (getIt.isRegistered<FoodDetailsCubit>()) {
-      _cubit = getIt<FoodDetailsCubit>();
-      _ownsCubit = false;
-    } else {
-      _cubit = FoodDetailsCubit();
-      _ownsCubit = true;
-    }
+    _cubit = widget.cubit ?? getIt<FoodDetailsCubit>();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (_ownsCubit) {
-      _cubit.close();
-    }
-    super.dispose();
   }
 
   @override
@@ -63,4 +45,3 @@ class _FoodDetailsViewState extends State<FoodDetailsView>
     );
   }
 }
-

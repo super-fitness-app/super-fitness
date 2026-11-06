@@ -7,4 +7,6 @@ class HomeRepoImpl implements HomeRepo {
   final HomeRemoteDataSource _homeRemoteDataSource;
 
   HomeRepoImpl(this._homeRemoteDataSource);
+
+  HomeRemoteDataSource get remoteDataSource => _homeRemoteDataSource;
 }

@@ -5,12 +5,14 @@ import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/manager/workout_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/widgets/workout_filter_chips.dart';
-import 'package:super_fitness/features/exercise/presentation/workout/view/widgets/workout_grid.dart';
+import 'package:super_fitness/features/exercise/presentation/workout/view/widgets/workout_muscle_card.dart';
 
 class WorkoutView extends StatefulWidget {
-  const WorkoutView({super.key});
+  final WorkoutCubit? cubit;
+  const WorkoutView({super.key, this.cubit});
 
   @override
   State<WorkoutView> createState() => _WorkoutViewState();
@@ -25,18 +27,18 @@ class _WorkoutViewState extends State<WorkoutView>
 
   @override
   void initState() {
-    _cubit = getIt<WorkoutCubit>();
+    _cubit = widget.cubit ?? getIt<WorkoutCubit>();
     super.initState();
-    _cubit.doEvent(const FetchMuscleGroupsEvent());
+    cubit.doEvent(const FetchMuscleGroupsEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _cubit,
+      value: cubit,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: _WorkoutBody(cubit: _cubit),
+        body: _WorkoutBody(cubit: cubit),
       ),
     );
   }
@@ -56,10 +58,8 @@ class _WorkoutBody extends StatelessWidget {
         _DarkOverlay(),
         SafeArea(
           child: BlocBuilder<WorkoutCubit, WorkoutState>(
-            builder: (context, state) => _ContentColumn(
-              state: state,
-              cubit: cubit,
-            ),
+            builder: (context, state) =>
+                _WorkoutScrollView(state: state, cubit: cubit),
           ),
         ),
       ],
@@ -70,10 +70,7 @@ class _WorkoutBody extends StatelessWidget {
 class _BackgroundImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      AppImages.workoutBackground,
-      fit: BoxFit.cover,
-    );
+    return Image.asset(AppImages.workoutBackground, fit: BoxFit.cover);
   }
 }
 
@@ -84,11 +81,31 @@ class _DarkOverlay extends StatelessWidget {
   }
 }
 
-class _ContentColumn extends StatelessWidget {
+class _WorkoutScrollView extends StatelessWidget {
   final WorkoutState state;
   final WorkoutCubit cubit;
 
-  const _ContentColumn({required this.state, required this.cubit});
+  const _WorkoutScrollView({required this.state, required this.cubit});
+
+  @override
+  Widget build(BuildContext context) {
+    final muscles = state.data?.muscles ?? [];
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: _WorkoutHeader(state: state, cubit: cubit),
+        ),
+        _WorkoutContent(state: state, muscles: muscles),
+      ],
+    );
+  }
+}
+
+class _WorkoutHeader extends StatelessWidget {
+  final WorkoutState state;
+  final WorkoutCubit cubit;
+
+  const _WorkoutHeader({required this.state, required this.cubit});
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +118,9 @@ class _ContentColumn extends StatelessWidget {
           WorkoutFilterChips(
             groups: state.data!.groups,
             selectedGroupId: state.data!.selectedGroupId,
-            onSelected: (id) =>
-                cubit.doEvent(SelectMuscleGroupEvent(id)),
+            onSelected: (id) => cubit.doEvent(SelectMuscleGroupEvent(id)),
           ),
         const SizedBox(height: 16),
-        Expanded(child: _WorkoutScrollBody(state: state)),
       ],
     );
   }
@@ -131,37 +146,55 @@ class _WorkoutTitle extends StatelessWidget {
   }
 }
 
-class _WorkoutScrollBody extends StatelessWidget {
+class _WorkoutContent extends StatelessWidget {
   final WorkoutState state;
+  final List<MuscleEntity> muscles;
 
-  const _WorkoutScrollBody({required this.state});
+  const _WorkoutContent({required this.state, required this.muscles});
 
   @override
   Widget build(BuildContext context) {
-    if (state.isLoading && (state.data?.muscles.isEmpty ?? true)) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
-    }
-    if (state.failure != null && (state.data?.muscles.isEmpty ?? true)) {
-      return Center(
-        child: Text(
-          state.errorMessage ?? 'Something went wrong',
-          style: const TextStyle(color: AppColors.white),
+    if (state.isLoading && muscles.isEmpty) {
+      return const SliverFillRemaining(
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
       );
     }
-    final muscles = state.data?.muscles ?? [];
+    if (state.failure != null && muscles.isEmpty) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Text(
+            state.errorMessage ?? 'Something went wrong',
+            style: const TextStyle(color: AppColors.white),
+          ),
+        ),
+      );
+    }
     if (muscles.isEmpty) {
-      return const Center(
-        child: Text(
-          'No exercises found',
-          style: TextStyle(color: AppColors.grey30),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'No exercises found',
+            style: TextStyle(color: AppColors.grey30),
+          ),
         ),
       );
     }
-    return SingleChildScrollView(
-      child: WorkoutGrid(muscles: muscles),
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => WorkoutMuscleCard(muscle: muscles[index]),
+          childCount: muscles.length,
+        ),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 14,
+          mainAxisSpacing: 14,
+          childAspectRatio: 0.85,
+        ),
+      ),
     );
   }
 }

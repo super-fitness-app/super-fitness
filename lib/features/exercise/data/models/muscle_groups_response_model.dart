@@ -8,10 +8,7 @@ class MuscleGroupsResponseModel {
   final String? message;
   final List<MuscleGroupModel>? musclesGroup;
 
-  const MuscleGroupsResponseModel({
-    this.message,
-    this.musclesGroup,
-  });
+  const MuscleGroupsResponseModel({this.message, this.musclesGroup});
 
   factory MuscleGroupsResponseModel.fromJson(Map<String, dynamic> json) =>
       _$MuscleGroupsResponseModelFromJson(json);
