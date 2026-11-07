@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 
@@ -9,15 +11,20 @@ class WorkoutMuscleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          _NetworkImage(url: muscle.image),
-          _GradientOverlay(),
-          _MuscleLabel(name: muscle.name),
-        ],
+    return GestureDetector(
+      onTap: () {
+        context.push(AppRoutes.exercise, extra: muscle);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _NetworkImage(url: muscle.image),
+            _GradientOverlay(),
+            _MuscleLabel(name: muscle.name),
+          ],
+        ),
       ),
     );
   }

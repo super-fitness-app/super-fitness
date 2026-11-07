@@ -5,7 +5,9 @@ part 'muscle_model.g.dart';
 
 @JsonSerializable()
 class MuscleModel {
+  @JsonKey(name: '_id')
   final String? id;
+
   final String? name;
   final String? image;
 

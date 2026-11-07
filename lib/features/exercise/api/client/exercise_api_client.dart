@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:super_fitness/core/const/endpoints.dart';
+import 'package:super_fitness/features/exercise/data/model/exercise_models/difficulty_levels_response_model.dart';
+import 'package:super_fitness/features/exercise/data/model/exercise_models/exercise_response_model.dart';
 import 'package:super_fitness/features/exercise/data/models/muscle_groups_response_model.dart';
 import 'package:super_fitness/features/exercise/data/models/muscles_by_group_response_model.dart';
 
@@ -18,5 +21,17 @@ abstract class ExerciseApiClient {
   @GET('/musclesGroup/by-muscle-group')
   Future<MusclesByGroupResponseModel> getMusclesByGroup(
     @Query('muscleGroupId') String muscleGroupId,
+  );
+
+  @GET(Endpoints.getAllDifficultyLevels)
+  Future<DifficultyLevelsResponseModel> getAllDifficultyLevels({
+    @Header('Accept-Language') required String language,
+  });
+
+  @GET(Endpoints.exercisesByMuscleDifficulty)
+  Future<ExerciseResponseModel> getExercisesByMuscleAndDifficulty(
+    @Header('Accept-Language') String language,
+    @Query('difficultyLevelId') String difficultyLevelId,
+    @Query('primeMoverMuscleId') String primeMoverMuscleId,
   );
 }

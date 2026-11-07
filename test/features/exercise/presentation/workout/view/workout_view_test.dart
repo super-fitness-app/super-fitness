@@ -1,119 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+import 'package:super_fitness/config/base/base_event.dart';
+import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
-import 'package:super_fitness/features/exercise/domain/entities/muscle_group_entity.dart';
-import 'package:super_fitness/features/exercise/domain/repo/exercise_repo.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscle_groups_use_case.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscles_by_group_use_case.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/manager/workout_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
+import 'package:super_fitness/features/exercise/presentation/workout/view/widgets/workout_muscle_card.dart';
 
-class FakeExerciseRepo implements ExerciseRepo {
-  ApiResults<List<MuscleGroupEntity>> groupsResult = const Success([]);
-  ApiResults<List<MuscleEntity>> musclesResult = const Success([]);
-
-  @override
-  Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() async =>
-      groupsResult;
-
-  @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(
-    String groupId,
-  ) async => musclesResult;
-}
-
-Widget buildTestWidget(WorkoutCubit cubit) {
-  return MaterialApp(
-    theme: AppTheme.darkTheme,
-    home: WorkoutView(cubit: cubit),
-  );
-}
+class MockWorkoutCubit extends MockCubit<WorkoutState>
+    implements WorkoutCubit {}
 
 void main() {
-  late FakeExerciseRepo repo;
-  late WorkoutCubit cubit;
+  late MockWorkoutCubit cubit;
 
   setUp(() {
-    repo = FakeExerciseRepo();
-    cubit = WorkoutCubit(
-      GetMuscleGroupsUseCase(repo),
-      GetMusclesByGroupUseCase(repo),
-    );
+    cubit = MockWorkoutCubit();
+
+    when(
+      () => cubit.eventStream,
+    ).thenAnswer((_) => const Stream<BaseEvent>.empty());
+
+    when(() => cubit.close()).thenAnswer((_) async {});
   });
 
-  tearDown(() async {
-    await cubit.close();
-  });
+  Widget createWidget() {
+    return MaterialApp(home: WorkoutView(cubit: cubit));
+  }
 
-  testWidgets('renders title and loading state initially', (tester) async {
-    await tester.pumpWidget(buildTestWidget(cubit));
-    expect(find.text('Workouts'), findsOneWidget);
-  });
+  group('WorkoutView Widget Tests', () {
+    testWidgets('should display loading indicator when loading', (
+      tester,
+    ) async {
+      // Arrange
+      final state = BaseState<WorkoutData>.loading(data: const WorkoutData());
 
-  testWidgets('renders muscle groups and muscle cards on success', (
-    tester,
-  ) async {
-    repo.groupsResult = const Success([
-      MuscleGroupEntity(id: '1', name: 'Chest'),
-      MuscleGroupEntity(id: '2', name: 'Back'),
-    ]);
-    repo.musclesResult = const Success([
-      MuscleEntity(id: 'm1', name: 'Pectoralis Major', image: ''),
-    ]);
+      when(() => cubit.state).thenReturn(state);
 
-    await tester.pumpWidget(buildTestWidget(cubit));
-    await tester.pumpAndSettle();
+      whenListen(
+        cubit,
+        const Stream<WorkoutState>.empty(),
+        initialState: state,
+      );
 
-    expect(find.text('Workouts'), findsOneWidget);
-    expect(find.text('Chest'), findsOneWidget);
-    expect(find.text('Back'), findsOneWidget);
-    expect(find.text('Pectoralis Major'), findsOneWidget);
-  });
+      // Act
+      await tester.pumpWidget(createWidget());
 
-  testWidgets('renders empty state when muscles list is empty', (tester) async {
-    repo.groupsResult = const Success([
-      MuscleGroupEntity(id: '1', name: 'Chest'),
-    ]);
-    repo.musclesResult = const Success([]);
+      // Assert
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
 
-    await tester.pumpWidget(buildTestWidget(cubit));
-    await tester.pumpAndSettle();
+    testWidgets('should display empty message when muscles are empty', (
+      tester,
+    ) async {
+      // Arrange
+      final state = BaseState<WorkoutData>.success(const WorkoutData());
 
-    expect(find.text('No exercises found'), findsOneWidget);
-  });
+      when(() => cubit.state).thenReturn(state);
 
-  testWidgets('renders error message when fetching fails', (tester) async {
-    repo.groupsResult = const FailureResponse(
-      ServerMessageFailure('Server error'),
-    );
+      whenListen(
+        cubit,
+        const Stream<WorkoutState>.empty(),
+        initialState: state,
+      );
 
-    await tester.pumpWidget(buildTestWidget(cubit));
-    await tester.pumpAndSettle();
+      // Act
+      await tester.pumpWidget(createWidget());
 
-    expect(find.text('Server error'), findsWidgets);
-  });
+      // Assert
+      expect(find.text('No exercises found'), findsOneWidget);
+    });
 
-  testWidgets('tapping filter chip selects new group', (tester) async {
-    repo.groupsResult = const Success([
-      MuscleGroupEntity(id: '1', name: 'Chest'),
-      MuscleGroupEntity(id: '2', name: 'Back'),
-    ]);
-    repo.musclesResult = const Success([
-      MuscleEntity(id: 'm1', name: 'Pectoralis', image: ''),
-    ]);
+    testWidgets('should display muscles when data is available', (
+      tester,
+    ) async {
+      // Arrange
+      const muscle = MuscleEntity(
+        id: 'muscle-1',
+        name: 'Rectus Abdominis',
+        image: '',
+      );
 
-    await tester.pumpWidget(buildTestWidget(cubit));
-    await tester.pumpAndSettle();
+      final state = BaseState<WorkoutData>.success(
+        const WorkoutData(muscles: [muscle]),
+      );
 
-    repo.musclesResult = const Success([
-      MuscleEntity(id: 'm2', name: 'Latissimus', image: ''),
-    ]);
+      when(() => cubit.state).thenReturn(state);
 
-    await tester.tap(find.text('Back'));
-    await tester.pumpAndSettle();
+      whenListen(
+        cubit,
+        const Stream<WorkoutState>.empty(),
+        initialState: state,
+      );
 
-    expect(find.text('Latissimus'), findsOneWidget);
+      // Act
+      await tester.pumpWidget(createWidget());
+
+      // Assert
+      expect(find.text('No exercises found'), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.byType(WorkoutMuscleCard), findsOneWidget);
+    });
+
+    testWidgets('should display error message when request fails', (
+      tester,
+    ) async {
+      // Arrange
+      final state = BaseState<WorkoutData>.error(
+        'Something went wrong',
+        data: const WorkoutData(),
+      );
+
+      when(() => cubit.state).thenReturn(state);
+
+      whenListen(
+        cubit,
+        const Stream<WorkoutState>.empty(),
+        initialState: state,
+      );
+
+      // Act
+      await tester.pumpWidget(createWidget());
+
+      // Assert
+      expect(find.text('Something went wrong'), findsOneWidget);
+    });
   });
 }

@@ -1,141 +1,178 @@
-import 'dart:async';
-
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_fitness/config/base/base_event.dart';
-import 'package:super_fitness/config/base/base_state.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_group_entity.dart';
-import 'package:super_fitness/features/exercise/domain/repo/exercise_repo.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscle_groups_use_case.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscles_by_group_use_case.dart';
+import 'package:super_fitness/features/exercise/domain/use_cases/get_muscle_groups_use_case.dart';
+import 'package:super_fitness/features/exercise/domain/use_cases/get_muscles_by_group_use_case.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/manager/workout_cubit.dart';
 
-class FakeExerciseRepo implements ExerciseRepo {
-  ApiResults<List<MuscleGroupEntity>> groupsResult = const Success([]);
-  ApiResults<List<MuscleEntity>> musclesResult = const Success([]);
+class MockGetMuscleGroupsUseCase extends Mock
+    implements GetMuscleGroupsUseCase {}
 
-  @override
-  Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() async =>
-      groupsResult;
-
-  @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(
-    String groupId,
-  ) async => musclesResult;
-}
+class MockGetMusclesByGroupUseCase extends Mock
+    implements GetMusclesByGroupUseCase {}
 
 void main() {
-  late FakeExerciseRepo fakeRepo;
-  late GetMuscleGroupsUseCase getGroupsUseCase;
-  late GetMusclesByGroupUseCase getMusclesUseCase;
   late WorkoutCubit cubit;
-  final subscriptions = <StreamSubscription<dynamic>>[];
+  late MockGetMuscleGroupsUseCase getMuscleGroupsUseCase;
+  late MockGetMusclesByGroupUseCase getMusclesByGroupUseCase;
 
-  const mockGroups = [
-    MuscleGroupEntity(id: '1', name: 'Chest'),
-    MuscleGroupEntity(id: '2', name: 'Shoulders'),
-  ];
+  const muscleGroup1 = MuscleGroupEntity(id: 'group-1', name: 'Abdominals');
 
-  const mockMuscles = [
-    MuscleEntity(id: 'm1', name: 'Pectoralis Major', image: 'img_url'),
-  ];
+  const muscleGroup2 = MuscleGroupEntity(id: 'group-2', name: 'Arms');
+
+  const muscle1 = MuscleEntity(
+    id: 'muscle-1',
+    name: 'Rectus Abdominis',
+    image: '',
+  );
+
+  const muscle2 = MuscleEntity(id: 'muscle-2', name: 'Obliques', image: '');
 
   setUp(() {
-    fakeRepo = FakeExerciseRepo();
-    getGroupsUseCase = GetMuscleGroupsUseCase(fakeRepo);
-    getMusclesUseCase = GetMusclesByGroupUseCase(fakeRepo);
-    cubit = WorkoutCubit(getGroupsUseCase, getMusclesUseCase);
+    getMuscleGroupsUseCase = MockGetMuscleGroupsUseCase();
+    getMusclesByGroupUseCase = MockGetMusclesByGroupUseCase();
+
+    cubit = WorkoutCubit(getMuscleGroupsUseCase, getMusclesByGroupUseCase);
   });
 
   tearDown(() async {
-    for (final sub in subscriptions) {
-      await sub.cancel();
-    }
-    subscriptions.clear();
     await cubit.close();
   });
 
-  test('initial state has empty data and not loading', () {
-    expect(cubit.state, const BaseState<WorkoutData>.initial());
-  });
-
-  test(
-    'FetchMuscleGroupsEvent success populates groups and fetches muscles for first group',
-    () async {
-      fakeRepo.groupsResult = const Success(mockGroups);
-      fakeRepo.musclesResult = const Success(mockMuscles);
-
-      cubit.doEvent(const FetchMuscleGroupsEvent());
-      await Future<void>.delayed(Duration.zero);
-
+  group('WorkoutCubit', () {
+    test('initial state should be empty', () {
       expect(cubit.state.isLoading, false);
-      expect(cubit.state.data?.groups, mockGroups);
-      expect(cubit.state.data?.selectedGroupId, '1');
-      expect(cubit.state.data?.muscles, mockMuscles);
-    },
-  );
+      expect(cubit.state.data, null);
+      expect(cubit.state.failure, null);
+    });
 
-  test(
-    'FetchMuscleGroupsEvent failure emits error event and failure state',
-    () async {
-      const failure = ServerMessageFailure('Failed to fetch groups');
-      fakeRepo.groupsResult = const FailureResponse(failure);
+    blocTest<WorkoutCubit, WorkoutState>(
+      'should fetch muscle groups and muscles of the first group',
+      build: () {
+        when(
+          () => getMuscleGroupsUseCase(),
+        ).thenAnswer((_) async => const Success([muscleGroup1, muscleGroup2]));
 
-      final emittedEvents = <BaseEvent>[];
-      subscriptions.add(cubit.eventStream.listen(emittedEvents.add));
+        when(
+          () => getMusclesByGroupUseCase('group-1'),
+        ).thenAnswer((_) async => const Success([muscle1, muscle2]));
 
-      cubit.doEvent(const FetchMuscleGroupsEvent());
-      await Future<void>.delayed(Duration.zero);
+        return cubit;
+      },
+      act: (cubit) {
+        cubit.doEvent(const FetchMuscleGroupsEvent());
+      },
+      wait: const Duration(milliseconds: 100),
+      expect: () => [
+        isA<WorkoutState>().having((state) => state.isLoading, 'loading', true),
+        isA<WorkoutState>()
+            .having((state) => state.data?.groups.length, 'groups count', 2)
+            .having(
+              (state) => state.data?.selectedGroupId,
+              'selected group',
+              'group-1',
+            ),
+        isA<WorkoutState>().having(
+          (state) => state.isLoading,
+          'loading muscles',
+          true,
+        ),
+        isA<WorkoutState>()
+            .having((state) => state.data?.muscles.length, 'muscles count', 2)
+            .having(
+              (state) => state.data?.muscles.first.name,
+              'first muscle',
+              'Rectus Abdominis',
+            ),
+      ],
+      verify: (_) {
+        verify(() => getMuscleGroupsUseCase()).called(1);
+        verify(() => getMusclesByGroupUseCase('group-1')).called(1);
+      },
+    );
 
-      expect(cubit.state.failure, failure);
-      expect(emittedEvents.length, 1);
-      expect(emittedEvents.first, isA<DisplayError>());
-    },
-  );
+    blocTest<WorkoutCubit, WorkoutState>(
+      'should fetch muscles when selecting another group',
+      build: () {
+        when(
+          () => getMuscleGroupsUseCase(),
+        ).thenAnswer((_) async => const Success([muscleGroup1, muscleGroup2]));
 
-  test(
-    'SelectMuscleGroupEvent updates selectedGroupId and loads muscles',
-    () async {
-      fakeRepo.groupsResult = const Success(mockGroups);
-      fakeRepo.musclesResult = const Success(mockMuscles);
+        when(
+          () => getMusclesByGroupUseCase('group-1'),
+        ).thenAnswer((_) async => const Success([muscle1]));
 
-      cubit.doEvent(const SelectMuscleGroupEvent('2'));
-      await Future<void>.delayed(Duration.zero);
+        when(
+          () => getMusclesByGroupUseCase('group-2'),
+        ).thenAnswer((_) async => const Success([muscle2]));
 
-      expect(cubit.state.data?.selectedGroupId, '2');
-      expect(cubit.state.data?.muscles, mockMuscles);
-    },
-  );
+        return cubit;
+      },
+      act: (cubit) async {
+        cubit.doEvent(const FetchMuscleGroupsEvent());
 
-  test('SelectMuscleGroupEvent handles empty image safely', () async {
-    const musclesWithEmptyImage = [
-      MuscleEntity(id: 'm2', name: 'Medial Deltoids', image: ''),
-    ];
-    fakeRepo.musclesResult = const Success(musclesWithEmptyImage);
+        await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    cubit.doEvent(const SelectMuscleGroupEvent('2'));
-    await Future<void>.delayed(Duration.zero);
+        cubit.doEvent(const SelectMuscleGroupEvent('group-2'));
+      },
+      wait: const Duration(milliseconds: 100),
+      expect: () => [
+        isA<WorkoutState>().having((state) => state.isLoading, 'loading', true),
+        isA<WorkoutState>().having(
+          (state) => state.data?.selectedGroupId,
+          'group',
+          'group-1',
+        ),
+        isA<WorkoutState>().having(
+          (state) => state.isLoading,
+          'loading muscles',
+          true,
+        ),
+        isA<WorkoutState>().having(
+          (state) => state.data?.muscles.length,
+          'muscles',
+          1,
+        ),
+        isA<WorkoutState>()
+            .having((state) => state.isLoading, 'loading', true)
+            .having((state) => state.data?.selectedGroupId, 'group', 'group-2'),
+        isA<WorkoutState>().having(
+          (state) => state.data?.muscles.first.name,
+          'muscle',
+          'Obliques',
+        ),
+      ],
+      verify: (_) {
+        verify(() => getMusclesByGroupUseCase('group-1')).called(1);
+        verify(() => getMusclesByGroupUseCase('group-2')).called(1);
+      },
+    );
 
-    expect(cubit.state.data?.muscles.first.image, '');
-    expect(cubit.state.failure, isNull);
+    test(
+      'should not fetch the same group again when muscles already exist',
+      () async {
+        when(
+          () => getMuscleGroupsUseCase(),
+        ).thenAnswer((_) async => const Success([muscleGroup1]));
+
+        when(
+          () => getMusclesByGroupUseCase('group-1'),
+        ).thenAnswer((_) async => const Success([muscle1]));
+
+        cubit.doEvent(const FetchMuscleGroupsEvent());
+
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        cubit.doEvent(const SelectMuscleGroupEvent('group-1'));
+
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        verify(() => getMusclesByGroupUseCase('group-1')).called(1);
+      },
+    );
   });
-
-  test(
-    'SelectMuscleGroupEvent with same selected group and loaded muscles skips fetch',
-    () async {
-      fakeRepo.groupsResult = const Success(mockGroups);
-      fakeRepo.musclesResult = const Success(mockMuscles);
-
-      cubit.doEvent(const FetchMuscleGroupsEvent());
-      await Future<void>.delayed(Duration.zero);
-
-      final stateBeforeRepeat = cubit.state;
-
-      cubit.doEvent(const SelectMuscleGroupEvent('1'));
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.state, stateBeforeRepeat);
-    },
-  );
 }

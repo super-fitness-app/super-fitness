@@ -7,6 +7,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final HomeApiClient _homeApiClient;
 
   HomeRemoteDataSourceImpl(this._homeApiClient);
-
-  HomeApiClient get apiClient => _homeApiClient;
+  Future<HomeApiClient> getallhome() async {
+    final response = _homeApiClient;
+    return response;
+  }
 }

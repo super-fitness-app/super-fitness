@@ -1,9 +1,18 @@
-import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
-import 'package:super_fitness/features/exercise/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/exercise/data/model/exercise_models/difficulty_levels_response_model.dart';
+import 'package:super_fitness/features/exercise/data/model/exercise_models/exercise_response_model.dart';
+import 'package:super_fitness/features/exercise/data/models/muscle_groups_response_model.dart';
+import 'package:super_fitness/features/exercise/data/models/muscles_by_group_response_model.dart';
 
-abstract class ExerciseRemoteDataSource {
-  Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups();
+abstract interface class ExerciseRemoteDataSource {
+  Future<DifficultyLevelsResponseModel> getAllDifficultyLevels({
+    required String language,
+  });
+  Future<ExerciseResponseModel> getExercisesByMuscleAndDifficulty({
+    required String language,
+    required String difficultyLevelId,
+    required String primeMoverMuscleId,
+  });
+  Future<MuscleGroupsResponseModel> getMuscleGroups();
 
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(String groupId);
+  Future<MusclesByGroupResponseModel> getMusclesByGroup(String groupId);
 }

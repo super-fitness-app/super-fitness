@@ -1,6 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/safe_call.dart';
 import 'package:super_fitness/features/exercise/data/data_source/remote/exercise_remote_data_source.dart';
+import 'package:super_fitness/features/exercise/domain/entities/difficulty_level_entity.dart';
+import 'package:super_fitness/features/exercise/domain/entities/exercise_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_group_entity.dart';
 import 'package:super_fitness/features/exercise/domain/repo/exercise_repo.dart';
@@ -12,10 +15,59 @@ class ExerciseRepoImpl implements ExerciseRepo {
   ExerciseRepoImpl(this._exerciseRemoteDataSource);
 
   @override
+  Future<ApiResults<List<DifficultyLevelEntity>>> getAllDifficultyLevels({
+    required String language,
+  }) {
+    return safeCall(() async {
+      final response = await _exerciseRemoteDataSource.getAllDifficultyLevels(
+        language: language,
+      );
+      return Success(response.levels.map((e) => e.toEntity()).toList());
+    });
+  }
+
+  @override
+  Future<ApiResults<List<ExerciseEntity>>> getExercisesByMuscleAndDifficulty({
+    required String language,
+    required String difficultyLevelId,
+    required String primeMoverMuscleId,
+  }) {
+    return safeCall(() async {
+      final response = await _exerciseRemoteDataSource
+          .getExercisesByMuscleAndDifficulty(
+            language: language,
+            difficultyLevelId: difficultyLevelId,
+            primeMoverMuscleId: primeMoverMuscleId,
+          );
+      return Success(response.exercises.map((e) => e.toEntity()).toList());
+    });
+  }
+
+  @override
   Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() =>
-      _exerciseRemoteDataSource.getMuscleGroups();
+      safeCall(() async {
+        final response = await _exerciseRemoteDataSource.getMuscleGroups();
+        final entities =
+            response.musclesGroup
+                ?.where((m) => m.id != null && m.name != null)
+                .map((m) => m.toEntity())
+                .toList() ??
+            [];
+        return Success(entities);
+      });
 
   @override
   Future<ApiResults<List<MuscleEntity>>> getMusclesByGroup(String groupId) =>
-      _exerciseRemoteDataSource.getMusclesByGroup(groupId);
+      safeCall(() async {
+        final response = await _exerciseRemoteDataSource.getMusclesByGroup(
+          groupId,
+        );
+        final entities =
+            response.muscles
+                ?.where((m) => m.id != null && m.name != null)
+                .map((m) => m.toEntity())
+                .toList() ??
+            [];
+        return Success(entities);
+      });
 }

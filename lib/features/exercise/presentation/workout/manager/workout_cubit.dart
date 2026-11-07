@@ -6,8 +6,8 @@ import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_group_entity.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscle_groups_use_case.dart';
-import 'package:super_fitness/features/exercise/domain/use_case/get_muscles_by_group_use_case.dart';
+import 'package:super_fitness/features/exercise/domain/use_cases/get_muscle_groups_use_case.dart';
+import 'package:super_fitness/features/exercise/domain/use_cases/get_muscles_by_group_use_case.dart';
 
 part 'workout_event.dart';
 part 'workout_state.dart';

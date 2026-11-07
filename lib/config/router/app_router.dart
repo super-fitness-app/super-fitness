@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
@@ -14,6 +16,8 @@ abstract final class AppRoutes {
   static const exercise = '/exercise';
   static const food = '/food';
   static const foodDetails = '/food-details';
+  static const exerciseview = '/exercise-details';
+  static const appVideoPlayer = '/app-video-player';
 }
 
 abstract final class AppRouter {
@@ -21,8 +25,28 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.workout,
     routes: [
+      GoRoute(
+        path: AppRoutes.exercise,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final muscle = state.extra as MuscleEntity;
+
+          return ExerciseView(muscle: muscle);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.appVideoPlayer,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+
+          final videoUrl = args['videoUrl'] as String;
+          final title = args['title'] as String;
+          return AppVideoPlayer(videoUrl: videoUrl, title: title);
+        },
+      ),
       GoRoute(
         path: AppRoutes.login,
         parentNavigatorKey: _rootNavigatorKey,
@@ -38,11 +62,7 @@ abstract final class AppRouter {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const WorkoutView(),
       ),
-      GoRoute(
-        path: AppRoutes.exercise,
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const ExerciseView(),
-      ),
+
       GoRoute(
         path: AppRoutes.food,
         parentNavigatorKey: _rootNavigatorKey,
