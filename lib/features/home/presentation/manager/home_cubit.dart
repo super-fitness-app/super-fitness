@@ -10,9 +10,13 @@ part 'home_state.dart';
 
 @injectable
 class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
-  final HomeRepo? _homeRepo;
+  HomeCubit(HomeRepo homeRepo)
+    : _homeRepo = homeRepo,
+      super(const BaseState<HomeData>.initial());
 
-  HomeCubit([this._homeRepo]) : super(const BaseState<HomeData>.initial());
+  final HomeRepo _homeRepo;
+
+  HomeRepo get repo => _homeRepo;
 
   @override
   void doEvent(Object event) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
@@ -24,12 +25,16 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.workout,
     routes: [
       GoRoute(
-        path: AppRoutes.exerciseview,
+        path: AppRoutes.exercise,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const ExerciseView(),
+        builder: (context, state) {
+          final muscle = state.extra as MuscleEntity;
+
+          return ExerciseView(muscle: muscle);
+        },
       ),
       GoRoute(
         path: AppRoutes.appVideoPlayer,
@@ -57,11 +62,7 @@ abstract final class AppRouter {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const WorkoutView(),
       ),
-      GoRoute(
-        path: AppRoutes.exercise,
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const ExerciseView(),
-      ),
+
       GoRoute(
         path: AppRoutes.food,
         parentNavigatorKey: _rootNavigatorKey,

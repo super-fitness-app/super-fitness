@@ -10,9 +10,11 @@ part 'food_state.dart';
 
 @injectable
 class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
-  final MealsRepo? _mealsRepo;
+  final MealsRepo _mealsRepo;
 
-  FoodCubit([this._mealsRepo]) : super(const BaseState<FoodData>.initial());
+  FoodCubit(this._mealsRepo) : super(const BaseState<FoodData>.initial());
+
+  MealsRepo get repo => _mealsRepo;
 
   @override
   void doEvent(Object event) {

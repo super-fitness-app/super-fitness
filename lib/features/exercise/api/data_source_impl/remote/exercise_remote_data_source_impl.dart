@@ -3,6 +3,8 @@ import 'package:super_fitness/features/exercise/api/client/exercise_api_client.d
 import 'package:super_fitness/features/exercise/data/data_source/remote/exercise_remote_data_source.dart';
 import 'package:super_fitness/features/exercise/data/model/exercise_models/difficulty_levels_response_model.dart';
 import 'package:super_fitness/features/exercise/data/model/exercise_models/exercise_response_model.dart';
+import 'package:super_fitness/features/exercise/data/models/muscle_groups_response_model.dart';
+import 'package:super_fitness/features/exercise/data/models/muscles_by_group_response_model.dart';
 
 @Injectable(as: ExerciseRemoteDataSource)
 class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
@@ -28,5 +30,15 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
       difficultyLevelId,
       primeMoverMuscleId,
     );
+  }
+
+  @override
+  Future<MuscleGroupsResponseModel> getMuscleGroups() async {
+    return await _exerciseApiClient.getMuscleGroups();
+  }
+
+  @override
+  Future<MusclesByGroupResponseModel> getMusclesByGroup(String groupId) async {
+    return await _exerciseApiClient.getMusclesByGroup(groupId);
   }
 }

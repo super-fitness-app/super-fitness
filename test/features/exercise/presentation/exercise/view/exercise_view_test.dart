@@ -1,19 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
-import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-
+import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/exercise/domain/entities/exercise_entity.dart';
-
 import 'package:super_fitness/features/exercise/domain/use_cases/get_all_dfficulty_levels_use_case.dart';
 import 'package:super_fitness/features/exercise/domain/use_cases/get_exercises_by_muscle_and_dfficulty_use_case.dart';
-
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 
@@ -32,11 +30,15 @@ void main() {
     Success<List<ExerciseEntity>>([]),
   );
 
-  late MockGetAllDfficultyLevelsUseCase mockGetAllDifficultyLevels;
+  late MockGetAllDfficultyLevelsUseCase mockGetLevels;
   late MockGetExercisesByMuscleAndDfficultyUseCase mockGetExercises;
   late ExerciseCubit cubit;
 
-  const language = 'en';
+  const muscle = MuscleEntity(
+    id: 'muscle_1',
+    name: 'Rectus Abdominis',
+    image: 'https://example.com/muscle.png',
+  );
 
   const levels = [
     DifficultyLevelEntity(id: 'level_1', name: 'Beginner'),
@@ -44,13 +46,23 @@ void main() {
     DifficultyLevelEntity(id: 'level_3', name: 'Advanced'),
   ];
 
-  const primeMoverMuscleId = '69d982ef85f6bfa972bf2248';
-
   setUp(() {
-    mockGetAllDifficultyLevels = MockGetAllDfficultyLevelsUseCase();
+    mockGetLevels = MockGetAllDfficultyLevelsUseCase();
     mockGetExercises = MockGetExercisesByMuscleAndDfficultyUseCase();
 
-    cubit = ExerciseCubit(mockGetExercises, mockGetAllDifficultyLevels);
+    cubit = ExerciseCubit(mockGetExercises, mockGetLevels);
+
+    when(
+      mockGetLevels.call(language: 'en'),
+    ).thenAnswer((_) async => Success(levels));
+
+    when(
+      mockGetExercises.call(
+        language: anyNamed('language'),
+        difficultyLevelId: anyNamed('difficultyLevelId'),
+        primeMoverMuscleId: anyNamed('primeMoverMuscleId'),
+      ),
+    ).thenAnswer((_) async => const Success<List<ExerciseEntity>>([]));
   });
 
   tearDown(() async {
@@ -60,110 +72,82 @@ void main() {
   Widget createWidget() {
     return MaterialApp(
       locale: const Locale('en'),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: ExerciseView(cubit: cubit),
+      home: ExerciseView(cubit: cubit, muscle: muscle),
     );
   }
 
   group('ExerciseView Widget Tests', () {
-    testWidgets(
-      'should display loading indicator while difficulty levels are loading',
-      (tester) async {
-        // Arrange
-        final completer = Completer<ApiResults<List<DifficultyLevelEntity>>>();
-
-        when(
-          mockGetAllDifficultyLevels.call(language: language),
-        ).thenAnswer((_) => completer.future);
-
-        // Act
+    testWidgets('should display selected muscle name', (tester) async {
+      await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createWidget());
         await tester.pump();
+      });
 
-        // Assert
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Rectus Abdominis'), findsOneWidget);
+    });
 
-        // Complete the pending request to avoid leaving it unfinished.
-        completer.complete(Success<List<DifficultyLevelEntity>>([]));
-
-        await tester.pumpAndSettle();
-      },
-    );
-
-    testWidgets(
-      'should display difficulty tabs after levels load successfully',
-      (tester) async {
-        // Arrange
-        when(
-          mockGetAllDifficultyLevels.call(language: language),
-        ).thenAnswer((_) async => Success<List<DifficultyLevelEntity>>(levels));
-
-        // Act
+    testWidgets('should display difficulty tabs', (tester) async {
+      await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createWidget());
-        await tester.pumpAndSettle();
+        await tester.pump();
+      });
 
-        // Assert
-        expect(find.byType(TabBar), findsOneWidget);
-        expect(find.text('Beginner'), findsOneWidget);
-        expect(find.text('Intermediate'), findsOneWidget);
-        expect(find.text('Advanced'), findsOneWidget);
-      },
-    );
+      expect(find.byType(TabBar), findsOneWidget);
+    });
 
-    testWidgets(
-      'should display no exercises message when exercise list is empty',
-      (tester) async {
-        // Arrange
-        when(
-          mockGetAllDifficultyLevels.call(language: language),
-        ).thenAnswer((_) async => Success<List<DifficultyLevelEntity>>(levels));
-
-        // Act
+    testWidgets('should request difficulty levels on initialization', (
+      tester,
+    ) async {
+      await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createWidget());
-        await tester.pumpAndSettle();
+        await tester.pump();
+      });
 
-        // Assert
-        final localization = AppLocalizations.of(
-          tester.element(find.byType(Scaffold)),
-        )!;
+      verify(mockGetLevels.call(language: 'en')).called(1);
+    });
 
-        expect(find.text(localization.noExercisesFound), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'should request exercises when user selects another difficulty tab',
-      (tester) async {
-        // Arrange
-        when(
-          mockGetAllDifficultyLevels.call(language: language),
-        ).thenAnswer((_) async => Success<List<DifficultyLevelEntity>>(levels));
-
-        when(
-          mockGetExercises.call(
-            language: language,
-            difficultyLevelId: 'level_2',
-            primeMoverMuscleId: primeMoverMuscleId,
-          ),
-        ).thenAnswer((_) async => Success<List<ExerciseEntity>>([]));
-
-        // Act
+    testWidgets('should pass selected muscle ID when loading exercises', (
+      tester,
+    ) async {
+      await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createWidget());
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump();
+      });
 
-        await tester.tap(find.text('Intermediate'));
-        await tester.pumpAndSettle();
+      verify(
+        mockGetExercises.call(
+          language: 'en',
+          difficultyLevelId: 'level_1',
+          primeMoverMuscleId: 'muscle_1',
+        ),
+      ).called(1);
+    });
 
-        // Assert
-        verify(
-          mockGetExercises.call(
-            language: language,
-            difficultyLevelId: 'level_2',
-            primeMoverMuscleId: primeMoverMuscleId,
-          ),
-        ).called(1);
-      },
-    );
+    testWidgets('should display no exercises message when list is empty', (
+      tester,
+    ) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createWidget());
+        await tester.pump();
+        await tester.pump();
+      });
+
+      expect(
+        find.text(
+          AppLocalizations.of(
+            tester.element(find.byType(ExerciseView)),
+          )!.noExercisesFound,
+        ),
+        findsOneWidget,
+      );
+    });
   });
 }

@@ -77,6 +77,9 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
           language: event.language,
           primeMoverMuscleId: event.primeMoverMuscleId,
         );
+
+      default:
+        break;
     }
   }
 }

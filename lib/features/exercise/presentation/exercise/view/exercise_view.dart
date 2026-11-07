@@ -9,6 +9,7 @@ import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_cubit.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_event.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/manager/exercise_state.dart';
@@ -21,7 +22,8 @@ class ExerciseView extends StatefulWidget {
   // final String primeMoverMuscleId;
   // final String bodyBuilderExerciseImage;
   // final String exerciseName;
-  const ExerciseView({super.key, this.cubit});
+  final MuscleEntity muscle;
+  const ExerciseView({super.key, this.cubit, required this.muscle});
 
   @override
   State<ExerciseView> createState() => _ExerciseViewState();
@@ -34,8 +36,8 @@ class _ExerciseViewState extends State<ExerciseView>
 
   @override
   ExerciseCubit get cubit => _cubit;
-  // String get _primeMoverMuscleId => widget.primeMoverMuscleId;
-  static const String _primeMoverMuscleId = '69d982ef85f6bfa972bf2248';
+  MuscleEntity get muscles => widget.muscle;
+  // static final String _primeMoverMuscleId = muscle.id;
   StreamSubscription<ExerciseState>? _stateSubscription;
 
   @override
@@ -80,7 +82,7 @@ class _ExerciseViewState extends State<ExerciseView>
     _cubit.doEvent(
       GetExercisesByMuscleAndDifficultyEvent(
         language: 'en',
-        primeMoverMuscleId: _primeMoverMuscleId,
+        primeMoverMuscleId: muscles.id,
         difficultyLevelId: levels[index].id,
       ),
     );
@@ -114,7 +116,7 @@ class _ExerciseViewState extends State<ExerciseView>
               right: 0,
               child: SizedBox(
                 height: MediaQuery.sizeOf(context).height * 0.42,
-                child: Image.asset(AppImages.bodyBuilder, fit: BoxFit.cover),
+                child: Image.network(widget.muscle.image, fit: BoxFit.cover),
               ),
             ),
 
@@ -160,7 +162,7 @@ class _ExerciseViewState extends State<ExerciseView>
                       const SizedBox(height: 200),
 
                       Text(
-                        'Chest exercise',
+                        widget.muscle.name,
                         style: AppTextStyles.medium20.copyWith(fontSize: 24),
                       ),
 
@@ -238,7 +240,7 @@ class _ExerciseViewState extends State<ExerciseView>
                                     _cubit.doEvent(
                                       GetExercisesByMuscleAndDifficultyEvent(
                                         language: 'en',
-                                        primeMoverMuscleId: _primeMoverMuscleId,
+                                        primeMoverMuscleId: widget.muscle.id,
                                         difficultyLevelId:
                                             state.data?.levels.first.id ?? '',
                                       ),

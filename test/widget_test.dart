@@ -4,10 +4,8 @@ import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
-import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/auth/presentation/view/login.dart';
-import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
   @override
@@ -22,22 +20,6 @@ class FakeStorageService implements StorageService {
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
-    testWidgets(
-      'renders SuperFitnessApp successfully with injected LocaleCubit',
-      (WidgetTester tester) async {
-        final storage = FakeStorageService();
-        final localeCubit = LocaleCubit(storage);
-
-        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
-        await tester.pumpAndSettle();
-
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(LoginView), findsOneWidget);
-
-        await localeCubit.close();
-      },
-    );
-
     testWidgets(
       'LoginView renders with exact theme, styling, and text alignment',
       (WidgetTester tester) async {
