@@ -28,7 +28,8 @@ class AiRequestModel {
   factory AiRequestModel.fromJson(Map<String, dynamic> json) {
     return AiRequestModel(
       model: json['model'] as String? ?? '',
-      messages: (json['messages'] as List<dynamic>?)
+      messages:
+          (json['messages'] as List<dynamic>?)
               ?.map((e) => ChatMessageModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

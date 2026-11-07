@@ -10,8 +10,14 @@ class TypingIndicator extends StatelessWidget {
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Container(
-        margin: const EdgeInsetsDirectional.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 12),
+        margin: const EdgeInsetsDirectional.symmetric(
+          vertical: 4,
+          horizontal: 8,
+        ),
+        padding: const EdgeInsetsDirectional.symmetric(
+          vertical: 8,
+          horizontal: 12,
+        ),
         decoration: BoxDecoration(
           color: AppColors.surfaceVariant,
           borderRadius: BorderRadius.circular(12),

@@ -1,29 +1,28 @@
-// ignore_for_file: unused_field
-
-import 'package:injectable/injectable.dart';
-import 'package:super_fitness/features/ai_chat/data/database/fitness_database_manager.dart';
-import 'package:super_fitness/features/ai_chat/data/models/chat_message_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/exercise_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/ingredient_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/meal_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/meal_step_model.dart';
 
 abstract interface class FitnessLocalDataSource {
-  Future<List<ChatMessageModel>> getCachedMessages();
-  Future<void> saveMessage(ChatMessageModel message);
-  Future<void> clearMessages();
-}
+  Future<List<MealModel>> searchMeals({
+    String? query,
+    double? minCalories,
+    double? maxCalories,
+    double? minProtein,
+  });
 
-@LazySingleton(as: FitnessLocalDataSource)
-class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
-  final FitnessDatabaseManager _databaseManager;
+  Future<MealModel?> getMealById(String id);
 
-  const FitnessLocalDataSourceImpl(this._databaseManager);
+  Future<List<IngredientModel>> getMealIngredients(String mealId);
 
-  @override
-  Future<List<ChatMessageModel>> getCachedMessages() async {
-    return [];
-  }
+  Future<List<MealStepModel>> getMealSteps(String mealId);
 
-  @override
-  Future<void> saveMessage(ChatMessageModel message) async {}
+  Future<List<ExerciseModel>> searchExercises({
+    String? query,
+    String? muscleGroup,
+    String? difficulty,
+    String? equipment,
+  });
 
-  @override
-  Future<void> clearMessages() async {}
+  Future<ExerciseModel?> getExerciseById(String id);
 }

@@ -4,11 +4,11 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/fitness_tool_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_intent.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floating_bottom_nav_bar.dart';
 import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
-import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
 import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
 
@@ -50,7 +50,8 @@ class _MainLayoutViewState extends State<MainLayoutView>
               ExploreView(),
               SmartCoachView(),
               WorkoutsView(),
-              ProfileView(),
+              // ProfileView(),
+              FitnessToolsTestPage(),
             ],
           ),
           bottomNavigationBar: FloatingBottomNavBar(

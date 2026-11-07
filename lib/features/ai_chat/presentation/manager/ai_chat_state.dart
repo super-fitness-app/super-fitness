@@ -17,7 +17,8 @@ class AiChatState extends Equatable {
     this.activeToolName,
   });
 
-  bool get isLoading => chatHistoryState.isLoading || sendMessageState.isLoading;
+  bool get isLoading =>
+      chatHistoryState.isLoading || sendMessageState.isLoading;
 
   AiChatState copyWith({
     BaseState<List<ChatMessageEntity>>? chatHistoryState,
@@ -39,10 +40,10 @@ class AiChatState extends Equatable {
 
   @override
   List<Object?> get props => [
-        chatHistoryState,
-        sendMessageState,
-        messages,
-        isTyping,
-        activeToolName,
-      ];
+    chatHistoryState,
+    sendMessageState,
+    messages,
+    isTyping,
+    activeToolName,
+  ];
 }

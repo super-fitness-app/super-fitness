@@ -17,7 +17,10 @@ class ChatInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsetsDirectional.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
       color: AppColors.background,
       child: SafeArea(
         top: false,
@@ -30,7 +33,9 @@ class ChatInputField extends StatelessWidget {
                 style: AppTextStyles.regular14.copyWith(color: AppColors.white),
                 decoration: InputDecoration(
                   hintText: 'Type your message...',
-                  hintStyle: AppTextStyles.regular14.copyWith(color: AppColors.grey40),
+                  hintStyle: AppTextStyles.regular14.copyWith(
+                    color: AppColors.grey40,
+                  ),
                   filled: true,
                   fillColor: AppColors.surface,
                   border: OutlineInputBorder(

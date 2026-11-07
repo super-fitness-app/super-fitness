@@ -5,7 +5,8 @@ abstract final class ToolDefinitions {
     'type': 'function',
     'function': {
       'name': ToolNames.searchExercises,
-      'description': 'Search for fitness exercises by target muscle group or difficulty level',
+      'description':
+          'Search for fitness exercises by target muscle group or difficulty level',
       'parameters': {
         'type': 'object',
         'properties': {
@@ -27,7 +28,8 @@ abstract final class ToolDefinitions {
     'type': 'function',
     'function': {
       'name': ToolNames.searchMeals,
-      'description': 'Search for healthy meals or recipes by dietary preference or calorie range',
+      'description':
+          'Search for healthy meals or recipes by dietary preference or calorie range',
       'parameters': {
         'type': 'object',
         'properties': {

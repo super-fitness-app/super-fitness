@@ -20,11 +20,7 @@ class ToolCallModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type,
-      'function': function.toJson(),
-    };
+    return {'id': id, 'type': type, 'function': function.toJson()};
   }
 }
 
@@ -32,22 +28,17 @@ class ToolCallFunctionModel {
   final String name;
   final Map<String, dynamic> arguments;
 
-  const ToolCallFunctionModel({
-    required this.name,
-    required this.arguments,
-  });
+  const ToolCallFunctionModel({required this.name, required this.arguments});
 
   factory ToolCallFunctionModel.fromJson(Map<String, dynamic> json) {
     return ToolCallFunctionModel(
       name: json['name'] as String? ?? '',
-      arguments: json['arguments'] as Map<String, dynamic>? ?? <String, dynamic>{},
+      arguments:
+          json['arguments'] as Map<String, dynamic>? ?? <String, dynamic>{},
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'arguments': arguments,
-    };
+    return {'name': name, 'arguments': arguments};
   }
 }

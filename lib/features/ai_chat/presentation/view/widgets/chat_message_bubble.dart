@@ -6,19 +6,21 @@ import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_enti
 class ChatMessageBubble extends StatelessWidget {
   final ChatMessageEntity message;
 
-  const ChatMessageBubble({
-    super.key,
-    required this.message,
-  });
+  const ChatMessageBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     final isUser = message.role == 'user';
 
     return Align(
-      alignment: isUser ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
+      alignment: isUser
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
       child: Container(
-        margin: const EdgeInsetsDirectional.symmetric(vertical: 4, horizontal: 8),
+        margin: const EdgeInsetsDirectional.symmetric(
+          vertical: 4,
+          horizontal: 8,
+        ),
         padding: const EdgeInsetsDirectional.all(12),
         decoration: BoxDecoration(
           color: isUser ? AppColors.primary : AppColors.surfaceVariant,

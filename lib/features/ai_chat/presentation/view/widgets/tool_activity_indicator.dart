@@ -5,18 +5,21 @@ import 'package:super_fitness/core/const/app_text_styles.dart';
 class ToolActivityIndicator extends StatelessWidget {
   final String toolName;
 
-  const ToolActivityIndicator({
-    super.key,
-    required this.toolName,
-  });
+  const ToolActivityIndicator({super.key, required this.toolName});
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Container(
-        margin: const EdgeInsetsDirectional.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 12),
+        margin: const EdgeInsetsDirectional.symmetric(
+          vertical: 4,
+          horizontal: 8,
+        ),
+        padding: const EdgeInsetsDirectional.symmetric(
+          vertical: 8,
+          horizontal: 12,
+        ),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
