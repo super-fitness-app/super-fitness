@@ -14,6 +14,7 @@ class ChatMessageModel extends Equatable {
   final List<ToolCallModel> toolCalls;
   final bool isToolResponse;
   final String? thought;
+  final String? thinkingStatus;
 
   const ChatMessageModel({
     required this.id,
@@ -24,6 +25,7 @@ class ChatMessageModel extends Equatable {
     this.toolCalls = const [],
     this.isToolResponse = false,
     this.thought,
+    this.thinkingStatus,
   });
 
   ChatMessageModel copyWith({
@@ -35,6 +37,7 @@ class ChatMessageModel extends Equatable {
     List<ToolCallModel>? toolCalls,
     bool? isToolResponse,
     String? thought,
+    String? thinkingStatus,
   }) {
     return ChatMessageModel(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class ChatMessageModel extends Equatable {
       toolCalls: toolCalls ?? this.toolCalls,
       isToolResponse: isToolResponse ?? this.isToolResponse,
       thought: thought ?? this.thought,
+      thinkingStatus: thinkingStatus ?? this.thinkingStatus,
     );
   }
 
@@ -66,6 +70,7 @@ class ChatMessageModel extends Equatable {
           : null,
       isToolResponse: entity.isToolResponse,
       thought: entity.thought,
+      thinkingStatus: entity.thinkingStatus,
     );
   }
 
@@ -151,6 +156,7 @@ class ChatMessageModel extends Equatable {
     isToolResponse: isToolResponse,
     isStreaming: isStreaming,
     thought: thought,
+    thinkingStatus: thinkingStatus,
   );
 
   @override
@@ -163,5 +169,6 @@ class ChatMessageModel extends Equatable {
     toolCalls,
     isToolResponse,
     thought,
+    thinkingStatus,
   ];
 }

@@ -40,6 +40,7 @@ Address them warmly and personally, inspire discipline, and tailor all advice di
 Always use the `get_exercise_details` tool when queried about workout mechanics, sets, reps, or exercise cues.
 Always use the `get_meal_nutrition` tool when queried about food recipes, macronutrients, calories, or meal plans.
 Keep your textual explanations concise, professional, and directly actionable.
+Keep internal reasoning concise. Do not expose bulleted scratchpad notes or meta-analysis in user-facing output; proceed directly to your coaching response.
 ''';
   }
 }

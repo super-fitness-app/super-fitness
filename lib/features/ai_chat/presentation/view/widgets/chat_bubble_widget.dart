@@ -4,6 +4,7 @@ import 'package:super_fitness/core/const/app_icons.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/fitness_card_widget.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 
 class ChatBubbleWidget extends StatelessWidget {
   final ChatMessageEntity message;
@@ -119,79 +120,14 @@ class _BubbleContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (message.thought != null && message.thought!.isNotEmpty)
-            _ThinkingSection(
-              thought: message.thought!,
-              isStreaming: message.isStreaming,
-              isContentEmpty: message.content.isEmpty,
-            ),
-          if (message.content.isNotEmpty || !message.isStreaming || message.thought == null)
-            _BubbleMessageContent(message: message),
-          if (message.fitnessCard != null)
-            FitnessCardWidget(card: message.fitnessCard!),
-        ],
-      ),
-    );
-  }
-}
-
-class _ThinkingSection extends StatelessWidget {
-  final String thought;
-  final bool isStreaming;
-  final bool isContentEmpty;
-
-  const _ThinkingSection({
-    required this.thought,
-    required this.isStreaming,
-    required this.isContentEmpty,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 8),
-      padding: const EdgeInsetsDirectional.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceVariant.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.25),
-          width: 0.8,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.auto_awesome_rounded,
-                size: 13,
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                isStreaming && isContentEmpty
-                    ? 'Thinking / Analyzing workout data...'
-                    : 'Thought Process',
-                style: AppTextStyles.regular12.copyWith(
-                  color: AppColors.primaryLight,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            thought,
-            style: AppTextStyles.regular12.copyWith(
-              color: AppColors.grey30,
-              fontStyle: FontStyle.italic,
-              height: 1.3,
-            ),
-          ),
+          if (message.isThinking)
+            ThinkingStatusCapsule(status: message.thinkingStatus)
+          else ...[
+            if (message.content.isNotEmpty)
+              _BubbleMessageContent(message: message),
+            if (message.fitnessCard != null)
+              FitnessCardWidget(card: message.fitnessCard!),
+          ],
         ],
       ),
     );

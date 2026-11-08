@@ -10,6 +10,7 @@ class ChatMessageEntity extends Equatable {
   final bool isToolResponse;
   final bool isStreaming;
   final String? thought;
+  final String? thinkingStatus;
 
   const ChatMessageEntity({
     required this.id,
@@ -20,10 +21,13 @@ class ChatMessageEntity extends Equatable {
     this.isToolResponse = false,
     this.isStreaming = false,
     this.thought,
+    this.thinkingStatus,
   });
 
   bool get isUser => role == 'user';
   bool get isAssistant => role == 'assistant';
+  bool get isThinking =>
+      isStreaming && content.isEmpty && (thought != null || thinkingStatus != null);
 
   ChatMessageEntity copyWith({
     String? id,
@@ -34,6 +38,7 @@ class ChatMessageEntity extends Equatable {
     bool? isToolResponse,
     bool? isStreaming,
     String? thought,
+    String? thinkingStatus,
   }) {
     return ChatMessageEntity(
       id: id ?? this.id,
@@ -44,6 +49,7 @@ class ChatMessageEntity extends Equatable {
       isToolResponse: isToolResponse ?? this.isToolResponse,
       isStreaming: isStreaming ?? this.isStreaming,
       thought: thought ?? this.thought,
+      thinkingStatus: thinkingStatus ?? this.thinkingStatus,
     );
   }
 
@@ -57,5 +63,6 @@ class ChatMessageEntity extends Equatable {
     isToolResponse,
     isStreaming,
     thought,
+    thinkingStatus,
   ];
 }

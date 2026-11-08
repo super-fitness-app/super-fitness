@@ -5,7 +5,6 @@ import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_event.dart';
@@ -15,6 +14,7 @@ import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_bu
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_input_field.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_top_bar.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/previous_conversations_drawer.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/token_status_banner.dart';
 
 class SmartCoachChatView extends StatefulWidget {
@@ -179,10 +179,7 @@ class _MessageListSection extends StatelessWidget {
         }
         return Padding(
           padding: const EdgeInsetsDirectional.only(start: 44, bottom: 12),
-          child: Text(
-            l10n.smartCoachThinking,
-            style: AppTextStyles.regular12.copyWith(color: AppColors.primary),
-          ),
+          child: ThinkingStatusCapsule(status: l10n.smartCoachThinking),
         );
       },
     );

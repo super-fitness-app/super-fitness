@@ -11,6 +11,7 @@ import 'package:super_fitness/features/ai_chat/core/constants/ai_constants.dart'
 import 'package:super_fitness/features/ai_chat/core/constants/tool_names.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/platform_host_resolver.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/system_prompt_builder.dart';
+import 'package:super_fitness/features/ai_chat/core/utils/thought_parser.dart';
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/ai_remote_data_source.dart';
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
 import 'package:super_fitness/features/ai_chat/data/models/chat_message_model.dart';
@@ -187,11 +188,12 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         );
       }
 
+      final cleanPhase1Content = ThoughtParser.stripThinkingTags(phase1Message.content);
       final assistantMessage = ChatMessageModel(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         role: 'assistant',
-        content: phase1Message.content.isNotEmpty
-            ? phase1Message.content
+        content: cleanPhase1Content.isNotEmpty
+            ? cleanPhase1Content
             : 'I am here to help you achieve your athletic potential! What workout or meal plan can I detail for you today?',
         timestamp: DateTime.now(),
       );
@@ -305,28 +307,17 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
                 accumulatedThinking += thinkingDelta;
               }
 
-              String? currentThought;
-              String displayContent = rawAccumulated;
-
-              if (rawAccumulated.contains('<think>')) {
-                final thinkStart = rawAccumulated.indexOf('<think>') + 7;
-                final thinkEnd = rawAccumulated.indexOf('</think>');
-                if (thinkEnd != -1) {
-                  currentThought = rawAccumulated.substring(thinkStart, thinkEnd).trim();
-                  displayContent = rawAccumulated.substring(thinkEnd + 8).trimLeft();
-                } else {
-                  currentThought = rawAccumulated.substring(thinkStart).trim();
-                  displayContent = '';
-                }
-              } else if (accumulatedThinking.isNotEmpty) {
-                currentThought = accumulatedThinking.trim();
-              }
+              final parsed = ThoughtParser.parseStream(
+                rawAccumulated: rawAccumulated,
+                accumulatedThinking: accumulatedThinking,
+              );
 
               yield ChatMessageModel(
                 id: assistantMsgId,
                 role: 'assistant',
-                content: displayContent,
-                thought: currentThought,
+                content: parsed.content,
+                thought: parsed.rawThought,
+                thinkingStatus: parsed.activeStep,
                 timestamp: DateTime.now(),
               );
             }
@@ -353,31 +344,23 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           } catch (_) {}
         }
 
-        String? finalThought;
-        String finalContent = rawAccumulated;
-        if (rawAccumulated.contains('<think>')) {
-          final thinkStart = rawAccumulated.indexOf('<think>') + 7;
-          final thinkEnd = rawAccumulated.indexOf('</think>');
-          if (thinkEnd != -1) {
-            finalThought = rawAccumulated.substring(thinkStart, thinkEnd).trim();
-            finalContent = rawAccumulated.substring(thinkEnd + 8).trimLeft();
-          } else {
-            finalThought = rawAccumulated.substring(thinkStart).trim();
-            finalContent = '';
-          }
-        } else if (accumulatedThinking.isNotEmpty) {
-          finalThought = accumulatedThinking.trim();
-        }
+        final parsedFinal = ThoughtParser.parseStream(
+          rawAccumulated: rawAccumulated,
+          accumulatedThinking: accumulatedThinking,
+        );
+
+        final cleanFinalContent = parsedFinal.content.isNotEmpty
+            ? parsedFinal.content
+            : (parsedFinal.rawThought?.isNotEmpty == true
+                ? 'I have analyzed your request based on your fitness goals.'
+                : 'I am here to help you achieve your athletic potential! What workout or meal plan can I detail for you today?');
 
         final finalMsg = ChatMessageModel(
           id: assistantMsgId,
           role: 'assistant',
-          content: finalContent.isNotEmpty
-              ? finalContent
-              : (finalThought?.isNotEmpty == true
-                  ? 'I have analyzed your request based on your fitness goals.'
-                  : 'I am here to help you achieve your athletic potential! What workout or meal plan can I detail for you today?'),
-          thought: finalThought,
+          content: cleanFinalContent,
+          thought: parsedFinal.rawThought,
+          thinkingStatus: null,
           timestamp: DateTime.now(),
         );
         await _safeSaveMessage(sessionId, finalMsg.toFirestoreMap());
