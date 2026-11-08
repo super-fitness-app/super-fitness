@@ -10,6 +10,7 @@ import 'package:super_fitness/features/ai_chat/domain/entities/chat_session_enti
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_event.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_state.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/delete_chat_confirmation_dialog.dart';
 
 class PreviousConversationsDrawer extends StatelessWidget {
   final bool isFromWelcomeScreen;
@@ -194,11 +195,17 @@ class _SessionTile extends StatelessWidget {
     required this.isFromWelcomeScreen,
   });
 
+  Future<bool?> _confirmDelete(BuildContext context) => showDialog<bool>(
+    context: context,
+    builder: (_) => const DeleteChatConfirmationDialog(),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(session.id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (_) => _confirmDelete(context),
       background: Container(
         alignment: AlignmentDirectional.centerEnd,
         padding: const EdgeInsetsDirectional.only(end: 16),
@@ -256,10 +263,11 @@ class _SessionTile extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               _DeleteSessionButton(
-                onDelete: () {
-                  context
-                      .read<AiChatCubit>()
-                      .doEvent(DeleteChatSessionEvent(session.id));
+                onDelete: () async {
+                  final confirmed = await _confirmDelete(context);
+                  if (confirmed == true && context.mounted) {
+                    context.read<AiChatCubit>().doEvent(DeleteChatSessionEvent(session.id));
+                  }
                 },
               ),
             ],
@@ -282,11 +290,7 @@ class _DeleteSessionButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: const Padding(
         padding: EdgeInsets.all(4),
-        child: Icon(
-          Icons.delete_outline_rounded,
-          size: 18,
-          color: Colors.white38,
-        ),
+        child: Icon(Icons.delete_outline_rounded, size: 18, color: Colors.white38),
       ),
     );
   }

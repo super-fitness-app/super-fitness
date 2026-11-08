@@ -387,4 +387,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartCoachPromptForm => '🔥 How to fix my squat form?';
+
+  @override
+  String get smartCoachDeleteChatTitle => 'Delete Conversation?';
+
+  @override
+  String get smartCoachDeleteChatConfirm =>
+      'Are you sure you want to delete this chat? This action cannot be undone.';
+
+  @override
+  String get smartCoachDelete => 'Delete';
 }

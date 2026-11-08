@@ -799,6 +799,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'🔥 How to fix my squat form?'**
   String get smartCoachPromptForm;
+
+  /// No description provided for @smartCoachDeleteChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Conversation?'**
+  String get smartCoachDeleteChatTitle;
+
+  /// No description provided for @smartCoachDeleteChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat? This action cannot be undone.'**
+  String get smartCoachDeleteChatConfirm;
+
+  /// No description provided for @smartCoachDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get smartCoachDelete;
 }
 
 class _AppLocalizationsDelegate

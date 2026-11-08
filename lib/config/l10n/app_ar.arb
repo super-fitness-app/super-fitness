@@ -130,5 +130,8 @@
   "smartCoachEmptySubtitle": "اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.",
   "smartCoachPromptWorkout": "🏋️ صمم لي جدول تمارين 3 أيام",
   "smartCoachPromptNutrition": "🥗 أفكار لوجبات عالية البروتين",
-  "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟"
+  "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟",
+  "smartCoachDeleteChatTitle": "حذف المحادثة؟",
+  "smartCoachDeleteChatConfirm": "هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "smartCoachDelete": "حذف"
 }

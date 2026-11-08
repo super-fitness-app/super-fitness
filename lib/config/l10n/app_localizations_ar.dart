@@ -385,4 +385,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get smartCoachPromptForm => '🔥 كيف أحسن أداء تمرين الاسكوات؟';
+
+  @override
+  String get smartCoachDeleteChatTitle => 'حذف المحادثة؟';
+
+  @override
+  String get smartCoachDeleteChatConfirm =>
+      'هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get smartCoachDelete => 'حذف';
 }
