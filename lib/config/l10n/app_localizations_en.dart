@@ -171,28 +171,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeBack => 'WELCOME BACK';
 
   @override
-  String get email => 'Email';
-
-  @override
-  String get password => 'Password';
-
-  @override
   String get forgotPassword => 'Forgot Password ?';
 
   @override
   String get dontHaveAccount => 'Don\'t Have An Account Yet ?';
 
   @override
-  String get register => 'Register';
+  String get createAnAccount => 'CREATE AN ACCOUNT';
 
   @override
-  String get createAnAccount => 'CREATE AN ACCOUNT';
+  String get register => 'Register';
 
   @override
   String get firstName => 'First Name';
 
   @override
   String get lastName => 'Last Name';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
 
   @override
   String get firstNameRequired => 'First name is required';
@@ -302,4 +302,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trueBeast => 'True Beast';
+
+  @override
+  String smartCoachGreeting(String userName) {
+    return 'Hi $userName ,';
+  }
+
+  @override
+  String get smartCoachSubtitle => 'I Am Your Smart Coach';
+
+  @override
+  String get smartCoachWelcomeAssist => 'How Can I Assist You\nToday ?';
+
+  @override
+  String get smartCoachGetStarted => 'Get Started';
+
+  @override
+  String get smartCoachInputHint => 'Ask me anything about fitness...';
+
+  @override
+  String get smartCoachThinking => 'Smart Coach is thinking...';
+
+  @override
+  String get smartCoachExerciseCardSets => 'Sets & Reps';
+
+  @override
+  String get smartCoachExerciseCardMuscle => 'Target Muscle';
+
+  @override
+  String get smartCoachNutritionCalories => 'Calories';
+
+  @override
+  String get smartCoachNutritionProtein => 'Protein';
+
+  @override
+  String get smartCoachNutritionCarbs => 'Carbs';
+
+  @override
+  String get smartCoachNutritionFat => 'Fat';
+
+  @override
+  String get smartCoachClearChat => 'Clear Chat';
+
+  @override
+  String get smartCoachClearChatConfirm =>
+      'Are you sure you want to clear this conversation?';
+
+  @override
+  String get smartCoachClear => 'Clear';
+
+  @override
+  String get smartCoachCancel => 'Cancel';
+
+  @override
+  String smartCoachTokenWarning(int tokens) {
+    return 'Conversation approaching memory limit ($tokens/3000 tokens). Start a new chat soon.';
+  }
+
+  @override
+  String get smartCoachTokenLocked =>
+      'This conversation reached the 3000-token limit. Please start a new chat to continue.';
+
+  @override
+  String get smartCoachStartNewChat => 'Start New Chat';
+
+  @override
+  String get smartCoachPreviousConversations => 'Previous Conversations';
+
+  @override
+  String get smartCoachNoPreviousChats => 'No previous chats';
 }

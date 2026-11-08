@@ -25,6 +25,12 @@ void main() {
       const c3 = CancelledFailure('Different');
       expect(c1, equals(c2));
       expect(c1, isNot(equals(c3)));
+
+      const a1 = AiChatFailure('AI failed');
+      const a2 = AiChatFailure('AI failed');
+      const a3 = AiChatFailure('Different AI error');
+      expect(a1, equals(a2));
+      expect(a1, isNot(equals(a3)));
     });
 
     testWidgets(
@@ -74,6 +80,26 @@ void main() {
       );
 
       expect(localizedMsg, 'Custom server error');
+    });
+
+    testWidgets('AiChatFailure returns message directly', (tester) async {
+      late String localizedMsg;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) {
+              const failure = AiChatFailure('Custom AI failure');
+              localizedMsg = failure.toLocalizedMessage(context);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      expect(localizedMsg, 'Custom AI failure');
     });
 
     testWidgets('NetworkFailure returns localized message for AppError', (

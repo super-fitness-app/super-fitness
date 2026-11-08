@@ -1,5 +1,12 @@
+import 'package:super_fitness/core/const/endpoints.dart';
+
 abstract final class AiConstants {
-  static const String defaultModel = 'llama3';
-  static const String baseUrl = 'http://localhost:11434';
-  static const Duration timeout = Duration(seconds: 60);
+  static const String defaultModel = Endpoints.ollamaDefaultModel;
+  static const String androidHost = Endpoints.ollamaAndroidHost;
+  static const String desktopHost = Endpoints.ollamaDesktopHost;
+  static const Duration requestTimeout = Duration(seconds: 45);
+  static const Duration firestoreTimeout = Duration(seconds: 3);
+  static const String chatSessionsCollection = 'smart_coach_chats';
+  static const String messagesCollection = 'messages';
+  static const String usersCollection = 'users';
 }

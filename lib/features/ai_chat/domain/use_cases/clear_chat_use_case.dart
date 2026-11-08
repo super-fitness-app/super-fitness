@@ -8,7 +8,9 @@ class ClearChatUseCase {
 
   const ClearChatUseCase(this._chatRepository);
 
-  Future<ApiResults<void>> call() {
-    return _chatRepository.clearChat();
+  Future<ApiResults<void>> call({
+    String sessionId = 'default_session',
+  }) {
+    return _chatRepository.clearChatHistory(sessionId: sessionId);
   }
 }

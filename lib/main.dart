@@ -1,17 +1,31 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_fitness/app_bloc_observer.dart';
-import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:super_fitness/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp();
+  } else {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      default:
+        await Firebase.initializeApp();
+    }
+  }
   Bloc.observer = AppBlocObserver();
   configureDependencies();
   runApp(SuperFitnessApp(localeCubit: getIt<LocaleCubit>()));

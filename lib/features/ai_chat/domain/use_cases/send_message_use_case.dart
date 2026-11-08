@@ -9,7 +9,13 @@ class SendMessageUseCase {
 
   const SendMessageUseCase(this._chatRepository);
 
-  Future<ApiResults<ChatMessageEntity>> call(String message) {
-    return _chatRepository.sendMessage(message);
+  Future<ApiResults<ChatMessageEntity>> call({
+    required String message,
+    String sessionId = 'default_session',
+  }) {
+    return _chatRepository.sendMessage(
+      message: message,
+      sessionId: sessionId,
+    );
   }
 }

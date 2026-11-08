@@ -59,14 +59,14 @@ class FloatingBottomNavBar extends StatelessWidget {
                     onTap: () => onTabSelected(0),
                   ),
                   NavBarItemWidget(
-                    iconPath: AppIcons.smartCoach,
-                    label: l10n.smartCoach,
+                    iconPath: AppIcons.workout,
+                    label: l10n.workouts,
                     isSelected: currentIndex == 1,
                     onTap: () => onTabSelected(1),
                   ),
                   NavBarItemWidget(
-                    iconPath: AppIcons.workout,
-                    label: l10n.workouts,
+                    iconPath: AppIcons.smartCoach,
+                    label: l10n.smartCoach,
                     isSelected: currentIndex == 2,
                     onTap: () => onTabSelected(2),
                   ),

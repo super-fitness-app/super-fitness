@@ -386,18 +386,6 @@ abstract class AppLocalizations {
   /// **'WELCOME BACK'**
   String get welcomeBack;
 
-  /// No description provided for @email.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get email;
-
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
@@ -410,17 +398,17 @@ abstract class AppLocalizations {
   /// **'Don\'t Have An Account Yet ?'**
   String get dontHaveAccount;
 
-  /// No description provided for @register.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get register;
-
   /// No description provided for @createAnAccount.
   ///
   /// In en, this message translates to:
   /// **'CREATE AN ACCOUNT'**
   String get createAnAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
 
   /// No description provided for @firstName.
   ///
@@ -433,6 +421,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last Name'**
   String get lastName;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
 
   /// No description provided for @firstNameRequired.
   ///
@@ -643,6 +643,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'True Beast'**
   String get trueBeast;
+
+  /// No description provided for @smartCoachGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {userName} ,'**
+  String smartCoachGreeting(String userName);
+
+  /// No description provided for @smartCoachSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I Am Your Smart Coach'**
+  String get smartCoachSubtitle;
+
+  /// No description provided for @smartCoachWelcomeAssist.
+  ///
+  /// In en, this message translates to:
+  /// **'How Can I Assist You\nToday ?'**
+  String get smartCoachWelcomeAssist;
+
+  /// No description provided for @smartCoachGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get smartCoachGetStarted;
+
+  /// No description provided for @smartCoachInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me anything about fitness...'**
+  String get smartCoachInputHint;
+
+  /// No description provided for @smartCoachThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Coach is thinking...'**
+  String get smartCoachThinking;
+
+  /// No description provided for @smartCoachExerciseCardSets.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets & Reps'**
+  String get smartCoachExerciseCardSets;
+
+  /// No description provided for @smartCoachExerciseCardMuscle.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Muscle'**
+  String get smartCoachExerciseCardMuscle;
+
+  /// No description provided for @smartCoachNutritionCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get smartCoachNutritionCalories;
+
+  /// No description provided for @smartCoachNutritionProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get smartCoachNutritionProtein;
+
+  /// No description provided for @smartCoachNutritionCarbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get smartCoachNutritionCarbs;
+
+  /// No description provided for @smartCoachNutritionFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get smartCoachNutritionFat;
+
+  /// No description provided for @smartCoachClearChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Chat'**
+  String get smartCoachClearChat;
+
+  /// No description provided for @smartCoachClearChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear this conversation?'**
+  String get smartCoachClearChatConfirm;
+
+  /// No description provided for @smartCoachClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get smartCoachClear;
+
+  /// No description provided for @smartCoachCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get smartCoachCancel;
+
+  /// No description provided for @smartCoachTokenWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation approaching memory limit ({tokens}/3000 tokens). Start a new chat soon.'**
+  String smartCoachTokenWarning(int tokens);
+
+  /// No description provided for @smartCoachTokenLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation reached the 3000-token limit. Please start a new chat to continue.'**
+  String get smartCoachTokenLocked;
+
+  /// No description provided for @smartCoachStartNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Chat'**
+  String get smartCoachStartNewChat;
+
+  /// No description provided for @smartCoachPreviousConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Conversations'**
+  String get smartCoachPreviousConversations;
+
+  /// No description provided for @smartCoachNoPreviousChats.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous chats'**
+  String get smartCoachNoPreviousChats;
 }
 
 class _AppLocalizationsDelegate

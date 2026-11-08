@@ -164,16 +164,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'الملف الشخصي';
 
   @override
-  String get heyThere => 'مرحباً بك';
+  String get heyThere => 'مرحباً';
 
   @override
   String get welcomeBack => 'مرحباً بعودتك';
-
-  @override
-  String get email => 'البريد الإلكتروني';
-
-  @override
-  String get password => 'كلمة المرور';
 
   @override
   String get forgotPassword => 'نسيت كلمة المرور؟';
@@ -182,16 +176,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontHaveAccount => 'ليس لديك حساب بعد؟';
 
   @override
-  String get register => 'تسجيل';
+  String get createAnAccount => 'إنشاء حساب';
 
   @override
-  String get createAnAccount => 'إنشاء حساب';
+  String get register => 'تسجيل';
 
   @override
   String get firstName => 'الاسم الأول';
 
   @override
   String get lastName => 'اسم العائلة';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
 
   @override
   String get firstNameRequired => 'الاسم الأول مطلوب';
@@ -300,4 +300,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trueBeast => 'محترف رياضي';
+
+  @override
+  String smartCoachGreeting(String userName) {
+    return 'مرحباً $userName ،';
+  }
+
+  @override
+  String get smartCoachSubtitle => 'أنا مدربك الذكي';
+
+  @override
+  String get smartCoachWelcomeAssist => 'كيف يمكنني مساعدتك\nاليوم ؟';
+
+  @override
+  String get smartCoachGetStarted => 'ابدأ الآن';
+
+  @override
+  String get smartCoachInputHint => 'اسألني أي شيء عن اللياقة والتغذية...';
+
+  @override
+  String get smartCoachThinking => 'المدرب الذكي يفكر...';
+
+  @override
+  String get smartCoachExerciseCardSets => 'المجموعات والتكرارات';
+
+  @override
+  String get smartCoachExerciseCardMuscle => 'العضلة المستهدفة';
+
+  @override
+  String get smartCoachNutritionCalories => 'السعرات الحرارية';
+
+  @override
+  String get smartCoachNutritionProtein => 'البروتين';
+
+  @override
+  String get smartCoachNutritionCarbs => 'الكربوهيدرات';
+
+  @override
+  String get smartCoachNutritionFat => 'الدهون';
+
+  @override
+  String get smartCoachClearChat => 'مسح المحادثة';
+
+  @override
+  String get smartCoachClearChatConfirm =>
+      'هل أنت متأكد من رغبتك في مسح المحادثة؟';
+
+  @override
+  String get smartCoachClear => 'مسح';
+
+  @override
+  String get smartCoachCancel => 'إلغاء';
+
+  @override
+  String smartCoachTokenWarning(int tokens) {
+    return 'المحادثة تقترب من حد الذاكرة ($tokens/3000 رمز). ابدأ محادثة جديدة قريباً.';
+  }
+
+  @override
+  String get smartCoachTokenLocked =>
+      'وصلت هذه المحادثة إلى حد 3000 رمز. يرجى بدء محادثة جديدة للمتابعة.';
+
+  @override
+  String get smartCoachStartNewChat => 'محادثة جديدة';
+
+  @override
+  String get smartCoachPreviousConversations => 'المحادثات السابقة';
+
+  @override
+  String get smartCoachNoPreviousChats => 'لا توجد محادثات سابقة';
 }

@@ -11,7 +11,7 @@ import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floa
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/nav_bar_item_widget.dart';
 import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
 import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
-import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_welcome_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
 
 Widget _buildTestApp({
@@ -63,35 +63,17 @@ void main() {
         expect(find.byType(ExploreView), findsOneWidget);
 
         expect(_findTabByIcon(AppIcons.explore), findsOneWidget);
-        expect(_findTabByIcon(AppIcons.smartCoach), findsOneWidget);
         expect(_findTabByIcon(AppIcons.workout), findsOneWidget);
+        expect(_findTabByIcon(AppIcons.smartCoach), findsOneWidget);
         expect(_findTabByIcon(AppIcons.profile), findsOneWidget);
 
         expect(find.text('Explore'), findsNWidgets(2));
-        expect(find.text('Smart Coach'), findsNothing);
         expect(find.text('Workouts'), findsNothing);
         expect(find.text('Profile'), findsNothing);
       },
     );
 
-    testWidgets('switches to Smart Coach tab when tapped', (tester) async {
-      tester.view.physicalSize = const Size(800, 1600);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(() => tester.view.resetPhysicalSize());
-
-      await tester.pumpWidget(_buildTestApp(cubit: cubit));
-      await tester.pumpAndSettle();
-
-      await tester.tap(_findTabByIcon(AppIcons.smartCoach));
-      await tester.pumpAndSettle();
-
-      expect(cubit.state.data, equals(1));
-      expect(find.byType(SmartCoachView), findsOneWidget);
-      expect(find.text('Smart Coach'), findsNWidgets(2));
-      expect(find.text('Workouts'), findsNothing);
-    });
-
-    testWidgets('switches to Workouts and Profile tabs', (tester) async {
+    testWidgets('switches to Workouts tab when tapped', (tester) async {
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -102,9 +84,25 @@ void main() {
       await tester.tap(_findTabByIcon(AppIcons.workout));
       await tester.pumpAndSettle();
 
-      expect(cubit.state.data, equals(2));
+      expect(cubit.state.data, equals(1));
       expect(find.byType(WorkoutsView), findsOneWidget);
       expect(find.text('Workouts'), findsNWidgets(2));
+      expect(find.text('Explore'), findsNothing);
+    });
+
+    testWidgets('switches to Smart Coach and Profile tabs', (tester) async {
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestApp(cubit: cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(_findTabByIcon(AppIcons.smartCoach));
+      await tester.pumpAndSettle();
+
+      expect(cubit.state.data, equals(2));
+      expect(find.byType(SmartCoachWelcomeView), findsOneWidget);
 
       await tester.tap(_findTabByIcon(AppIcons.profile));
       await tester.pumpAndSettle();
