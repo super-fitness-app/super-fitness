@@ -122,6 +122,7 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     emit(state.copyWith(
       currentSessionId: sessionId,
       currentSessionTokens: matching?.totalTokens ?? 0,
+      isHistoryLoading: true,
       messages: const [],
     ));
     await _onLoadHistory(sessionId);
@@ -178,6 +179,7 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     if (sessionId != null) _currentSessionId = sessionId;
     emit(state.copyWith(
       historyState: BaseState.loading(),
+      isHistoryLoading: true,
       currentSessionId: _currentSessionId,
     ));
 
@@ -187,11 +189,15 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
         final matching = state.sessions.where((s) => s.id == _currentSessionId).firstOrNull;
         emit(state.copyWith(
           historyState: BaseState.success(data),
+          isHistoryLoading: false,
           messages: data,
           currentSessionTokens: matching?.totalTokens ?? state.currentSessionTokens,
         ));
       case FailureResponse(:final failure):
-        emit(state.copyWith(historyState: BaseState.failure(failure)));
+        emit(state.copyWith(
+          historyState: BaseState.failure(failure),
+          isHistoryLoading: false,
+        ));
         emitEvent(DisplayError.fromFailure(failure));
     }
   }

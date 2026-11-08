@@ -12,6 +12,7 @@ class AiChatState extends Equatable {
   final List<ChatMessageEntity> messages;
   final List<ChatSessionEntity> sessions;
   final bool isTyping;
+  final bool isHistoryLoading;
   final String? activeToolName;
   final String userName;
   final String currentSessionId;
@@ -24,6 +25,7 @@ class AiChatState extends Equatable {
     this.messages = const [],
     this.sessions = const [],
     this.isTyping = false,
+    this.isHistoryLoading = false,
     this.activeToolName,
     this.userName = 'Athlete',
     this.currentSessionId = 'default_session',
@@ -47,6 +49,7 @@ class AiChatState extends Equatable {
     List<ChatMessageEntity>? messages,
     List<ChatSessionEntity>? sessions,
     bool? isTyping,
+    bool? isHistoryLoading,
     Object? activeToolName = _unset,
     String? userName,
     String? currentSessionId,
@@ -59,6 +62,7 @@ class AiChatState extends Equatable {
       messages: messages ?? this.messages,
       sessions: sessions ?? this.sessions,
       isTyping: isTyping ?? this.isTyping,
+      isHistoryLoading: isHistoryLoading ?? this.isHistoryLoading,
       activeToolName: identical(activeToolName, _unset)
           ? this.activeToolName
           : activeToolName as String?,
@@ -76,6 +80,7 @@ class AiChatState extends Equatable {
     messages,
     sessions,
     isTyping,
+    isHistoryLoading,
     activeToolName,
     userName,
     currentSessionId,

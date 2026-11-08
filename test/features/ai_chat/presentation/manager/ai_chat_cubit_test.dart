@@ -281,5 +281,17 @@ void main() {
       expect(cubit.state.messages, isEmpty);
       expect(cubit.state.isSessionLocked, isTrue);
     });
+
+    test('SelectChatSessionEvent sets isHistoryLoading to true then false after history loads', () async {
+      fakeRepo.historyToReturn = [testMsg];
+      cubit.doEvent(const SelectChatSessionEvent('session_test'));
+      expect(cubit.state.isHistoryLoading, isTrue);
+      expect(cubit.state.messages, isEmpty);
+
+      await pumpEventQueue();
+
+      expect(cubit.state.isHistoryLoading, isFalse);
+      expect(cubit.state.messages, equals([testMsg]));
+    });
   });
 }

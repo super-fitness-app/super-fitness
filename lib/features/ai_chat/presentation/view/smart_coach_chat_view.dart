@@ -3,19 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
-import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_event.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_state.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_background_stack.dart';
-import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_bubble_widget.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_input_field.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_message_list_section.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_top_bar.dart';
-import 'package:super_fitness/features/ai_chat/presentation/view/widgets/empty_chat_placeholder.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/previous_conversations_drawer.dart';
-import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/token_status_banner.dart';
 
 class SmartCoachChatView extends StatefulWidget {
@@ -50,6 +46,9 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
   @override
   void dispose() {
     _scrollController.dispose();
+    if (widget.cubit == null) {
+      _cubit.close();
+    }
     super.dispose();
   }
 
@@ -120,9 +119,10 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
                       },
                       listener: (_, _) => _scrollToBottom(),
                       builder: (context, state) {
-                        return _MessageListSection(
+                        return ChatMessageListSection(
                           messages: state.messages,
                           isTyping: state.isTyping,
+                          isHistoryLoading: state.isHistoryLoading,
                           scrollController: _scrollController,
                           onPromptTap: (prompt) =>
                               _cubit.doEvent(SendChatMessageEvent(prompt)),
@@ -150,47 +150,6 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
           ],
         ),
       ),
-    );
-  }
-}
-
-class _MessageListSection extends StatelessWidget {
-  final List<ChatMessageEntity> messages;
-  final bool isTyping;
-  final ScrollController scrollController;
-  final ValueChanged<String> onPromptTap;
-
-  const _MessageListSection({
-    required this.messages,
-    required this.isTyping,
-    required this.scrollController,
-    required this.onPromptTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (messages.isEmpty && !isTyping) {
-      return EmptyChatPlaceholder(onPromptTap: onPromptTap);
-    }
-
-    final l10n = AppLocalizations.of(context)!;
-
-    return ListView.builder(
-      controller: scrollController,
-      padding: const EdgeInsetsDirectional.symmetric(
-        horizontal: 20,
-        vertical: 12,
-      ),
-      itemCount: messages.length + (isTyping ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index < messages.length) {
-          return ChatBubbleWidget(message: messages[index]);
-        }
-        return Padding(
-          padding: const EdgeInsetsDirectional.only(start: 44, bottom: 12),
-          child: ThinkingStatusCapsule(status: l10n.smartCoachThinking),
-        );
-      },
     );
   }
 }
