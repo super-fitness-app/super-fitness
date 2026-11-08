@@ -369,4 +369,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get smartCoachNoPreviousChats => 'لا توجد محادثات سابقة';
+
+  @override
+  String get smartCoachEmptyTitle => 'كيف يمكنني مساعدتك اليوم؟';
+
+  @override
+  String get smartCoachEmptySubtitle =>
+      'اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.';
+
+  @override
+  String get smartCoachPromptWorkout => '🏋️ صمم لي جدول تمارين 3 أيام';
+
+  @override
+  String get smartCoachPromptNutrition => '🥗 أفكار لوجبات عالية البروتين';
+
+  @override
+  String get smartCoachPromptForm => '🔥 كيف أحسن أداء تمرين الاسكوات؟';
 }

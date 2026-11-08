@@ -125,5 +125,10 @@
   "smartCoachTokenLocked": "وصلت هذه المحادثة إلى حد 3000 رمز. يرجى بدء محادثة جديدة للمتابعة.",
   "smartCoachStartNewChat": "محادثة جديدة",
   "smartCoachPreviousConversations": "المحادثات السابقة",
-  "smartCoachNoPreviousChats": "لا توجد محادثات سابقة"
+  "smartCoachNoPreviousChats": "لا توجد محادثات سابقة",
+  "smartCoachEmptyTitle": "كيف يمكنني مساعدتك اليوم؟",
+  "smartCoachEmptySubtitle": "اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.",
+  "smartCoachPromptWorkout": "🏋️ صمم لي جدول تمارين 3 أيام",
+  "smartCoachPromptNutrition": "🥗 أفكار لوجبات عالية البروتين",
+  "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟"
 }

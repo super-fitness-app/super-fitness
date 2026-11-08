@@ -135,5 +135,10 @@
   "smartCoachTokenLocked": "This conversation reached the 3000-token limit. Please start a new chat to continue.",
   "smartCoachStartNewChat": "Start New Chat",
   "smartCoachPreviousConversations": "Previous Conversations",
-  "smartCoachNoPreviousChats": "No previous chats"
+  "smartCoachNoPreviousChats": "No previous chats",
+  "smartCoachEmptyTitle": "How can I help you today?",
+  "smartCoachEmptySubtitle": "Ask me about custom workout routines, diet macros, or form checks.",
+  "smartCoachPromptWorkout": "🏋️ Design a 3-day workout split",
+  "smartCoachPromptNutrition": "🥗 High protein meal ideas",
+  "smartCoachPromptForm": "🔥 How to fix my squat form?"
 }

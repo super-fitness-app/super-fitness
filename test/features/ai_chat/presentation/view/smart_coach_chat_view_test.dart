@@ -15,6 +15,7 @@ import 'package:super_fitness/features/ai_chat/domain/use_cases/get_chat_history
 import 'package:super_fitness/features/ai_chat/domain/use_cases/send_message_use_case.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/empty_chat_placeholder.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/fitness_card_widget.dart';
 
 class FakeChatRepository implements ChatRepository {
@@ -135,6 +136,16 @@ void main() {
   }
 
   group('SmartCoachChatView', () {
+    testWidgets('renders EmptyChatPlaceholder when messages are empty', (tester) async {
+      fakeRepo.historyToReturn = [];
+
+      await tester.pumpWidget(buildTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EmptyChatPlaceholder), findsOneWidget);
+      expect(find.text('How can I help you today?'), findsOneWidget);
+    });
+
     testWidgets('renders top bar with title and input field', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();

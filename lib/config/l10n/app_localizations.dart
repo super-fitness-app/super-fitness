@@ -769,6 +769,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No previous chats'**
   String get smartCoachNoPreviousChats;
+
+  /// No description provided for @smartCoachEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How can I help you today?'**
+  String get smartCoachEmptyTitle;
+
+  /// No description provided for @smartCoachEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me about custom workout routines, diet macros, or form checks.'**
+  String get smartCoachEmptySubtitle;
+
+  /// No description provided for @smartCoachPromptWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'🏋️ Design a 3-day workout split'**
+  String get smartCoachPromptWorkout;
+
+  /// No description provided for @smartCoachPromptNutrition.
+  ///
+  /// In en, this message translates to:
+  /// **'🥗 High protein meal ideas'**
+  String get smartCoachPromptNutrition;
+
+  /// No description provided for @smartCoachPromptForm.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 How to fix my squat form?'**
+  String get smartCoachPromptForm;
 }
 
 class _AppLocalizationsDelegate

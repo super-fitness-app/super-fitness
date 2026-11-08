@@ -13,6 +13,7 @@ import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_ba
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_bubble_widget.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_input_field.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_top_bar.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/empty_chat_placeholder.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/previous_conversations_drawer.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/token_status_banner.dart';
@@ -123,6 +124,8 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
                           messages: state.messages,
                           isTyping: state.isTyping,
                           scrollController: _scrollController,
+                          onPromptTap: (prompt) =>
+                              _cubit.doEvent(SendChatMessageEvent(prompt)),
                         );
                       },
                     ),
@@ -155,15 +158,21 @@ class _MessageListSection extends StatelessWidget {
   final List<ChatMessageEntity> messages;
   final bool isTyping;
   final ScrollController scrollController;
+  final ValueChanged<String> onPromptTap;
 
   const _MessageListSection({
     required this.messages,
     required this.isTyping,
     required this.scrollController,
+    required this.onPromptTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (messages.isEmpty && !isTyping) {
+      return EmptyChatPlaceholder(onPromptTap: onPromptTap);
+    }
+
     final l10n = AppLocalizations.of(context)!;
 
     return ListView.builder(

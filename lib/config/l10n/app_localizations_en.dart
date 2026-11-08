@@ -371,4 +371,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartCoachNoPreviousChats => 'No previous chats';
+
+  @override
+  String get smartCoachEmptyTitle => 'How can I help you today?';
+
+  @override
+  String get smartCoachEmptySubtitle =>
+      'Ask me about custom workout routines, diet macros, or form checks.';
+
+  @override
+  String get smartCoachPromptWorkout => '🏋️ Design a 3-day workout split';
+
+  @override
+  String get smartCoachPromptNutrition => '🥗 High protein meal ideas';
+
+  @override
+  String get smartCoachPromptForm => '🔥 How to fix my squat form?';
 }
