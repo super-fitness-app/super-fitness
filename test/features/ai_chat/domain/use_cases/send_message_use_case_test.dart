@@ -13,21 +13,22 @@ class MockChatRepository extends Mock implements ChatRepository {
     String sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#sendMessage, [], {
-          #message: message,
-          #sessionId: sessionId,
-        }),
-        returnValue: Future.value(
-          Success(
-            ChatMessageEntity(
-              id: '1',
-              role: 'assistant',
-              content: 'Mock response',
-              timestamp: DateTime(2026),
+            Invocation.method(#sendMessage, [], {
+              #message: message,
+              #sessionId: sessionId,
+            }),
+            returnValue: Future.value(
+              Success(
+                ChatMessageEntity(
+                  id: '1',
+                  role: 'assistant',
+                  content: 'Mock response',
+                  timestamp: DateTime(2026),
+                ),
+              ),
             ),
-          ),
-        ),
-      ) as Future<ApiResults<ChatMessageEntity>>;
+          )
+          as Future<ApiResults<ChatMessageEntity>>;
 }
 
 void main() {

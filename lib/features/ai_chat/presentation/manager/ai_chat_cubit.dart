@@ -94,23 +94,31 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     final result = await useCase();
     switch (result) {
       case Success(:final data):
-        final matching = data.where((s) => s.id == _currentSessionId).firstOrNull;
+        final matching = data
+            .where((s) => s.id == _currentSessionId)
+            .firstOrNull;
         final resolvedSessions = data.map((remote) {
-          final local = state.sessions.where((s) => s.id == remote.id).firstOrNull;
+          final local = state.sessions
+              .where((s) => s.id == remote.id)
+              .firstOrNull;
           if (local != null &&
               local.title != 'New Chat' &&
               !local.title.startsWith('Chat ') &&
-              (remote.title == 'New Chat' || remote.title.startsWith('Chat '))) {
+              (remote.title == 'New Chat' ||
+                  remote.title.startsWith('Chat '))) {
             return remote.copyWith(title: local.title);
           }
           return remote;
         }).toList();
 
-        emit(state.copyWith(
-          sessionsState: BaseState.success(data),
-          sessions: resolvedSessions,
-          currentSessionTokens: matching?.totalTokens ?? state.currentSessionTokens,
-        ));
+        emit(
+          state.copyWith(
+            sessionsState: BaseState.success(data),
+            sessions: resolvedSessions,
+            currentSessionTokens:
+                matching?.totalTokens ?? state.currentSessionTokens,
+          ),
+        );
       case FailureResponse(:final failure):
         emit(state.copyWith(sessionsState: BaseState.failure(failure)));
     }
@@ -119,12 +127,14 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
   Future<void> _onSelectSession(String sessionId) async {
     _currentSessionId = sessionId;
     final matching = state.sessions.where((s) => s.id == sessionId).firstOrNull;
-    emit(state.copyWith(
-      currentSessionId: sessionId,
-      currentSessionTokens: matching?.totalTokens ?? 0,
-      isHistoryLoading: true,
-      messages: const [],
-    ));
+    emit(
+      state.copyWith(
+        currentSessionId: sessionId,
+        currentSessionTokens: matching?.totalTokens ?? 0,
+        isHistoryLoading: true,
+        messages: const [],
+      ),
+    );
     await _onLoadHistory(sessionId);
   }
 
@@ -133,11 +143,13 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     if (useCase == null) {
       final newId = 'session_${DateTime.now().millisecondsSinceEpoch}';
       _currentSessionId = newId;
-      emit(state.copyWith(
-        currentSessionId: newId,
-        currentSessionTokens: 0,
-        messages: const [],
-      ));
+      emit(
+        state.copyWith(
+          currentSessionId: newId,
+          currentSessionTokens: 0,
+          messages: const [],
+        ),
+      );
       return;
     }
 
@@ -145,13 +157,16 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     switch (result) {
       case Success(:final data):
         _currentSessionId = data.id;
-        final list = List<ChatSessionEntity>.from(state.sessions)..insert(0, data);
-        emit(state.copyWith(
-          currentSessionId: data.id,
-          currentSessionTokens: 0,
-          messages: const [],
-          sessions: list,
-        ));
+        final list = List<ChatSessionEntity>.from(state.sessions)
+          ..insert(0, data);
+        emit(
+          state.copyWith(
+            currentSessionId: data.id,
+            currentSessionTokens: 0,
+            messages: const [],
+            sessions: list,
+          ),
+        );
       case FailureResponse(:final failure):
         emitEvent(DisplayError.fromFailure(failure));
     }
@@ -177,27 +192,36 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
 
   Future<void> _onLoadHistory(String? sessionId) async {
     if (sessionId != null) _currentSessionId = sessionId;
-    emit(state.copyWith(
-      historyState: BaseState.loading(),
-      isHistoryLoading: true,
-      currentSessionId: _currentSessionId,
-    ));
+    emit(
+      state.copyWith(
+        historyState: BaseState.loading(),
+        isHistoryLoading: true,
+        currentSessionId: _currentSessionId,
+      ),
+    );
 
     final result = await _getChatHistoryUseCase(sessionId: _currentSessionId);
     switch (result) {
       case Success(:final data):
-        final matching = state.sessions.where((s) => s.id == _currentSessionId).firstOrNull;
-        emit(state.copyWith(
-          historyState: BaseState.success(data),
-          isHistoryLoading: false,
-          messages: data,
-          currentSessionTokens: matching?.totalTokens ?? state.currentSessionTokens,
-        ));
+        final matching = state.sessions
+            .where((s) => s.id == _currentSessionId)
+            .firstOrNull;
+        emit(
+          state.copyWith(
+            historyState: BaseState.success(data),
+            isHistoryLoading: false,
+            messages: data,
+            currentSessionTokens:
+                matching?.totalTokens ?? state.currentSessionTokens,
+          ),
+        );
       case FailureResponse(:final failure):
-        emit(state.copyWith(
-          historyState: BaseState.failure(failure),
-          isHistoryLoading: false,
-        ));
+        emit(
+          state.copyWith(
+            historyState: BaseState.failure(failure),
+            isHistoryLoading: false,
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
@@ -206,7 +230,9 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     final collapsed = raw.replaceAll(RegExp(r'\s+'), ' ').trim();
     if (collapsed.isEmpty) return 'New Chat';
     final capitalized = collapsed[0].toUpperCase() + collapsed.substring(1);
-    return capitalized.length > 28 ? '${capitalized.substring(0, 28)}...' : capitalized;
+    return capitalized.length > 28
+        ? '${capitalized.substring(0, 28)}...'
+        : capitalized;
   }
 
   Future<void> _onSendMessage(String message, String? sessionId) async {
@@ -214,9 +240,11 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     if (sessionId != null) _currentSessionId = sessionId;
 
     if (state.isSessionLocked) {
-      emitEvent(const DisplayError(
-        'This conversation reached the 3000-token limit. Please start a new chat.',
-      ));
+      emitEvent(
+        const DisplayError(
+          'This conversation reached the 3000-token limit. Please start a new chat.',
+        ),
+      );
       return;
     }
 
@@ -227,9 +255,12 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
       timestamp: DateTime.now(),
     );
 
-    final matching = state.sessions.where((s) => s.id == _currentSessionId).firstOrNull;
+    final matching = state.sessions
+        .where((s) => s.id == _currentSessionId)
+        .firstOrNull;
     var currentSessions = state.sessions;
-    if (matching != null && (matching.title == 'New Chat' || matching.title.startsWith('Chat '))) {
+    if (matching != null &&
+        (matching.title == 'New Chat' || matching.title.startsWith('Chat '))) {
       final dynamicTitle = _formatDynamicTitle(message);
       currentSessions = state.sessions.map((s) {
         if (s.id == _currentSessionId) return s.copyWith(title: dynamicTitle);
@@ -238,12 +269,14 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     }
 
     final updated = List<ChatMessageEntity>.from(state.messages)..add(userMsg);
-    emit(state.copyWith(
-      messages: updated,
-      sessions: currentSessions,
-      isTyping: true,
-      sendMessageState: BaseState.loading(),
-    ));
+    emit(
+      state.copyWith(
+        messages: updated,
+        sessions: currentSessions,
+        isTyping: true,
+        sendMessageState: BaseState.loading(),
+      ),
+    );
 
     if (_streamMessageUseCase != null) {
       final streamed = await _tryStreamFlow(message.trim());
@@ -302,14 +335,17 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     if (list.isNotEmpty) {
       list[list.length - 1] = finalMessage.copyWith(isStreaming: false);
     }
-    final added = ((userPrompt.length + finalMessage.content.length) / 4).ceil();
+    final added = ((userPrompt.length + finalMessage.content.length) / 4)
+        .ceil();
     final updatedTokens = state.currentSessionTokens + added;
-    emit(state.copyWith(
-      messages: list,
-      isTyping: false,
-      sendMessageState: BaseState.success(finalMessage),
-      currentSessionTokens: updatedTokens,
-    ));
+    emit(
+      state.copyWith(
+        messages: list,
+        isTyping: false,
+        sendMessageState: BaseState.success(finalMessage),
+        currentSessionTokens: updatedTokens,
+      ),
+    );
     _onLoadSessions();
   }
 
@@ -323,18 +359,22 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
           ..add(data);
         final added = ((userPrompt.length + data.content.length) / 4).ceil();
         final updatedTokens = state.currentSessionTokens + added;
-        emit(state.copyWith(
-          messages: withAssistant,
-          isTyping: false,
-          sendMessageState: BaseState.success(data),
-          currentSessionTokens: updatedTokens,
-        ));
+        emit(
+          state.copyWith(
+            messages: withAssistant,
+            isTyping: false,
+            sendMessageState: BaseState.success(data),
+            currentSessionTokens: updatedTokens,
+          ),
+        );
         _onLoadSessions();
       case FailureResponse(:final failure):
-        emit(state.copyWith(
-          isTyping: false,
-          sendMessageState: BaseState.failure(failure),
-        ));
+        emit(
+          state.copyWith(
+            isTyping: false,
+            sendMessageState: BaseState.failure(failure),
+          ),
+        );
         emitEvent(DisplayError.fromFailure(failure));
     }
   }

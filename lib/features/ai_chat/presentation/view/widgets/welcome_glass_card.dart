@@ -21,10 +21,7 @@ class WelcomeGlassCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.frostedGlassSurface,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color: AppColors.frostedGlassBorder,
-          width: 1.2,
-        ),
+        border: Border.all(color: AppColors.frostedGlassBorder, width: 1.2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -52,10 +49,7 @@ class _GetStartedButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  const _GetStartedButton({
-    required this.label,
-    required this.onPressed,
-  });
+  const _GetStartedButton({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +65,7 @@ class _GetStartedButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: AppTextStyles.bold16.copyWith(
-            color: AppColors.white,
-          ),
+          style: AppTextStyles.bold16.copyWith(color: AppColors.white),
         ),
       ),
     );

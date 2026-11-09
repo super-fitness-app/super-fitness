@@ -79,10 +79,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
               ),
             ),
             const SizedBox(width: 8),
-            _SendButton(
-              isEnabled: widget.isEnabled,
-              onTap: _handleSubmitted,
-            ),
+            _SendButton(isEnabled: widget.isEnabled, onTap: _handleSubmitted),
           ],
         ),
       ),
@@ -94,10 +91,7 @@ class _SendButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool isEnabled;
 
-  const _SendButton({
-    required this.onTap,
-    this.isEnabled = true,
-  });
+  const _SendButton({required this.onTap, this.isEnabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +106,7 @@ class _SendButton extends StatelessWidget {
         child: const SizedBox(
           width: 44,
           height: 44,
-          child: Icon(
-            Icons.send_rounded,
-            color: AppColors.white,
-            size: 20,
-          ),
+          child: Icon(Icons.send_rounded, color: AppColors.white, size: 20),
         ),
       ),
     );

@@ -7,16 +7,16 @@ import 'package:super_fitness/core/const/app_text_styles.dart';
 class EmptyChatPlaceholder extends StatelessWidget {
   final ValueChanged<String> onPromptTap;
 
-  const EmptyChatPlaceholder({
-    super.key,
-    required this.onPromptTap,
-  });
+  const EmptyChatPlaceholder({super.key, required this.onPromptTap});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -122,10 +122,7 @@ class _PromptSuggestionsList extends StatelessWidget {
       children: suggestions.map((prompt) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(bottom: 10),
-          child: _PromptChip(
-            prompt: prompt,
-            onTap: () => onPromptTap(prompt),
-          ),
+          child: _PromptChip(prompt: prompt, onTap: () => onPromptTap(prompt)),
         );
       }).toList(),
     );
@@ -136,10 +133,7 @@ class _PromptChip extends StatelessWidget {
   final String prompt;
   final VoidCallback onTap;
 
-  const _PromptChip({
-    required this.prompt,
-    required this.onTap,
-  });
+  const _PromptChip({required this.prompt, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -155,10 +149,7 @@ class _PromptChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.white12,
-            width: 0.8,
-          ),
+          border: Border.all(color: Colors.white12, width: 0.8),
         ),
         child: Text(
           prompt,

@@ -17,9 +17,7 @@ abstract final class SystemPromptBuilder {
       if (rawData.isNotEmpty) {
         final decoded = jsonDecode(rawData);
         if (decoded is Map<String, dynamic>) {
-          athleteName = decoded['firstName'] ??
-              decoded['name'] ??
-              athleteName;
+          athleteName = decoded['firstName'] ?? decoded['name'] ?? athleteName;
           gender = decoded['gender'] ?? gender;
           goal = decoded['goal'] ?? goal;
           activity = decoded['activityLevel'] ?? activity;

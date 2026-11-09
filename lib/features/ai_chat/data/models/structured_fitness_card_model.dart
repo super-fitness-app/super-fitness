@@ -28,7 +28,8 @@ class StructuredFitnessCardModel extends Equatable {
       });
     }
 
-    final rawBullets = json[ApiParams.cardItems] ??
+    final rawBullets =
+        json[ApiParams.cardItems] ??
         json['bullet_points'] ??
         json['instructions'];
     final List<String> parsedBullets = [];
@@ -58,7 +59,8 @@ class StructuredFitnessCardModel extends Equatable {
   };
 
   FitnessCardEntity toEntity() => FitnessCardEntity(
-    cardType: cardType.toLowerCase().contains('meal') ||
+    cardType:
+        cardType.toLowerCase().contains('meal') ||
             cardType.toLowerCase().contains('nutrition')
         ? FitnessCardType.meal
         : FitnessCardType.exercise,

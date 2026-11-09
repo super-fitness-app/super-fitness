@@ -27,11 +27,7 @@ class FitnessCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _CardHeader(
-            title: card.title,
-            badge: card.badge,
-            isMeal: isMeal,
-          ),
+          _CardHeader(title: card.title, badge: card.badge, isMeal: isMeal),
           if (card.subtitle != null && card.subtitle!.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(
@@ -153,14 +149,16 @@ class _BulletPointsList extends StatelessWidget {
             children: [
               Text(
                 '• ',
-                style:
-                    AppTextStyles.regular12.copyWith(color: AppColors.primary),
+                style: AppTextStyles.regular12.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
               Expanded(
                 child: Text(
                   cue,
-                  style:
-                      AppTextStyles.regular12.copyWith(color: AppColors.grey20),
+                  style: AppTextStyles.regular12.copyWith(
+                    color: AppColors.grey20,
+                  ),
                 ),
               ),
             ],

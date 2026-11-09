@@ -26,9 +26,7 @@ class WelcomeTopBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _LeadingOrangeCircle(onTap: onBack ?? () => _handleBack(context)),
-          Expanded(
-            child: _CenterTitles(userName: userName),
-          ),
+          Expanded(child: _CenterTitles(userName: userName)),
           _TrailingMenuButton(onTap: onMenuTap),
         ],
       ),
@@ -87,17 +85,13 @@ class _CenterTitles extends StatelessWidget {
       children: [
         Text(
           l10n.smartCoachGreeting(userName),
-          style: AppTextStyles.bold16.copyWith(
-            color: AppColors.white,
-          ),
+          style: AppTextStyles.bold16.copyWith(color: AppColors.white),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 2),
         Text(
           l10n.smartCoachSubtitle,
-          style: AppTextStyles.medium18.copyWith(
-            color: AppColors.white,
-          ),
+          style: AppTextStyles.medium18.copyWith(color: AppColors.white),
           textAlign: TextAlign.center,
         ),
       ],

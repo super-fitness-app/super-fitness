@@ -17,16 +17,13 @@ class ChatBackgroundStack extends StatelessWidget {
           errorBuilder: (_, _, _) => Image.asset(
             AppImages.background,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => const ColoredBox(
-              color: AppColors.background,
-            ),
+            errorBuilder: (_, _, _) =>
+                const ColoredBox(color: AppColors.background),
           ),
         ),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-          child: ColoredBox(
-            color: Colors.black.withValues(alpha: 0.35),
-          ),
+          child: ColoredBox(color: Colors.black.withValues(alpha: 0.35)),
         ),
       ],
     );

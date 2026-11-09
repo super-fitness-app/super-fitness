@@ -134,17 +134,12 @@ class ChatMessageModel extends Equatable {
       ApiParams.content: content,
       ApiParams.timestamp: FieldValue.serverTimestamp(),
       if (fitnessCard != null)
-        ApiParams.metadata: {
-          ApiParams.fitnessCard: fitnessCard!.toJson(),
-        },
+        ApiParams.metadata: {ApiParams.fitnessCard: fitnessCard!.toJson()},
     };
   }
 
   Map<String, dynamic> toOllamaJson() {
-    return {
-      ApiParams.role: role,
-      ApiParams.content: content,
-    };
+    return {ApiParams.role: role, ApiParams.content: content};
   }
 
   ChatMessageEntity toEntity({bool isStreaming = false}) => ChatMessageEntity(

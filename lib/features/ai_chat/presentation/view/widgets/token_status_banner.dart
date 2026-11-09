@@ -40,7 +40,10 @@ class _LockedBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 6),
+      margin: const EdgeInsetsDirectional.symmetric(
+        horizontal: 20,
+        vertical: 6,
+      ),
       padding: const EdgeInsetsDirectional.all(12),
       decoration: BoxDecoration(
         color: const Color(0xFF2A1515),
@@ -56,11 +59,7 @@ class _LockedBanner extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
-                Icons.lock_rounded,
-                color: AppColors.error,
-                size: 20,
-              ),
+              const Icon(Icons.lock_rounded, color: AppColors.error, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -126,8 +125,14 @@ class _WarningBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 6),
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 10),
+      margin: const EdgeInsetsDirectional.symmetric(
+        horizontal: 20,
+        vertical: 6,
+      ),
+      padding: const EdgeInsetsDirectional.symmetric(
+        horizontal: 12,
+        vertical: 10,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xFF2A2210),
         borderRadius: BorderRadius.circular(12),

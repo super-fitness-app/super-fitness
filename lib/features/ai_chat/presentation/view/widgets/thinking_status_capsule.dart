@@ -14,14 +14,14 @@ class ThinkingStatusCapsule extends StatelessWidget {
         : 'Smart Coach is analyzing your fitness profile...';
 
     return Container(
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsetsDirectional.symmetric(
+        horizontal: 14,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white12,
-          width: 0.8,
-        ),
+        border: Border.all(color: Colors.white12, width: 0.8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

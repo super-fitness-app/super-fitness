@@ -12,13 +12,9 @@ abstract interface class AiRemoteDataSource {
     required String sessionId,
   });
 
-  Future<List<ChatMessageModel>> getChatHistory({
-    required String sessionId,
-  });
+  Future<List<ChatMessageModel>> getChatHistory({required String sessionId});
 
-  Future<void> clearChatHistory({
-    required String sessionId,
-  });
+  Future<void> clearChatHistory({required String sessionId});
 
   Future<List<ChatSessionModel>> getChatSessions();
 

@@ -4,7 +4,9 @@ import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinkin
 
 void main() {
   group('ThinkingStatusCapsule Widget Tests', () {
-    testWidgets('renders mini spinner and provided active status text', (tester) async {
+    testWidgets('renders mini spinner and provided active status text', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -17,12 +19,12 @@ void main() {
       expect(find.text('Analyzing workout split...'), findsOneWidget);
     });
 
-    testWidgets('renders default fallback text when status is null or empty', (tester) async {
+    testWidgets('renders default fallback text when status is null or empty', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ThinkingStatusCapsule(status: null),
-          ),
+          home: Scaffold(body: ThinkingStatusCapsule(status: null)),
         ),
       );
 

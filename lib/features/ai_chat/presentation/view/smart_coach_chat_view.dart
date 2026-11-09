@@ -81,7 +81,8 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
                 children: [
                   Builder(
                     builder: (scaffoldContext) => ChatTopBar(
-                      onMenuTap: () => Scaffold.of(scaffoldContext).openEndDrawer(),
+                      onMenuTap: () =>
+                          Scaffold.of(scaffoldContext).openEndDrawer(),
                       onClearChat: () =>
                           _cubit.doEvent(const ClearChatHistoryEvent()),
                     ),
@@ -89,9 +90,11 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
                   BlocBuilder<AiChatCubit, AiChatState>(
                     bloc: _cubit,
                     buildWhen: (prev, curr) =>
-                        prev.currentSessionTokens != curr.currentSessionTokens ||
+                        prev.currentSessionTokens !=
+                            curr.currentSessionTokens ||
                         prev.isSessionLocked != curr.isSessionLocked ||
-                        prev.isApproachingTokenLimit != curr.isApproachingTokenLimit,
+                        prev.isApproachingTokenLimit !=
+                            curr.isApproachingTokenLimit,
                     builder: (context, state) => TokenStatusBanner(
                       totalTokens: state.currentSessionTokens,
                       isApproachingLimit: state.isApproachingTokenLimit,
@@ -111,7 +114,8 @@ class _SmartCoachChatViewState extends State<SmartCoachChatView>
                             curr.messages.isNotEmpty) {
                           final p = prev.messages.last;
                           final c = curr.messages.last;
-                          if (p.content != c.content || p.thought != c.thought) {
+                          if (p.content != c.content ||
+                              p.thought != c.thought) {
                             return true;
                           }
                         }

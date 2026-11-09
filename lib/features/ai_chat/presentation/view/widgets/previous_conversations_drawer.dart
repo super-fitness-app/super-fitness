@@ -23,7 +23,9 @@ class PreviousConversationsDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width * 0.72;
-    const radius = BorderRadiusDirectional.horizontal(start: Radius.circular(24));
+    const radius = BorderRadiusDirectional.horizontal(
+      start: Radius.circular(24),
+    );
 
     return Drawer(
       width: width,
@@ -46,7 +48,10 @@ class PreviousConversationsDrawer extends StatelessWidget {
             ),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,7 +62,9 @@ class PreviousConversationsDrawer extends StatelessWidget {
                     const Divider(color: Colors.white12, height: 1),
                     const SizedBox(height: 12),
                     Expanded(
-                      child: _SessionsList(isFromWelcomeScreen: isFromWelcomeScreen),
+                      child: _SessionsList(
+                        isFromWelcomeScreen: isFromWelcomeScreen,
+                      ),
                     ),
                   ],
                 ),
@@ -85,7 +92,11 @@ class _DrawerHeader extends StatelessWidget {
           style: AppTextStyles.bold16.copyWith(color: AppColors.white),
         ),
         IconButton(
-          icon: const Icon(Icons.close_rounded, color: AppColors.grey30, size: 20),
+          icon: const Icon(
+            Icons.close_rounded,
+            color: AppColors.grey30,
+            size: 20,
+          ),
           onPressed: () => Navigator.of(context).pop(),
           visualDensity: VisualDensity.compact,
         ),
@@ -114,7 +125,10 @@ class _NewChatButton extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
         decoration: BoxDecoration(
           color: AppColors.primary.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(20),
@@ -213,7 +227,11 @@ class _SessionTile extends StatelessWidget {
           color: AppColors.error.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Icon(Icons.delete_outline, color: AppColors.white, size: 20),
+        child: const Icon(
+          Icons.delete_outline,
+          color: AppColors.white,
+          size: 20,
+        ),
       ),
       onDismissed: (_) {
         context.read<AiChatCubit>().doEvent(DeleteChatSessionEvent(session.id));
@@ -229,7 +247,10 @@ class _SessionTile extends StatelessWidget {
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 12,
+            vertical: 10,
+          ),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primary.withValues(alpha: 0.12)
@@ -266,7 +287,9 @@ class _SessionTile extends StatelessWidget {
                 onDelete: () async {
                   final confirmed = await _confirmDelete(context);
                   if (confirmed == true && context.mounted) {
-                    context.read<AiChatCubit>().doEvent(DeleteChatSessionEvent(session.id));
+                    context.read<AiChatCubit>().doEvent(
+                      DeleteChatSessionEvent(session.id),
+                    );
                   }
                 },
               ),
@@ -290,7 +313,11 @@ class _DeleteSessionButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: const Padding(
         padding: EdgeInsets.all(4),
-        child: Icon(Icons.delete_outline_rounded, size: 18, color: Colors.white38),
+        child: Icon(
+          Icons.delete_outline_rounded,
+          size: 18,
+          color: Colors.white38,
+        ),
       ),
     );
   }

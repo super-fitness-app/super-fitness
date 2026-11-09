@@ -18,17 +18,15 @@ class ChatBubbleWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16),
       child: Row(
-        mainAxisAlignment:
-            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUser) const _AssistantAvatar(),
           const SizedBox(width: 8),
           Flexible(
-            child: _BubbleContainer(
-              isUser: isUser,
-              message: message,
-            ),
+            child: _BubbleContainer(isUser: isUser, message: message),
           ),
           const SizedBox(width: 8),
           if (isUser) const _UserAvatar(),
@@ -78,11 +76,7 @@ class _UserAvatar extends StatelessWidget {
         color: AppColors.surfaceVariant,
         border: Border.all(color: AppColors.primaryLight, width: 1.2),
       ),
-      child: const Icon(
-        Icons.person,
-        color: AppColors.white,
-        size: 20,
-      ),
+      child: const Icon(Icons.person, color: AppColors.white, size: 20),
     );
   }
 }
@@ -91,10 +85,7 @@ class _BubbleContainer extends StatelessWidget {
   final bool isUser;
   final ChatMessageEntity message;
 
-  const _BubbleContainer({
-    required this.isUser,
-    required this.message,
-  });
+  const _BubbleContainer({required this.isUser, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -104,17 +95,16 @@ class _BubbleContainer extends StatelessWidget {
         vertical: 12,
       ),
       decoration: BoxDecoration(
-        color: isUser ? AppColors.chatUserBubble : AppColors.chatAssistantBubble,
+        color: isUser
+            ? AppColors.chatUserBubble
+            : AppColors.chatAssistantBubble,
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(20),
           topRight: const Radius.circular(20),
           bottomLeft: Radius.circular(isUser ? 20 : 4),
           bottomRight: Radius.circular(isUser ? 4 : 20),
         ),
-        border: Border.all(
-          color: AppColors.chatBubbleStroke,
-          width: 0.8,
-        ),
+        border: Border.all(color: AppColors.chatBubbleStroke, width: 0.8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,9 +153,6 @@ class _BubbleMessageContent extends StatelessWidget {
       );
     }
 
-    return Text(
-      message.content,
-      style: baseStyle,
-    );
+    return Text(message.content, style: baseStyle);
   }
 }

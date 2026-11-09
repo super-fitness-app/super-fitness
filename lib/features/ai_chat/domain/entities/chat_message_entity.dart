@@ -27,7 +27,9 @@ class ChatMessageEntity extends Equatable {
   bool get isUser => role == 'user';
   bool get isAssistant => role == 'assistant';
   bool get isThinking =>
-      isStreaming && content.isEmpty && (thought != null || thinkingStatus != null);
+      isStreaming &&
+      content.isEmpty &&
+      (thought != null || thinkingStatus != null);
 
   ChatMessageEntity copyWith({
     String? id,

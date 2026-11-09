@@ -1,19 +1,16 @@
-abstract final class DatabaseSchema {
-  static const String chatMessagesTable = 'chat_messages';
+abstract final class ExerciseTables {
+  static const exercise = 'exercise';
+  static const exerciseCard = 'exercise_card';
+  static const muscle = 'muscle';
+  static const muscleGroup = 'muscle_group';
+  static const equipment = 'equipment';
+  static const difficultyLevel = 'difficulty_level';
+}
 
-  static const String columnId = 'id';
-  static const String columnContent = 'content';
-  static const String columnRole = 'role';
-  static const String columnTimestamp = 'timestamp';
-  static const String columnToolCalls = 'tool_calls';
-
-  static const String createChatMessagesTableQuery = '''
-    CREATE TABLE IF NOT EXISTS $chatMessagesTable (
-      $columnId TEXT PRIMARY KEY,
-      $columnContent TEXT NOT NULL,
-      $columnRole TEXT NOT NULL,
-      $columnTimestamp TEXT NOT NULL,
-      $columnToolCalls TEXT
-    )
-  ''';
+abstract final class MealTables {
+  static const mealCard = 'meal_card';
+  static const mealIngredient = 'meal_ingredient';
+  static const mealStep = 'meal_step';
+  static const mealTag = 'meal_tag';
+  static const mealCategory = 'meal_category';
 }

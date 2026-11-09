@@ -13,9 +13,6 @@ class SendMessageUseCase {
     required String message,
     String sessionId = 'default_session',
   }) {
-    return _chatRepository.sendMessage(
-      message: message,
-      sessionId: sessionId,
-    );
+    return _chatRepository.sendMessage(message: message, sessionId: sessionId);
   }
 }

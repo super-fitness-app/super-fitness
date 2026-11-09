@@ -14,9 +14,7 @@ void main() {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: EmptyChatPlaceholder(onPromptTap: onPromptTap),
-      ),
+      home: Scaffold(body: EmptyChatPlaceholder(onPromptTap: onPromptTap)),
     );
   }
 
@@ -37,7 +35,9 @@ void main() {
       expect(find.text('🔥 How to fix my squat form?'), findsOneWidget);
     });
 
-    testWidgets('tapping prompt chip invokes onPromptTap callback', (tester) async {
+    testWidgets('tapping prompt chip invokes onPromptTap callback', (
+      tester,
+    ) async {
       String? selectedPrompt;
 
       await tester.pumpWidget(

@@ -1,172 +1,213 @@
 import 'package:injectable/injectable.dart';
-import 'package:super_fitness/core/const/api_params.dart';
-import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
+import 'package:super_fitness/features/ai_chat/data/database/fitness_database_manager.dart';
+import 'package:super_fitness/features/ai_chat/data/datasources/local/fitness_local_data_source.dart';
+import 'package:super_fitness/features/ai_chat/data/models/exercise_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/ingredient_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/meal_model.dart';
+import 'package:super_fitness/features/ai_chat/data/models/meal_step_model.dart';
 
 @LazySingleton(as: FitnessLocalDataSource)
 class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
-  const FitnessLocalDataSourceImpl();
+  final FitnessDatabaseManager _databaseManager;
 
-  static const Map<String, Map<String, dynamic>> _mockExercisesDb = {
-    'bench press': {
-      'title': 'Barbell Bench Press',
-      'target_muscle': 'Chest (Pectoralis Major)',
-      'subtitle': 'Compound upper body press',
-      'metrics': {
-        'Sets & Reps': '4 sets x 8-10 reps',
-        'Rest Time': '90-120 seconds',
-        'Target RPE': '8 / 10',
-      },
-      'bullet_points': [
-        'Retract your scapula and maintain a slight natural arch.',
-        'Lower the bar with control to your mid-sternum.',
-        'Drive through your heels and press back up explosively.',
-      ],
-    },
-    'squat': {
-      'title': 'Barbell Back Squat',
-      'target_muscle': 'Quadriceps & Glutes',
-      'subtitle': 'Primary lower body compound builder',
-      'metrics': {
-        'Sets & Reps': '4 sets x 6-8 reps',
-        'Rest Time': '120 seconds',
-        'Target RPE': '8.5 / 10',
-      },
-      'bullet_points': [
-        'Set feet shoulder-width apart with toes slightly flared.',
-        'Brace your core deep into your belt before descending.',
-        'Break at hips and knees simultaneously down to parallel.',
-      ],
-    },
-    'deadlift': {
-      'title': 'Conventional Deadlift',
-      'target_muscle': 'Posterior Chain & Back',
-      'subtitle': 'Total body power and pulling foundation',
-      'metrics': {
-        'Sets & Reps': '3 sets x 5 reps',
-        'Rest Time': '180 seconds',
-        'Target RPE': '9 / 10',
-      },
-      'bullet_points': [
-        'Stand with bar over mid-foot, shins touching.',
-        'Engage lats, push the floor away without rounding lower back.',
-        'Lock out by driving hips through at the top.',
-      ],
-    },
-  };
+  FitnessLocalDataSourceImpl(this._databaseManager);
 
-  static const Map<String, Map<String, dynamic>> _mockMealsDb = {
-    'chicken': {
-      'title': 'Grilled Chicken Breast & Jasmine Rice',
-      'subtitle': 'High-protein lean muscle recovery meal',
-      'goal': 'Muscle Gain / Lean Bulk',
-      'metrics': {
-        'Calories': '580 kcal',
-        'Protein': '48g',
-        'Carbs': '65g',
-        'Fats': '9g',
-      },
-      'bullet_points': [
-        '200g skinless chicken breast marinated in herbs and olive oil.',
-        '180g steamed jasmine or basmati white rice.',
-        'Side of steamed broccoli or asparagus for micronutrients.',
-      ],
-    },
-    'oatmeal': {
-      'title': 'Power Athlete Protein Oats',
-      'subtitle': 'Sustained energy breakfast bowl',
-      'goal': 'Pre-Workout Fuel',
-      'metrics': {
-        'Calories': '460 kcal',
-        'Protein': '32g',
-        'Carbs': '58g',
-        'Fats': '11g',
-      },
-      'bullet_points': [
-        '70g rolled oats cooked with unsweetened almond milk.',
-        '1 scoop whey isolate protein powder stirred in.',
-        'Topped with a handful of blueberries and 10g crushed walnuts.',
-      ],
-    },
-    'salmon': {
-      'title': 'Pan-Seared Salmon & Sweet Potato',
-      'subtitle': 'Omega-3 rich recovery dinner',
-      'goal': 'Cutting / Health Optimization',
-      'metrics': {
-        'Calories': '520 kcal',
-        'Protein': '42g',
-        'Carbs': '40g',
-        'Fats': '18g',
-      },
-      'bullet_points': [
-        '180g wild Atlantic salmon fillet pan-seared with lemon.',
-        '200g baked sweet potato wedges.',
-        'Mixed garden green salad drizzled with flaxseed oil.',
-      ],
-    },
-  };
+  // ============================================================
+  // NUTRITION
+  // ============================================================
 
   @override
-  Future<Map<String, dynamic>> getExerciseDetails({
-    required String exerciseName,
-    String? targetMuscle,
+  Future<List<MealModel>> searchMeals({
+    String? query,
+    double? minCalories,
+    double? maxCalories,
+    double? minProtein,
   }) async {
-    final query = exerciseName.toLowerCase().trim();
-    for (final entry in _mockExercisesDb.entries) {
-      if (query.contains(entry.key) || entry.key.contains(query)) {
-        final data = Map<String, dynamic>.from(entry.value);
-        data[ApiParams.cardType] = 'exercise';
-        return data;
-      }
+    final db = await _databaseManager.getDatabase(FitnessDatabase.meals);
+
+    final conditions = <String>[];
+    final arguments = <Object?>[];
+
+    if (query != null && query.trim().isNotEmpty) {
+      conditions.add('''
+        (
+          name LIKE ?
+          OR name_ar LIKE ?
+          OR category LIKE ?
+          OR area LIKE ?
+          OR tags LIKE ?
+        )
+      ''');
+
+      final searchQuery = '%${query.trim()}%';
+
+      arguments.addAll(List.filled(5, searchQuery));
     }
 
-    return {
-      ApiParams.cardType: 'exercise',
-      'title': exerciseName.toUpperCase(),
-      'subtitle': 'Customized movement analysis',
-      'badge': targetMuscle ?? 'Full Body',
-      'metrics': {
-        'Sets & Reps': '3-4 sets x 8-12 reps',
-        'Rest Time': '60-90 seconds',
-        'Target RPE': '8 / 10',
-      },
-      'bullet_points': [
-        'Execute each repetition with controlled eccentric tempo.',
-        'Maintain steady diaphragmatic breathing under tension.',
-        'Focus on full range of motion without momentum.',
-      ],
-    };
+    if (minCalories != null) {
+      conditions.add('kcal >= ?');
+      arguments.add(minCalories);
+    }
+
+    if (maxCalories != null) {
+      conditions.add('kcal <= ?');
+      arguments.add(maxCalories);
+    }
+
+    if (minProtein != null) {
+      conditions.add('protein_g >= ?');
+      arguments.add(minProtein);
+    }
+
+    final whereClause = conditions.isEmpty ? null : conditions.join(' AND ');
+
+    final result = await db.query(
+      'meal_card',
+      where: whereClause,
+      whereArgs: arguments,
+      orderBy: 'popularity DESC, name ASC',
+      limit: 50,
+    );
+
+    return result.map((row) => MealModel.fromJson(row)).toList();
   }
 
   @override
-  Future<Map<String, dynamic>> getMealNutrition({
-    required String mealName,
-    String? goal,
+  Future<MealModel?> getMealById(String id) async {
+    final db = await _databaseManager.getDatabase(FitnessDatabase.meals);
+
+    final result = await db.query(
+      'meal_card',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+
+    return MealModel.fromJson(result.first);
+  }
+
+  @override
+  Future<List<IngredientModel>> getMealIngredients(String mealId) async {
+    final db = await _databaseManager.getDatabase(FitnessDatabase.meals);
+
+    final result = await db.rawQuery(
+      '''
+      SELECT
+        i.id AS id,
+        i.name AS name,
+        i.name_ar AS name_ar,
+        i.image AS image,
+        i.kcal_100g AS kcal_100g,
+        i.protein_100g AS protein_100g,
+        i.carbs_100g AS carbs_100g,
+        i.fat_100g AS fat_100g,
+        mi.meal_id AS meal_id,
+        mi.position AS position,
+        mi.qty AS qty,
+        mi.unit AS unit,
+        mi.measure_raw AS measure_raw
+      FROM meal_ingredient mi
+      INNER JOIN ingredient i
+        ON i.id = mi.ingredient_id
+      WHERE mi.meal_id = ?
+      ORDER BY mi.position ASC
+      ''',
+      [mealId],
+    );
+
+    return result.map((row) => IngredientModel.fromJson(row)).toList();
+  }
+
+  @override
+  Future<List<MealStepModel>> getMealSteps(String mealId) async {
+    final db = await _databaseManager.getDatabase(FitnessDatabase.meals);
+
+    final result = await db.query(
+      'meal_step',
+      where: 'meal_id = ?',
+      whereArgs: [mealId],
+      orderBy: 'position ASC',
+    );
+
+    return result.map((row) => MealStepModel.fromJson(row)).toList();
+  }
+
+  // ============================================================
+  // EXERCISES
+  // ============================================================
+
+  @override
+  Future<List<ExerciseModel>> searchExercises({
+    String? query,
+    String? muscleGroup,
+    String? difficulty,
+    String? equipment,
   }) async {
-    final query = mealName.toLowerCase().trim();
-    for (final entry in _mockMealsDb.entries) {
-      if (query.contains(entry.key) || entry.key.contains(query)) {
-        final data = Map<String, dynamic>.from(entry.value);
-        data[ApiParams.cardType] = 'meal';
-        return data;
-      }
+    final db = await _databaseManager.getDatabase(FitnessDatabase.exercises);
+
+    final conditions = <String>[];
+    final arguments = <Object?>[];
+
+    if (query != null && query.trim().isNotEmpty) {
+      conditions.add('''
+        (
+          name LIKE ?
+          OR name_ar LIKE ?
+          OR muscle_group LIKE ?
+          OR prime_mover LIKE ?
+          OR equipment LIKE ?
+          OR movement_patterns LIKE ?
+        )
+      ''');
+
+      final searchQuery = '%${query.trim()}%';
+
+      arguments.addAll(List.filled(6, searchQuery));
     }
 
-    return {
-      ApiParams.cardType: 'meal',
-      'title': mealName.toUpperCase(),
-      'subtitle': 'Macronutrient breakdown & nutrition protocol',
-      'badge': goal ?? 'Balanced',
-      'metrics': {
-        'Calories': '500 kcal',
-        'Protein': '35g',
-        'Carbs': '50g',
-        'Fats': '15g',
-      },
-      'bullet_points': [
-        'Opt for whole, nutrient-dense unprocessed ingredients.',
-        'Pair protein sources with fibrous carbohydrates.',
-        'Stay hydrated with 500ml water accompanying the meal.',
-      ],
-    };
+    if (muscleGroup != null && muscleGroup.trim().isNotEmpty) {
+      conditions.add('muscle_group LIKE ?');
+      arguments.add('%${muscleGroup.trim()}%');
+    }
+
+    if (difficulty != null && difficulty.trim().isNotEmpty) {
+      conditions.add('difficulty LIKE ?');
+      arguments.add('%${difficulty.trim()}%');
+    }
+
+    if (equipment != null && equipment.trim().isNotEmpty) {
+      conditions.add('equipment LIKE ?');
+      arguments.add('%${equipment.trim()}%');
+    }
+
+    final whereClause = conditions.isEmpty ? null : conditions.join(' AND ');
+
+    final result = await db.query(
+      'exercise_card',
+      where: whereClause,
+      whereArgs: arguments,
+      orderBy: 'popularity DESC, name ASC',
+      limit: 100,
+    );
+
+    return result.map((row) => ExerciseModel.fromJson(row)).toList();
+  }
+
+  @override
+  Future<ExerciseModel?> getExerciseById(String id) async {
+    final db = await _databaseManager.getDatabase(FitnessDatabase.exercises);
+
+    final result = await db.query(
+      'exercise_card',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+
+    return ExerciseModel.fromJson(result.first);
   }
 }

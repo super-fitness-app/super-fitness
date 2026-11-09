@@ -8,12 +8,7 @@ class ChatTopBar extends StatelessWidget {
   final VoidCallback? onClearChat;
   final VoidCallback? onMenuTap;
 
-  const ChatTopBar({
-    super.key,
-    this.onBack,
-    this.onClearChat,
-    this.onMenuTap,
-  });
+  const ChatTopBar({super.key, this.onBack, this.onClearChat, this.onMenuTap});
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +99,7 @@ class _MoreActionMenu extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return PopupMenuButton<String>(
-      icon: const Icon(
-        Icons.menu_rounded,
-        color: AppColors.primary,
-        size: 26,
-      ),
+      icon: const Icon(Icons.menu_rounded, color: AppColors.primary, size: 26),
       color: AppColors.surface,
       onSelected: (val) {
         if (val == 'clear' && onClearChat != null) {
@@ -120,7 +111,11 @@ class _MoreActionMenu extends StatelessWidget {
           value: 'clear',
           child: Row(
             children: [
-              const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+              const Icon(
+                Icons.delete_outline,
+                color: AppColors.error,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text(
                 l10n.smartCoachClearChat,

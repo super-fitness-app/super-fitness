@@ -71,10 +71,11 @@ class _WelcomeBody extends StatelessWidget {
                 Builder(
                   builder: (scaffoldContext) => WelcomeTopBar(
                     userName: userName,
-                    onMenuTap: () => Scaffold.of(scaffoldContext).openEndDrawer(),
+                    onMenuTap: () =>
+                        Scaffold.of(scaffoldContext).openEndDrawer(),
                   ),
                 ),
-                
+
                 // ترك مساحة مرنة للروبوت ليتقلص حسب مقاس الشاشة
                 Expanded(
                   child: Center(
@@ -125,9 +126,8 @@ class _BackgroundLayer extends StatelessWidget {
           errorBuilder: (_, _, _) => Image.asset(
             AppImages.background,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => const ColoredBox(
-              color: AppColors.background,
-            ),
+            errorBuilder: (_, _, _) =>
+                const ColoredBox(color: AppColors.background),
           ),
         ),
         Container(
@@ -166,7 +166,7 @@ class _RobotFallbackIcon extends StatelessWidget {
             width: 2,
           ),
         ),
-        child: const Icon(  
+        child: const Icon(
           Icons.smart_toy_rounded,
           size: 100,
           color: AppColors.primary,

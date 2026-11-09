@@ -1,4 +1,5 @@
-export 'package:super_fitness/core/errors/app_failure.dart' show AiChatFailure, AppFailure;
+export 'package:super_fitness/core/errors/app_failure.dart'
+    show AiChatFailure, AppFailure;
 
 class AiChatException implements Exception {
   final String message;

@@ -30,39 +30,44 @@ Widget _buildTestableWidget({
 
 void main() {
   group('ChatMessageListSection Widget Tests', () {
-    testWidgets('renders CircularProgressIndicator when isHistoryLoading is true',
-        (tester) async {
-      await tester.pumpWidget(
-        _buildTestableWidget(
-          messages: const [],
-          isTyping: false,
-          isHistoryLoading: true,
-        ),
-      );
-      await tester.pump();
+    testWidgets(
+      'renders CircularProgressIndicator when isHistoryLoading is true',
+      (tester) async {
+        await tester.pumpWidget(
+          _buildTestableWidget(
+            messages: const [],
+            isTyping: false,
+            isHistoryLoading: true,
+          ),
+        );
+        await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(find.byType(EmptyChatPlaceholder), findsNothing);
-      expect(find.byType(ChatBubbleWidget), findsNothing);
-    });
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(EmptyChatPlaceholder), findsNothing);
+        expect(find.byType(ChatBubbleWidget), findsNothing);
+      },
+    );
 
-    testWidgets('renders EmptyChatPlaceholder when messages are empty and not loading',
-        (tester) async {
-      await tester.pumpWidget(
-        _buildTestableWidget(
-          messages: const [],
-          isTyping: false,
-          isHistoryLoading: false,
-        ),
-      );
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets(
+      'renders EmptyChatPlaceholder when messages are empty and not loading',
+      (tester) async {
+        await tester.pumpWidget(
+          _buildTestableWidget(
+            messages: const [],
+            isTyping: false,
+            isHistoryLoading: false,
+          ),
+        );
+        await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byType(EmptyChatPlaceholder), findsOneWidget);
-      expect(find.byType(CircularProgressIndicator), findsNothing);
-    });
+        expect(find.byType(EmptyChatPlaceholder), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      },
+    );
 
-    testWidgets('renders ChatBubbleWidget when messages are present',
-        (tester) async {
+    testWidgets('renders ChatBubbleWidget when messages are present', (
+      tester,
+    ) async {
       final messages = [
         ChatMessageEntity(
           id: '1',
@@ -87,8 +92,9 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
 
-    testWidgets('renders ThinkingStatusCapsule when isTyping is true',
-        (tester) async {
+    testWidgets('renders ThinkingStatusCapsule when isTyping is true', (
+      tester,
+    ) async {
       final messages = [
         ChatMessageEntity(
           id: '1',

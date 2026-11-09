@@ -34,7 +34,9 @@ void main() {
   }
 
   group('DeleteChatConfirmationDialog Widget Tests', () {
-    testWidgets('renders warning icon, title, message and buttons', (tester) async {
+    testWidgets('renders warning icon, title, message and buttons', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestHost(onResult: (_) {}));
       await tester.tap(find.text('Open Dialog'));
       await tester.pumpAndSettle();

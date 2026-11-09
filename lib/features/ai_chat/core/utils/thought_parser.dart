@@ -16,12 +16,17 @@ abstract final class ThoughtParser {
   static const String defaultThinkingTitle =
       'Smart Coach is analyzing your fitness profile...';
 
-  static final RegExp _thinkTagRegex =
-      RegExp(r'<think>([\s\S]*?)(?:<\/think>|$)', caseSensitive: false);
+  static final RegExp _thinkTagRegex = RegExp(
+    r'<think>([\s\S]*?)(?:<\/think>|$)',
+    caseSensitive: false,
+  );
   static final RegExp _boldStepRegex = RegExp(r'\*\*([^*]+)\*\*');
-  static final RegExp _headerStepRegex = RegExp(r'(?:^|\n)\s*#{1,4}\s*([^\n\r]+)');
-  static final RegExp _listStepRegex =
-      RegExp(r'(?:^|\n)\s*(?:\d+\.|\*|-)\s*([^\n\r]+)');
+  static final RegExp _headerStepRegex = RegExp(
+    r'(?:^|\n)\s*#{1,4}\s*([^\n\r]+)',
+  );
+  static final RegExp _listStepRegex = RegExp(
+    r'(?:^|\n)\s*(?:\d+\.|\*|-)\s*([^\n\r]+)',
+  );
 
   static String? extractActiveStep(String rawThought) {
     if (rawThought.trim().isEmpty) return defaultThinkingTitle;
@@ -102,8 +107,9 @@ abstract final class ThoughtParser {
       return ParsedThoughtResult(
         content: rawAccumulated,
         rawThought: accumulatedThinking.trim(),
-        activeStep:
-            isStillThinking ? extractActiveStep(accumulatedThinking) : null,
+        activeStep: isStillThinking
+            ? extractActiveStep(accumulatedThinking)
+            : null,
         isThinking: isStillThinking,
       );
     }
@@ -122,9 +128,10 @@ abstract final class ThoughtParser {
     if (thinkingProcessIdx != -1) {
       final nextDoubleNewline = result.indexOf('\n\n', thinkingProcessIdx);
       if (nextDoubleNewline != -1) {
-        result = (result.substring(0, thinkingProcessIdx) +
-                result.substring(nextDoubleNewline + 2))
-            .trim();
+        result =
+            (result.substring(0, thinkingProcessIdx) +
+                    result.substring(nextDoubleNewline + 2))
+                .trim();
       } else {
         result = result.substring(0, thinkingProcessIdx).trim();
       }

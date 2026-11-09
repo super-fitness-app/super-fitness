@@ -58,7 +58,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     return _sessionsCollection().doc(sessionId);
   }
 
-  CollectionReference<Map<String, dynamic>> _messagesCollection(String sessionId) {
+  CollectionReference<Map<String, dynamic>> _messagesCollection(
+    String sessionId,
+  ) {
     return _sessionDoc(sessionId).collection(AiConstants.messagesCollection);
   }
 
@@ -83,34 +85,43 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final data = snapshot.data();
 
       final existingTitle = data?[ApiParams.title] as String?;
-      final isGeneric = existingTitle == null ||
+      final isGeneric =
+          existingTitle == null ||
           existingTitle.isEmpty ||
           existingTitle == 'New Chat' ||
           existingTitle.startsWith('Chat ');
 
       String title = existingTitle ?? '';
-      if (isGeneric && firstUserMessage != null && firstUserMessage.trim().isNotEmpty) {
+      if (isGeneric &&
+          firstUserMessage != null &&
+          firstUserMessage.trim().isNotEmpty) {
         title = _generateSessionTitle(firstUserMessage);
       } else if (title.isEmpty) {
         title = 'New Chat';
       }
 
-      await doc.set({
-        ApiParams.title: title,
-        if (!snapshot.exists) ApiParams.createdAt: FieldValue.serverTimestamp(),
-        ApiParams.updatedAt: FieldValue.serverTimestamp(),
-        ApiParams.totalTokens: FieldValue.increment(addedTokens),
-      }, SetOptions(merge: true)).timeout(AiConstants.firestoreTimeout);
+      await doc
+          .set({
+            ApiParams.title: title,
+            if (!snapshot.exists)
+              ApiParams.createdAt: FieldValue.serverTimestamp(),
+            ApiParams.updatedAt: FieldValue.serverTimestamp(),
+            ApiParams.totalTokens: FieldValue.increment(addedTokens),
+          }, SetOptions(merge: true))
+          .timeout(AiConstants.firestoreTimeout);
     } catch (e) {
       debugPrint('[AiChat] Failed to update session metadata: $e');
     }
   }
 
-  Future<void> _safeSaveMessage(String sessionId, Map<String, dynamic> data) async {
+  Future<void> _safeSaveMessage(
+    String sessionId,
+    Map<String, dynamic> data,
+  ) async {
     try {
-      await _messagesCollection(sessionId)
-          .add(data)
-          .timeout(AiConstants.firestoreTimeout);
+      await _messagesCollection(
+        sessionId,
+      ).add(data).timeout(AiConstants.firestoreTimeout);
     } catch (e) {
       debugPrint('[AiChat] Firestore message save skipped: $e');
     }
@@ -130,7 +141,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
 
     await _safeSaveMessage(sessionId, userMessageModel.toFirestoreMap());
 
-    final List<ChatMessageModel> history = await getChatHistory(sessionId: sessionId);
+    final List<ChatMessageModel> history = await getChatHistory(
+      sessionId: sessionId,
+    );
 
     final systemPrompt = await SystemPromptBuilder.buildPrompt(
       sessionService: _sessionService,
@@ -138,10 +151,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     );
 
     final List<Map<String, dynamic>> contextMessages = [
-      {
-        ApiParams.role: 'system',
-        ApiParams.content: systemPrompt,
-      },
+      {ApiParams.role: 'system', ApiParams.content: systemPrompt},
     ];
 
     for (final m in history) {
@@ -153,7 +163,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     contextMessages.add(userMessageModel.toOllamaJson());
 
     try {
-      debugPrint('[AiChat] Sending request to Ollama: $_ollamaUrl (Model: ${AiConstants.defaultModel})');
+      debugPrint(
+        '[AiChat] Sending request to Ollama: $_ollamaUrl (Model: ${AiConstants.defaultModel})',
+      );
       final response = await _dio.post(
         _ollamaUrl,
         data: {
@@ -163,9 +175,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           ApiParams.tools: ToolDefinitions.tools,
         },
         options: Options(
-          headers: {
-            ApiHeaders.contentType: ApiHeaders.applicationJson,
-          },
+          headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
           receiveTimeout: AiConstants.requestTimeout,
         ),
@@ -180,7 +190,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final phase1Message = ChatMessageModel.fromOllamaJson(messageMap);
 
       if (phase1Message.toolCalls.isNotEmpty) {
-        debugPrint('[AiChat] Detected ${phase1Message.toolCalls.length} tool calls. Initiating Phase 2.');
+        debugPrint(
+          '[AiChat] Detected ${phase1Message.toolCalls.length} tool calls. Initiating Phase 2.',
+        );
         return await _executePhase2ToolFlow(
           phase1Message: phase1Message,
           contextMessages: contextMessages,
@@ -188,7 +200,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         );
       }
 
-      final cleanPhase1Content = ThoughtParser.stripThinkingTags(phase1Message.content);
+      final cleanPhase1Content = ThoughtParser.stripThinkingTags(
+        phase1Message.content,
+      );
       final assistantMessage = ChatMessageModel(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         role: 'assistant',
@@ -234,17 +248,16 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
 
     await _safeSaveMessage(sessionId, userMessageModel.toFirestoreMap());
 
-    final List<ChatMessageModel> history = await getChatHistory(sessionId: sessionId);
+    final List<ChatMessageModel> history = await getChatHistory(
+      sessionId: sessionId,
+    );
     final systemPrompt = await SystemPromptBuilder.buildPrompt(
       sessionService: _sessionService,
       firebaseAuth: _firebaseAuth,
     );
 
     final List<Map<String, dynamic>> contextMessages = [
-      {
-        ApiParams.role: 'system',
-        ApiParams.content: systemPrompt,
-      },
+      {ApiParams.role: 'system', ApiParams.content: systemPrompt},
     ];
 
     for (final m in history) {
@@ -257,7 +270,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     final assistantMsgId = DateTime.now().microsecondsSinceEpoch.toString();
 
     try {
-      debugPrint('[AiChat] Streaming request to Ollama: $_ollamaUrl (stream: true)');
+      debugPrint(
+        '[AiChat] Streaming request to Ollama: $_ollamaUrl (stream: true)',
+      );
       final response = await _dio.post<ResponseBody>(
         _ollamaUrl,
         data: {
@@ -268,9 +283,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         },
         options: Options(
           responseType: ResponseType.stream,
-          headers: {
-            ApiHeaders.contentType: ApiHeaders.applicationJson,
-          },
+          headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
           receiveTimeout: AiConstants.requestTimeout,
         ),
@@ -278,7 +291,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
 
       final stream = response.data?.stream;
       if (stream != null) {
-        final lineStream = utf8.decoder.bind(stream).transform(const LineSplitter());
+        final lineStream = utf8.decoder
+            .bind(stream)
+            .transform(const LineSplitter());
         final List<ToolCallModel> streamedToolCalls = [];
         var rawAccumulated = '';
         var accumulatedThinking = '';
@@ -286,7 +301,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         await for (final line in lineStream) {
           if (line.trim().isEmpty) continue;
           try {
-            final Map<String, dynamic> json = jsonDecode(line) as Map<String, dynamic>;
+            final Map<String, dynamic> json =
+                jsonDecode(line) as Map<String, dynamic>;
             final messageMap = (json['message'] as Map<String, dynamic>?) ?? {};
             final delta = (messageMap[ApiParams.content] as String?) ?? '';
             final thinkingDelta = (messageMap['thinking'] as String?) ?? '';
@@ -352,8 +368,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         final cleanFinalContent = parsedFinal.content.isNotEmpty
             ? parsedFinal.content
             : (parsedFinal.rawThought?.isNotEmpty == true
-                ? 'I have analyzed your request based on your fitness goals.'
-                : 'I am here to help you achieve your athletic potential! What workout or meal plan can I detail for you today?');
+                  ? 'I have analyzed your request based on your fitness goals.'
+                  : 'I am here to help you achieve your athletic potential! What workout or meal plan can I detail for you today?');
 
         final finalMsg = ChatMessageModel(
           id: assistantMsgId,
@@ -364,7 +380,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           timestamp: DateTime.now(),
         );
         await _safeSaveMessage(sessionId, finalMsg.toFirestoreMap());
-        final estimatedTokens = ((message.length + finalMsg.content.length) / 4).ceil();
+        final estimatedTokens = ((message.length + finalMsg.content.length) / 4)
+            .ceil();
         await _updateSessionMetadata(
           sessionId: sessionId,
           firstUserMessage: message,
@@ -374,7 +391,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         return;
       }
     } catch (e) {
-      debugPrint('[AiChat] Streaming Ollama error: $e. Falling back to local harness.');
+      debugPrint(
+        '[AiChat] Streaming Ollama error: $e. Falling back to local harness.',
+      );
     }
 
     final fallbackModel = await _fallbackLocalHarness(
@@ -382,7 +401,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       sessionId: sessionId,
     );
 
-    const fallbackThought = 'Analyzing workout routines, target muscle groups, and metabolic targets...';
+    const fallbackThought =
+        'Analyzing workout routines, target muscle groups, and metabolic targets...';
     yield ChatMessageModel(
       id: fallbackModel.id,
       role: 'assistant',
@@ -414,12 +434,16 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     required String sessionId,
   }) async {
     StructuredFitnessCardModel? structuredCard;
-    final List<Map<String, dynamic>> toolResultContext = List.from(contextMessages);
+    final List<Map<String, dynamic>> toolResultContext = List.from(
+      contextMessages,
+    );
 
     toolResultContext.add({
       ApiParams.role: 'assistant',
       ApiParams.content: phase1Message.content,
-      ApiParams.toolCalls: phase1Message.toolCalls.map((t) => t.toJson()).toList(),
+      ApiParams.toolCalls: phase1Message.toolCalls
+          .map((t) => t.toJson())
+          .toList(),
     });
 
     for (final toolCall in phase1Message.toolCalls) {
@@ -429,7 +453,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
 
       Map<String, dynamic> toolResult = {};
       if (name == ToolNames.getExerciseDetails) {
-        final exerciseName = (args[ToolNames.paramExerciseName] as String?) ?? 'Exercise';
+        final exerciseName =
+            (args[ToolNames.paramExerciseName] as String?) ?? 'Exercise';
         final targetMuscle = args[ToolNames.paramTargetMuscle] as String?;
         toolResult = await _localDbDataSource.getExerciseDetails(
           exerciseName: exerciseName,
@@ -462,9 +487,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           ApiParams.stream: false,
         },
         options: Options(
-          headers: {
-            ApiHeaders.contentType: ApiHeaders.applicationJson,
-          },
+          headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
           receiveTimeout: AiConstants.requestTimeout,
         ),
@@ -515,10 +538,10 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final exerciseName = lower.contains('bench')
           ? 'bench press'
           : lower.contains('squat')
-              ? 'squat'
-              : lower.contains('deadlift')
-                  ? 'deadlift'
-                  : 'bench press';
+          ? 'squat'
+          : lower.contains('deadlift')
+          ? 'deadlift'
+          : 'bench press';
       final res = await _localDbDataSource.getExerciseDetails(
         exerciseName: exerciseName,
       );
@@ -536,11 +559,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final mealName = lower.contains('oat')
           ? 'oatmeal'
           : lower.contains('salmon')
-              ? 'salmon'
-              : 'chicken';
-      final res = await _localDbDataSource.getMealNutrition(
-        mealName: mealName,
-      );
+          ? 'salmon'
+          : 'chicken';
+      final res = await _localDbDataSource.getMealNutrition(mealName: mealName);
       card = StructuredFitnessCardModel.fromJson(res);
       replyText =
           'I have pulled the nutritional breakdown and macro profile for your goal:';
@@ -558,7 +579,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     );
 
     await _safeSaveMessage(sessionId, messageModel.toFirestoreMap());
-    final total = ((userMessage.length + messageModel.content.length) / 4).ceil();
+    final total = ((userMessage.length + messageModel.content.length) / 4)
+        .ceil();
     await _updateSessionMetadata(
       sessionId: sessionId,
       firstUserMessage: userMessage,
@@ -589,9 +611,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
   @override
   Future<void> clearChatHistory({required String sessionId}) async {
     try {
-      final snapshot = await _messagesCollection(sessionId)
-          .get()
-          .timeout(AiConstants.firestoreTimeout);
+      final snapshot = await _messagesCollection(
+        sessionId,
+      ).get().timeout(AiConstants.firestoreTimeout);
       final batch = _firestore.batch();
       for (final doc in snapshot.docs) {
         batch.delete(doc.reference);
@@ -647,9 +669,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
   @override
   Future<void> deleteSession(String sessionId) async {
     try {
-      final messages = await _messagesCollection(sessionId)
-          .get()
-          .timeout(AiConstants.firestoreTimeout);
+      final messages = await _messagesCollection(
+        sessionId,
+      ).get().timeout(AiConstants.firestoreTimeout);
       final batch = _firestore.batch();
       for (final doc in messages.docs) {
         batch.delete(doc.reference);
