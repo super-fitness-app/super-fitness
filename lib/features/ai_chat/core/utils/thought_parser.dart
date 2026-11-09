@@ -68,7 +68,9 @@ abstract final class ThoughtParser {
         .trim();
     if (cleaned.isEmpty) return defaultThinkingTitle;
 
-    cleaned = cleaned[0].toUpperCase() + cleaned.substring(1);
+    cleaned = cleaned.isNotEmpty
+        ? '${cleaned[0].toUpperCase()}${cleaned.substring(1)}'
+        : cleaned;
     if (cleaned.length > 45) {
       return '${cleaned.substring(0, 45)}...';
     }

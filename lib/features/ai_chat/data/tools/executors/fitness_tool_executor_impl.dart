@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/features/ai_chat/core/constants/tool_names.dart';
 import 'package:super_fitness/features/ai_chat/data/tools/exercise/exercise_tools.dart';
@@ -19,30 +19,18 @@ class FitnessToolExecutorImpl implements FitnessToolExecutor {
     String toolName,
     Map<String, dynamic> arguments,
   ) async {
-    late final Map<String, dynamic> toolResult;
+    Map<String, dynamic> toolResult;
 
     try {
-      switch (toolName) {
-        case ToolNames.searchExercises:
-          toolResult = await _exerciseTools.searchExercises(arguments);
-          break;
-
-        case ToolNames.getExerciseDetails:
-          toolResult = await _exerciseTools.getExerciseDetails(arguments);
-          break;
-
-        case ToolNames.searchMeals:
-          toolResult = await _nutritionTools.searchMeals(arguments);
-          break;
-
-        case ToolNames.getMealDetails:
-          toolResult = await _nutritionTools.getMealDetails(arguments);
-          break;
-
-        default:
-          toolResult = {'success': false, 'error': 'Unknown tool: $toolName'};
-      }
+      toolResult = await switch (toolName) {
+        ToolNames.searchExercises => _exerciseTools.searchExercises(arguments),
+        ToolNames.getExerciseDetails => _exerciseTools.getExerciseDetails(arguments),
+        ToolNames.searchMeals => _nutritionTools.searchMeals(arguments),
+        ToolNames.getMealDetails => _nutritionTools.getMealDetails(arguments),
+        _ => Future.value({'success': false, 'error': 'Unknown tool: $toolName'}),
+      };
     } catch (e) {
+      debugPrint('[AiChat] Tool $toolName execution error: $e');
       toolResult = {'success': false, 'error': 'Tool execution failed.'};
     }
 

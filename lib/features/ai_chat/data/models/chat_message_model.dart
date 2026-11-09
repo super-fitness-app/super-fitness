@@ -99,6 +99,13 @@ class ChatMessageModel extends Equatable {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     final data = doc.data() ?? {};
+    return ChatMessageModel.fromMap(data, id: doc.id);
+  }
+
+  factory ChatMessageModel.fromMap(
+    Map<String, dynamic> data, {
+    String? id,
+  }) {
     final rawTimestamp = data[ApiParams.timestamp];
     DateTime parsedTime = DateTime.now();
 
@@ -119,7 +126,7 @@ class ChatMessageModel extends Equatable {
     }
 
     return ChatMessageModel(
-      id: doc.id,
+      id: id ?? DateTime.now().microsecondsSinceEpoch.toString(),
       role: (data[ApiParams.role] as String?) ?? 'user',
       content: (data[ApiParams.content] as String?) ?? '',
       timestamp: parsedTime,
@@ -128,15 +135,17 @@ class ChatMessageModel extends Equatable {
     );
   }
 
-  Map<String, dynamic> toFirestoreMap() {
+  Map<String, dynamic> toMap({Object? serverTimestamp}) {
     return {
       ApiParams.role: role,
       ApiParams.content: content,
-      ApiParams.timestamp: FieldValue.serverTimestamp(),
+      ApiParams.timestamp: serverTimestamp ?? timestamp.millisecondsSinceEpoch,
       if (fitnessCard != null)
         ApiParams.metadata: {ApiParams.fitnessCard: fitnessCard!.toJson()},
     };
   }
+
+  Map<String, dynamic> toFirestoreMap() => toMap();
 
   Map<String, dynamic> toOllamaJson() {
     return {ApiParams.role: role, ApiParams.content: content};

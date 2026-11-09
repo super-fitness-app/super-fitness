@@ -13,6 +13,7 @@ import 'package:super_fitness/features/ai_chat/core/utils/platform_host_resolver
 import 'package:super_fitness/features/ai_chat/core/utils/safe_bool_parser.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/system_prompt_builder.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/thought_parser.dart';
+import 'package:super_fitness/features/ai_chat/core/utils/token_estimator.dart';
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/ai_remote_data_source.dart';
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
 import 'package:super_fitness/features/ai_chat/data/models/chat_message_model.dart';
@@ -120,9 +121,11 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     Map<String, dynamic> data,
   ) async {
     try {
+      final payload = Map<String, dynamic>.from(data);
+      payload[ApiParams.timestamp] = FieldValue.serverTimestamp();
       await _messagesCollection(
         sessionId,
-      ).add(data).timeout(AiConstants.firestoreTimeout);
+      ).add(payload).timeout(AiConstants.firestoreTimeout);
     } catch (e) {
       debugPrint('[AiChat] Firestore message save skipped: $e');
     }
@@ -218,7 +221,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       final evalTokens = (dataMap['eval_count'] as int?) ?? 0;
       final total = promptTokens + evalTokens > 0
           ? (promptTokens + evalTokens)
-          : ((message.length + assistantMessage.content.length) / 4).ceil();
+          : TokenEstimator.estimateExchange(message, assistantMessage.content);
       await _updateSessionMetadata(
         sessionId: sessionId,
         firstUserMessage: message,
@@ -299,66 +302,74 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         var rawAccumulated = '';
         var accumulatedThinking = '';
 
-        await for (final line in lineStream) {
-          if (line.trim().isEmpty) continue;
-          try {
-            final Map<String, dynamic> json =
-                jsonDecode(line) as Map<String, dynamic>;
-            final messageMap = (json['message'] as Map<String, dynamic>?) ?? {};
-            final delta = (messageMap[ApiParams.content] as String?) ?? '';
-            final thinkingDelta = (messageMap['thinking'] as String?) ?? '';
-            final done = safeBool(json['done']) ?? false;
+        try {
+          await for (final line in lineStream) {
+            if (line.trim().isEmpty) continue;
+            try {
+              final Map<String, dynamic> json =
+                  jsonDecode(line) as Map<String, dynamic>;
+              final messageMap = (json['message'] as Map<String, dynamic>?) ?? {};
+              final delta = (messageMap[ApiParams.content] as String?) ?? '';
+              final thinkingDelta = (messageMap['thinking'] as String?) ?? '';
+              final done = safeBool(json['done']) ?? false;
 
-            final rawTools = messageMap[ApiParams.toolCalls];
-            if (rawTools is List && rawTools.isNotEmpty) {
-              for (final t in rawTools) {
-                if (t is Map<String, dynamic>) {
-                  streamedToolCalls.add(ToolCallModel.fromJson(t));
+              final rawTools = messageMap[ApiParams.toolCalls];
+              if (rawTools is List && rawTools.isNotEmpty) {
+                for (final t in rawTools) {
+                  if (t is Map<String, dynamic>) {
+                    streamedToolCalls.add(ToolCallModel.fromJson(t));
+                  }
                 }
               }
-            }
 
-            if (delta.isNotEmpty || thinkingDelta.isNotEmpty) {
-              rawAccumulated += delta;
-              if (thinkingDelta.isNotEmpty) {
-                accumulatedThinking += thinkingDelta;
-              }
+              if (delta.isNotEmpty || thinkingDelta.isNotEmpty) {
+                rawAccumulated += delta;
+                if (thinkingDelta.isNotEmpty) {
+                  accumulatedThinking += thinkingDelta;
+                }
 
-              final parsed = ThoughtParser.parseStream(
-                rawAccumulated: rawAccumulated,
-                accumulatedThinking: accumulatedThinking,
-              );
+                final parsed = ThoughtParser.parseStream(
+                  rawAccumulated: rawAccumulated,
+                  accumulatedThinking: accumulatedThinking,
+                );
 
-              yield ChatMessageModel(
-                id: assistantMsgId,
-                role: 'assistant',
-                content: parsed.content,
-                thought: parsed.rawThought,
-                thinkingStatus: parsed.activeStep,
-                timestamp: DateTime.now(),
-              );
-            }
-
-            if (done) {
-              if (streamedToolCalls.isNotEmpty) {
-                final phase1 = ChatMessageModel(
+                yield ChatMessageModel(
                   id: assistantMsgId,
                   role: 'assistant',
-                  content: rawAccumulated,
+                  content: parsed.content,
+                  thought: parsed.rawThought,
+                  thinkingStatus: parsed.activeStep,
                   timestamp: DateTime.now(),
-                  toolCalls: streamedToolCalls,
                 );
-                final phase2Result = await _executePhase2ToolFlow(
-                  phase1Message: phase1,
-                  contextMessages: contextMessages,
-                  sessionId: sessionId,
-                );
-                yield phase2Result;
-                return;
               }
-              break;
+
+              if (done) {
+                if (streamedToolCalls.isNotEmpty) {
+                  final phase1 = ChatMessageModel(
+                    id: assistantMsgId,
+                    role: 'assistant',
+                    content: rawAccumulated,
+                    timestamp: DateTime.now(),
+                    toolCalls: streamedToolCalls,
+                  );
+                  final phase2Result = await _executePhase2ToolFlow(
+                    phase1Message: phase1,
+                    contextMessages: contextMessages,
+                    sessionId: sessionId,
+                  );
+                  yield phase2Result;
+                  return;
+                }
+                break;
+              }
+            } on FormatException catch (e) {
+              debugPrint('[AiChat] Stream JSON format warning: $e');
+            } catch (e) {
+              debugPrint('[AiChat] Stream chunk processing error: $e');
             }
-          } catch (_) {}
+          }
+        } finally {
+          // Stream lifecycle completed or interrupted
         }
 
         final parsedFinal = ThoughtParser.parseStream(
@@ -381,8 +392,10 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           timestamp: DateTime.now(),
         );
         await _safeSaveMessage(sessionId, finalMsg.toFirestoreMap());
-        final estimatedTokens = ((message.length + finalMsg.content.length) / 4)
-            .ceil();
+        final estimatedTokens = TokenEstimator.estimateExchange(
+          message,
+          finalMsg.content,
+        );
         await _updateSessionMetadata(
           sessionId: sessionId,
           firstUserMessage: message,
@@ -512,8 +525,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       role: 'assistant',
       content: finalContent.isNotEmpty
-          ? finalContent
-          : 'Here is the requested breakdown for your training:',
+            ? finalContent
+            : 'Here is the requested breakdown for your training:',
       timestamp: DateTime.now(),
       fitnessCard: structuredCard,
     );
@@ -563,9 +576,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
             : lower.contains('salmon')
             ? 'salmon'
             : 'chicken';
-        final res = await _localDbDataSource.getMealNutrition(
-          mealName: mealName,
-        );
+        final res = await _localDbDataSource.getMealNutrition(mealName: mealName);
         card = StructuredFitnessCardModel.fromJson(res);
         replyText =
             'I have pulled the nutritional breakdown and macro profile for your goal:';
@@ -574,9 +585,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
             'Hello! I am your Smart Coach. Ask me about any workout (e.g. bench press, squats) or nutrition plans (e.g. high protein chicken, oats, salmon) to get real-time athletic guidance!';
       }
     } catch (e, st) {
-      debugPrint(
-        '[AiChat] Error in fallback local harness database lookup: $e\n$st',
-      );
+      debugPrint('[AiChat] Error in fallback local harness database lookup: $e\n$st');
       card = null;
       replyText =
           'I am your Smart Coach. I am temporarily operating in offline mode. Ask me about any workout or meal plan to get guidance!';
@@ -591,8 +600,10 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     );
 
     await _safeSaveMessage(sessionId, messageModel.toFirestoreMap());
-    final total = ((userMessage.length + messageModel.content.length) / 4)
-        .ceil();
+    final total = TokenEstimator.estimateExchange(
+      userMessage,
+      messageModel.content,
+    );
     await _updateSessionMetadata(
       sessionId: sessionId,
       firstUserMessage: userMessage,

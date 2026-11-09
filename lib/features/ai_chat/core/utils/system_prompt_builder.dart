@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 
 abstract final class SystemPromptBuilder {
@@ -29,7 +30,9 @@ abstract final class SystemPromptBuilder {
           athleteName = currentFbUser.displayName!;
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[AiChat] SystemPromptBuilder user profile retrieval error: $e');
+    }
 
     return '''
 You are 'Smart Coach', an expert AI fitness and nutrition assistant inside the Super Fitness app.

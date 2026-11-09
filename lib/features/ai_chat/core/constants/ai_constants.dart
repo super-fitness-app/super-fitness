@@ -1,7 +1,7 @@
 import 'package:super_fitness/core/const/endpoints.dart';
 
 abstract final class AiConstants {
-  static const String defaultModel = Endpoints.ollamaDefaultModel;
+  static const String defaultModel = Endpoints.ollamaCloudModel;
   static const String androidHost = Endpoints.ollamaAndroidHost;
   static const String desktopHost = Endpoints.ollamaDesktopHost;
   static const Duration requestTimeout = Duration(seconds: 120);

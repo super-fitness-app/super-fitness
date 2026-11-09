@@ -1,10 +1,8 @@
-// import 'dart:convert';
-
+import 'dart:convert';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
-// import 'package:super_fitness/core/const/api_params.dart';
-
-class ToolCallModel {
+class ToolCallModel extends Equatable {
   final String id;
   final String type;
   final ToolCallFunctionModel function;
@@ -28,6 +26,9 @@ class ToolCallModel {
   Map<String, dynamic> toJson() {
     return {'id': id, 'type': type, 'function': function.toJson()};
   }
+
+  @override
+  List<Object?> get props => [id, type, function];
 }
 
 class ToolCallFunctionModel extends Equatable {
@@ -37,25 +38,25 @@ class ToolCallFunctionModel extends Equatable {
   const ToolCallFunctionModel({required this.name, required this.arguments});
 
   factory ToolCallFunctionModel.fromJson(Map<String, dynamic> json) {
-    // final rawArgs = json[ApiParams.arguments];
-    // Map<String, dynamic> parsedArgs = {};
-    // if (rawArgs is Map<String, dynamic>) {
-    //   parsedArgs = rawArgs;
-    // } else if (rawArgs is String) {
-    //   try {
-    //     final decoded = jsonDecode(rawArgs);
-    //     if (decoded is Map<String, dynamic>) {
-    //       parsedArgs = decoded;
-    //     }
-    //   } catch (_) {
-    //     parsedArgs = {};
-    //   }
-    // }
+    final rawArgs = json['arguments'];
+    Map<String, dynamic> parsedArgs = {};
+
+    if (rawArgs is Map) {
+      parsedArgs = Map<String, dynamic>.from(rawArgs);
+    } else if (rawArgs is String) {
+      try {
+        final decoded = jsonDecode(rawArgs);
+        if (decoded is Map) {
+          parsedArgs = Map<String, dynamic>.from(decoded);
+        }
+      } catch (e) {
+        debugPrint('[AiChat] Failed to parse tool arguments JSON: $e');
+      }
+    }
 
     return ToolCallFunctionModel(
       name: json['name'] as String? ?? '',
-      arguments:
-          json['arguments'] as Map<String, dynamic>? ?? <String, dynamic>{},
+      arguments: parsedArgs,
     );
   }
 
@@ -64,5 +65,5 @@ class ToolCallFunctionModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [name, arguments];
 }
