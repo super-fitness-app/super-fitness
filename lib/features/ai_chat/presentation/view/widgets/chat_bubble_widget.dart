@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
-import 'package:super_fitness/core/const/app_icons.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/coach_robot_avatar.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/fitness_card_widget.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 
@@ -22,7 +22,7 @@ class ChatBubbleWidget extends StatelessWidget {
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isUser) const _AssistantAvatar(),
+          if (!isUser) const CoachRobotAvatar(size: 36),
           const SizedBox(width: 8),
           Flexible(
             child: _BubbleContainer(
@@ -33,33 +33,6 @@ class ChatBubbleWidget extends StatelessWidget {
           const SizedBox(width: 8),
           if (isUser) const _UserAvatar(),
         ],
-      ),
-    );
-  }
-}
-
-class _AssistantAvatar extends StatelessWidget {
-  const _AssistantAvatar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.primary, width: 1.2),
-      ),
-      padding: const EdgeInsetsDirectional.all(4),
-      child: Image.asset(
-        AppIcons.chatRobot,
-        fit: BoxFit.contain,
-        errorBuilder: (_, _, _) => const Icon(
-          Icons.smart_toy_rounded,
-          color: AppColors.primary,
-          size: 18,
-        ),
       ),
     );
   }

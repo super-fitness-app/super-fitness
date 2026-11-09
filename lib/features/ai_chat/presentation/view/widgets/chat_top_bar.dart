@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_text_styles.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/coach_robot_avatar.dart';
 
 class ChatTopBar extends StatelessWidget {
   final VoidCallback? onBack;
@@ -25,15 +26,20 @@ class ChatTopBar extends StatelessWidget {
         vertical: 12,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _CircleIconButton(
             icon: Icons.arrow_back_ios_new_rounded,
             onTap: onBack ?? () => Navigator.of(context).maybePop(),
           ),
-          Text(
-            l10n.smartCoach,
-            style: AppTextStyles.bold20.copyWith(color: AppColors.white),
+          const SizedBox(width: 12),
+          const CoachRobotAvatar(size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              l10n.smartCoach,
+              style: AppTextStyles.bold20.copyWith(color: AppColors.white),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           if (onMenuTap != null)
             _TrailingMenuButton(onTap: onMenuTap!)
