@@ -1,3 +1,4 @@
+import 'package:super_fitness/features/ai_chat/core/utils/safe_bool_parser.dart';
 import 'package:super_fitness/features/ai_chat/data/models/chat_message_model.dart';
 
 class AiRequestModel {
@@ -34,7 +35,7 @@ class AiRequestModel {
               .map(ChatMessageModel.fromOllamaJson)
               .toList() ??
           const [],
-      stream: json['stream'] as bool? ?? false,
+      stream: safeBool(json['stream']) ?? false,
       tools: (json['tools'] as List<dynamic>?)
           ?.whereType<Map<String, dynamic>>()
           .toList(),

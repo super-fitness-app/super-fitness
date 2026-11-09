@@ -146,8 +146,8 @@ class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
         'card_type': 'meal',
         'card_title': mealName,
         'card_subtitle': 'Meal not found',
-        'card_details': {},
-        'card_items': [],
+        'card_details': <String, dynamic>{},
+        'card_items': <String>[],
       };
     }
 
@@ -158,18 +158,19 @@ class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
       'card_title': meal.name,
       'card_subtitle':
           meal.category ?? meal.mealType ?? 'Nutrition information',
-      'badge': goal,
+      if (goal != null && goal.isNotEmpty) 'badge': goal,
       'card_details': {
         if (meal.calories != null) 'calories': '${meal.calories} kcal',
         if (meal.protein != null) 'protein': '${meal.protein} g',
         if (meal.carbs != null) 'carbs': '${meal.carbs} g',
         if (meal.fat != null) 'fat': '${meal.fat} g',
         if (meal.nutritionIsEstimate != null)
-          'estimated': meal.nutritionIsEstimate! ? 'Yes' : 'No',
+          'estimated': meal.nutritionIsEstimate == true ? 'Yes' : 'No',
       },
-      'card_items': [],
+      'card_items': <String>[],
     };
   }
+
   // ============================================================
   // EXERCISES
   // ============================================================
@@ -243,32 +244,41 @@ class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
         'card_type': 'exercise',
         'card_title': exerciseName,
         'card_subtitle': 'Exercise not found',
-        'card_details': {},
-        'card_items': [],
+        'card_details': <String, dynamic>{},
+        'card_items': <String>[],
       };
     }
 
     final exercise = exercises.first;
+    final badge = targetMuscle ?? exercise.primeMover ?? exercise.muscleGroup;
 
     return {
       'card_type': 'exercise',
       'card_title': exercise.name,
       'card_subtitle': exercise.muscleGroup ?? 'Exercise details',
-      'badge': targetMuscle ?? exercise.primeMover ?? exercise.muscleGroup,
+      if (badge != null && badge.isNotEmpty) 'badge': badge,
       'card_details': {
-        if (exercise.equipment != null) 'equipment': exercise.equipment!,
-        if (exercise.difficulty != null) 'difficulty': exercise.difficulty!,
-        if (exercise.bodyRegion != null) 'body_region': exercise.bodyRegion!,
-        if (exercise.mechanics != null) 'mechanics': exercise.mechanics!,
-        if (exercise.forceType != null) 'force_type': exercise.forceType!,
+        if (exercise.equipment != null && exercise.equipment!.isNotEmpty)
+          'equipment': exercise.equipment!,
+        if (exercise.difficulty != null && exercise.difficulty!.isNotEmpty)
+          'difficulty': exercise.difficulty!,
+        if (exercise.bodyRegion != null && exercise.bodyRegion!.isNotEmpty)
+          'body_region': exercise.bodyRegion!,
+        if (exercise.mechanics != null && exercise.mechanics!.isNotEmpty)
+          'mechanics': exercise.mechanics!,
+        if (exercise.forceType != null && exercise.forceType!.isNotEmpty)
+          'force_type': exercise.forceType!,
       },
       'card_items': [
-        if (exercise.primeMover != null)
+        if (exercise.primeMover != null && exercise.primeMover!.isNotEmpty)
           'Primary muscle: ${exercise.primeMover}',
-        if (exercise.movementPatterns != null)
+        if (exercise.movementPatterns != null &&
+            exercise.movementPatterns!.isNotEmpty)
           'Movement pattern: ${exercise.movementPatterns}',
-        if (exercise.posture != null) 'Posture: ${exercise.posture}',
-        if (exercise.laterality != null) 'Laterality: ${exercise.laterality}',
+        if (exercise.posture != null && exercise.posture!.isNotEmpty)
+          'Posture: ${exercise.posture}',
+        if (exercise.laterality != null && exercise.laterality!.isNotEmpty)
+          'Laterality: ${exercise.laterality}',
       ],
     };
   }

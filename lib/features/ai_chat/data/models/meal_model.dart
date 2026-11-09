@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import '../../core/utils/safe_bool_parser.dart';
 import '../../domain/entities/meal_entity.dart';
 
 part 'meal_model.g.dart';
@@ -32,19 +33,22 @@ class MealModel extends Equatable {
   @JsonKey(name: 'fat_g')
   final double? fat;
 
-  @JsonKey(name: 'nutrition_is_estimate')
+  @JsonKey(name: 'nutrition_is_estimate', fromJson: _safeBool)
   final bool? nutritionIsEstimate;
 
   @JsonKey(name: 'nutrition_confidence')
   final double? nutritionConfidence;
 
+  @JsonKey(fromJson: _safeBool)
   final bool? vegetarian;
+
+  @JsonKey(fromJson: _safeBool)
   final bool? vegan;
 
-  @JsonKey(name: 'contains_gluten')
+  @JsonKey(name: 'contains_gluten', fromJson: _safeBool)
   final bool? containsGluten;
 
-  @JsonKey(name: 'contains_nuts')
+  @JsonKey(name: 'contains_nuts', fromJson: _safeBool)
   final bool? containsNuts;
 
   @JsonKey(name: 'ingredient_count')
@@ -82,6 +86,8 @@ class MealModel extends Equatable {
   });
 
   static String _toLowerCase(String value) => value.toLowerCase();
+
+  static bool? _safeBool(dynamic value) => safeBool(value);
 
   factory MealModel.fromJson(Map<String, dynamic> json) =>
       _$MealModelFromJson(json);

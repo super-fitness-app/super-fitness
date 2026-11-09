@@ -1,3 +1,5 @@
+import 'safe_bool_parser.dart';
+
 class ToolArgumentParser {
   const ToolArgumentParser();
 
@@ -46,27 +48,7 @@ class ToolArgumentParser {
   }
 
   bool? getBool(Map<String, dynamic> arguments, String key) {
-    final value = arguments[key];
-
-    if (value == null) {
-      return null;
-    }
-
-    if (value is bool) {
-      return value;
-    }
-
-    final normalized = value.toString().toLowerCase();
-
-    if (normalized == 'true') {
-      return true;
-    }
-
-    if (normalized == 'false') {
-      return false;
-    }
-
-    return null;
+    return safeBool(arguments[key]);
   }
 
   List<String> getStringList(Map<String, dynamic> arguments, String key) {

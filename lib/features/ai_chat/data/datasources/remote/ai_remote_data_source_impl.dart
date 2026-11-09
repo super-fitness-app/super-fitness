@@ -10,6 +10,7 @@ import 'package:super_fitness/core/const/api_params.dart';
 import 'package:super_fitness/features/ai_chat/core/constants/ai_constants.dart';
 import 'package:super_fitness/features/ai_chat/core/constants/tool_names.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/platform_host_resolver.dart';
+import 'package:super_fitness/features/ai_chat/core/utils/safe_bool_parser.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/system_prompt_builder.dart';
 import 'package:super_fitness/features/ai_chat/core/utils/thought_parser.dart';
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/ai_remote_data_source.dart';
@@ -177,7 +178,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         options: Options(
           headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
-          receiveTimeout: AiConstants.requestTimeout,
+          receiveTimeout: AiConstants.receiveTimeout,
         ),
       );
 
@@ -285,7 +286,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
           responseType: ResponseType.stream,
           headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
-          receiveTimeout: AiConstants.requestTimeout,
+          receiveTimeout: AiConstants.receiveTimeout,
         ),
       );
 
@@ -306,7 +307,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
             final messageMap = (json['message'] as Map<String, dynamic>?) ?? {};
             final delta = (messageMap[ApiParams.content] as String?) ?? '';
             final thinkingDelta = (messageMap['thinking'] as String?) ?? '';
-            final done = (json['done'] as bool?) ?? false;
+            final done = safeBool(json['done']) ?? false;
 
             final rawTools = messageMap[ApiParams.toolCalls];
             if (rawTools is List && rawTools.isNotEmpty) {
@@ -489,7 +490,7 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
         options: Options(
           headers: {ApiHeaders.contentType: ApiHeaders.applicationJson},
           sendTimeout: AiConstants.requestTimeout,
-          receiveTimeout: AiConstants.requestTimeout,
+          receiveTimeout: AiConstants.receiveTimeout,
         ),
       );
 
@@ -511,8 +512,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       role: 'assistant',
       content: finalContent.isNotEmpty
-          ? finalContent
-          : 'Here is the requested breakdown for your training:',
+            ? finalContent
+            : 'Here is the requested breakdown for your training:',
       timestamp: DateTime.now(),
       fitnessCard: structuredCard,
     );
@@ -529,45 +530,52 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
     StructuredFitnessCardModel? card;
     String replyText = '';
 
-    if (lower.contains('squat') ||
-        lower.contains('bench') ||
-        lower.contains('deadlift') ||
-        lower.contains('exercise') ||
-        lower.contains('workout') ||
-        lower.contains('train')) {
-      final exerciseName = lower.contains('bench')
-          ? 'bench press'
-          : lower.contains('squat')
-          ? 'squat'
-          : lower.contains('deadlift')
-          ? 'deadlift'
-          : 'bench press';
-      final res = await _localDbDataSource.getExerciseDetails(
-        exerciseName: exerciseName,
-      );
-      card = StructuredFitnessCardModel.fromJson(res);
+    try {
+      if (lower.contains('squat') ||
+          lower.contains('bench') ||
+          lower.contains('deadlift') ||
+          lower.contains('exercise') ||
+          lower.contains('workout') ||
+          lower.contains('train')) {
+        final exerciseName = lower.contains('bench')
+            ? 'bench press'
+            : lower.contains('squat')
+            ? 'squat'
+            : lower.contains('deadlift')
+            ? 'deadlift'
+            : 'bench press';
+        final res = await _localDbDataSource.getExerciseDetails(
+          exerciseName: exerciseName,
+        );
+        card = StructuredFitnessCardModel.fromJson(res);
+        replyText =
+            'I have analyzed your workout query and retrieved the exact training mechanics from our exercise database:';
+      } else if (lower.contains('chicken') ||
+          lower.contains('oat') ||
+          lower.contains('salmon') ||
+          lower.contains('meal') ||
+          lower.contains('diet') ||
+          lower.contains('food') ||
+          lower.contains('nutrition') ||
+          lower.contains('calor')) {
+        final mealName = lower.contains('oat')
+            ? 'oatmeal'
+            : lower.contains('salmon')
+            ? 'salmon'
+            : 'chicken';
+        final res = await _localDbDataSource.getMealNutrition(mealName: mealName);
+        card = StructuredFitnessCardModel.fromJson(res);
+        replyText =
+            'I have pulled the nutritional breakdown and macro profile for your goal:';
+      } else {
+        replyText =
+            'Hello! I am your Smart Coach. Ask me about any workout (e.g. bench press, squats) or nutrition plans (e.g. high protein chicken, oats, salmon) to get real-time athletic guidance!';
+      }
+    } catch (e, st) {
+      debugPrint('[AiChat] Error in fallback local harness database lookup: $e\n$st');
+      card = null;
       replyText =
-          'I have analyzed your workout query and retrieved the exact training mechanics from our exercise database:';
-    } else if (lower.contains('chicken') ||
-        lower.contains('oat') ||
-        lower.contains('salmon') ||
-        lower.contains('meal') ||
-        lower.contains('diet') ||
-        lower.contains('food') ||
-        lower.contains('nutrition') ||
-        lower.contains('calor')) {
-      final mealName = lower.contains('oat')
-          ? 'oatmeal'
-          : lower.contains('salmon')
-          ? 'salmon'
-          : 'chicken';
-      final res = await _localDbDataSource.getMealNutrition(mealName: mealName);
-      card = StructuredFitnessCardModel.fromJson(res);
-      replyText =
-          'I have pulled the nutritional breakdown and macro profile for your goal:';
-    } else {
-      replyText =
-          'Hello! I am your Smart Coach. Ask me about any workout (e.g. bench press, squats) or nutrition plans (e.g. high protein chicken, oats, salmon) to get real-time athletic guidance!';
+          'I am your Smart Coach. I am temporarily operating in offline mode. Ask me about any workout or meal plan to get guidance!';
     }
 
     final messageModel = ChatMessageModel(
