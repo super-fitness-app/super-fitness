@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:super_fitness/features/ai_chat/data/datasources/local/fitness_local_data_source.dart';
+import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
 
 @lazySingleton
 class NutritionTools {

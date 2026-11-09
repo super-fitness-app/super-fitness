@@ -4,7 +4,7 @@ import 'package:super_fitness/features/ai_chat/core/errors/ai_chat_exception.dar
 import 'package:super_fitness/features/ai_chat/data/datasources/contract/ai_remote_data_source.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_session_entity.dart';
-import 'package:super_fitness/features/ai_chat/data/datasources/local/fitness_local_data_source.dart';
+import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
 import 'package:super_fitness/features/ai_chat/domain/repositories/chat_repository.dart';
 
 import '../../domain/entities/exercise_entity.dart';

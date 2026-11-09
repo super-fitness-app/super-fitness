@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:super_fitness/features/ai_chat/data/database/fitness_database_manager.dart';
-import 'package:super_fitness/features/ai_chat/data/datasources/local/fitness_local_data_source.dart';
+import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness_local_data_source.dart';
 import 'package:super_fitness/features/ai_chat/data/models/exercise_model.dart';
 import 'package:super_fitness/features/ai_chat/data/models/ingredient_model.dart';
 import 'package:super_fitness/features/ai_chat/data/models/meal_model.dart';
