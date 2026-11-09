@@ -5,6 +5,8 @@ import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_welcome_view.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
@@ -30,6 +32,8 @@ abstract final class AppRoutes {
   static const forgetPassword = '/forget-password';
   static const home = '/home';
   static const main = '/main';
+  static const smartCoachWelcome = '/smart-coach-welcome';
+  static const smartCoachChat = '/smart-coach-chat';
 }
 
 abstract final class AppRouter {
@@ -68,7 +72,7 @@ abstract final class AppRouter {
           if (isAuthenticated) {
             if (isGoingToOnboarding ||
                 state.matchedLocation == AppRoutes.login) {
-              return AppRoutes.main;
+              return AppRoutes.smartCoachWelcome;
             }
           } else {
             if (isGoingToOnboarding) {
@@ -129,6 +133,17 @@ abstract final class AppRouter {
             create: (_) => getIt<MainLayoutCubit>(),
             child: const MainLayoutView(),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.smartCoachWelcome,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const SmartCoachWelcomeView(),
+        ),
+        GoRoute(
+          path: AppRoutes.smartCoachChat,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) =>
+              SmartCoachChatView(sessionId: state.extra as String?),
         ),
       ],
     );
