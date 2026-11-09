@@ -73,21 +73,27 @@ void main() {
       final result = ThoughtParser.parseStream(rawAccumulated: raw);
 
       expect(result.isThinking, isFalse);
-      expect(result.content, equals('Direct coaching advice without thinking tags.'));
+      expect(
+        result.content,
+        equals('Direct coaching advice without thinking tags.'),
+      );
       expect(result.rawThought, isNull);
       expect(result.activeStep, isNull);
     });
 
-    test('parseStream handles separate accumulatedThinking parameter during stream', () {
-      final result = ThoughtParser.parseStream(
-        rawAccumulated: '',
-        accumulatedThinking: '**Formulating macro breakdown**',
-      );
+    test(
+      'parseStream handles separate accumulatedThinking parameter during stream',
+      () {
+        final result = ThoughtParser.parseStream(
+          rawAccumulated: '',
+          accumulatedThinking: '**Formulating macro breakdown**',
+        );
 
-      expect(result.isThinking, isTrue);
-      expect(result.content, isEmpty);
-      expect(result.rawThought, equals('**Formulating macro breakdown**'));
-      expect(result.activeStep, equals('Formulating macro breakdown'));
-    });
+        expect(result.isThinking, isTrue);
+        expect(result.content, isEmpty);
+        expect(result.rawThought, equals('**Formulating macro breakdown**'));
+        expect(result.activeStep, equals('Formulating macro breakdown'));
+      },
+    );
   });
 }

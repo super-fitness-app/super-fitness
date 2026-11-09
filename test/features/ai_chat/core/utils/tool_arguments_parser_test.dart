@@ -41,11 +41,12 @@ void main() {
       final listArgs = {
         'items': ['chest', 'triceps', ''],
       };
-      expect(parser.getStringList(listArgs, 'items'), equals(['chest', 'triceps']));
+      expect(
+        parser.getStringList(listArgs, 'items'),
+        equals(['chest', 'triceps']),
+      );
 
-      final stringArgs = {
-        'items': 'squat, deadlift, bench press , ',
-      };
+      final stringArgs = {'items': 'squat, deadlift, bench press , '};
       expect(
         parser.getStringList(stringArgs, 'items'),
         equals(['squat', 'deadlift', 'bench press']),
@@ -58,13 +59,19 @@ void main() {
     test('requireString returns string or throws ArgumentError', () {
       expect(parser.requireString({'name': 'Squat'}, 'name'), equals('Squat'));
       expect(() => parser.requireString({}, 'name'), throwsArgumentError);
-      expect(() => parser.requireString({'name': '   '}, 'name'), throwsArgumentError);
+      expect(
+        () => parser.requireString({'name': '   '}, 'name'),
+        throwsArgumentError,
+      );
     });
 
     test('requireInt returns int or throws ArgumentError', () {
       expect(parser.requireInt({'reps': 10}, 'reps'), equals(10));
       expect(() => parser.requireInt({}, 'reps'), throwsArgumentError);
-      expect(() => parser.requireInt({'reps': 'abc'}, 'reps'), throwsArgumentError);
+      expect(
+        () => parser.requireInt({'reps': 'abc'}, 'reps'),
+        throwsArgumentError,
+      );
     });
   });
 }

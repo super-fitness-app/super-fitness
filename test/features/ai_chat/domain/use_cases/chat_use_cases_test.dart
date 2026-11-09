@@ -15,21 +15,22 @@ class MockChatRepository extends Mock implements ChatRepository {
     String sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#sendMessage, [], {
-          #message: message,
-          #sessionId: sessionId,
-        }),
-        returnValue: Future.value(
-          Success(
-            ChatMessageEntity(
-              id: '1',
-              role: 'assistant',
-              content: 'Response',
-              timestamp: DateTime(2026),
+            Invocation.method(#sendMessage, [], {
+              #message: message,
+              #sessionId: sessionId,
+            }),
+            returnValue: Future.value(
+              Success(
+                ChatMessageEntity(
+                  id: '1',
+                  role: 'assistant',
+                  content: 'Response',
+                  timestamp: DateTime(2026),
+                ),
+              ),
             ),
-          ),
-        ),
-      ) as Future<ApiResults<ChatMessageEntity>>;
+          )
+          as Future<ApiResults<ChatMessageEntity>>;
 
   @override
   Stream<ChatMessageEntity> streamMessage({
@@ -37,37 +38,40 @@ class MockChatRepository extends Mock implements ChatRepository {
     String sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#streamMessage, [], {
-          #message: message,
-          #sessionId: sessionId,
-        }),
-        returnValue: Stream.fromIterable([
-          ChatMessageEntity(
-            id: '1',
-            role: 'assistant',
-            content: 'Streamed',
-            timestamp: DateTime(2026),
-          ),
-        ]),
-      ) as Stream<ChatMessageEntity>;
+            Invocation.method(#streamMessage, [], {
+              #message: message,
+              #sessionId: sessionId,
+            }),
+            returnValue: Stream.fromIterable([
+              ChatMessageEntity(
+                id: '1',
+                role: 'assistant',
+                content: 'Streamed',
+                timestamp: DateTime(2026),
+              ),
+            ]),
+          )
+          as Stream<ChatMessageEntity>;
 
   @override
   Future<ApiResults<List<ChatMessageEntity>>> getChatHistory({
     String sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#getChatHistory, [], {#sessionId: sessionId}),
-        returnValue: Future.value(Success(<ChatMessageEntity>[])),
-      ) as Future<ApiResults<List<ChatMessageEntity>>>;
+            Invocation.method(#getChatHistory, [], {#sessionId: sessionId}),
+            returnValue: Future.value(Success(<ChatMessageEntity>[])),
+          )
+          as Future<ApiResults<List<ChatMessageEntity>>>;
 
   @override
   Future<ApiResults<void>> clearChatHistory({
     String sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#clearChatHistory, [], {#sessionId: sessionId}),
-        returnValue: Future.value(const Success(null)),
-      ) as Future<ApiResults<void>>;
+            Invocation.method(#clearChatHistory, [], {#sessionId: sessionId}),
+            returnValue: Future.value(const Success(null)),
+          )
+          as Future<ApiResults<void>>;
 }
 
 void main() {
@@ -95,7 +99,9 @@ void main() {
 
       expect(result, isA<Success<ChatMessageEntity>>());
       expect((result as Success).data, equals(expected));
-      verify(mockRepository.sendMessage(message: 'Hi', sessionId: 's1')).called(1);
+      verify(
+        mockRepository.sendMessage(message: 'Hi', sessionId: 's1'),
+      ).called(1);
     });
 
     test('StreamMessageUseCase forwards stream from repository', () async {

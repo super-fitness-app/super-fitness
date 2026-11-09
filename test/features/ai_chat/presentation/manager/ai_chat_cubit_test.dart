@@ -23,18 +23,22 @@ class MockSendMessageUseCase extends Mock implements SendMessageUseCase {
     dynamic sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#call, [], {#message: message, #sessionId: sessionId}),
-        returnValue: Future.value(
-          Success(
-            ChatMessageEntity(
-              id: 'resp_1',
-              role: 'assistant',
-              content: 'Fallback response',
-              timestamp: DateTime(2026),
+            Invocation.method(#call, [], {
+              #message: message,
+              #sessionId: sessionId,
+            }),
+            returnValue: Future.value(
+              Success(
+                ChatMessageEntity(
+                  id: 'resp_1',
+                  role: 'assistant',
+                  content: 'Fallback response',
+                  timestamp: DateTime(2026),
+                ),
+              ),
             ),
-          ),
-        ),
-      ) as Future<ApiResults<ChatMessageEntity>>;
+          )
+          as Future<ApiResults<ChatMessageEntity>>;
 }
 
 class MockGetChatHistoryUseCase extends Mock implements GetChatHistoryUseCase {
@@ -43,20 +47,20 @@ class MockGetChatHistoryUseCase extends Mock implements GetChatHistoryUseCase {
     dynamic sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#call, [], {#sessionId: sessionId}),
-        returnValue: Future.value(const Success(<ChatMessageEntity>[])),
-      ) as Future<ApiResults<List<ChatMessageEntity>>>;
+            Invocation.method(#call, [], {#sessionId: sessionId}),
+            returnValue: Future.value(const Success(<ChatMessageEntity>[])),
+          )
+          as Future<ApiResults<List<ChatMessageEntity>>>;
 }
 
 class MockClearChatUseCase extends Mock implements ClearChatUseCase {
   @override
-  Future<ApiResults<void>> call({
-    dynamic sessionId = 'default_session',
-  }) =>
+  Future<ApiResults<void>> call({dynamic sessionId = 'default_session'}) =>
       super.noSuchMethod(
-        Invocation.method(#call, [], {#sessionId: sessionId}),
-        returnValue: Future.value(const Success(null)),
-      ) as Future<ApiResults<void>>;
+            Invocation.method(#call, [], {#sessionId: sessionId}),
+            returnValue: Future.value(const Success(null)),
+          )
+          as Future<ApiResults<void>>;
 }
 
 class MockSessionService extends Mock implements SessionService {
@@ -76,45 +80,54 @@ class MockStreamMessageUseCase extends Mock implements StreamMessageUseCase {
     dynamic sessionId = 'default_session',
   }) =>
       super.noSuchMethod(
-        Invocation.method(#call, [], {#message: message, #sessionId: sessionId}),
-        returnValue: Stream<ChatMessageEntity>.empty(),
-      ) as Stream<ChatMessageEntity>;
+            Invocation.method(#call, [], {
+              #message: message,
+              #sessionId: sessionId,
+            }),
+            returnValue: Stream<ChatMessageEntity>.empty(),
+          )
+          as Stream<ChatMessageEntity>;
 }
 
-class MockGetChatSessionsUseCase extends Mock implements GetChatSessionsUseCase {
+class MockGetChatSessionsUseCase extends Mock
+    implements GetChatSessionsUseCase {
   @override
   Future<ApiResults<List<ChatSessionEntity>>> call() =>
       super.noSuchMethod(
-        Invocation.method(#call, []),
-        returnValue: Future.value(const Success(<ChatSessionEntity>[])),
-      ) as Future<ApiResults<List<ChatSessionEntity>>>;
+            Invocation.method(#call, []),
+            returnValue: Future.value(const Success(<ChatSessionEntity>[])),
+          )
+          as Future<ApiResults<List<ChatSessionEntity>>>;
 }
 
-class MockCreateNewSessionUseCase extends Mock implements CreateNewSessionUseCase {
+class MockCreateNewSessionUseCase extends Mock
+    implements CreateNewSessionUseCase {
   @override
   Future<ApiResults<ChatSessionEntity>> call({dynamic title}) =>
       super.noSuchMethod(
-        Invocation.method(#call, [], {#title: title}),
-        returnValue: Future.value(
-          Success(
-            ChatSessionEntity(
-              id: 'new_s1',
-              title: title?.toString() ?? 'New Chat',
-              createdAt: DateTime(2026),
-              updatedAt: DateTime(2026),
+            Invocation.method(#call, [], {#title: title}),
+            returnValue: Future.value(
+              Success(
+                ChatSessionEntity(
+                  id: 'new_s1',
+                  title: title?.toString() ?? 'New Chat',
+                  createdAt: DateTime(2026),
+                  updatedAt: DateTime(2026),
+                ),
+              ),
             ),
-          ),
-        ),
-      ) as Future<ApiResults<ChatSessionEntity>>;
+          )
+          as Future<ApiResults<ChatSessionEntity>>;
 }
 
 class MockDeleteSessionUseCase extends Mock implements DeleteSessionUseCase {
   @override
   Future<ApiResults<void>> call(dynamic sessionId) =>
       super.noSuchMethod(
-        Invocation.method(#call, [sessionId]),
-        returnValue: Future.value(const Success(null)),
-      ) as Future<ApiResults<void>>;
+            Invocation.method(#call, [sessionId]),
+            returnValue: Future.value(const Success(null)),
+          )
+          as Future<ApiResults<void>>;
 }
 
 void main() {
@@ -141,8 +154,9 @@ void main() {
     mockDeleteSession = MockDeleteSessionUseCase();
 
     when(mockGetSessions()).thenAnswer((_) async => const Success([]));
-    when(mockGetHistory(sessionId: anyNamed('sessionId')))
-        .thenAnswer((_) async => const Success([]));
+    when(
+      mockGetHistory(sessionId: anyNamed('sessionId')),
+    ).thenAnswer((_) async => const Success([]));
 
     cubit = AiChatCubit(
       mockSendMessage,
@@ -187,53 +201,75 @@ void main() {
       await Future<void>.delayed(Duration.zero);
       expect(events.isNotEmpty, isTrue);
       expect(events.first, isA<DisplayError>());
-      expect((events.first as DisplayError).errorMsg, contains('3000-token limit'));
+      expect(
+        (events.first as DisplayError).errorMsg,
+        contains('3000-token limit'),
+      );
 
       await sub.cancel();
     });
 
-    test('streaming failure falls back gracefully to SendMessageUseCase', () async {
-      when(
-        mockStream(
-          message: anyNamed('message'),
-          sessionId: anyNamed('sessionId'),
-        ),
-      ).thenAnswer((_) => Stream<ChatMessageEntity>.error(Exception('Stream disconnected')));
+    test(
+      'streaming failure falls back gracefully to SendMessageUseCase',
+      () async {
+        when(
+          mockStream(
+            message: anyNamed('message'),
+            sessionId: anyNamed('sessionId'),
+          ),
+        ).thenAnswer(
+          (_) =>
+              Stream<ChatMessageEntity>.error(Exception('Stream disconnected')),
+        );
 
-      final fallbackEntity = ChatMessageEntity(
-        id: 'fallback_1',
-        role: 'assistant',
-        content: 'Fallback response from SendMessage',
-        timestamp: DateTime(2026),
-      );
+        final fallbackEntity = ChatMessageEntity(
+          id: 'fallback_1',
+          role: 'assistant',
+          content: 'Fallback response from SendMessage',
+          timestamp: DateTime(2026),
+        );
 
-      when(
-        mockSendMessage(
-          message: anyNamed('message'),
-          sessionId: anyNamed('sessionId'),
-        ),
-      ).thenAnswer((_) async => Success(fallbackEntity));
+        when(
+          mockSendMessage(
+            message: anyNamed('message'),
+            sessionId: anyNamed('sessionId'),
+          ),
+        ).thenAnswer((_) async => Success(fallbackEntity));
 
-      cubit.doEvent(const SendChatMessageEvent('Should fallback'));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+        cubit.doEvent(const SendChatMessageEvent('Should fallback'));
+        await Future<void>.delayed(const Duration(milliseconds: 50));
 
-      expect(cubit.state.messages.any((m) => m.content == 'Fallback response from SendMessage'), isTrue);
-      verify(mockSendMessage(message: 'Should fallback', sessionId: anyNamed('sessionId'))).called(1);
-    });
+        expect(
+          cubit.state.messages.any(
+            (m) => m.content == 'Fallback response from SendMessage',
+          ),
+          isTrue,
+        );
+        verify(
+          mockSendMessage(
+            message: 'Should fallback',
+            sessionId: anyNamed('sessionId'),
+          ),
+        ).called(1);
+      },
+    );
 
-    test('LoadChatHistoryEvent updates isHistoryLoading transition states', () async {
-      when(
-        mockGetHistory(sessionId: anyNamed('sessionId')),
-      ).thenAnswer((_) async {
-        await Future<void>.delayed(const Duration(milliseconds: 10));
-        return const Success([]);
-      });
+    test(
+      'LoadChatHistoryEvent updates isHistoryLoading transition states',
+      () async {
+        when(mockGetHistory(sessionId: anyNamed('sessionId'))).thenAnswer((
+          _,
+        ) async {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          return const Success([]);
+        });
 
-      cubit.doEvent(const LoadChatHistoryEvent(sessionId: 'session_target'));
-      expect(cubit.state.isHistoryLoading, isTrue);
+        cubit.doEvent(const LoadChatHistoryEvent(sessionId: 'session_target'));
+        expect(cubit.state.isHistoryLoading, isTrue);
 
-      await Future<void>.delayed(const Duration(milliseconds: 30));
-      expect(cubit.state.isHistoryLoading, isFalse);
-    });
+        await Future<void>.delayed(const Duration(milliseconds: 30));
+        expect(cubit.state.isHistoryLoading, isFalse);
+      },
+    );
   });
 }

@@ -31,7 +31,9 @@ abstract final class SystemPromptBuilder {
         }
       }
     } catch (e) {
-      debugPrint('[AiChat] SystemPromptBuilder user profile retrieval error: $e');
+      debugPrint(
+        '[AiChat] SystemPromptBuilder user profile retrieval error: $e',
+      );
     }
 
     return '''
