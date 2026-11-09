@@ -43,7 +43,8 @@ class StructuredFitnessCardModel extends Equatable {
       cardType: (json[ApiParams.cardType]?.toString()) ?? 'exercise',
       title: (json[ApiParams.cardTitle] ?? json['title'])?.toString() ?? '',
       subtitle: (json[ApiParams.cardSubtitle] ?? json['subtitle'])?.toString(),
-      badge: (json['badge'] ?? json['target_muscle'] ?? json['goal'])?.toString(),
+      badge: (json['badge'] ?? json['target_muscle'] ?? json['goal'])
+          ?.toString(),
       metrics: parsedMetrics,
       bulletPoints: parsedBullets,
     );

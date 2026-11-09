@@ -512,8 +512,8 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       role: 'assistant',
       content: finalContent.isNotEmpty
-            ? finalContent
-            : 'Here is the requested breakdown for your training:',
+          ? finalContent
+          : 'Here is the requested breakdown for your training:',
       timestamp: DateTime.now(),
       fitnessCard: structuredCard,
     );
@@ -563,7 +563,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
             : lower.contains('salmon')
             ? 'salmon'
             : 'chicken';
-        final res = await _localDbDataSource.getMealNutrition(mealName: mealName);
+        final res = await _localDbDataSource.getMealNutrition(
+          mealName: mealName,
+        );
         card = StructuredFitnessCardModel.fromJson(res);
         replyText =
             'I have pulled the nutritional breakdown and macro profile for your goal:';
@@ -572,7 +574,9 @@ class AiRemoteDataSourceImpl implements AiRemoteDataSource {
             'Hello! I am your Smart Coach. Ask me about any workout (e.g. bench press, squats) or nutrition plans (e.g. high protein chicken, oats, salmon) to get real-time athletic guidance!';
       }
     } catch (e, st) {
-      debugPrint('[AiChat] Error in fallback local harness database lookup: $e\n$st');
+      debugPrint(
+        '[AiChat] Error in fallback local harness database lookup: $e\n$st',
+      );
       card = null;
       replyText =
           'I am your Smart Coach. I am temporarily operating in offline mode. Ask me about any workout or meal plan to get guidance!';

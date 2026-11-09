@@ -12,14 +12,17 @@ void main() {
       expect(safeBool(false), isFalse);
     });
 
-    test('returns correct boolean when value is a num (SQLite 0/1 integers)', () {
-      expect(safeBool(1), isTrue);
-      expect(safeBool(0), isFalse);
-      expect(safeBool(2), isTrue);
-      expect(safeBool(-1), isTrue);
-      expect(safeBool(0.0), isFalse);
-      expect(safeBool(1.0), isTrue);
-    });
+    test(
+      'returns correct boolean when value is a num (SQLite 0/1 integers)',
+      () {
+        expect(safeBool(1), isTrue);
+        expect(safeBool(0), isFalse);
+        expect(safeBool(2), isTrue);
+        expect(safeBool(-1), isTrue);
+        expect(safeBool(0.0), isFalse);
+        expect(safeBool(1.0), isTrue);
+      },
+    );
 
     test('returns correct boolean when value is a string representation', () {
       expect(safeBool('true'), isTrue);
@@ -35,12 +38,15 @@ void main() {
       expect(safeBool(' 0 '), isFalse);
     });
 
-    test('returns null for unrecognized string values or unsupported types', () {
-      expect(safeBool(''), isNull);
-      expect(safeBool('yes'), isNull);
-      expect(safeBool('invalid'), isNull);
-      expect(safeBool(['true']), isNull);
-      expect(safeBool({'key': 'val'}), isNull);
-    });
+    test(
+      'returns null for unrecognized string values or unsupported types',
+      () {
+        expect(safeBool(''), isNull);
+        expect(safeBool('yes'), isNull);
+        expect(safeBool('invalid'), isNull);
+        expect(safeBool(['true']), isNull);
+        expect(safeBool({'key': 'val'}), isNull);
+      },
+    );
   });
 }
