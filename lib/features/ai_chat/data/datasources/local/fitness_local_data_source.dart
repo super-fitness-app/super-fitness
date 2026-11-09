@@ -4,6 +4,10 @@ import 'package:super_fitness/features/ai_chat/data/models/meal_model.dart';
 import 'package:super_fitness/features/ai_chat/data/models/meal_step_model.dart';
 
 abstract interface class FitnessLocalDataSource {
+  // ============================================================
+  // NUTRITION
+  // ============================================================
+
   Future<List<MealModel>> searchMeals({
     String? query,
     double? minCalories,
@@ -17,6 +21,15 @@ abstract interface class FitnessLocalDataSource {
 
   Future<List<MealStepModel>> getMealSteps(String mealId);
 
+  Future<Map<String, dynamic>> getMealNutrition({
+    required String mealName,
+    String? goal,
+  });
+
+  // ============================================================
+  // EXERCISES
+  // ============================================================
+
   Future<List<ExerciseModel>> searchExercises({
     String? query,
     String? muscleGroup,
@@ -25,4 +38,9 @@ abstract interface class FitnessLocalDataSource {
   });
 
   Future<ExerciseModel?> getExerciseById(String id);
+
+  Future<Map<String, dynamic>> getExerciseDetails({
+    required String exerciseName,
+    String? targetMuscle,
+  });
 }

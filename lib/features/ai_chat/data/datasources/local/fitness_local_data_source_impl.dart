@@ -134,6 +134,42 @@ class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
     return result.map((row) => MealStepModel.fromJson(row)).toList();
   }
 
+  @override
+  Future<Map<String, dynamic>> getMealNutrition({
+    required String mealName,
+    String? goal,
+  }) async {
+    final meals = await searchMeals(query: mealName);
+
+    if (meals.isEmpty) {
+      return {
+        'card_type': 'meal',
+        'card_title': mealName,
+        'card_subtitle': 'Meal not found',
+        'card_details': {},
+        'card_items': [],
+      };
+    }
+
+    final meal = meals.first;
+
+    return {
+      'card_type': 'meal',
+      'card_title': meal.name,
+      'card_subtitle':
+          meal.category ?? meal.mealType ?? 'Nutrition information',
+      'badge': goal,
+      'card_details': {
+        if (meal.calories != null) 'calories': '${meal.calories} kcal',
+        if (meal.protein != null) 'protein': '${meal.protein} g',
+        if (meal.carbs != null) 'carbs': '${meal.carbs} g',
+        if (meal.fat != null) 'fat': '${meal.fat} g',
+        if (meal.nutritionIsEstimate != null)
+          'estimated': meal.nutritionIsEstimate! ? 'Yes' : 'No',
+      },
+      'card_items': [],
+    };
+  }
   // ============================================================
   // EXERCISES
   // ============================================================
@@ -193,6 +229,48 @@ class FitnessLocalDataSourceImpl implements FitnessLocalDataSource {
     );
 
     return result.map((row) => ExerciseModel.fromJson(row)).toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> getExerciseDetails({
+    required String exerciseName,
+    String? targetMuscle,
+  }) async {
+    final exercises = await searchExercises(query: exerciseName);
+
+    if (exercises.isEmpty) {
+      return {
+        'card_type': 'exercise',
+        'card_title': exerciseName,
+        'card_subtitle': 'Exercise not found',
+        'card_details': {},
+        'card_items': [],
+      };
+    }
+
+    final exercise = exercises.first;
+
+    return {
+      'card_type': 'exercise',
+      'card_title': exercise.name,
+      'card_subtitle': exercise.muscleGroup ?? 'Exercise details',
+      'badge': targetMuscle ?? exercise.primeMover ?? exercise.muscleGroup,
+      'card_details': {
+        if (exercise.equipment != null) 'equipment': exercise.equipment!,
+        if (exercise.difficulty != null) 'difficulty': exercise.difficulty!,
+        if (exercise.bodyRegion != null) 'body_region': exercise.bodyRegion!,
+        if (exercise.mechanics != null) 'mechanics': exercise.mechanics!,
+        if (exercise.forceType != null) 'force_type': exercise.forceType!,
+      },
+      'card_items': [
+        if (exercise.primeMover != null)
+          'Primary muscle: ${exercise.primeMover}',
+        if (exercise.movementPatterns != null)
+          'Movement pattern: ${exercise.movementPatterns}',
+        if (exercise.posture != null) 'Posture: ${exercise.posture}',
+        if (exercise.laterality != null) 'Laterality: ${exercise.laterality}',
+      ],
+    };
   }
 
   @override
