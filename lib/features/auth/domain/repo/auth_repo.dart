@@ -8,5 +8,6 @@ import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 abstract interface class AuthRepo {
   Future<ApiResults<RegisterEntity>> register(RegisterParams request);
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle();
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook();
   Future<ApiResults<LoginEntity>> login(LoginParams params);
 }
