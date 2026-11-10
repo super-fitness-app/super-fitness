@@ -227,6 +227,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get googleAccountConnected => 'تم ربط حساب Google. أكمل ملفك الشخصي.';
 
   @override
+  String get facebookAccountIdMissing =>
+      'معرف حساب Facebook مفقود. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get facebookAccountConnected =>
+      'تم ربط حساب Facebook. أكمل ملفك الشخصي.';
+
+  @override
   String get accountNotFoundRegisterFirst =>
       'الحساب غير موجود. يرجى إنشاء حساب أولاً.';
 

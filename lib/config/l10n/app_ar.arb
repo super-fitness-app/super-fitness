@@ -77,6 +77,8 @@
   "missingRegistrationData": "يرجى إكمال جميع بيانات التسجيل المطلوبة",
   "googleAccountIdMissing": "معرف حساب Google مفقود. يرجى المحاولة مرة أخرى.",
   "googleAccountConnected": "تم ربط حساب Google. أكمل ملفك الشخصي.",
+  "facebookAccountIdMissing": "معرف حساب Facebook مفقود. يرجى المحاولة مرة أخرى.",
+  "facebookAccountConnected": "تم ربط حساب Facebook. أكمل ملفك الشخصي.",
   "accountNotFoundRegisterFirst": "الحساب غير موجود. يرجى إنشاء حساب أولاً.",
 
   "tellUsAboutYourself": "أخبرنا عن نفسك!",
