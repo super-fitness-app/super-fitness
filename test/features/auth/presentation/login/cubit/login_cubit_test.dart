@@ -14,6 +14,7 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_event.dart';
@@ -22,6 +23,7 @@ import 'package:super_fitness/features/auth/presentation/login/cubit/login_state
 class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
   ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+  ApiResults<SocialAuthUserEntity>? facebookResultToReturn;
 
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
@@ -35,6 +37,11 @@ class _FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
     return googleResultToReturn!;
+  }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
+    return facebookResultToReturn!;
   }
 }
 
@@ -99,6 +106,7 @@ void main() {
     late _FakeSessionService fakeSessionService;
     late LoginUseCase loginUseCase;
     late SignInWithGoogleUseCase signInWithGoogleUseCase;
+    late SignInWithFacebookUseCase signInWithFacebookUseCase;
     const passwordGenerator = PasswordGenerator();
 
     final testUser = UserEntity(
@@ -126,6 +134,7 @@ void main() {
           loginUseCase,
           fakeSessionService,
           signInWithGoogleUseCase,
+          signInWithFacebookUseCase,
           passwordGenerator,
         );
 
@@ -134,6 +143,7 @@ void main() {
       fakeSessionService = _FakeSessionService();
       loginUseCase = LoginUseCase(fakeAuthRepo);
       signInWithGoogleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      signInWithFacebookUseCase = SignInWithFacebookUseCase(fakeAuthRepo);
     });
 
     test('initial state has default values', () {
@@ -382,6 +392,150 @@ void main() {
         LoginState(
           loginApiState: BaseState.failure(
             const ServerMessageFailure('Google Sign-In failed'),
+          ),
+        ),
+      ],
+    );
+
+    // =========================================================================
+    // Facebook Sign-In Tests
+    // =========================================================================
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithFacebookEvent logs in and navigates when user is already registered',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'facebook-user-123',
+            email: 'facebookuser@example.com',
+            displayName: 'Facebook User',
+            photoUrl: 'https://photo.url',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+        expect(events, contains(const NavigateEvent(AppRoutes.main)));
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(loginApiState: BaseState.success(testLoginEntity)),
+      ],
+      verify: (_) {
+        expect(fakeSessionService.savedToken, 'jwt_token_alex');
+        expect(fakeSessionService.savedUserData, contains('alex@example.com'));
+      },
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithFacebookEvent notifies user to register first when user is not registered',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'facebook-unregistered-id',
+            email: 'unregistered@example.com',
+            displayName: 'New Facebook User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+          ServerMessageFailure('Invalid credentials or user not found'),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+        expect(
+          events.whereType<DisplayError>().map((e) => e.errorMsg),
+          contains('Account not found. Please register first.'),
+        );
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.error('Account not found. Please register first.'),
+        ),
+      ],
+      verify: (_) {
+        expect(fakeSessionService.savedToken, isNull);
+      },
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithFacebookEvent emits error when Facebook account ID is missing',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: null,
+            email: 'missingid@example.com',
+            displayName: 'No ID User',
+          ),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+        expect(
+          events.whereType<DisplayError>().map((e) => e.errorMsg),
+          contains('Facebook account ID is missing. Please try again.'),
+        );
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.error('Facebook account ID is missing. Please try again.'),
+        ),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithFacebookEvent reverts to initial state silently when cancelled by user',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.facebookResultToReturn = const FailureResponse(
+          CancelledFailure('User cancelled sign-in'),
+        );
+      },
+      act: (cubit) async {
+        final events = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(events.add);
+        await cubit.signInWithFacebookIntent();
+        expect(events, isEmpty);
+        await sub.cancel();
+      },
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        const LoginState(loginApiState: BaseState.initial()),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'SignInWithFacebookEvent emits failure on Facebook sign-in failure',
+      build: createCubit,
+      setUp: () {
+        fakeAuthRepo.facebookResultToReturn = const FailureResponse(
+          ServerMessageFailure('Facebook Sign-In failed'),
+        );
+      },
+      act: (cubit) => cubit.signInWithFacebookIntent(),
+      expect: () => [
+        LoginState(loginApiState: BaseState.loading()),
+        LoginState(
+          loginApiState: BaseState.failure(
+            const ServerMessageFailure('Facebook Sign-In failed'),
           ),
         ),
       ],

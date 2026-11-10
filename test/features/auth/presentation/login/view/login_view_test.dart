@@ -19,6 +19,7 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
@@ -32,6 +33,7 @@ class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
   Completer<ApiResults<LoginEntity>>? completer;
   ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+  ApiResults<SocialAuthUserEntity>? facebookResultToReturn;
 
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
@@ -46,6 +48,10 @@ class _FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
       googleResultToReturn!;
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      facebookResultToReturn!;
 }
 
 class _FakeSessionService implements SessionService {
@@ -96,6 +102,7 @@ void main() {
     late _FakeSessionService fakeSessionService;
     late LoginUseCase loginUseCase;
     late SignInWithGoogleUseCase signInWithGoogleUseCase;
+    late SignInWithFacebookUseCase signInWithFacebookUseCase;
     const passwordGenerator = PasswordGenerator();
     late LoginCubit cubit;
 
@@ -119,10 +126,12 @@ void main() {
       fakeSessionService = _FakeSessionService();
       loginUseCase = LoginUseCase(fakeAuthRepo);
       signInWithGoogleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      signInWithFacebookUseCase = SignInWithFacebookUseCase(fakeAuthRepo);
       cubit = LoginCubit(
         loginUseCase,
         fakeSessionService,
         signInWithGoogleUseCase,
+        signInWithFacebookUseCase,
         passwordGenerator,
       );
     });
@@ -320,6 +329,52 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(SocialAuthKeys.google));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Account not found. Please register first.'), findsOneWidget);
+      expect(fakeSessionService.savedToken, isNull);
+    });
+
+    testWidgets('tapping Facebook button signs in and navigates to Main when user is registered',
+        (tester) async {
+      fakeAuthRepo.facebookResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'fb-reg-1',
+          email: 'fbreg@example.com',
+          displayName: 'FB Reg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
+        LoginEntity(message: 'OK', user: testUser, token: 'token_facebook_user'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.facebook));
+      await tester.pumpAndSettle();
+
+      expect(fakeSessionService.savedToken, 'token_facebook_user');
+      expect(find.text('Main'), findsOneWidget);
+    });
+
+    testWidgets('tapping Facebook button shows notification to register first when user is not registered',
+        (tester) async {
+      fakeAuthRepo.facebookResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'fb-unreg-1',
+          email: 'fbunreg@example.com',
+          displayName: 'FB Unreg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+        ServerMessageFailure('Invalid credentials'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.facebook));
       await tester.pumpAndSettle();
 
       expect(find.text('Account not found. Please register first.'), findsOneWidget);

@@ -19,6 +19,7 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
@@ -97,6 +98,10 @@ class _FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
       const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
 }
 
 void main() {
@@ -128,6 +133,7 @@ void main() {
           LoginUseCase(const _FakeAuthRepo()),
           getIt<SessionService>(),
           SignInWithGoogleUseCase(const _FakeAuthRepo()),
+          SignInWithFacebookUseCase(const _FakeAuthRepo()),
           const PasswordGenerator(),
         ),
       );
