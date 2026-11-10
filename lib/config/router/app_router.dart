@@ -38,7 +38,7 @@ abstract final class AppRouter {
   static GoRouter createRouter({
     required StorageService storageService,
     required SessionService sessionService,
-    String initialLocation = AppRoutes.onboarding,
+    String initialLocation = AppRoutes.login,
   }) {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
@@ -66,7 +66,8 @@ abstract final class AppRouter {
 
         if (hasSeen == 'true') {
           if (isAuthenticated) {
-            if (isGoingToOnboarding || state.matchedLocation == AppRoutes.login) {
+            if (isGoingToOnboarding ||
+                state.matchedLocation == AppRoutes.login) {
               return AppRoutes.main;
             }
           } else {

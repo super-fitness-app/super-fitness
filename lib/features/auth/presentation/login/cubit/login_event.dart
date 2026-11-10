@@ -19,3 +19,11 @@ final class TogglePasswordVisibilityEvent extends LoginEvent {
 final class SubmitLoginEvent extends LoginEvent {
   const SubmitLoginEvent();
 }
+
+final class SignInWithGoogleEvent extends LoginEvent {
+  const SignInWithGoogleEvent();
+}
+
+final class SignInWithFacebookEvent extends LoginEvent {
+  const SignInWithFacebookEvent();
+}

@@ -494,6 +494,24 @@ abstract class AppLocalizations {
   /// **'Google account connected. Complete your profile.'**
   String get googleAccountConnected;
 
+  /// No description provided for @facebookAccountIdMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook account ID is missing. Please try again.'**
+  String get facebookAccountIdMissing;
+
+  /// No description provided for @facebookAccountConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook account connected. Complete your profile.'**
+  String get facebookAccountConnected;
+
+  /// No description provided for @accountNotFoundRegisterFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Account not found. Please register first.'**
+  String get accountNotFoundRegisterFirst;
+
   /// No description provided for @tellUsAboutYourself.
   ///
   /// In en, this message translates to:

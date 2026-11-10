@@ -51,6 +51,18 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() {
+    return safeCall<SocialAuthUserEntity>(() async {
+      final response = await _socialAuthRemoteDataSource.signInWithFacebook();
+
+      if (response == null) {
+        return const Failure(CancelledFailure('Sign-in cancelled'));
+      }
+      return Success(response.toEntity());
+    });
+  }
+
+  @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     return safeCall(() async {
       final request = LoginRequest(

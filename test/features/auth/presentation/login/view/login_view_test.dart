@@ -11,24 +11,29 @@ import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/ui/widgets/app_button.dart';
 import 'package:super_fitness/core/ui/widgets/app_text_field.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
-
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/forgot_password_button.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/login_card.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/login_footer.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/login_header_section.dart';
+import 'package:super_fitness/features/auth/presentation/widgets/social_auth_buttons.dart';
 
 class _FakeAuthRepo implements AuthRepo {
   ApiResults<LoginEntity>? resultToReturn;
   Completer<ApiResults<LoginEntity>>? completer;
+  ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+  ApiResults<SocialAuthUserEntity>? facebookResultToReturn;
 
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
@@ -42,7 +47,11 @@ class _FakeAuthRepo implements AuthRepo {
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
-      throw UnimplementedError();
+      googleResultToReturn!;
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      facebookResultToReturn!;
 }
 
 class _FakeSessionService implements SessionService {
@@ -92,13 +101,39 @@ void main() {
     late _FakeAuthRepo fakeAuthRepo;
     late _FakeSessionService fakeSessionService;
     late LoginUseCase loginUseCase;
+    late SignInWithGoogleUseCase signInWithGoogleUseCase;
+    late SignInWithFacebookUseCase signInWithFacebookUseCase;
+    const passwordGenerator = PasswordGenerator();
     late LoginCubit cubit;
+
+    final testUser = UserEntity(
+      id: 'u1',
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'test@example.com',
+      gender: 'male',
+      age: 25,
+      weight: 70,
+      height: 175,
+      activityLevel: 'mid',
+      goal: 'gain',
+      photo: 'pic.png',
+      createdAt: DateTime(2025, 1, 1),
+    );
 
     setUp(() {
       fakeAuthRepo = _FakeAuthRepo();
       fakeSessionService = _FakeSessionService();
       loginUseCase = LoginUseCase(fakeAuthRepo);
-      cubit = LoginCubit(loginUseCase, fakeSessionService);
+      signInWithGoogleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      signInWithFacebookUseCase = SignInWithFacebookUseCase(fakeAuthRepo);
+      cubit = LoginCubit(
+        loginUseCase,
+        fakeSessionService,
+        signInWithGoogleUseCase,
+        signInWithFacebookUseCase,
+        passwordGenerator,
+      );
     });
 
     tearDown(() async {
@@ -139,7 +174,7 @@ void main() {
       );
     }
 
-    testWidgets('renders all expected UI elements and excludes social logins',
+    testWidgets('renders all expected UI elements including social auth buttons',
         (tester) async {
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
@@ -148,13 +183,13 @@ void main() {
       expect(find.byType(LoginCard), findsOneWidget);
       expect(find.byType(AppTextField), findsNWidgets(2));
       expect(find.byType(ForgotPasswordButton), findsOneWidget);
+      expect(find.byType(SocialAuthButtons), findsOneWidget);
+      expect(find.byKey(SocialAuthKeys.facebook), findsOneWidget);
+      expect(find.byKey(SocialAuthKeys.google), findsOneWidget);
+      expect(find.byKey(SocialAuthKeys.apple), findsOneWidget);
+      expect(find.text('Or'), findsOneWidget);
       expect(find.byType(AppButton), findsOneWidget);
       expect(find.byType(LoginFooter), findsOneWidget);
-
-      expect(find.text('Or'), findsNothing);
-      expect(find.text('Facebook'), findsNothing);
-      expect(find.text('Google'), findsNothing);
-      expect(find.text('Apple'), findsNothing);
     });
 
     testWidgets('toggles password visibility when eye icon tapped',
@@ -216,20 +251,6 @@ void main() {
 
     testWidgets('submitting valid credentials shows loading indicator and navigates on success',
         (tester) async {
-      final testUser = UserEntity(
-        id: 'u1',
-        firstName: 'Test',
-        lastName: 'User',
-        email: 'test@example.com',
-        gender: 'male',
-        age: 25,
-        weight: 70,
-        height: 175,
-        activityLevel: 'mid',
-        goal: 'gain',
-        photo: 'pic.png',
-        createdAt: DateTime(2025, 1, 1),
-      );
       final loginCompleter = Completer<ApiResults<LoginEntity>>();
       fakeAuthRepo.completer = loginCompleter;
 
@@ -266,6 +287,98 @@ void main() {
       expect(fakeSessionService.savedToken, 'token_xyz');
       expect(fakeSessionService.savedUserData, contains('test@example.com'));
       expect(find.text('Main'), findsOneWidget);
+    });
+
+    testWidgets('tapping Google button signs in and navigates to Main when user is registered',
+        (tester) async {
+      fakeAuthRepo.googleResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'google-reg-1',
+          email: 'reg@example.com',
+          displayName: 'Reg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
+        LoginEntity(message: 'OK', user: testUser, token: 'token_google_user'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.google));
+      await tester.pumpAndSettle();
+
+      expect(fakeSessionService.savedToken, 'token_google_user');
+      expect(find.text('Main'), findsOneWidget);
+    });
+
+    testWidgets('tapping Google button shows notification to register first when user is not registered',
+        (tester) async {
+      fakeAuthRepo.googleResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'google-unreg-1',
+          email: 'unreg@example.com',
+          displayName: 'Unreg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+        ServerMessageFailure('Invalid credentials'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.google));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Account not found. Please register first.'), findsOneWidget);
+      expect(fakeSessionService.savedToken, isNull);
+    });
+
+    testWidgets('tapping Facebook button signs in and navigates to Main when user is registered',
+        (tester) async {
+      fakeAuthRepo.facebookResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'fb-reg-1',
+          email: 'fbreg@example.com',
+          displayName: 'FB Reg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
+        LoginEntity(message: 'OK', user: testUser, token: 'token_facebook_user'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.facebook));
+      await tester.pumpAndSettle();
+
+      expect(fakeSessionService.savedToken, 'token_facebook_user');
+      expect(find.text('Main'), findsOneWidget);
+    });
+
+    testWidgets('tapping Facebook button shows notification to register first when user is not registered',
+        (tester) async {
+      fakeAuthRepo.facebookResultToReturn = const Success(
+        SocialAuthUserEntity(
+          id: 'fb-unreg-1',
+          email: 'fbunreg@example.com',
+          displayName: 'FB Unreg User',
+        ),
+      );
+      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+        ServerMessageFailure('Invalid credentials'),
+      );
+
+      await tester.pumpWidget(createTestApp(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(SocialAuthKeys.facebook));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Account not found. Please register first.'), findsOneWidget);
+      expect(fakeSessionService.savedToken, isNull);
     });
   });
 }
