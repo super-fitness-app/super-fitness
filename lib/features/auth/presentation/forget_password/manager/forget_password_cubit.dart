@@ -77,6 +77,7 @@ class ForgetPasswordCubit extends BaseCubit<ForgetPasswordState, BaseEvent> {
           failure: result.failure,
         ),
       );
+      emitEvent(DisplayError.fromFailure(result.failure));
     }
   }
 
@@ -115,6 +116,7 @@ class ForgetPasswordCubit extends BaseCubit<ForgetPasswordState, BaseEvent> {
           failure: result.failure,
         ),
       );
+      emitEvent(DisplayError.fromFailure(result.failure));
     }
   }
 
