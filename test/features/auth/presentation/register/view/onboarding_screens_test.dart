@@ -16,6 +16,7 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
@@ -44,6 +45,11 @@ class FakeAuthRepo implements AuthRepo {
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return const FailureResponse(ServerMessageFailure(''));
+  }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
     return const FailureResponse(ServerMessageFailure(''));
   }
 
@@ -93,6 +99,7 @@ void main() {
     cubit = RegisterCubit(
       RegisterUseCase(fakeRepo),
       SignInWithGoogleUseCase(fakeRepo),
+      SignInWithFacebookUseCase(fakeRepo),
       const PasswordGenerator(),
     );
   });
@@ -373,6 +380,7 @@ void main() {
         final testCubit = RegisterCubit(
           RegisterUseCase(fakeRepo),
           SignInWithGoogleUseCase(fakeRepo),
+          SignInWithFacebookUseCase(fakeRepo),
           const PasswordGenerator(),
         );
 
@@ -478,6 +486,7 @@ void main() {
       final testCubit = RegisterCubit(
         RegisterUseCase(fakeRepo),
         SignInWithGoogleUseCase(fakeRepo),
+        SignInWithFacebookUseCase(fakeRepo),
         const PasswordGenerator(),
       );
 
@@ -562,6 +571,7 @@ void main() {
         final testCubit = RegisterCubit(
           RegisterUseCase(fakeRepo),
           SignInWithGoogleUseCase(fakeRepo),
+          SignInWithFacebookUseCase(fakeRepo),
           const PasswordGenerator(),
         );
 

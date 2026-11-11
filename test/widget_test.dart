@@ -13,7 +13,7 @@ import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
-
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -26,6 +26,8 @@ import 'package:super_fitness/features/auth/domain/use_cases/forget_password_use
 import 'package:super_fitness/features/auth/domain/use_cases/verify_otp_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/reset_password_usecase.dart';
 
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
 
@@ -139,6 +141,10 @@ class _FakeAuthRepo implements AuthRepo {
     required String confirmPassword,
   }) async {
     return const FailureResponse(NetworkFailure(AppError.cancelled));
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
   }
 }
 
@@ -188,6 +194,9 @@ void main() {
           ForgetPasswordUseCase(fakeAuthRepo),
           VerifyOtpUseCase(fakeAuthRepo),
           ResetPasswordUseCase(fakeAuthRepo),
+          SignInWithGoogleUseCase(const _FakeAuthRepo()),
+          SignInWithFacebookUseCase(const _FakeAuthRepo()),
+          const PasswordGenerator(),
         ),
       );
 

@@ -11,6 +11,7 @@ import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -18,6 +19,8 @@ import 'package:super_fitness/features/auth/domain/entities/social_auth_user_ent
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
@@ -70,6 +73,9 @@ class _FakeAuthRepo implements AuthRepo {
       const FailureResponse(NetworkFailure(AppError.cancelled));
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
+      const FailureResponse(NetworkFailure(AppError.cancelled));
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
       const FailureResponse(NetworkFailure(AppError.cancelled));
 
   @override
@@ -177,6 +183,9 @@ void main() {
         () => LoginCubit(
           LoginUseCase(const _FakeAuthRepo()),
           getIt<SessionService>(),
+          SignInWithGoogleUseCase(const _FakeAuthRepo()),
+          SignInWithFacebookUseCase(const _FakeAuthRepo()),
+          const PasswordGenerator(),
         ),
       );
     });

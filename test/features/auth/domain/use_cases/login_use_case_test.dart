@@ -49,6 +49,10 @@ class _FakeAuthRepo implements AuthRepo {
   }) async {
     return const FailureResponse(NetworkFailure(AppError.cancelled));
   }
+
+  @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      throw UnimplementedError();
 }
 
 void main() {

@@ -25,6 +25,11 @@ class FakeAuthRepo implements AuthRepo {
   }
 
   @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     throw UnimplementedError();
   }

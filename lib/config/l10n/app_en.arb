@@ -80,6 +80,9 @@
   "missingRegistrationData": "Please fill all required registration details",
   "googleAccountIdMissing": "Google account ID is missing. Please try again.",
   "googleAccountConnected": "Google account connected. Complete your profile.",
+  "facebookAccountIdMissing": "Facebook account ID is missing. Please try again.",
+  "facebookAccountConnected": "Facebook account connected. Complete your profile.",
+  "accountNotFoundRegisterFirst": "Account not found. Please register first.",
 
   "tellUsAboutYourself": "TELL US ABOUT YOURSELF!",
   "weNeedToKnowYourGender": "We Need To Know Your Gender",
