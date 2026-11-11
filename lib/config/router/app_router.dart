@@ -5,6 +5,7 @@ import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/features/auth/presentation/forget_password/manager/forget_password_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
@@ -120,7 +121,10 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.forgetPassword,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const ForgetPasswordView(),
+          builder: (context, state) => BlocProvider<ForgetPasswordCubit>(
+            create: (_) => getIt<ForgetPasswordCubit>(),
+            child: const ForgetPasswordView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.main,

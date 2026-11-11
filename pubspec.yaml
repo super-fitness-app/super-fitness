@@ -51,6 +51,7 @@ dependencies:
   firebase_auth: ^7.0.1
   google_sign_in: ^6.2.2
   crypto: ^3.0.8
+  pin_code_fields: ^10.1.1
 
 dev_dependencies:
   bloc_test: ^10.0.0

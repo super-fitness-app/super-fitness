@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/api_results.dart';
@@ -7,34 +8,49 @@ import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
+
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/localization/locale_cubit.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
+
 import 'package:super_fitness/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/forget_password_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/verify_otp_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/reset_password_usecase.dart';
+
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
+
+import 'package:super_fitness/features/auth/presentation/forget_password/manager/forget_password_cubit.dart';
+
 import 'package:super_fitness/features/auth/presentation/onboarding/cubit/onboarding_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/onboarding/view/onboarding_view.dart';
+
 import 'package:super_fitness/main.dart';
 
 class FakeStorageService implements StorageService {
   final Map<String, String> _data = {};
 
   @override
-  Future<void> save(String key, String value) async => _data[key] = value;
+  Future<void> save(String key, String value) async {
+    _data[key] = value;
+  }
 
   @override
   Future<String> get(String key) async => _data[key] ?? '';
 
   @override
-  Future<void> delete(String key) async => _data.remove(key);
+  Future<void> delete(String key) async {
+    _data.remove(key);
+  }
 }
 
 class FakeSessionService implements SessionService {
@@ -45,13 +61,17 @@ class FakeSessionService implements SessionService {
     required String token,
     String? refreshToken,
     bool rememberMe = true,
-  }) async => this.token = token;
+  }) async {
+    this.token = token;
+  }
 
   @override
   Future<String> getToken() async => token;
 
   @override
-  Future<void> clearSession() async => token = '';
+  Future<void> clearSession() async {
+    token = '';
+  }
 
   @override
   Future<String> getRefreshToken() async => '';
@@ -85,16 +105,41 @@ class _FakeAuthRepo implements AuthRepo {
   const _FakeAuthRepo();
 
   @override
-  Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
-      const FailureResponse(NetworkFailure(AppError.cancelled));
+  Future<ApiResults<LoginEntity>> login(LoginParams params) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
 
   @override
-  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
-      const FailureResponse(NetworkFailure(AppError.cancelled));
+  Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
 
   @override
-  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async =>
-      const FailureResponse(NetworkFailure(AppError.cancelled));
+  Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle() async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
 }
 
 void main() {
@@ -108,29 +153,49 @@ void main() {
       sessionService = FakeSessionService();
       localeCubit = LocaleCubit(storage);
 
+      const fakeAuthRepo = _FakeAuthRepo();
+
+      // Storage Service
       if (getIt.isRegistered<StorageService>()) {
         getIt.unregister<StorageService>();
       }
+
       getIt.registerSingleton<StorageService>(storage);
 
+      // Session Service
       if (getIt.isRegistered<SessionService>()) {
         getIt.unregister<SessionService>();
       }
+
       getIt.registerSingleton<SessionService>(sessionService);
 
+      // Login Cubit
       if (getIt.isRegistered<LoginCubit>()) {
         getIt.unregister<LoginCubit>();
       }
+
       getIt.registerFactory<LoginCubit>(
-        () => LoginCubit(
-          LoginUseCase(const _FakeAuthRepo()),
-          getIt<SessionService>(),
+        () => LoginCubit(LoginUseCase(fakeAuthRepo), getIt<SessionService>()),
+      );
+
+      // Forget Password Cubit
+      if (getIt.isRegistered<ForgetPasswordCubit>()) {
+        getIt.unregister<ForgetPasswordCubit>();
+      }
+
+      getIt.registerFactory<ForgetPasswordCubit>(
+        () => ForgetPasswordCubit(
+          ForgetPasswordUseCase(fakeAuthRepo),
+          VerifyOtpUseCase(fakeAuthRepo),
+          ResetPasswordUseCase(fakeAuthRepo),
         ),
       );
 
+      // Onboarding Cubit
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
+
       getIt.registerFactory<OnboardingCubit>(
         () => OnboardingCubit(getIt<StorageService>()),
       );
@@ -138,15 +203,23 @@ void main() {
 
     tearDown(() async {
       await localeCubit.close();
+
       if (getIt.isRegistered<LoginCubit>()) {
         getIt.unregister<LoginCubit>();
       }
+
+      if (getIt.isRegistered<ForgetPasswordCubit>()) {
+        getIt.unregister<ForgetPasswordCubit>();
+      }
+
       if (getIt.isRegistered<OnboardingCubit>()) {
         getIt.unregister<OnboardingCubit>();
       }
+
       if (getIt.isRegistered<SessionService>()) {
         getIt.unregister<SessionService>();
       }
+
       if (getIt.isRegistered<StorageService>()) {
         getIt.unregister<StorageService>();
       }
@@ -163,6 +236,7 @@ void main() {
         await tester.pumpWidget(
           SuperFitnessApp(localeCubit: localeCubit, router: router),
         );
+
         await tester.pumpAndSettle();
 
         expect(find.byType(MaterialApp), findsOneWidget);
@@ -174,6 +248,7 @@ void main() {
       'renders SuperFitnessApp and routes returning user to LoginView',
       (WidgetTester tester) async {
         await storage.save(AppConstants.hasSeenOnboardingKey, 'true');
+
         final router = AppRouter.createRouter(
           storageService: storage,
           sessionService: sessionService,
@@ -182,6 +257,7 @@ void main() {
         await tester.pumpWidget(
           SuperFitnessApp(localeCubit: localeCubit, router: router),
         );
+
         await tester.pumpAndSettle();
 
         expect(find.byType(MaterialApp), findsOneWidget);
@@ -205,10 +281,12 @@ void main() {
         await tester.pumpAndSettle();
 
         final scaffoldFinder = find.byType(Scaffold);
-        expect(scaffoldFinder, findsOneWidget);
-        final scaffold = tester.widget<Scaffold>(scaffoldFinder);
-        expect(scaffold.backgroundColor, AppColors.background);
 
+        expect(scaffoldFinder, findsOneWidget);
+
+        final scaffold = tester.widget<Scaffold>(scaffoldFinder);
+
+        expect(scaffold.backgroundColor, AppColors.background);
         expect(find.byType(SafeArea), findsOneWidget);
 
         expect(find.text('Hey There'), findsOneWidget);
@@ -233,6 +311,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final l10n = await AppLocalizations.delegate.load(const Locale('ar'));
+
       expect(find.text(l10n.welcomeBack), findsOneWidget);
       expect(find.text(l10n.login), findsNWidgets(2));
       expect(tester.takeException(), isNull);

@@ -5,6 +5,7 @@ import 'package:super_fitness/features/auth/data/data_source/local/auth_local_da
 import 'package:super_fitness/features/auth/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/data_source/remote/social_auth_remote_data_source.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
+import 'package:super_fitness/features/auth/data/models/verify_otp_response_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
@@ -60,6 +61,45 @@ class AuthRepoImpl implements AuthRepo {
       final response = await _authRemoteDataSource.login(request);
       final loginEntity = AuthMapper.toLoginEntity(response);
       return Success<LoginEntity>(loginEntity);
+    });
+  }
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) {
+    return safeCall(() async {
+      await _authRemoteDataSource.forgotPassword(email: email);
+
+      return Success(null);
+    });
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) {
+    return safeCall(() async {
+      await _authRemoteDataSource.resetPassword(
+        otpToken: otpToken,
+        password: password,
+        confirmPassword: confirmPassword,
+      );
+
+      return Success(null);
+    });
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) {
+    return safeCall(() async {
+      VerifyOtpResponseDto verifyOtpResponse = await _authRemoteDataSource
+          .verifyOtp(email: email, otp: otp);
+
+      return Success<Map<String, dynamic>>(verifyOtpResponse.data);
     });
   }
 }
