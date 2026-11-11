@@ -62,21 +62,24 @@ void main() {
       },
     );
 
-    test('returns FailureResponse when AuthRepo.signInWithGoogle fails', () async {
-      fakeAuthRepo.googleResultToReturn = const FailureResponse(
-        ServerMessageFailure('Google sign-in failed'),
-      );
+    test(
+      'returns FailureResponse when AuthRepo.signInWithGoogle fails',
+      () async {
+        fakeAuthRepo.googleResultToReturn = const FailureResponse(
+          ServerMessageFailure('Google sign-in failed'),
+        );
 
-      final result = await signInWithGoogleUseCase();
+        final result = await signInWithGoogleUseCase();
 
-      expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
-      final failure = result as FailureResponse<SocialAuthUserEntity>;
-      expect(failure.failure, isA<ServerMessageFailure>());
-      expect(
-        (failure.failure as ServerMessageFailure).message,
-        'Google sign-in failed',
-      );
-    });
+        expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
+        final failure = result as FailureResponse<SocialAuthUserEntity>;
+        expect(failure.failure, isA<ServerMessageFailure>());
+        expect(
+          (failure.failure as ServerMessageFailure).message,
+          'Google sign-in failed',
+        );
+      },
+    );
 
     test(
       'returns Failure with CancelledFailure when user cancels Google sign-in',
@@ -98,4 +101,3 @@ void main() {
     );
   });
 }
-

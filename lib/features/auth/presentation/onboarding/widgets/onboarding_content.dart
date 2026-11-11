@@ -77,10 +77,7 @@ class _ContentTextSection extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const _ContentTextSection({
-    required this.title,
-    required this.subtitle,
-  });
+  const _ContentTextSection({required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {

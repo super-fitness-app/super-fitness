@@ -18,27 +18,30 @@ void main() {
       activityLevel: 'intermediate',
     );
 
-    test('fromDomain and toDomain convert correctly between DTO and Domain', () {
-      const params = RegisterParams(
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        password: 'Password123!',
-        rePassword: 'Password123!',
-        gender: 'male',
-        height: 180,
-        weight: 75,
-        age: 25,
-        goal: 'muscle',
-        activityLevel: 'intermediate',
-      );
+    test(
+      'fromDomain and toDomain convert correctly between DTO and Domain',
+      () {
+        const params = RegisterParams(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          password: 'Password123!',
+          rePassword: 'Password123!',
+          gender: 'male',
+          height: 180,
+          weight: 75,
+          age: 25,
+          goal: 'muscle',
+          activityLevel: 'intermediate',
+        );
 
-      final dto = RegisterDto.fromDomain(params);
-      expect(dto, equals(testDto));
+        final dto = RegisterDto.fromDomain(params);
+        expect(dto, equals(testDto));
 
-      final convertedParams = dto.toDomain();
-      expect(convertedParams, equals(params));
-    });
+        final convertedParams = dto.toDomain();
+        expect(convertedParams, equals(params));
+      },
+    );
 
     test('toJson generates correct JSON map', () {
       final json = testDto.toJson();
@@ -85,10 +88,7 @@ void main() {
     });
 
     test('copyWith updates specified fields only', () {
-      final updated = testDto.copyWith(
-        firstName: 'Johnny',
-        weight: 80,
-      );
+      final updated = testDto.copyWith(firstName: 'Johnny', weight: 80);
 
       expect(updated.firstName, 'Johnny');
       expect(updated.weight, 80);
@@ -115,4 +115,3 @@ void main() {
     });
   });
 }
-

@@ -72,9 +72,8 @@ Widget _createTestWidget(RegisterCubit testCubit) {
       ),
       GoRoute(
         path: AppRoutes.completeRegister,
-        builder: (context, state) => const Scaffold(
-          body: Text('Complete Register Screen'),
-        ),
+        builder: (context, state) =>
+            const Scaffold(body: Text('Complete Register Screen')),
       ),
     ],
   );
@@ -180,10 +179,7 @@ void main() {
           find.byKey(RegisterFieldsKeys.firstName),
           'John',
         );
-        await tester.enterText(
-          find.byKey(RegisterFieldsKeys.lastName),
-          'Doe',
-        );
+        await tester.enterText(find.byKey(RegisterFieldsKeys.lastName), 'Doe');
         await tester.enterText(
           find.byKey(RegisterFieldsKeys.email),
           'invalid-email',
@@ -215,10 +211,7 @@ void main() {
           find.byKey(RegisterFieldsKeys.firstName),
           'John',
         );
-        await tester.enterText(
-          find.byKey(RegisterFieldsKeys.lastName),
-          'Doe',
-        );
+        await tester.enterText(find.byKey(RegisterFieldsKeys.lastName), 'Doe');
         await tester.enterText(
           find.byKey(RegisterFieldsKeys.email),
           'john.doe@example.com',
@@ -238,34 +231,33 @@ void main() {
       },
     );
 
-    testWidgets(
-      'toggles password visibility icon when suffix icon is tapped',
-      (tester) async {
-        final cubit = createTestCubit();
-        addTearDown(cubit.close);
+    testWidgets('toggles password visibility icon when suffix icon is tapped', (
+      tester,
+    ) async {
+      final cubit = createTestCubit();
+      addTearDown(cubit.close);
 
-        await tester.pumpWidget(_createTestWidget(cubit));
+      await tester.pumpWidget(_createTestWidget(cubit));
 
-        expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
-        expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
+      expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
 
-        final toggleButton = find.descendant(
-          of: find.byKey(RegisterFieldsKeys.password),
-          matching: find.byType(IconButton),
-        );
-        await tester.tap(toggleButton);
-        await tester.pumpAndSettle();
+      final toggleButton = find.descendant(
+        of: find.byKey(RegisterFieldsKeys.password),
+        matching: find.byType(IconButton),
+      );
+      await tester.tap(toggleButton);
+      await tester.pumpAndSettle();
 
-        expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
-        expect(find.byIcon(Icons.visibility_outlined), findsNothing);
+      expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_outlined), findsNothing);
 
-        await tester.tap(toggleButton);
-        await tester.pumpAndSettle();
+      await tester.tap(toggleButton);
+      await tester.pumpAndSettle();
 
-        expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
-        expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
-      },
-    );
+      expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
+    });
 
     testWidgets(
       'submits basic info intent and updates cubit state when form is valid',
@@ -279,10 +271,7 @@ void main() {
           find.byKey(RegisterFieldsKeys.firstName),
           'John',
         );
-        await tester.enterText(
-          find.byKey(RegisterFieldsKeys.lastName),
-          'Doe',
-        );
+        await tester.enterText(find.byKey(RegisterFieldsKeys.lastName), 'Doe');
         await tester.enterText(
           find.byKey(RegisterFieldsKeys.email),
           'john.doe@example.com',
@@ -316,10 +305,7 @@ void main() {
           find.byKey(RegisterFieldsKeys.firstName),
           'John',
         );
-        await tester.enterText(
-          find.byKey(RegisterFieldsKeys.lastName),
-          'Doe',
-        );
+        await tester.enterText(find.byKey(RegisterFieldsKeys.lastName), 'Doe');
         await tester.enterText(
           find.byKey(RegisterFieldsKeys.email),
           'john.doe@example.com',

@@ -22,9 +22,7 @@ class ForgotPasswordButton extends StatelessWidget {
         ),
         child: Text(
           l10n.forgotPassword,
-          style: AppTextStyles.regular13.copyWith(
-            color: AppColors.primary,
-          ),
+          style: AppTextStyles.regular13.copyWith(color: AppColors.primary),
         ),
       ),
     );

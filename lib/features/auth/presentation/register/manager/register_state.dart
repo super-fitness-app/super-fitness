@@ -14,10 +14,7 @@ class RegisterState extends Equatable {
   bool get isFailure => registerState.isFailure;
   AppFailure? get failure => registerState.failure;
 
-  RegisterState copyWith({
-    RegisterData? data,
-    BaseState? registerState,
-  }) {
+  RegisterState copyWith({RegisterData? data, BaseState? registerState}) {
     return RegisterState(
       data: data ?? this.data,
       registerState: registerState ?? this.registerState,

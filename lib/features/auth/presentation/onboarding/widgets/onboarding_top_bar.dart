@@ -6,10 +6,7 @@ import 'package:super_fitness/core/const/app_text_styles.dart';
 class OnboardingTopBar extends StatelessWidget {
   final VoidCallback onSkip;
 
-  const OnboardingTopBar({
-    super.key,
-    required this.onSkip,
-  });
+  const OnboardingTopBar({super.key, required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +26,7 @@ class OnboardingTopBar extends StatelessWidget {
           ),
           child: Text(
             l10n.onboardingSkip,
-            style: AppTextStyles.regular16.copyWith(
-              color: AppColors.white,
-            ),
+            style: AppTextStyles.regular16.copyWith(color: AppColors.white),
           ),
         ),
       ),

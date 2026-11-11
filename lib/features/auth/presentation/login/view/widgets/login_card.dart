@@ -31,9 +31,7 @@ class LoginCard extends StatelessWidget {
             children: [
               Text(
                 l10n.login,
-                style: AppTextStyles.bold24.copyWith(
-                  color: AppColors.white,
-                ),
+                style: AppTextStyles.bold24.copyWith(color: AppColors.white),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),

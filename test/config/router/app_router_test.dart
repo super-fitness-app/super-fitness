@@ -181,13 +181,16 @@ void main() {
           .map((r) => r.path)
           .toList();
 
-      expect(routePaths, containsAll([
-        AppRoutes.login,
-        AppRoutes.onboarding,
-        AppRoutes.register,
-        AppRoutes.forgetPassword,
-        AppRoutes.main,
-      ]));
+      expect(
+        routePaths,
+        containsAll([
+          AppRoutes.login,
+          AppRoutes.onboarding,
+          AppRoutes.register,
+          AppRoutes.forgetPassword,
+          AppRoutes.main,
+        ]),
+      );
     });
 
     testWidgets(

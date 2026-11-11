@@ -10,10 +10,7 @@ import 'widgets/onboarding_selectable_item.dart';
 class SelectActivityView extends StatefulWidget {
   final VoidCallback? onBack;
 
-  const SelectActivityView({
-    super.key,
-    this.onBack,
-  });
+  const SelectActivityView({super.key, this.onBack});
 
   @override
   State<SelectActivityView> createState() => _SelectActivityViewState();

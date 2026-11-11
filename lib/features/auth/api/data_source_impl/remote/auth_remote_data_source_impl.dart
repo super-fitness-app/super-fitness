@@ -16,7 +16,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<RegisterResponseModel> register(RegisterDto request) {
     return _authApiClient.register(request);
   }
-  
+
   @override
   Future<LoginResponse> login(LoginRequest request) async {
     return await _authApiClient.login(request);

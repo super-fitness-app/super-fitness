@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'login_response.g.dart';
@@ -20,7 +19,7 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }
- 
+
 @JsonSerializable()
 class LoginUser {
   @JsonKey(name: '_id')

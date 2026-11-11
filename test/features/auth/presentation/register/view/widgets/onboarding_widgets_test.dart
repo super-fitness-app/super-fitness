@@ -12,7 +12,9 @@ import 'package:super_fitness/features/auth/presentation/register/view/widgets/o
 
 void main() {
   group('GenderOptionButton Widget Tests', () {
-    testWidgets('renders icon, label, and reflects selection style', (tester) async {
+    testWidgets('renders icon, label, and reflects selection style', (
+      tester,
+    ) async {
       var tapped = false;
 
       await tester.pumpWidget(
@@ -44,7 +46,9 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('renders transparent background when unselected', (tester) async {
+    testWidgets('renders transparent background when unselected', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -99,7 +103,9 @@ void main() {
       expect(changedValue, lessThanOrEqualTo(40));
     });
 
-    testWidgets('clamps initial value within min and max bounds', (tester) async {
+    testWidgets('clamps initial value within min and max bounds', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -151,7 +157,9 @@ void main() {
       expect(border.top.color, AppColors.orangeBase);
     });
 
-    testWidgets('renders unselected styling when isSelected is false', (tester) async {
+    testWidgets('renders unselected styling when isSelected is false', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -177,103 +185,108 @@ void main() {
   });
 
   group('OnboardingBottomButton Widget Tests', () {
-    testWidgets('renders label, invokes onPressed when enabled, and shows loading', (
-      tester,
-    ) async {
-      var tapped = false;
+    testWidgets(
+      'renders label, invokes onPressed when enabled, and shows loading',
+      (tester) async {
+        var tapped = false;
 
-      // 1. Enabled button
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: OnboardingBottomButton(
-              label: 'Continue',
-              isEnabled: true,
-              onPressed: () => tapped = true,
+        // 1. Enabled button
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: OnboardingBottomButton(
+                label: 'Continue',
+                isEnabled: true,
+                onPressed: () => tapped = true,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Continue'), findsOneWidget);
-      final elevatedButton = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(elevatedButton.onPressed, isNotNull);
+        expect(find.text('Continue'), findsOneWidget);
+        final elevatedButton = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        expect(elevatedButton.onPressed, isNotNull);
 
-      await tester.tap(find.byType(ElevatedButton));
-      expect(tapped, isTrue);
+        await tester.tap(find.byType(ElevatedButton));
+        expect(tapped, isTrue);
 
-      // 2. Disabled button
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: OnboardingBottomButton(
-              label: 'Continue',
-              isEnabled: false,
-              onPressed: () {},
+        // 2. Disabled button
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: OnboardingBottomButton(
+                label: 'Continue',
+                isEnabled: false,
+                onPressed: () {},
+              ),
             ),
           ),
-        ),
-      );
-      final disabledButton = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(disabledButton.onPressed, isNull);
+        );
+        final disabledButton = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        expect(disabledButton.onPressed, isNull);
 
-      // 3. Loading state
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: OnboardingBottomButton(
-              label: 'Continue',
-              isLoading: true,
-              onPressed: () {},
+        // 3. Loading state
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: OnboardingBottomButton(
+                label: 'Continue',
+                isLoading: true,
+                onPressed: () {},
+              ),
             ),
           ),
-        ),
-      );
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
+        );
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      },
+    );
   });
 
   group('OnboardingHeader & TopBar Widget Tests', () {
-    testWidgets('OnboardingHeader renders step image, title, and optional subtitle', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OnboardingHeader(
-              stepImage: AppImages.step1,
-              title: 'Tell us about yourself',
-              subtitle: 'To give you a better experience',
+    testWidgets(
+      'OnboardingHeader renders step image, title, and optional subtitle',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: OnboardingHeader(
+                stepImage: AppImages.step1,
+                title: 'Tell us about yourself',
+                subtitle: 'To give you a better experience',
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Tell us about yourself'), findsOneWidget);
-      expect(find.text('To give you a better experience'), findsOneWidget);
-      expect(find.byType(Image), findsOneWidget);
-    });
+        expect(find.text('Tell us about yourself'), findsOneWidget);
+        expect(find.text('To give you a better experience'), findsOneWidget);
+        expect(find.byType(Image), findsOneWidget);
+      },
+    );
 
-    testWidgets('OnboardingTopBar renders logo and invokes onBackTap on back button', (
-      tester,
-    ) async {
-      var backTapped = false;
+    testWidgets(
+      'OnboardingTopBar renders logo and invokes onBackTap on back button',
+      (tester) async {
+        var backTapped = false;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: OnboardingTopBar(
-              onBackTap: () => backTapped = true,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: OnboardingTopBar(onBackTap: () => backTapped = true),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.byType(Image), findsNWidgets(2));
-      expect(find.byType(IconButton), findsOneWidget);
-      await tester.tap(find.byType(IconButton));
-      expect(backTapped, isTrue);
-    });
+        expect(find.byType(Image), findsNWidgets(2));
+        expect(find.byType(IconButton), findsOneWidget);
+        await tester.tap(find.byType(IconButton));
+        expect(backTapped, isTrue);
+      },
+    );
   });
 
   group('OnboardingScaffold Widget Tests', () {
@@ -305,4 +318,3 @@ void main() {
     });
   });
 }
-

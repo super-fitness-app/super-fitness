@@ -28,9 +28,7 @@ class LoginHeaderSection extends StatelessWidget {
             children: [
               Text(
                 l10n.heyThere,
-                style: AppTextStyles.regular18.copyWith(
-                  color: AppColors.white,
-                ),
+                style: AppTextStyles.regular18.copyWith(color: AppColors.white),
               ),
               const SizedBox(height: 4),
               Text(

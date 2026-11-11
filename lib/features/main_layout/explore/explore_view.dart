@@ -8,11 +8,6 @@ class ExploreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Center(
-      child: Text(
-        l10n.explore,
-        style: AppTextStyles.headline24,
-      ),
-    );
+    return Center(child: Text(l10n.explore, style: AppTextStyles.headline24));
   }
 }

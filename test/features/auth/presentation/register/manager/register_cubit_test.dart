@@ -160,12 +160,15 @@ void main() {
       },
     );
 
-    test('initial state has default RegisterData and initial registerState', () {
-      expect(cubit.state.isLoading, isFalse);
-      expect(cubit.state.failure, isNull);
-      expect(cubit.state.data, equals(const RegisterData()));
-      expect(cubit.state.registerState, equals(const BaseState.initial()));
-    });
+    test(
+      'initial state has default RegisterData and initial registerState',
+      () {
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isNull);
+        expect(cubit.state.data, equals(const RegisterData()));
+        expect(cubit.state.registerState, equals(const BaseState.initial()));
+      },
+    );
 
     test(
       'doEvent with SubmitBasicInfoEvent updates state.data in MVI flow',
@@ -236,14 +239,17 @@ void main() {
       expect(cubit.state.data.activityLevel, 'intermediate');
     });
 
-    test('resetRegistrationIntent resets state to initial with default data', () {
-      cubit.updateGenderIntent('female');
-      expect(cubit.state.data.gender, 'female');
+    test(
+      'resetRegistrationIntent resets state to initial with default data',
+      () {
+        cubit.updateGenderIntent('female');
+        expect(cubit.state.data.gender, 'female');
 
-      cubit.resetRegistrationIntent();
-      expect(cubit.state.data, equals(const RegisterData()));
-      expect(cubit.state.isLoading, isFalse);
-    });
+        cubit.resetRegistrationIntent();
+        expect(cubit.state.data, equals(const RegisterData()));
+        expect(cubit.state.isLoading, isFalse);
+      },
+    );
 
     test(
       'submitFinalRegistration emits error when data is incomplete',
@@ -631,33 +637,36 @@ void main() {
       expect(dto?.activityLevel, 'intermediate');
     });
 
-    test('toParams and toDto return null when any required field is missing', () {
-      const missingGender = RegisterData(
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        password: 'Password123!',
-        height: 180,
-        weight: 75,
-        age: 25,
-        goal: 'muscle',
-        activityLevel: 'intermediate',
-      );
-      expect(missingGender.isComplete, isFalse);
-      expect(missingGender.toParams(), isNull);
-      expect(missingGender.toDto(), isNull);
+    test(
+      'toParams and toDto return null when any required field is missing',
+      () {
+        const missingGender = RegisterData(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'Password123!',
+          height: 180,
+          weight: 75,
+          age: 25,
+          goal: 'muscle',
+          activityLevel: 'intermediate',
+        );
+        expect(missingGender.isComplete, isFalse);
+        expect(missingGender.toParams(), isNull);
+        expect(missingGender.toDto(), isNull);
 
-      const missingMetrics = RegisterData(
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        password: 'Password123!',
-        gender: 'male',
-      );
-      expect(missingMetrics.isComplete, isFalse);
-      expect(missingMetrics.toParams(), isNull);
-      expect(missingMetrics.toDto(), isNull);
-    });
+        const missingMetrics = RegisterData(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'Password123!',
+          gender: 'male',
+        );
+        expect(missingMetrics.isComplete, isFalse);
+        expect(missingMetrics.toParams(), isNull);
+        expect(missingMetrics.toDto(), isNull);
+      },
+    );
   });
 
   group('RegisterState Tests', () {
@@ -675,9 +684,7 @@ void main() {
       expect(stateWithData.data.firstName, 'John');
       expect(stateWithData, isNot(equals(state1)));
 
-      final loadingState = state1.copyWith(
-        registerState: BaseState.loading(),
-      );
+      final loadingState = state1.copyWith(registerState: BaseState.loading());
       expect(loadingState.isLoading, isTrue);
       expect(loadingState.isSuccess, isFalse);
       expect(loadingState.isFailure, isFalse);
@@ -722,14 +729,8 @@ void main() {
         const UpdateGenderEvent('male'),
         equals(const UpdateGenderEvent('male')),
       );
-      expect(
-        const UpdateAgeEvent(25),
-        equals(const UpdateAgeEvent(25)),
-      );
-      expect(
-        const UpdateWeightEvent(70),
-        equals(const UpdateWeightEvent(70)),
-      );
+      expect(const UpdateAgeEvent(25), equals(const UpdateAgeEvent(25)));
+      expect(const UpdateWeightEvent(70), equals(const UpdateWeightEvent(70)));
       expect(
         const UpdateHeightEvent(175),
         equals(const UpdateHeightEvent(175)),

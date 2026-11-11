@@ -16,9 +16,7 @@ class LoginFooter extends StatelessWidget {
       children: [
         Text(
           '${l10n.dontHaveAccount} ',
-          style: AppTextStyles.regular13.copyWith(
-            color: AppColors.white,
-          ),
+          style: AppTextStyles.regular13.copyWith(color: AppColors.white),
         ),
         InkWell(
           borderRadius: BorderRadius.circular(4),

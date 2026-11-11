@@ -19,8 +19,6 @@ abstract class AuthApiClient {
   @POST(Endpoints.register)
   Future<RegisterResponseModel> register(@Body() RegisterDto request);
 
-   @POST(Endpoints.loginEndPoint)
-  Future<LoginResponse> login(
-    @Body() LoginRequest request,
-  );
+  @POST(Endpoints.loginEndPoint)
+  Future<LoginResponse> login(@Body() LoginRequest request);
 }

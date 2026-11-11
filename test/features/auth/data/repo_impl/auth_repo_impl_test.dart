@@ -131,70 +131,86 @@ void main() {
       );
     });
 
-    test('register saves token locally and returns Success on valid remote response',
-        () async {
-      fakeRemoteDataSource.responseToReturn = testResponse;
+    test(
+      'register saves token locally and returns Success on valid remote response',
+      () async {
+        fakeRemoteDataSource.responseToReturn = testResponse;
 
-      final result = await authRepo.register(testParams);
+        final result = await authRepo.register(testParams);
 
-      expect(result, isA<Success<RegisterEntity>>());
-      final success = result as Success<RegisterEntity>;
-      expect(success.data.token, 'jwt_secure_token');
-      expect(fakeLocalDataSource.savedToken, 'jwt_secure_token');
-      expect(
-        fakeRemoteDataSource.capturedRequest,
-        equals(RegisterDto.fromDomain(testParams)),
-      );
-    });
+        expect(result, isA<Success<RegisterEntity>>());
+        final success = result as Success<RegisterEntity>;
+        expect(success.data.token, 'jwt_secure_token');
+        expect(fakeLocalDataSource.savedToken, 'jwt_secure_token');
+        expect(
+          fakeRemoteDataSource.capturedRequest,
+          equals(RegisterDto.fromDomain(testParams)),
+        );
+      },
+    );
 
-    test('register returns FailureResponse and does not save token on DioException',
-        () async {
-      fakeRemoteDataSource.exceptionToThrow = DioException(
-        requestOptions: RequestOptions(path: '/auth/signup'),
-        type: DioExceptionType.connectionTimeout,
-      );
+    test(
+      'register returns FailureResponse and does not save token on DioException',
+      () async {
+        fakeRemoteDataSource.exceptionToThrow = DioException(
+          requestOptions: RequestOptions(path: '/auth/signup'),
+          type: DioExceptionType.connectionTimeout,
+        );
 
-      final result = await authRepo.register(testParams);
+        final result = await authRepo.register(testParams);
 
-      expect(result, isA<FailureResponse<RegisterEntity>>());
-      expect(fakeLocalDataSource.savedToken, isNull);
-    });
+        expect(result, isA<FailureResponse<RegisterEntity>>());
+        expect(fakeLocalDataSource.savedToken, isNull);
+      },
+    );
 
-    test('signInWithGoogle returns Success when social auth remote returns user', () async {
-      fakeSocialRemoteDataSource.responseToReturn = const SocialAuthUserModel(
-        id: 'user_123',
-        email: 'user@example.com',
-        displayName: 'John Doe',
-        photoUrl: 'https://example.com/photo.png',
-      );
+    test(
+      'signInWithGoogle returns Success when social auth remote returns user',
+      () async {
+        fakeSocialRemoteDataSource.responseToReturn = const SocialAuthUserModel(
+          id: 'user_123',
+          email: 'user@example.com',
+          displayName: 'John Doe',
+          photoUrl: 'https://example.com/photo.png',
+        );
 
-      final result = await authRepo.signInWithGoogle();
+        final result = await authRepo.signInWithGoogle();
 
-      expect(result, isA<Success<SocialAuthUserEntity>>());
-      final success = result as Success<SocialAuthUserEntity>;
-      expect(success.data.id, 'user_123');
-      expect(success.data.email, 'user@example.com');
-      expect(success.data.displayName, 'John Doe');
-    });
+        expect(result, isA<Success<SocialAuthUserEntity>>());
+        final success = result as Success<SocialAuthUserEntity>;
+        expect(success.data.id, 'user_123');
+        expect(success.data.email, 'user@example.com');
+        expect(success.data.displayName, 'John Doe');
+      },
+    );
 
-    test('signInWithGoogle returns Failure with CancelledFailure when remote returns null', () async {
-      fakeSocialRemoteDataSource.responseToReturn = null;
+    test(
+      'signInWithGoogle returns Failure with CancelledFailure when remote returns null',
+      () async {
+        fakeSocialRemoteDataSource.responseToReturn = null;
 
-      final result = await authRepo.signInWithGoogle();
+        final result = await authRepo.signInWithGoogle();
 
-      expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
-      final failure = (result as FailureResponse<SocialAuthUserEntity>).failure;
-      expect(failure, isA<CancelledFailure>());
-      expect((failure as CancelledFailure).message, 'Sign-in cancelled');
-    });
+        expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
+        final failure =
+            (result as FailureResponse<SocialAuthUserEntity>).failure;
+        expect(failure, isA<CancelledFailure>());
+        expect((failure as CancelledFailure).message, 'Sign-in cancelled');
+      },
+    );
 
-    test('signInWithGoogle returns FailureResponse when remote throws an exception', () async {
-      fakeSocialRemoteDataSource.exceptionToThrow = Exception('Google sign-in failed');
+    test(
+      'signInWithGoogle returns FailureResponse when remote throws an exception',
+      () async {
+        fakeSocialRemoteDataSource.exceptionToThrow = Exception(
+          'Google sign-in failed',
+        );
 
-      final result = await authRepo.signInWithGoogle();
+        final result = await authRepo.signInWithGoogle();
 
-      expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
-    });
+        expect(result, isA<FailureResponse<SocialAuthUserEntity>>());
+      },
+    );
 
     group('AuthRepoImpl.login', () {
       final testUser = LoginUser(
@@ -234,7 +250,10 @@ void main() {
         expect(data.user.id, 'u1');
         expect(data.user.weight, 60.0);
         expect(data.user.height, 165.0);
-        expect(fakeRemoteDataSource.capturedLoginRequest?.email, 'jane@example.com');
+        expect(
+          fakeRemoteDataSource.capturedLoginRequest?.email,
+          'jane@example.com',
+        );
       });
 
       test('returns FailureResponse on network exception', () async {

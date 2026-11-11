@@ -110,12 +110,7 @@ class FakeUser extends Fake implements User {
   @override
   final String? photoURL;
 
-  FakeUser({
-    required this.uid,
-    this.email,
-    this.displayName,
-    this.photoURL,
-  });
+  FakeUser({required this.uid, this.email, this.displayName, this.photoURL});
 }
 
 class FakeUserCredential extends Fake implements UserCredential {
@@ -264,15 +259,13 @@ void main() {
           () => dataSource.signInWithGoogle(),
           throwsA(
             isA<FirebaseAuthException>()
-                .having(
-                  (e) => e.code,
-                  'code',
-                  equals('user-not-found'),
-                )
+                .having((e) => e.code, 'code', equals('user-not-found'))
                 .having(
                   (e) => e.message,
                   'message',
-                  equals('Firebase user creation failed after Google authentication'),
+                  equals(
+                    'Firebase user creation failed after Google authentication',
+                  ),
                 ),
           ),
         );
@@ -306,22 +299,20 @@ void main() {
       () async {
         fakeGoogleSignIn.exceptionToThrow = Exception('Google sign in failed');
 
-        expect(
-          () => dataSource.signInWithGoogle(),
-          throwsA(isA<Exception>()),
-        );
+        expect(() => dataSource.signInWithGoogle(), throwsA(isA<Exception>()));
       },
     );
 
     test(
-        'signOut calls signOut on Google, logOut on Facebook, and signOut on Firebase',
-        () async {
-      await dataSource.signOut();
+      'signOut calls signOut on Google, logOut on Facebook, and signOut on Firebase',
+      () async {
+        await dataSource.signOut();
 
-      expect(fakeGoogleSignIn.signOutCallCount, equals(1));
-      expect(fakeFacebookAuth.logOutCallCount, equals(1));
-      expect(fakeFirebaseAuth.signOutCallCount, equals(1));
-    });
+        expect(fakeGoogleSignIn.signOutCallCount, equals(1));
+        expect(fakeFacebookAuth.logOutCallCount, equals(1));
+        expect(fakeFirebaseAuth.signOutCallCount, equals(1));
+      },
+    );
 
     test('signInWithFacebook returns null when user cancels', () async {
       fakeFacebookAuth.loginResultToReturn = LoginResult(
@@ -356,17 +347,20 @@ void main() {
       },
     );
 
-    test('signInWithFacebook throws Exception when login status is failed', () async {
-      fakeFacebookAuth.loginResultToReturn = LoginResult(
-        status: LoginStatus.failed,
-        message: 'Network error during Facebook login',
-      );
+    test(
+      'signInWithFacebook throws Exception when login status is failed',
+      () async {
+        fakeFacebookAuth.loginResultToReturn = LoginResult(
+          status: LoginStatus.failed,
+          message: 'Network error during Facebook login',
+        );
 
-      expect(
-        () => dataSource.signInWithFacebook(),
-        throwsA(isA<Exception>()),
-      );
-    });
+        expect(
+          () => dataSource.signInWithFacebook(),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test(
       'signInWithFacebook throws FirebaseAuthException when Firebase user is null',

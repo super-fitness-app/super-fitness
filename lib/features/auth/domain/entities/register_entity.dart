@@ -8,11 +8,7 @@ class RegisterEntity extends Equatable {
   final String? token;
   final UserEntity? user;
 
-  const RegisterEntity({
-    this.message,
-    this.token,
-    this.user,
-  });
+  const RegisterEntity({this.message, this.token, this.user});
 
   @override
   List<Object?> get props => [message, token, user];

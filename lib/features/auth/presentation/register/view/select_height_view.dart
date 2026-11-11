@@ -13,11 +13,7 @@ class SelectHeightView extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback? onBack;
 
-  const SelectHeightView({
-    super.key,
-    this.onNext,
-    this.onBack,
-  });
+  const SelectHeightView({super.key, this.onNext, this.onBack});
 
   @override
   State<SelectHeightView> createState() => _SelectHeightViewState();

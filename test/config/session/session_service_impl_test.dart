@@ -45,92 +45,106 @@ void main() {
       expect(storage.data[AppConstants.rememberMeKey], 'false');
     });
 
-    test('setGuestMode and isGuest persist correctly and clear in-memory tokens',
-        () async {
-      await sessionService.saveTokens(
-        token: 'initial_token',
-        refreshToken: 'initial_refresh',
-        rememberMe: false,
-      );
+    test(
+      'setGuestMode and isGuest persist correctly and clear in-memory tokens',
+      () async {
+        await sessionService.saveTokens(
+          token: 'initial_token',
+          refreshToken: 'initial_refresh',
+          rememberMe: false,
+        );
 
-      await sessionService.setGuestMode(true);
-      expect(await sessionService.isGuest(), isTrue);
-      expect(storage.data[AppConstants.guestModeKey], 'true');
+        await sessionService.setGuestMode(true);
+        expect(await sessionService.isGuest(), isTrue);
+        expect(storage.data[AppConstants.guestModeKey], 'true');
 
-      expect(await sessionService.getToken(), isEmpty);
-      expect(await sessionService.getRefreshToken(), isEmpty);
+        expect(await sessionService.getToken(), isEmpty);
+        expect(await sessionService.getRefreshToken(), isEmpty);
 
-      await sessionService.setGuestMode(false);
-      expect(await sessionService.isGuest(), isFalse);
-    });
+        await sessionService.setGuestMode(false);
+        expect(await sessionService.isGuest(), isFalse);
+      },
+    );
 
-    test('saveTokens with rememberMe=true persists to storage and memory',
-        () async {
-      await sessionService.saveTokens(
-        token: 'test_token',
-        refreshToken: 'test_refresh',
-        rememberMe: true,
-      );
+    test(
+      'saveTokens with rememberMe=true persists to storage and memory',
+      () async {
+        await sessionService.saveTokens(
+          token: 'test_token',
+          refreshToken: 'test_refresh',
+          rememberMe: true,
+        );
 
-      expect(await sessionService.getToken(), 'test_token');
-      expect(await sessionService.getRefreshToken(), 'test_refresh');
-      expect(storage.data[AppConstants.storageTokenKey], 'test_token');
-      expect(storage.data[AppConstants.storageRefreshTokenKey], 'test_refresh');
-    });
+        expect(await sessionService.getToken(), 'test_token');
+        expect(await sessionService.getRefreshToken(), 'test_refresh');
+        expect(storage.data[AppConstants.storageTokenKey], 'test_token');
+        expect(
+          storage.data[AppConstants.storageRefreshTokenKey],
+          'test_refresh',
+        );
+      },
+    );
 
-    test('saveTokens with optional refreshToken omitted stores only token',
-        () async {
-      await sessionService.saveTokens(
-        token: 'token_only',
-        rememberMe: true,
-      );
+    test(
+      'saveTokens with optional refreshToken omitted stores only token',
+      () async {
+        await sessionService.saveTokens(token: 'token_only', rememberMe: true);
 
-      expect(await sessionService.getToken(), 'token_only');
-      expect(await sessionService.getRefreshToken(), isEmpty);
-      expect(storage.data[AppConstants.storageTokenKey], 'token_only');
-      expect(storage.data[AppConstants.storageRefreshTokenKey], isNull);
-    });
+        expect(await sessionService.getToken(), 'token_only');
+        expect(await sessionService.getRefreshToken(), isEmpty);
+        expect(storage.data[AppConstants.storageTokenKey], 'token_only');
+        expect(storage.data[AppConstants.storageRefreshTokenKey], isNull);
+      },
+    );
 
-    test('saveTokens with rememberMe=false deletes from storage but keeps in memory',
-        () async {
-      storage.data[AppConstants.storageTokenKey] = 'old_token';
-      storage.data[AppConstants.storageRefreshTokenKey] = 'old_refresh';
+    test(
+      'saveTokens with rememberMe=false deletes from storage but keeps in memory',
+      () async {
+        storage.data[AppConstants.storageTokenKey] = 'old_token';
+        storage.data[AppConstants.storageRefreshTokenKey] = 'old_refresh';
 
-      await sessionService.saveTokens(
-        token: 'session_token',
-        refreshToken: 'session_refresh',
-        rememberMe: false,
-      );
+        await sessionService.saveTokens(
+          token: 'session_token',
+          refreshToken: 'session_refresh',
+          rememberMe: false,
+        );
 
-      expect(await sessionService.getToken(), 'session_token');
-      expect(await sessionService.getRefreshToken(), 'session_refresh');
-      expect(storage.data.containsKey(AppConstants.storageTokenKey), isFalse);
-      expect(
-        storage.data.containsKey(AppConstants.storageRefreshTokenKey),
-        isFalse,
-      );
-    });
+        expect(await sessionService.getToken(), 'session_token');
+        expect(await sessionService.getRefreshToken(), 'session_refresh');
+        expect(storage.data.containsKey(AppConstants.storageTokenKey), isFalse);
+        expect(
+          storage.data.containsKey(AppConstants.storageRefreshTokenKey),
+          isFalse,
+        );
+      },
+    );
 
-    test('updateTokens updates memory and only storage if isRemembered', () async {
-      await sessionService.setRememberMe(false);
-      await sessionService.updateTokens(
-        token: 'new_token',
-        refreshToken: 'new_refresh',
-      );
+    test(
+      'updateTokens updates memory and only storage if isRemembered',
+      () async {
+        await sessionService.setRememberMe(false);
+        await sessionService.updateTokens(
+          token: 'new_token',
+          refreshToken: 'new_refresh',
+        );
 
-      expect(await sessionService.getToken(), 'new_token');
-      expect(storage.data[AppConstants.storageTokenKey], isNull);
+        expect(await sessionService.getToken(), 'new_token');
+        expect(storage.data[AppConstants.storageTokenKey], isNull);
 
-      await sessionService.setRememberMe(true);
-      await sessionService.updateTokens(
-        token: 'new_token_2',
-        refreshToken: 'new_refresh_2',
-      );
+        await sessionService.setRememberMe(true);
+        await sessionService.updateTokens(
+          token: 'new_token_2',
+          refreshToken: 'new_refresh_2',
+        );
 
-      expect(await sessionService.getToken(), 'new_token_2');
-      expect(storage.data[AppConstants.storageTokenKey], 'new_token_2');
-      expect(storage.data[AppConstants.storageRefreshTokenKey], 'new_refresh_2');
-    });
+        expect(await sessionService.getToken(), 'new_token_2');
+        expect(storage.data[AppConstants.storageTokenKey], 'new_token_2');
+        expect(
+          storage.data[AppConstants.storageRefreshTokenKey],
+          'new_refresh_2',
+        );
+      },
+    );
 
     test('saveUserData and getUserData persist user data to storage', () async {
       await sessionService.saveUserData('{"id":"123","email":"test@test.com"}');

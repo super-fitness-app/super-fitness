@@ -64,32 +64,32 @@ class RegisterDto extends Equatable {
   Map<String, dynamic> toJson() => _$RegisterDtoToJson(this);
 
   factory RegisterDto.fromDomain(RegisterParams params) => RegisterDto(
-        firstName: params.firstName,
-        lastName: params.lastName,
-        email: params.email,
-        password: params.password,
-        rePassword: params.rePassword,
-        gender: params.gender,
-        height: params.height,
-        weight: params.weight,
-        age: params.age,
-        goal: params.goal,
-        activityLevel: params.activityLevel,
-      );
+    firstName: params.firstName,
+    lastName: params.lastName,
+    email: params.email,
+    password: params.password,
+    rePassword: params.rePassword,
+    gender: params.gender,
+    height: params.height,
+    weight: params.weight,
+    age: params.age,
+    goal: params.goal,
+    activityLevel: params.activityLevel,
+  );
 
   RegisterParams toDomain() => RegisterParams(
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        rePassword: rePassword,
-        gender: gender,
-        height: height,
-        weight: weight,
-        age: age,
-        goal: goal,
-        activityLevel: activityLevel,
-      );
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    rePassword: rePassword,
+    gender: gender,
+    height: height,
+    weight: weight,
+    age: age,
+    goal: goal,
+    activityLevel: activityLevel,
+  );
 
   @override
   List<Object?> get props => [

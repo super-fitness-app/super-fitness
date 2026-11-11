@@ -48,29 +48,31 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('renders 4 asset tabs, floating pill bar, and initial Explore tab',
-        (tester) async {
-      tester.view.physicalSize = const Size(800, 1600);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(() => tester.view.resetPhysicalSize());
+    testWidgets(
+      'renders 4 asset tabs, floating pill bar, and initial Explore tab',
+      (tester) async {
+        tester.view.physicalSize = const Size(800, 1600);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(() => tester.view.resetPhysicalSize());
 
-      await tester.pumpWidget(_buildTestApp(cubit: cubit));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(_buildTestApp(cubit: cubit));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(FloatingBottomNavBar), findsOneWidget);
-      expect(find.byType(NavBarItemWidget), findsNWidgets(4));
-      expect(find.byType(ExploreView), findsOneWidget);
+        expect(find.byType(FloatingBottomNavBar), findsOneWidget);
+        expect(find.byType(NavBarItemWidget), findsNWidgets(4));
+        expect(find.byType(ExploreView), findsOneWidget);
 
-      expect(_findTabByIcon(AppIcons.explore), findsOneWidget);
-      expect(_findTabByIcon(AppIcons.smartCoach), findsOneWidget);
-      expect(_findTabByIcon(AppIcons.workout), findsOneWidget);
-      expect(_findTabByIcon(AppIcons.profile), findsOneWidget);
+        expect(_findTabByIcon(AppIcons.explore), findsOneWidget);
+        expect(_findTabByIcon(AppIcons.smartCoach), findsOneWidget);
+        expect(_findTabByIcon(AppIcons.workout), findsOneWidget);
+        expect(_findTabByIcon(AppIcons.profile), findsOneWidget);
 
-      expect(find.text('Explore'), findsNWidgets(2));
-      expect(find.text('Smart Coach'), findsNothing);
-      expect(find.text('Workouts'), findsNothing);
-      expect(find.text('Profile'), findsNothing);
-    });
+        expect(find.text('Explore'), findsNWidgets(2));
+        expect(find.text('Smart Coach'), findsNothing);
+        expect(find.text('Workouts'), findsNothing);
+        expect(find.text('Profile'), findsNothing);
+      },
+    );
 
     testWidgets('switches to Smart Coach tab when tapped', (tester) async {
       tester.view.physicalSize = const Size(800, 1600);
@@ -112,21 +114,24 @@ void main() {
       expect(find.text('Profile'), findsNWidgets(2));
     });
 
-    testWidgets('renders on compact small screen (320dp width) without overflow',
-        (tester) async {
-      tester.view.physicalSize = const Size(320, 568);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() => tester.view.resetPhysicalSize());
+    testWidgets(
+      'renders on compact small screen (320dp width) without overflow',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 568);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() => tester.view.resetPhysicalSize());
 
-      await tester.pumpWidget(_buildTestApp(cubit: cubit));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(_buildTestApp(cubit: cubit));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(FloatingBottomNavBar), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(find.byType(FloatingBottomNavBar), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-    testWidgets('respects max-width bounds on tablet screen (800dp width)',
-        (tester) async {
+    testWidgets('respects max-width bounds on tablet screen (800dp width)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(800, 1280);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -144,16 +149,16 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('renders Arabic (RTL) localized content without overflow',
-        (tester) async {
+    testWidgets('renders Arabic (RTL) localized content without overflow', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(360, 640);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      await tester.pumpWidget(_buildTestApp(
-        cubit: cubit,
-        locale: const Locale('ar'),
-      ));
+      await tester.pumpWidget(
+        _buildTestApp(cubit: cubit, locale: const Locale('ar')),
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(FloatingBottomNavBar), findsOneWidget);

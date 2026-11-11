@@ -13,11 +13,7 @@ class SelectWeightView extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback? onBack;
 
-  const SelectWeightView({
-    super.key,
-    this.onNext,
-    this.onBack,
-  });
+  const SelectWeightView({super.key, this.onNext, this.onBack});
 
   @override
   State<SelectWeightView> createState() => _SelectWeightViewState();

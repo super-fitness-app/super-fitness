@@ -148,10 +148,7 @@ class _RegisterViewState extends State<RegisterView>
     );
 
     if (widget.cubit != null) {
-      return BlocProvider.value(
-        value: _cubit,
-        child: content,
-      );
+      return BlocProvider.value(value: _cubit, child: content);
     }
 
     return content;

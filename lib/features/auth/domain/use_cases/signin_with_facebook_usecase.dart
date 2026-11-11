@@ -12,4 +12,3 @@ class SignInWithFacebookUseCase {
     return _authRepo.signInWithFacebook();
   }
 }
-

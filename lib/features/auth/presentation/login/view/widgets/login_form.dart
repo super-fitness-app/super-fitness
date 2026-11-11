@@ -44,9 +44,9 @@ class LoginForm extends StatelessWidget {
               obscureText: !state.isPasswordVisible,
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
-                onPressed: () => context
-                    .read<LoginCubit>()
-                    .doEvent(const TogglePasswordVisibilityEvent()),
+                onPressed: () => context.read<LoginCubit>().doEvent(
+                  const TogglePasswordVisibilityEvent(),
+                ),
                 icon: Icon(
                   state.isPasswordVisible
                       ? Icons.visibility_outlined
@@ -65,14 +65,10 @@ class LoginForm extends StatelessWidget {
             SocialAuthButtons(
               onFacebookTap: state.isLoading
                   ? null
-                  : () => context
-                      .read<LoginCubit>()
-                      .signInWithFacebookIntent(),
+                  : () => context.read<LoginCubit>().signInWithFacebookIntent(),
               onGoogleTap: state.isLoading
                   ? null
-                  : () => context
-                      .read<LoginCubit>()
-                      .signInWithGoogleIntent(),
+                  : () => context.read<LoginCubit>().signInWithGoogleIntent(),
             ),
             const SizedBox(height: 24),
             AppButton(

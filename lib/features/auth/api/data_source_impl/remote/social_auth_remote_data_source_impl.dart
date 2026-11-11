@@ -107,7 +107,8 @@ class SocialAuthRemoteDataSourceImpl implements SocialAuthRemoteDataSource {
       if (user == null) {
         throw FirebaseAuthException(
           code: 'user-not-found',
-          message: 'Firebase user creation failed after Facebook authentication',
+          message:
+              'Firebase user creation failed after Facebook authentication',
         );
       }
 

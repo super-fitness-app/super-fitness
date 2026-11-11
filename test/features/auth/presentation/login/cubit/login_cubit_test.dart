@@ -131,12 +131,12 @@ void main() {
     );
 
     LoginCubit createCubit() => LoginCubit(
-          loginUseCase,
-          fakeSessionService,
-          signInWithGoogleUseCase,
-          signInWithFacebookUseCase,
-          passwordGenerator,
-        );
+      loginUseCase,
+      fakeSessionService,
+      signInWithGoogleUseCase,
+      signInWithFacebookUseCase,
+      passwordGenerator,
+    );
 
     setUp(() {
       fakeAuthRepo = _FakeAuthRepo();
@@ -176,11 +176,8 @@ void main() {
     blocTest<LoginCubit, LoginState>(
       'TogglePasswordVisibilityEvent inverts isPasswordVisible',
       build: createCubit,
-      act: (cubit) =>
-          cubit.doEvent(const TogglePasswordVisibilityEvent()),
-      expect: () => [
-        const LoginState(isPasswordVisible: true),
-      ],
+      act: (cubit) => cubit.doEvent(const TogglePasswordVisibilityEvent()),
+      expect: () => [const LoginState(isPasswordVisible: true)],
     );
 
     blocTest<LoginCubit, LoginState>(
@@ -196,15 +193,28 @@ void main() {
     );
 
     blocTest<LoginCubit, LoginState>(
+      'SubmitLoginEvent emits invalidLoginPassword when password is weak',
+      build: createCubit,
+      seed: () =>
+          const LoginState(email: 'valid@example.com', password: 'invalid'),
+      act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
+      expect: () => [
+        const LoginState(
+          email: 'valid@example.com',
+          password: 'invalid',
+          passwordError: ValidationError.invalidLoginPassword,
+        ),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
       'SubmitLoginEvent emits loading then success on valid credentials',
       build: createCubit,
       setUp: () {
         fakeAuthRepo.resultToReturn = Success<LoginEntity>(testLoginEntity);
       },
-      seed: () => const LoginState(
-        email: 'alex@example.com',
-        password: 'Password123',
-      ),
+      seed: () =>
+          const LoginState(email: 'alex@example.com', password: 'Password123'),
       act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
       expect: () => [
         LoginState(
@@ -232,10 +242,8 @@ void main() {
           ServerMessageFailure('Invalid credentials'),
         );
       },
-      seed: () => const LoginState(
-        email: 'alex@example.com',
-        password: 'Password123',
-      ),
+      seed: () =>
+          const LoginState(email: 'alex@example.com', password: 'Password123'),
       act: (cubit) => cubit.doEvent(const SubmitLoginEvent()),
       expect: () => [
         LoginState(
@@ -318,7 +326,9 @@ void main() {
       expect: () => [
         LoginState(loginApiState: BaseState.loading()),
         LoginState(
-          loginApiState: BaseState.error('Account not found. Please register first.'),
+          loginApiState: BaseState.error(
+            'Account not found. Please register first.',
+          ),
         ),
       ],
       verify: (_) {
@@ -352,7 +362,9 @@ void main() {
       expect: () => [
         LoginState(loginApiState: BaseState.loading()),
         LoginState(
-          loginApiState: BaseState.error('Google account ID is missing. Please try again.'),
+          loginApiState: BaseState.error(
+            'Google account ID is missing. Please try again.',
+          ),
         ),
       ],
     );
@@ -462,7 +474,9 @@ void main() {
       expect: () => [
         LoginState(loginApiState: BaseState.loading()),
         LoginState(
-          loginApiState: BaseState.error('Account not found. Please register first.'),
+          loginApiState: BaseState.error(
+            'Account not found. Please register first.',
+          ),
         ),
       ],
       verify: (_) {
@@ -496,7 +510,9 @@ void main() {
       expect: () => [
         LoginState(loginApiState: BaseState.loading()),
         LoginState(
-          loginApiState: BaseState.error('Facebook account ID is missing. Please try again.'),
+          loginApiState: BaseState.error(
+            'Facebook account ID is missing. Please try again.',
+          ),
         ),
       ],
     );

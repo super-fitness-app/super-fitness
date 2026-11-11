@@ -8,11 +8,11 @@ class PasswordGenerator {
   final String prefix;
 
   const PasswordGenerator()
-      : secretKey = const String.fromEnvironment('SOCIAL_AUTH_SECRET_KEY'),
-        prefix = const String.fromEnvironment(
-          'SOCIAL_AUTH_PASSWORD_PREFIX',
-          defaultValue: 'SuperFit@2026#',
-        );
+    : secretKey = const String.fromEnvironment('SOCIAL_AUTH_SECRET_KEY'),
+      prefix = const String.fromEnvironment(
+        'SOCIAL_AUTH_PASSWORD_PREFIX',
+        defaultValue: 'SuperFit@2026#',
+      );
 
   /// Constructor for testing or custom configuration.
   const PasswordGenerator.custom({

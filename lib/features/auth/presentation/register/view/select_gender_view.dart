@@ -13,11 +13,7 @@ class SelectGenderView extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback? onBack;
 
-  const SelectGenderView({
-    super.key,
-    this.onNext,
-    this.onBack,
-  });
+  const SelectGenderView({super.key, this.onNext, this.onBack});
 
   @override
   State<SelectGenderView> createState() => _SelectGenderViewState();

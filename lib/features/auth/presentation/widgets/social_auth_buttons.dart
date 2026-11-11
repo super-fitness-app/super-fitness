@@ -51,11 +51,7 @@ class SocialAuthButtons extends StatelessWidget {
             SocialIconButton(
               key: SocialAuthKeys.apple,
               onTap: onAppleTap,
-              child: const Icon(
-                Icons.apple,
-                color: Colors.white,
-                size: 22,
-              ),
+              child: const Icon(Icons.apple, color: Colors.white, size: 22),
             ),
           ],
         ),
@@ -110,11 +106,7 @@ class SocialIconButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
 
-  const SocialIconButton({
-    super.key,
-    required this.child,
-    this.onTap,
-  });
+  const SocialIconButton({super.key, required this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -203,4 +195,3 @@ class _GoogleIconPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-

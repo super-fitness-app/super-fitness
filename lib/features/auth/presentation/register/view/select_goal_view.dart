@@ -13,11 +13,7 @@ class SelectGoalView extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback? onBack;
 
-  const SelectGoalView({
-    super.key,
-    this.onNext,
-    this.onBack,
-  });
+  const SelectGoalView({super.key, this.onNext, this.onBack});
 
   @override
   State<SelectGoalView> createState() => _SelectGoalViewState();

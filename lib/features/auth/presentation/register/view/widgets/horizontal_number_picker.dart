@@ -82,8 +82,7 @@ class _HorizontalNumberPickerState extends State<HorizontalNumberPicker> {
                   style: TextStyle(
                     color: isSelected ? AppColors.orangeBase : Colors.white60,
                     fontSize: isSelected ? 34 : 20,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                   ),
                 ),
               );
@@ -91,11 +90,7 @@ class _HorizontalNumberPickerState extends State<HorizontalNumberPicker> {
           ),
         ),
         const SizedBox(height: 4),
-        const Icon(
-          Icons.arrow_drop_up,
-          color: AppColors.orangeBase,
-          size: 24,
-        ),
+        const Icon(Icons.arrow_drop_up, color: AppColors.orangeBase, size: 24),
       ],
     );
   }

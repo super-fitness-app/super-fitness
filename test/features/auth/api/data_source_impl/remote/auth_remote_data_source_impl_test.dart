@@ -103,37 +103,40 @@ void main() {
       );
     });
 
-    test('login forwards request to AuthApiClient and returns response', () async {
-      final loginResponse = LoginResponse(
-        message: 'login success',
-        token: 'token123',
-        user: LoginUser(
-          id: '1',
-          firstName: 'John',
-          lastName: 'Doe',
+    test(
+      'login forwards request to AuthApiClient and returns response',
+      () async {
+        final loginResponse = LoginResponse(
+          message: 'login success',
+          token: 'token123',
+          user: LoginUser(
+            id: '1',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            gender: 'male',
+            age: 25,
+            weight: 75.0,
+            height: 180.0,
+            activityLevel: 'intermediate',
+            goal: 'muscle',
+            photo: 'avatar.png',
+            createdAt: DateTime(2025, 1, 1),
+          ),
+        );
+        fakeApiClient.loginResponseToReturn = loginResponse;
+
+        const loginReq = LoginRequest(
           email: 'john@example.com',
-          gender: 'male',
-          age: 25,
-          weight: 75.0,
-          height: 180.0,
-          activityLevel: 'intermediate',
-          goal: 'muscle',
-          photo: 'avatar.png',
-          createdAt: DateTime(2025, 1, 1),
-        ),
-      );
-      fakeApiClient.loginResponseToReturn = loginResponse;
+          password: 'Password123!',
+        );
+        final result = await remoteDataSource.login(loginReq);
 
-      const loginReq = LoginRequest(
-        email: 'john@example.com',
-        password: 'Password123!',
-      );
-      final result = await remoteDataSource.login(loginReq);
-
-      expect(fakeApiClient.capturedLoginRequest, loginReq);
-      expect(result.token, 'token123');
-      expect(result.message, 'login success');
-      expect(result.user.firstName, 'John');
-    });
+        expect(fakeApiClient.capturedLoginRequest, loginReq);
+        expect(result.token, 'token123');
+        expect(result.message, 'login success');
+        expect(result.user.firstName, 'John');
+      },
+    );
   });
 }

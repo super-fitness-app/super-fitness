@@ -174,26 +174,29 @@ void main() {
       );
     }
 
-    testWidgets('renders all expected UI elements including social auth buttons',
-        (tester) async {
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'renders all expected UI elements including social auth buttons',
+      (tester) async {
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(LoginHeaderSection), findsOneWidget);
-      expect(find.byType(LoginCard), findsOneWidget);
-      expect(find.byType(AppTextField), findsNWidgets(2));
-      expect(find.byType(ForgotPasswordButton), findsOneWidget);
-      expect(find.byType(SocialAuthButtons), findsOneWidget);
-      expect(find.byKey(SocialAuthKeys.facebook), findsOneWidget);
-      expect(find.byKey(SocialAuthKeys.google), findsOneWidget);
-      expect(find.byKey(SocialAuthKeys.apple), findsOneWidget);
-      expect(find.text('Or'), findsOneWidget);
-      expect(find.byType(AppButton), findsOneWidget);
-      expect(find.byType(LoginFooter), findsOneWidget);
-    });
+        expect(find.byType(LoginHeaderSection), findsOneWidget);
+        expect(find.byType(LoginCard), findsOneWidget);
+        expect(find.byType(AppTextField), findsNWidgets(2));
+        expect(find.byType(ForgotPasswordButton), findsOneWidget);
+        expect(find.byType(SocialAuthButtons), findsOneWidget);
+        expect(find.byKey(SocialAuthKeys.facebook), findsOneWidget);
+        expect(find.byKey(SocialAuthKeys.google), findsOneWidget);
+        expect(find.byKey(SocialAuthKeys.apple), findsOneWidget);
+        expect(find.text('Or'), findsOneWidget);
+        expect(find.byType(AppButton), findsOneWidget);
+        expect(find.byType(LoginFooter), findsOneWidget);
+      },
+    );
 
-    testWidgets('toggles password visibility when eye icon tapped',
-        (tester) async {
+    testWidgets('toggles password visibility when eye icon tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
 
@@ -209,8 +212,9 @@ void main() {
       expect(cubit.state.isPasswordVisible, isFalse);
     });
 
-    testWidgets('submitting invalid form shows validation error messages',
-        (tester) async {
+    testWidgets('submitting invalid form shows validation error messages', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestApp(cubit));
       await tester.pumpAndSettle();
 
@@ -222,163 +226,185 @@ void main() {
       expect(find.text('This field is required'), findsWidgets);
     });
 
-    testWidgets('entering invalid password displays localized error message in UI',
-        (tester) async {
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'entering invalid password displays localized error message in UI',
+      (tester) async {
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-      await tester.enterText(
-        find.byKey(const Key('loginEmailField')),
-        'user@example.com',
-      );
-      await tester.enterText(
-        find.byKey(const Key('loginPasswordField')),
-        'short',
-      );
-      await tester.pump();
+        await tester.enterText(
+          find.byKey(const Key('loginEmailField')),
+          'user@example.com',
+        );
+        await tester.enterText(
+          find.byKey(const Key('loginPasswordField')),
+          'short',
+        );
+        await tester.pump();
 
-      await tester.tap(find.byKey(const Key('loginSubmitButton')));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('loginSubmitButton')));
+        await tester.pumpAndSettle();
 
-      expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
-      expect(
-        find.text(
-          'Password must be at least 6 characters with an uppercase letter and a number',
-        ),
-        findsOneWidget,
-      );
-    });
+        expect(cubit.state.passwordError, ValidationError.invalidLoginPassword);
+        expect(
+          find.text(
+            'Password must be at least 6 characters with an uppercase letter and a number',
+          ),
+          findsOneWidget,
+        );
+      },
+    );
 
-    testWidgets('submitting valid credentials shows loading indicator and navigates on success',
-        (tester) async {
-      final loginCompleter = Completer<ApiResults<LoginEntity>>();
-      fakeAuthRepo.completer = loginCompleter;
+    testWidgets(
+      'submitting valid credentials shows loading indicator and navigates on success',
+      (tester) async {
+        final loginCompleter = Completer<ApiResults<LoginEntity>>();
+        fakeAuthRepo.completer = loginCompleter;
 
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-      await tester.enterText(
-        find.byKey(const Key('loginEmailField')),
-        'test@example.com',
-      );
-      await tester.enterText(
-        find.byKey(const Key('loginPasswordField')),
-        'ValidPass1',
-      );
-      await tester.pump();
+        await tester.enterText(
+          find.byKey(const Key('loginEmailField')),
+          'test@example.com',
+        );
+        await tester.enterText(
+          find.byKey(const Key('loginPasswordField')),
+          'ValidPass1',
+        );
+        await tester.pump();
 
-      await tester.tap(find.byKey(const Key('loginSubmitButton')));
-      await tester.pump();
+        await tester.tap(find.byKey(const Key('loginSubmitButton')));
+        await tester.pump();
 
-      // Loading indicator should appear on AppButton
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        // Loading indicator should appear on AppButton
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      loginCompleter.complete(
-        Success<LoginEntity>(
+        loginCompleter.complete(
+          Success<LoginEntity>(
+            LoginEntity(message: 'OK', user: testUser, token: 'token_xyz'),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(fakeSessionService.savedToken, 'token_xyz');
+        expect(fakeSessionService.savedUserData, contains('test@example.com'));
+        expect(find.text('Main'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'tapping Google button signs in and navigates to Main when user is registered',
+      (tester) async {
+        fakeAuthRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'google-reg-1',
+            email: 'reg@example.com',
+            displayName: 'Reg User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = Success<LoginEntity>(
           LoginEntity(
             message: 'OK',
             user: testUser,
-            token: 'token_xyz',
+            token: 'token_google_user',
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
 
-      expect(fakeSessionService.savedToken, 'token_xyz');
-      expect(fakeSessionService.savedUserData, contains('test@example.com'));
-      expect(find.text('Main'), findsOneWidget);
-    });
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-    testWidgets('tapping Google button signs in and navigates to Main when user is registered',
-        (tester) async {
-      fakeAuthRepo.googleResultToReturn = const Success(
-        SocialAuthUserEntity(
-          id: 'google-reg-1',
-          email: 'reg@example.com',
-          displayName: 'Reg User',
-        ),
-      );
-      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
-        LoginEntity(message: 'OK', user: testUser, token: 'token_google_user'),
-      );
+        await tester.tap(find.byKey(SocialAuthKeys.google));
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+        expect(fakeSessionService.savedToken, 'token_google_user');
+        expect(find.text('Main'), findsOneWidget);
+      },
+    );
 
-      await tester.tap(find.byKey(SocialAuthKeys.google));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'tapping Google button shows notification to register first when user is not registered',
+      (tester) async {
+        fakeAuthRepo.googleResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'google-unreg-1',
+            email: 'unreg@example.com',
+            displayName: 'Unreg User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+          ServerMessageFailure('Invalid credentials'),
+        );
 
-      expect(fakeSessionService.savedToken, 'token_google_user');
-      expect(find.text('Main'), findsOneWidget);
-    });
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-    testWidgets('tapping Google button shows notification to register first when user is not registered',
-        (tester) async {
-      fakeAuthRepo.googleResultToReturn = const Success(
-        SocialAuthUserEntity(
-          id: 'google-unreg-1',
-          email: 'unreg@example.com',
-          displayName: 'Unreg User',
-        ),
-      );
-      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
-        ServerMessageFailure('Invalid credentials'),
-      );
+        await tester.tap(find.byKey(SocialAuthKeys.google));
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+        expect(
+          find.text('Account not found. Please register first.'),
+          findsOneWidget,
+        );
+        expect(fakeSessionService.savedToken, isNull);
+      },
+    );
 
-      await tester.tap(find.byKey(SocialAuthKeys.google));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'tapping Facebook button signs in and navigates to Main when user is registered',
+      (tester) async {
+        fakeAuthRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'fb-reg-1',
+            email: 'fbreg@example.com',
+            displayName: 'FB Reg User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = Success<LoginEntity>(
+          LoginEntity(
+            message: 'OK',
+            user: testUser,
+            token: 'token_facebook_user',
+          ),
+        );
 
-      expect(find.text('Account not found. Please register first.'), findsOneWidget);
-      expect(fakeSessionService.savedToken, isNull);
-    });
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-    testWidgets('tapping Facebook button signs in and navigates to Main when user is registered',
-        (tester) async {
-      fakeAuthRepo.facebookResultToReturn = const Success(
-        SocialAuthUserEntity(
-          id: 'fb-reg-1',
-          email: 'fbreg@example.com',
-          displayName: 'FB Reg User',
-        ),
-      );
-      fakeAuthRepo.resultToReturn = Success<LoginEntity>(
-        LoginEntity(message: 'OK', user: testUser, token: 'token_facebook_user'),
-      );
+        await tester.tap(find.byKey(SocialAuthKeys.facebook));
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
+        expect(fakeSessionService.savedToken, 'token_facebook_user');
+        expect(find.text('Main'), findsOneWidget);
+      },
+    );
 
-      await tester.tap(find.byKey(SocialAuthKeys.facebook));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'tapping Facebook button shows notification to register first when user is not registered',
+      (tester) async {
+        fakeAuthRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'fb-unreg-1',
+            email: 'fbunreg@example.com',
+            displayName: 'FB Unreg User',
+          ),
+        );
+        fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
+          ServerMessageFailure('Invalid credentials'),
+        );
 
-      expect(fakeSessionService.savedToken, 'token_facebook_user');
-      expect(find.text('Main'), findsOneWidget);
-    });
+        await tester.pumpWidget(createTestApp(cubit));
+        await tester.pumpAndSettle();
 
-    testWidgets('tapping Facebook button shows notification to register first when user is not registered',
-        (tester) async {
-      fakeAuthRepo.facebookResultToReturn = const Success(
-        SocialAuthUserEntity(
-          id: 'fb-unreg-1',
-          email: 'fbunreg@example.com',
-          displayName: 'FB Unreg User',
-        ),
-      );
-      fakeAuthRepo.resultToReturn = const FailureResponse<LoginEntity>(
-        ServerMessageFailure('Invalid credentials'),
-      );
+        await tester.tap(find.byKey(SocialAuthKeys.facebook));
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(createTestApp(cubit));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byKey(SocialAuthKeys.facebook));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Account not found. Please register first.'), findsOneWidget);
-      expect(fakeSessionService.savedToken, isNull);
-    });
+        expect(
+          find.text('Account not found. Please register first.'),
+          findsOneWidget,
+        );
+        expect(fakeSessionService.savedToken, isNull);
+      },
+    );
   });
 }

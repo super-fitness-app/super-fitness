@@ -13,11 +13,7 @@ class SelectAgeView extends StatefulWidget {
   final VoidCallback? onNext;
   final VoidCallback? onBack;
 
-  const SelectAgeView({
-    super.key,
-    this.onNext,
-    this.onBack,
-  });
+  const SelectAgeView({super.key, this.onNext, this.onBack});
 
   @override
   State<SelectAgeView> createState() => _SelectAgeViewState();

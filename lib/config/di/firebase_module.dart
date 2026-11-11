@@ -14,4 +14,3 @@ abstract class FirebaseModule {
   @lazySingleton
   FacebookAuth provideFacebookAuth() => FacebookAuth.instance;
 }
-

@@ -23,8 +23,9 @@ class OnboardingBottomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: (isEnabled && !isLoading) ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              isEnabled ? AppColors.orangeBase : AppColors.disabledButton,
+          backgroundColor: isEnabled
+              ? AppColors.orangeBase
+              : AppColors.disabledButton,
           disabledBackgroundColor: AppColors.disabledButtonBackground,
           foregroundColor: AppColors.white,
           disabledForegroundColor: Colors.white60,

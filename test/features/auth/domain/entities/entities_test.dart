@@ -113,19 +113,22 @@ void main() {
 
       expect(params1, equals(params2));
       expect(params1, isNot(equals(params3)));
-      expect(params1.props, equals([
-        'John',
-        'Doe',
-        'john@example.com',
-        'Password123!',
-        'Password123!',
-        'male',
-        180,
-        75,
-        25,
-        'muscle',
-        'intermediate',
-      ]));
+      expect(
+        params1.props,
+        equals([
+          'John',
+          'Doe',
+          'john@example.com',
+          'Password123!',
+          'Password123!',
+          'male',
+          180,
+          75,
+          25,
+          'muscle',
+          'intermediate',
+        ]),
+      );
     });
   });
 }

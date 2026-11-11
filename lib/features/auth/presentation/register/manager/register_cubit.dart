@@ -157,7 +157,11 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   void _onUpdateActivityLevel(UpdateActivityLevelEvent event) {
-    emit(state.copyWith(data: state.data.copyWith(activityLevel: event.activityLevel)));
+    emit(
+      state.copyWith(
+        data: state.data.copyWith(activityLevel: event.activityLevel),
+      ),
+    );
   }
 
   void updateActivityLevelIntent(String activityLevel) {
@@ -173,34 +177,26 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     if (params == null) {
       emit(
         state.copyWith(
-          registerState: BaseState.error('Please fill all required registration details'),
+          registerState: BaseState.error(
+            'Please fill all required registration details',
+          ),
         ),
       );
-      emitEvent(const DisplayError('Please fill all required registration details'));
+      emitEvent(
+        const DisplayError('Please fill all required registration details'),
+      );
       return;
     }
 
-    emit(
-      state.copyWith(
-        registerState: BaseState.loading(),
-      ),
-    );
+    emit(state.copyWith(registerState: BaseState.loading()));
 
     final result = await _registerUseCase(params);
     switch (result) {
       case Success(:final data):
-        emit(
-          state.copyWith(
-            registerState: BaseState.success(data),
-          ),
-        );
+        emit(state.copyWith(registerState: BaseState.success(data)));
         emitEvent(const DisplaySuccess('Registered successfully'));
       case FailureResponse(:final failure):
-        emit(
-          state.copyWith(
-            registerState: BaseState.failure(failure),
-          ),
-        );
+        emit(state.copyWith(registerState: BaseState.failure(failure)));
         emitEvent(DisplayError.fromFailure(failure));
     }
   }
@@ -224,11 +220,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
-    emit(
-      state.copyWith(
-        registerState: BaseState.loading(),
-      ),
-    );
+    emit(state.copyWith(registerState: BaseState.loading()));
 
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
@@ -240,11 +232,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   Future<void> _onSignInWithFacebook() async {
-    emit(
-      state.copyWith(
-        registerState: BaseState.loading(),
-      ),
-    );
+    emit(state.copyWith(registerState: BaseState.loading()));
 
     final facebookResult = await _signInWithFacebookUseCase();
     switch (facebookResult) {
@@ -255,16 +243,15 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     }
   }
 
-  void _handleSocialAuthSuccess(SocialAuthUserEntity data, String providerName) {
+  void _handleSocialAuthSuccess(
+    SocialAuthUserEntity data,
+    String providerName,
+  ) {
     // Validate provider user ID to prevent null/empty issues
     final userId = data.id;
     if (userId == null || userId.trim().isEmpty) {
       final errorMsg = '$providerName account ID is missing. Please try again.';
-      emit(
-        state.copyWith(
-          registerState: BaseState.error(errorMsg),
-        ),
-      );
+      emit(state.copyWith(registerState: BaseState.error(errorMsg)));
       emitEvent(DisplayError(errorMsg));
       return;
     }
@@ -299,17 +286,11 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     emitEvent(
       DisplaySuccess('$providerName account connected. Complete your profile.'),
     );
-    emitEvent(
-      NavigateEvent(AppRoutes.completeRegister, extra: this),
-    );
+    emitEvent(NavigateEvent(AppRoutes.completeRegister, extra: this));
   }
 
   void _handleSocialAuthFailure(dynamic failure) {
-    emit(
-      state.copyWith(
-        registerState: BaseState.failure(failure),
-      ),
-    );
+    emit(state.copyWith(registerState: BaseState.failure(failure)));
     emitEvent(DisplayError.fromFailure(failure));
   }
 

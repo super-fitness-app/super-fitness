@@ -16,9 +16,7 @@ Widget _wrapWithLocalization(Widget child) {
   return MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: Scaffold(
-      body: SingleChildScrollView(child: child),
-    ),
+    home: Scaffold(body: SingleChildScrollView(child: child)),
   );
 }
 
@@ -67,10 +65,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SocialIconButton(
-              onTap: () {},
-              child: const Icon(Icons.star),
-            ),
+            body: SocialIconButton(onTap: () {}, child: const Icon(Icons.star)),
           ),
         ),
       );
@@ -99,11 +94,7 @@ void main() {
 
   group('RegisterHeader Widget Tests', () {
     testWidgets('renders logo, title, and subtitle', (tester) async {
-      await tester.pumpWidget(
-        _wrapWithLocalization(
-          const RegisterHeader(),
-        ),
-      );
+      await tester.pumpWidget(_wrapWithLocalization(const RegisterHeader()));
 
       expect(find.text(l10n.heyThere), findsOneWidget);
       expect(find.text(l10n.createAnAccount), findsOneWidget);
@@ -112,88 +103,97 @@ void main() {
   });
 
   group('RegisterTextField & RegisterPasswordField Widget Tests', () {
-    testWidgets('RegisterTextField binds controller and displays error on failed validation', (
-      tester,
-    ) async {
-      final controller = TextEditingController();
-      final formKey = GlobalKey<FormState>();
+    testWidgets(
+      'RegisterTextField binds controller and displays error on failed validation',
+      (tester) async {
+        final controller = TextEditingController();
+        final formKey = GlobalKey<FormState>();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Form(
-              key: formKey,
-              child: RegisterTextField(
-                controller: controller,
-                hint: 'Enter name',
-                prefixIcon: const Icon(Icons.person_outline),
-                validator: (val) =>
-                    (val == null || val.isEmpty) ? 'Name required' : null,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Form(
+                key: formKey,
+                child: RegisterTextField(
+                  controller: controller,
+                  hint: 'Enter name',
+                  prefixIcon: const Icon(Icons.person_outline),
+                  validator: (val) =>
+                      (val == null || val.isEmpty) ? 'Name required' : null,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Enter name'), findsOneWidget);
-      expect(find.byIcon(Icons.person_outline), findsOneWidget);
+        expect(find.text('Enter name'), findsOneWidget);
+        expect(find.byIcon(Icons.person_outline), findsOneWidget);
 
-      // Trigger validation with empty text
-      formKey.currentState!.validate();
-      await tester.pumpAndSettle();
-      expect(find.text('Name required'), findsOneWidget);
+        // Trigger validation with empty text
+        formKey.currentState!.validate();
+        await tester.pumpAndSettle();
+        expect(find.text('Name required'), findsOneWidget);
 
-      // Enter valid text
-      await tester.enterText(find.byType(TextFormField), 'Alice');
-      expect(controller.text, 'Alice');
+        // Enter valid text
+        await tester.enterText(find.byType(TextFormField), 'Alice');
+        expect(controller.text, 'Alice');
 
-      formKey.currentState!.validate();
-      await tester.pumpAndSettle();
-      expect(find.text('Name required'), findsNothing);
+        formKey.currentState!.validate();
+        await tester.pumpAndSettle();
+        expect(find.text('Name required'), findsNothing);
 
-      controller.dispose();
-    });
+        controller.dispose();
+      },
+    );
 
-    testWidgets('RegisterPasswordField toggles obscureText and suffix icon on tap', (
-      tester,
-    ) async {
-      final controller = TextEditingController(text: 'secret123');
+    testWidgets(
+      'RegisterPasswordField toggles obscureText and suffix icon on tap',
+      (tester) async {
+        final controller = TextEditingController(text: 'secret123');
 
-      await tester.pumpWidget(
-        _wrapWithLocalization(
-          RegisterPasswordField(
-            controller: controller,
-          ),
-        ),
-      );
+        await tester.pumpWidget(
+          _wrapWithLocalization(RegisterPasswordField(controller: controller)),
+        );
 
-      expect(find.byIcon(Icons.lock_outline), findsOneWidget);
-      expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+        expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+        expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
 
-      // Initially password is obscured
-      final editableTextFinder = find.byType(EditableText);
-      expect(tester.widget<EditableText>(editableTextFinder).obscureText, isTrue);
+        // Initially password is obscured
+        final editableTextFinder = find.byType(EditableText);
+        expect(
+          tester.widget<EditableText>(editableTextFinder).obscureText,
+          isTrue,
+        );
 
-      // Toggle to visible
-      await tester.tap(find.byType(IconButton));
-      await tester.pumpAndSettle();
+        // Toggle to visible
+        await tester.tap(find.byType(IconButton));
+        await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
-      expect(tester.widget<EditableText>(editableTextFinder).obscureText, isFalse);
+        expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
+        expect(
+          tester.widget<EditableText>(editableTextFinder).obscureText,
+          isFalse,
+        );
 
-      // Toggle back to obscured
-      await tester.tap(find.byType(IconButton));
-      await tester.pumpAndSettle();
+        // Toggle back to obscured
+        await tester.tap(find.byType(IconButton));
+        await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
-      expect(tester.widget<EditableText>(editableTextFinder).obscureText, isTrue);
+        expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+        expect(
+          tester.widget<EditableText>(editableTextFinder).obscureText,
+          isTrue,
+        );
 
-      controller.dispose();
-    });
+        controller.dispose();
+      },
+    );
   });
 
   group('RegisterFields & RegisterFormCard Widget Tests', () {
-    testWidgets('RegisterFields renders all four text input fields', (tester) async {
+    testWidgets('RegisterFields renders all four text input fields', (
+      tester,
+    ) async {
       final firstCtrl = TextEditingController();
       final lastCtrl = TextEditingController();
       final emailCtrl = TextEditingController();
@@ -221,81 +221,83 @@ void main() {
       passCtrl.dispose();
     });
 
-    testWidgets('RegisterFormCard renders title, fields, register button, and social buttons', (
-      tester,
-    ) async {
-      final firstCtrl = TextEditingController();
-      final lastCtrl = TextEditingController();
-      final emailCtrl = TextEditingController();
-      final passCtrl = TextEditingController();
-      var registerPressed = false;
-      var loginPressed = false;
+    testWidgets(
+      'RegisterFormCard renders title, fields, register button, and social buttons',
+      (tester) async {
+        final firstCtrl = TextEditingController();
+        final lastCtrl = TextEditingController();
+        final emailCtrl = TextEditingController();
+        final passCtrl = TextEditingController();
+        var registerPressed = false;
+        var loginPressed = false;
 
-      await tester.pumpWidget(
-        _wrapWithLocalization(
-          RegisterFormCard(
-            firstNameController: firstCtrl,
-            lastNameController: lastCtrl,
-            emailController: emailCtrl,
-            passwordController: passCtrl,
-            isLoading: false,
-            onRegisterPressed: () => registerPressed = true,
-            onLoginTap: () => loginPressed = true,
+        await tester.pumpWidget(
+          _wrapWithLocalization(
+            RegisterFormCard(
+              firstNameController: firstCtrl,
+              lastNameController: lastCtrl,
+              emailController: emailCtrl,
+              passwordController: passCtrl,
+              isLoading: false,
+              onRegisterPressed: () => registerPressed = true,
+              onLoginTap: () => loginPressed = true,
+            ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text(l10n.register), findsNWidgets(2)); // Title and Button
-      expect(find.byType(RegisterFields), findsOneWidget);
-      expect(find.byType(SocialAuthButtons), findsOneWidget);
+        expect(find.text(l10n.register), findsNWidgets(2)); // Title and Button
+        expect(find.byType(RegisterFields), findsOneWidget);
+        expect(find.byType(SocialAuthButtons), findsOneWidget);
 
-      await tester.tap(find.byType(ElevatedButton));
-      expect(registerPressed, isTrue);
+        await tester.tap(find.byType(ElevatedButton));
+        expect(registerPressed, isTrue);
 
-      final richTextFinder = find.descendant(
-        of: find.byType(AlreadyHaveAccountRow),
-        matching: find.byType(RichText),
-      );
-      final richText = tester.widget<RichText>(richTextFinder);
-      final textSpan = richText.text as TextSpan;
-      final loginSpan = textSpan.children!.first as TextSpan;
-      (loginSpan.recognizer! as TapGestureRecognizer).onTap?.call();
-      expect(loginPressed, isTrue);
+        final richTextFinder = find.descendant(
+          of: find.byType(AlreadyHaveAccountRow),
+          matching: find.byType(RichText),
+        );
+        final richText = tester.widget<RichText>(richTextFinder);
+        final textSpan = richText.text as TextSpan;
+        final loginSpan = textSpan.children!.first as TextSpan;
+        (loginSpan.recognizer! as TapGestureRecognizer).onTap?.call();
+        expect(loginPressed, isTrue);
 
-      firstCtrl.dispose();
-      lastCtrl.dispose();
-      emailCtrl.dispose();
-      passCtrl.dispose();
-    });
+        firstCtrl.dispose();
+        lastCtrl.dispose();
+        emailCtrl.dispose();
+        passCtrl.dispose();
+      },
+    );
 
-    testWidgets('RegisterFormCard displays CircularProgressIndicator when isLoading is true', (
-      tester,
-    ) async {
-      final firstCtrl = TextEditingController();
-      final lastCtrl = TextEditingController();
-      final emailCtrl = TextEditingController();
-      final passCtrl = TextEditingController();
+    testWidgets(
+      'RegisterFormCard displays CircularProgressIndicator when isLoading is true',
+      (tester) async {
+        final firstCtrl = TextEditingController();
+        final lastCtrl = TextEditingController();
+        final emailCtrl = TextEditingController();
+        final passCtrl = TextEditingController();
 
-      await tester.pumpWidget(
-        _wrapWithLocalization(
-          RegisterFormCard(
-            firstNameController: firstCtrl,
-            lastNameController: lastCtrl,
-            emailController: emailCtrl,
-            passwordController: passCtrl,
-            isLoading: true,
-            onRegisterPressed: () {},
-            onLoginTap: () {},
+        await tester.pumpWidget(
+          _wrapWithLocalization(
+            RegisterFormCard(
+              firstNameController: firstCtrl,
+              lastNameController: lastCtrl,
+              emailController: emailCtrl,
+              passwordController: passCtrl,
+              isLoading: true,
+              onRegisterPressed: () {},
+              onLoginTap: () {},
+            ),
           ),
-        ),
-      );
+        );
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      firstCtrl.dispose();
-      lastCtrl.dispose();
-      emailCtrl.dispose();
-      passCtrl.dispose();
-    });
+        firstCtrl.dispose();
+        lastCtrl.dispose();
+        emailCtrl.dispose();
+        passCtrl.dispose();
+      },
+    );
   });
 }

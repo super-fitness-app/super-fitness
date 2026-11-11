@@ -85,7 +85,8 @@ class _CompleteRegisterViewState extends State<CompleteRegisterView> {
             context.go(AppRoutes.login);
           } else if (state.isFailure) {
             final failure = state.failure;
-            final message = failure?.toLocalizedMessage(context) ??
+            final message =
+                failure?.toLocalizedMessage(context) ??
                 state.registerState.errorMessage ??
                 AppLocalizations.of(context)?.generalErrorMessage ??
                 '';

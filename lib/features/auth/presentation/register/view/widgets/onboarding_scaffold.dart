@@ -111,11 +111,7 @@ class _BlurredContentCard extends StatelessWidget {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              content,
-              const SizedBox(height: 20),
-              bottomButton,
-            ],
+            children: [content, const SizedBox(height: 20), bottomButton],
           ),
         ),
       ),

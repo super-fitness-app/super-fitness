@@ -10,18 +10,12 @@ class DisplayError extends BaseEvent {
 
   const DisplayError(this.errorMsg, {this.failure});
 
-  factory DisplayError.fromFailure(
-    AppFailure failure, [
-    String? fallback,
-  ]) =>
-      DisplayError(
-        switch (failure) {
-          ServerMessageFailure(:final message) => message,
-          CancelledFailure(:final message) => message ?? fallback,
-          _ => fallback,
-        },
-        failure: failure,
-      );
+  factory DisplayError.fromFailure(AppFailure failure, [String? fallback]) =>
+      DisplayError(switch (failure) {
+        ServerMessageFailure(:final message) => message,
+        CancelledFailure(:final message) => message ?? fallback,
+        _ => fallback,
+      }, failure: failure);
 }
 
 class DisplaySuccess extends BaseEvent {

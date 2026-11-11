@@ -153,11 +153,7 @@ class LoginCubit extends BaseCubit<LoginState, BaseEvent> {
         await _saveSessionAndNavigate(data);
       case FailureResponse<LoginEntity>():
         const notFoundMsg = 'Account not found. Please register first.';
-        emit(
-          state.copyWith(
-            loginApiState: BaseState.error(notFoundMsg),
-          ),
-        );
+        emit(state.copyWith(loginApiState: BaseState.error(notFoundMsg)));
         emitEvent(const DisplayError(notFoundMsg));
     }
   }
@@ -172,10 +168,7 @@ class LoginCubit extends BaseCubit<LoginState, BaseEvent> {
   }
 
   Future<void> _saveSessionAndNavigate(LoginEntity data) async {
-    await _sessionService.saveTokens(
-      token: data.token,
-      rememberMe: true,
-    );
+    await _sessionService.saveTokens(token: data.token, rememberMe: true);
     await _sessionService.saveUserData(
       jsonEncode(AuthMapper.userEntityToJson(data.user)),
     );

@@ -34,53 +34,50 @@ class FloatingBottomNavBar extends StatelessWidget {
             constraints: const BoxConstraints(
               maxWidth: AppDimensions.bottomNavBarMaxWidth,
             ),
-          child: Container(
-            height: AppDimensions.bottomNavBarHeight,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(
-                AppDimensions.bottomNavBarRadius,
+            child: Container(
+              height: AppDimensions.bottomNavBarHeight,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(
+                  AppDimensions.bottomNavBarRadius,
+                ),
+                border: Border.all(color: AppColors.surfaceVariant, width: 1),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.overlay,
+                    blurRadius: AppDimensions.bottomNavBarElevation,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              border: Border.all(
-                color: AppColors.surfaceVariant,
-                width: 1,
+              child: Row(
+                children: [
+                  NavBarItemWidget(
+                    iconPath: AppIcons.explore,
+                    label: l10n.explore,
+                    isSelected: currentIndex == 0,
+                    onTap: () => onTabSelected(0),
+                  ),
+                  NavBarItemWidget(
+                    iconPath: AppIcons.smartCoach,
+                    label: l10n.smartCoach,
+                    isSelected: currentIndex == 1,
+                    onTap: () => onTabSelected(1),
+                  ),
+                  NavBarItemWidget(
+                    iconPath: AppIcons.workout,
+                    label: l10n.workouts,
+                    isSelected: currentIndex == 2,
+                    onTap: () => onTabSelected(2),
+                  ),
+                  NavBarItemWidget(
+                    iconPath: AppIcons.profile,
+                    label: l10n.profile,
+                    isSelected: currentIndex == 3,
+                    onTap: () => onTabSelected(3),
+                  ),
+                ],
               ),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.overlay,
-                  blurRadius: AppDimensions.bottomNavBarElevation,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                NavBarItemWidget(
-                  iconPath: AppIcons.explore,
-                  label: l10n.explore,
-                  isSelected: currentIndex == 0,
-                  onTap: () => onTabSelected(0),
-                ),
-                NavBarItemWidget(
-                  iconPath: AppIcons.smartCoach,
-                  label: l10n.smartCoach,
-                  isSelected: currentIndex == 1,
-                  onTap: () => onTabSelected(1),
-                ),
-                NavBarItemWidget(
-                  iconPath: AppIcons.workout,
-                  label: l10n.workouts,
-                  isSelected: currentIndex == 2,
-                  onTap: () => onTabSelected(2),
-                ),
-                NavBarItemWidget(
-                  iconPath: AppIcons.profile,
-                  label: l10n.profile,
-                  isSelected: currentIndex == 3,
-                  onTap: () => onTabSelected(3),
-                ),
-              ],
-            ),
             ),
           ),
         ),
