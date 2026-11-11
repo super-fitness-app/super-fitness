@@ -8,7 +8,9 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
+import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 part 'register_event.dart';
 part 'register_state.dart';
@@ -17,11 +19,13 @@ part 'register_state.dart';
 class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   final RegisterUseCase _registerUseCase;
   final SignInWithGoogleUseCase _signInWithGoogleUseCase;
+  final SignInWithFacebookUseCase _signInWithFacebookUseCase;
   final PasswordGenerator _passwordGenerator;
 
   RegisterCubit(
     this._registerUseCase,
     this._signInWithGoogleUseCase,
+    this._signInWithFacebookUseCase,
     this._passwordGenerator,
   ) : super(const RegisterState());
 
@@ -33,6 +37,8 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
         _onSubmitBasicInfo(event);
       case SignInWithGoogleEvent():
         _onSignInWithGoogle();
+      case SignInWithFacebookEvent():
+        _onSignInWithFacebook();
       case UpdateGenderEvent():
         _onUpdateGender(event);
       case UpdateAgeEvent():
@@ -210,7 +216,7 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
   }
 
   // ===========================================================================
-  // Social Auth: Google Sign-In
+  // Social Auth: Google & Facebook Sign-In
   // ===========================================================================
 
   Future<void> _onSignInWithGoogle() async {
@@ -219,63 +225,75 @@ class RegisterCubit extends BaseCubit<RegisterState, BaseEvent> {
     final googleResult = await _signInWithGoogleUseCase();
     switch (googleResult) {
       case Success(:final data):
-        // Validate Google user ID to prevent null/empty issues
-        final userId = data.id;
-        if (userId == null || userId.trim().isEmpty) {
-          emit(
-            state.copyWith(
-              registerState: BaseState.error(
-                'Google account ID is missing. Please try again.',
-              ),
-            ),
-          );
-          emitEvent(
-            const DisplayError(
-              'Google account ID is missing. Please try again.',
-            ),
-          );
-          return;
-        }
-
-        // 1. Generate deterministic password: prefix + Hash(userId + secretKey)
-        final generatedPassword = _passwordGenerator.generate(userId);
-
-        // 2. Parse display name into firstName and lastName
-        final names = data.displayName.trim().split(RegExp(r'\s+'));
-        final firstName = names.isNotEmpty && names.first.isNotEmpty
-            ? names.first
-            : (state.data.firstName ?? 'User');
-        final lastName = names.length > 1
-            ? names.sublist(1).join(' ')
-            : (state.data.lastName ?? firstName);
-
-        // 3. Save name, email, and generated password into Cubit's state (RegisterData)
-        final updatedData = state.data.copyWith(
-          firstName: firstName,
-          lastName: lastName,
-          email: data.email,
-          password: generatedPassword,
-          rePassword: generatedPassword,
-        );
-
-        emit(
-          state.copyWith(
-            data: updatedData,
-            registerState: const BaseState.initial(),
-          ),
-        );
-        emitEvent(
-          const DisplaySuccess(
-            'Google account connected. Complete your profile.',
-          ),
-        );
-        emitEvent(NavigateEvent(AppRoutes.completeRegister, extra: this));
-
+        _handleSocialAuthSuccess(data, 'Google');
       case FailureResponse(:final failure):
-        emit(state.copyWith(registerState: BaseState.failure(failure)));
-        emitEvent(DisplayError.fromFailure(failure));
+        _handleSocialAuthFailure(failure);
     }
   }
 
+  Future<void> _onSignInWithFacebook() async {
+    emit(state.copyWith(registerState: BaseState.loading()));
+
+    final facebookResult = await _signInWithFacebookUseCase();
+    switch (facebookResult) {
+      case Success(:final data):
+        _handleSocialAuthSuccess(data, 'Facebook');
+      case FailureResponse(:final failure):
+        _handleSocialAuthFailure(failure);
+    }
+  }
+
+  void _handleSocialAuthSuccess(
+    SocialAuthUserEntity data,
+    String providerName,
+  ) {
+    // Validate provider user ID to prevent null/empty issues
+    final userId = data.id;
+    if (userId == null || userId.trim().isEmpty) {
+      final errorMsg = '$providerName account ID is missing. Please try again.';
+      emit(state.copyWith(registerState: BaseState.error(errorMsg)));
+      emitEvent(DisplayError(errorMsg));
+      return;
+    }
+
+    // 1. Generate deterministic password: prefix + Hash(userId + secretKey)
+    final generatedPassword = _passwordGenerator.generate(userId);
+
+    // 2. Parse display name into firstName and lastName
+    final names = data.displayName.trim().split(RegExp(r'\s+'));
+    final firstName = names.isNotEmpty && names.first.isNotEmpty
+        ? names.first
+        : (state.data.firstName ?? 'User');
+    final lastName = names.length > 1
+        ? names.sublist(1).join(' ')
+        : (state.data.lastName ?? firstName);
+
+    // 3. Save name, email, and generated password into Cubit's state (RegisterData)
+    final updatedData = state.data.copyWith(
+      firstName: firstName,
+      lastName: lastName,
+      email: data.email,
+      password: generatedPassword,
+      rePassword: generatedPassword,
+    );
+
+    emit(
+      state.copyWith(
+        data: updatedData,
+        registerState: const BaseState.initial(),
+      ),
+    );
+    emitEvent(
+      DisplaySuccess('$providerName account connected. Complete your profile.'),
+    );
+    emitEvent(NavigateEvent(AppRoutes.completeRegister, extra: this));
+  }
+
+  void _handleSocialAuthFailure(dynamic failure) {
+    emit(state.copyWith(registerState: BaseState.failure(failure)));
+    emitEvent(DisplayError.fromFailure(failure));
+  }
+
   Future<void> signInWithGoogleIntent() => _onSignInWithGoogle();
+  Future<void> signInWithFacebookIntent() => _onSignInWithFacebook();
 }
