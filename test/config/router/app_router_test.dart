@@ -99,6 +99,11 @@ class _FakeAuthRepo implements AuthRepo {
   }
 
   @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
   Future<ApiResults<void>> forgotPassword({required String email}) async {
     return const FailureResponse(NetworkFailure(AppError.cancelled));
   }
@@ -118,10 +123,6 @@ class _FakeAuthRepo implements AuthRepo {
     required String confirmPassword,
   }) async {
     return const FailureResponse(NetworkFailure(AppError.cancelled));
-
-  @override
-  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
-      const FailureResponse(NetworkFailure(AppError.cancelled));
   }
 }
 

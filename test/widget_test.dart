@@ -141,11 +141,11 @@ class _FakeAuthRepo implements AuthRepo {
     required String confirmPassword,
   }) async {
     return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
 
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
       const FailureResponse(NetworkFailure(AppError.cancelled));
-  }
 }
 
 void main() {
@@ -181,9 +181,14 @@ void main() {
       }
 
       getIt.registerFactory<LoginCubit>(
-        () => LoginCubit(LoginUseCase(fakeAuthRepo), getIt<SessionService>()),
+        () => LoginCubit(
+          LoginUseCase(fakeAuthRepo),
+          getIt<SessionService>(),
+          SignInWithGoogleUseCase(fakeAuthRepo),
+          SignInWithFacebookUseCase(fakeAuthRepo),
+          const PasswordGenerator(),
+        ),
       );
-
       // Forget Password Cubit
       if (getIt.isRegistered<ForgetPasswordCubit>()) {
         getIt.unregister<ForgetPasswordCubit>();
@@ -194,9 +199,6 @@ void main() {
           ForgetPasswordUseCase(fakeAuthRepo),
           VerifyOtpUseCase(fakeAuthRepo),
           ResetPasswordUseCase(fakeAuthRepo),
-          SignInWithGoogleUseCase(const _FakeAuthRepo()),
-          SignInWithFacebookUseCase(const _FakeAuthRepo()),
-          const PasswordGenerator(),
         ),
       );
 

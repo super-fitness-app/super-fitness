@@ -26,6 +26,28 @@ class FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
       throw UnimplementedError();
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) {
+    throw UnimplementedError();
+  }
 }
 
 void main() {
