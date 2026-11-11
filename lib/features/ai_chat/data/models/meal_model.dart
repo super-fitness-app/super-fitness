@@ -214,8 +214,4 @@ class MealModel extends Equatable {
     tags,
     popularity,
   ];
-
-  String? operator [](String other) {
-    return null;
-  }
 }
