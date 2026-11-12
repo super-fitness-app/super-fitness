@@ -52,6 +52,7 @@ dependencies:
   google_sign_in: ^6.2.2
   crypto: ^3.0.8
   flutter_facebook_auth: ^7.1.5
+  pin_code_fields: ^10.1.1
 
 dev_dependencies:
   bloc_test: ^10.0.0
