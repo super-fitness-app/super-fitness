@@ -81,7 +81,7 @@ class IngredientModel extends Equatable {
   }) {
     return IngredientModel(
       id: id ?? this.id,
-      name: name?.toLowerCase() ?? this.name,
+      name: name ?? this.name,
       nameAr: nameAr ?? this.nameAr,
       image: image ?? this.image,
       caloriesPer100g: caloriesPer100g ?? this.caloriesPer100g,
