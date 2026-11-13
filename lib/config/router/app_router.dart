@@ -6,6 +6,10 @@ import 'package:super_fitness/features/exercise/presentation/workout/view/workou
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
 import 'package:super_fitness/features/meals/presentation/food/view/food_view.dart';
 import 'package:super_fitness/features/meals/presentation/food_details/view/food_details_view.dart';
+import 'package:super_fitness/features/profile/presentation/view/activity_edit_view.dart';
+import 'package:super_fitness/features/profile/presentation/view/edit_profile_view.dart';
+import 'package:super_fitness/features/profile/presentation/view/goal_edit_view.dart';
+import 'package:super_fitness/features/profile/presentation/view/weight_edit_view.dart';
 
 abstract final class AppRoutes {
   static const login = '/';
@@ -14,6 +18,10 @@ abstract final class AppRoutes {
   static const exercise = '/exercise';
   static const food = '/food';
   static const foodDetails = '/food-details';
+  static const editProfile = '/edit-profile';
+  static const weightEdit = '/weight-edit';
+  static const goalEdit = '/goal-edit';
+  static const activityEdit = '/activity-edit';
 }
 
 abstract final class AppRouter {
@@ -21,7 +29,7 @@ abstract final class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.editProfile,
     routes: [
       GoRoute(
         path: AppRoutes.login,
@@ -52,6 +60,26 @@ abstract final class AppRouter {
         path: AppRoutes.foodDetails,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const FoodDetailsView(),
+      ),
+      GoRoute(
+        path: AppRoutes.editProfile,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const EditProfileView(),
+      ),
+      GoRoute(
+        path: AppRoutes.weightEdit,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const WeightEditView(),
+      ),
+      GoRoute(
+        path: AppRoutes.goalEdit,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const GoalEditView(),
+      ),
+      GoRoute(
+        path: AppRoutes.activityEdit,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ActivityEditView(),
       ),
     ],
   );

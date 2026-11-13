@@ -76,6 +76,13 @@ abstract final class AppColors {
   static const Color borderSubtle = Color(0xFFD3D3D3);
   static const Color divider = Color(0xFF3A3A3A);
   static const Color overlay = Color(0x80000000);
+  static const Color authOverlay = Color(0x801A1A1A);
+  static const Color onboardingOverlay = Color(0x73000000);
+  static const Color onboardingCard = Color(0x331E1E1E);
+  static const Color disabledButton = Color(0xFF555555);
+  static const Color disabledButtonBackground = Color(0xFF444444);
+  static const Color itemBorder = Color(0x2EFFFFFF);
+  static const Color socialButtonBackground = Color(0xFF1E1E1E);
 
   // Semantic Colors
   static const Color error = Color(0xFFFF4D4F);
