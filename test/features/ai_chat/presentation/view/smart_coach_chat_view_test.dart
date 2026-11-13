@@ -15,8 +15,12 @@ import 'package:super_fitness/features/ai_chat/domain/entities/meal_entity.dart'
 import 'package:super_fitness/features/ai_chat/domain/entities/meal_step_entity.dart';
 import 'package:super_fitness/features/ai_chat/domain/repositories/chat_repository.dart';
 import 'package:super_fitness/features/ai_chat/domain/use_cases/clear_chat_use_case.dart';
+import 'package:super_fitness/features/ai_chat/domain/use_cases/create_new_session_use_case.dart';
+import 'package:super_fitness/features/ai_chat/domain/use_cases/delete_session_use_case.dart';
 import 'package:super_fitness/features/ai_chat/domain/use_cases/get_chat_history_use_case.dart';
+import 'package:super_fitness/features/ai_chat/domain/use_cases/get_chat_sessions_use_case.dart';
 import 'package:super_fitness/features/ai_chat/domain/use_cases/send_message_use_case.dart';
+import 'package:super_fitness/features/ai_chat/domain/use_cases/stream_message_use_case.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/empty_chat_placeholder.dart';
@@ -83,7 +87,12 @@ class FakeChatRepository implements ChatRepository {
   }
 
   @override
-  Future<ExerciseEntity?> getExerciseById(String id) async => null;
+  Future<List<MealEntity>> searchMeals({
+    String? query,
+    double? minCalories,
+    double? maxCalories,
+    double? minProtein,
+  }) async => [];
 
   @override
   Future<MealEntity?> getMealById(String id) async => null;
@@ -103,26 +112,33 @@ class FakeChatRepository implements ChatRepository {
   }) async => [];
 
   @override
-  Future<List<MealEntity>> searchMeals({
-    String? query,
-    double? minCalories,
-    double? maxCalories,
-    double? minProtein,
-  }) async => [];
+  Future<ExerciseEntity?> getExerciseById(String id) async => null;
 }
 
 class MockSessionService extends Mock implements SessionService {
   @override
-  Future<String> getUserData() => Future.value('{"firstName": "Ahmed"}');
+  Future<String> getUserData() =>
+      super.noSuchMethod(
+            Invocation.method(#getUserData, []),
+            returnValue: Future.value('{"firstName": "Ahmed"}'),
+          )
+          as Future<String>;
 }
 
-class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+class MockFirebaseAuth extends Mock implements FirebaseAuth {
+  @override
+  User? get currentUser => null;
+}
 
 void main() {
   late FakeChatRepository fakeRepo;
   late SendMessageUseCase sendMessageUseCase;
+  late StreamMessageUseCase streamMessageUseCase;
   late GetChatHistoryUseCase getChatHistoryUseCase;
   late ClearChatUseCase clearChatUseCase;
+  late GetChatSessionsUseCase getChatSessionsUseCase;
+  late CreateNewSessionUseCase createNewSessionUseCase;
+  late DeleteSessionUseCase deleteSessionUseCase;
   late MockSessionService mockSession;
   late MockFirebaseAuth mockFirebaseAuth;
   late AiChatCubit cubit;
@@ -130,10 +146,18 @@ void main() {
   setUp(() {
     fakeRepo = FakeChatRepository();
     sendMessageUseCase = SendMessageUseCase(fakeRepo);
+    streamMessageUseCase = StreamMessageUseCase(fakeRepo);
     getChatHistoryUseCase = GetChatHistoryUseCase(fakeRepo);
     clearChatUseCase = ClearChatUseCase(fakeRepo);
+    getChatSessionsUseCase = GetChatSessionsUseCase(fakeRepo);
+    createNewSessionUseCase = CreateNewSessionUseCase(fakeRepo);
+    deleteSessionUseCase = DeleteSessionUseCase(fakeRepo);
     mockSession = MockSessionService();
     mockFirebaseAuth = MockFirebaseAuth();
+
+    when(
+      mockSession.getUserData(),
+    ).thenAnswer((_) async => '{"firstName": "Ahmed"}');
 
     cubit = AiChatCubit(
       sendMessageUseCase,
@@ -141,15 +165,20 @@ void main() {
       clearChatUseCase,
       mockSession,
       mockFirebaseAuth,
+      streamMessageUseCase,
+      getChatSessionsUseCase,
+      createNewSessionUseCase,
+      deleteSessionUseCase,
     );
   });
 
-  tearDown(() async {
-    await cubit.close();
+  tearDown(() {
+    cubit.close();
   });
 
   Widget buildTestWidget() {
     return MaterialApp(
+      locale: const Locale('en'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -161,7 +190,7 @@ void main() {
     );
   }
 
-  group('SmartCoachChatView Widget Tests', () {
+  group('SmartCoachChatView', () {
     testWidgets('renders EmptyChatPlaceholder when messages are empty', (
       tester,
     ) async {
@@ -171,13 +200,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(EmptyChatPlaceholder), findsOneWidget);
+      expect(find.text('How can I help you today?'), findsOneWidget);
     });
 
     testWidgets('renders top bar with title and input field', (tester) async {
       await tester.pumpWidget(buildTestWidget());
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.byType(TextField), findsOneWidget);
+      expect(find.byIcon(Icons.send_rounded), findsOneWidget);
     });
 
     testWidgets('renders messages and structured fitness card', (tester) async {

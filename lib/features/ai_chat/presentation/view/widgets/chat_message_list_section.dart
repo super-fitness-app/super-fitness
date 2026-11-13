@@ -3,6 +3,7 @@ import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/chat_bubble_widget.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/widgets/coach_avatar_widget.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/empty_chat_placeholder.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/thinking_status_capsule.dart';
 
@@ -80,8 +81,17 @@ class _MessagesListView extends StatelessWidget {
           return ChatBubbleWidget(message: messages[index]);
         }
         return Padding(
-          padding: const EdgeInsetsDirectional.only(start: 44, bottom: 12),
-          child: ThinkingStatusCapsule(status: l10n.smartCoachThinking),
+          padding: const EdgeInsetsDirectional.only(bottom: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CoachAvatarWidget(),
+              const SizedBox(width: 8),
+              Flexible(
+                child: ThinkingStatusCapsule(status: l10n.smartCoachThinking),
+              ),
+            ],
+          ),
         );
       },
     );

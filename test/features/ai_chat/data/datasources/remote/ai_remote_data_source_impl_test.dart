@@ -144,14 +144,14 @@ class MockFitnessLocalDataSource extends Mock
     implements FitnessLocalDataSource {
   @override
   Future<Map<String, dynamic>> getExerciseDetails({
-    dynamic exerciseName,
-    dynamic targetMuscle,
+    required String exerciseName,
+    String? targetMuscle,
   }) async {
     return {
       'card_type': 'exercise',
-      'card_title': exerciseName?.toString() ?? 'Exercise',
+      'card_title': exerciseName,
       'card_subtitle': 'Compound lift',
-      'badge': targetMuscle?.toString() ?? 'Chest',
+      'badge': targetMuscle ?? 'Chest',
       'card_details': {'equipment': 'Barbell'},
       'card_items': ['Keep back straight'],
     };
@@ -159,14 +159,14 @@ class MockFitnessLocalDataSource extends Mock
 
   @override
   Future<Map<String, dynamic>> getMealNutrition({
-    dynamic mealName,
-    dynamic goal,
+    required String mealName,
+    String? goal,
   }) async {
     return {
       'card_type': 'meal',
-      'card_title': mealName?.toString() ?? 'Meal',
+      'card_title': mealName,
       'card_subtitle': 'High Protein',
-      'badge': goal?.toString() ?? 'Muscle Gain',
+      'badge': goal ?? 'Muscle Gain',
       'card_details': {'calories': '300 kcal'},
       'card_items': ['Serve grilled'],
     };

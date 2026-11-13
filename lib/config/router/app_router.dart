@@ -72,7 +72,7 @@ abstract final class AppRouter {
           if (isAuthenticated) {
             if (isGoingToOnboarding ||
                 state.matchedLocation == AppRoutes.login) {
-              return AppRoutes.smartCoachWelcome;
+              return AppRoutes.main;
             }
           } else {
             if (isGoingToOnboarding) {
