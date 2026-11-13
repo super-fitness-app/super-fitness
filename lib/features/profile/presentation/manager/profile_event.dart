@@ -1,4 +1,4 @@
-﻿part of 'profile_cubit.dart';
+part of 'profile_cubit.dart';
 
 abstract base class ProfileEvent extends FeatureEvent {
   const ProfileEvent();

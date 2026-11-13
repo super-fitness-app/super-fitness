@@ -1,4 +1,4 @@
-﻿abstract class ProfileRepo {
+abstract class ProfileRepo {
   Future<void> updateProfile({
     String? firstName,
     String? lastName,
