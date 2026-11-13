@@ -24,10 +24,15 @@ class FitnessToolExecutorImpl implements FitnessToolExecutor {
     try {
       toolResult = await switch (toolName) {
         ToolNames.searchExercises => _exerciseTools.searchExercises(arguments),
-        ToolNames.getExerciseDetails => _exerciseTools.getExerciseDetails(arguments),
+        ToolNames.getExerciseDetails => _exerciseTools.getExerciseDetails(
+          arguments,
+        ),
         ToolNames.searchMeals => _nutritionTools.searchMeals(arguments),
         ToolNames.getMealDetails => _nutritionTools.getMealDetails(arguments),
-        _ => Future.value({'success': false, 'error': 'Unknown tool: $toolName'}),
+        _ => Future.value({
+          'success': false,
+          'error': 'Unknown tool: $toolName',
+        }),
       };
     } catch (e) {
       debugPrint('[AiChat] Tool $toolName execution error: $e');

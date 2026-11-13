@@ -327,7 +327,8 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
 
   void _updateStreamingChunk(ChatMessageEntity chunk) {
     final now = DateTime.now();
-    final shouldThrottle = _lastChunkEmitTime != null &&
+    final shouldThrottle =
+        _lastChunkEmitTime != null &&
         now.difference(_lastChunkEmitTime!).inMilliseconds < 50;
 
     if (shouldThrottle &&
@@ -350,7 +351,10 @@ class AiChatCubit extends BaseCubit<AiChatState, BaseEvent> {
     if (list.isNotEmpty) {
       list[list.length - 1] = finalMessage.copyWith(isStreaming: false);
     }
-    final added = TokenEstimator.estimateExchange(userPrompt, finalMessage.content);
+    final added = TokenEstimator.estimateExchange(
+      userPrompt,
+      finalMessage.content,
+    );
     final updatedTokens = state.currentSessionTokens + added;
     emit(
       state.copyWith(

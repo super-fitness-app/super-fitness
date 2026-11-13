@@ -4,7 +4,8 @@ import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness
 import 'package:super_fitness/features/ai_chat/data/models/exercise_model.dart';
 import 'package:super_fitness/features/ai_chat/data/tools/exercise/exercise_tools.dart';
 
-class MockFitnessLocalDataSource extends Mock implements FitnessLocalDataSource {
+class MockFitnessLocalDataSource extends Mock
+    implements FitnessLocalDataSource {
   @override
   Future<List<ExerciseModel>> searchExercises({
     String? query,
@@ -13,21 +14,23 @@ class MockFitnessLocalDataSource extends Mock implements FitnessLocalDataSource 
     String? equipment,
   }) =>
       super.noSuchMethod(
-        Invocation.method(#searchExercises, [], {
-          #query: query,
-          #muscleGroup: muscleGroup,
-          #difficulty: difficulty,
-          #equipment: equipment,
-        }),
-        returnValue: Future.value(<ExerciseModel>[]),
-      ) as Future<List<ExerciseModel>>;
+            Invocation.method(#searchExercises, [], {
+              #query: query,
+              #muscleGroup: muscleGroup,
+              #difficulty: difficulty,
+              #equipment: equipment,
+            }),
+            returnValue: Future.value(<ExerciseModel>[]),
+          )
+          as Future<List<ExerciseModel>>;
 
   @override
   Future<ExerciseModel?> getExerciseById(String? id) =>
       super.noSuchMethod(
-        Invocation.method(#getExerciseById, [id]),
-        returnValue: Future.value(null),
-      ) as Future<ExerciseModel?>;
+            Invocation.method(#getExerciseById, [id]),
+            returnValue: Future.value(null),
+          )
+          as Future<ExerciseModel?>;
 }
 
 void main() {
@@ -50,18 +53,26 @@ void main() {
       expect(res['data']['count'], equals(0));
     });
 
-    test('getExerciseDetails returns error when exercise_id is missing', () async {
-      final res = await tools.getExerciseDetails({});
-      expect(res['success'], isFalse);
-      expect(res['error'], contains('Exercise ID is required'));
-    });
+    test(
+      'getExerciseDetails returns error when exercise_id is missing',
+      () async {
+        final res = await tools.getExerciseDetails({});
+        expect(res['success'], isFalse);
+        expect(res['error'], contains('Exercise ID is required'));
+      },
+    );
 
-    test('getExerciseDetails returns error when exercise is not found', () async {
-      when(mockDataSource.getExerciseById(any)).thenAnswer((_) async => null);
+    test(
+      'getExerciseDetails returns error when exercise is not found',
+      () async {
+        when(mockDataSource.getExerciseById(any)).thenAnswer((_) async => null);
 
-      final res = await tools.getExerciseDetails({'exercise_id': 'invalid_id'});
-      expect(res['success'], isFalse);
-      expect(res['error'], contains('Exercise not found'));
-    });
+        final res = await tools.getExerciseDetails({
+          'exercise_id': 'invalid_id',
+        });
+        expect(res['success'], isFalse);
+        expect(res['error'], contains('Exercise not found'));
+      },
+    );
   });
 }

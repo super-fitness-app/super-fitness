@@ -4,7 +4,8 @@ import 'package:super_fitness/features/ai_chat/data/datasources/contract/fitness
 import 'package:super_fitness/features/ai_chat/data/models/meal_model.dart';
 import 'package:super_fitness/features/ai_chat/data/tools/nutrition/nutrition_tools.dart';
 
-class MockFitnessLocalDataSource extends Mock implements FitnessLocalDataSource {
+class MockFitnessLocalDataSource extends Mock
+    implements FitnessLocalDataSource {
   @override
   Future<List<MealModel>> searchMeals({
     String? query,
@@ -13,21 +14,23 @@ class MockFitnessLocalDataSource extends Mock implements FitnessLocalDataSource 
     double? minProtein,
   }) =>
       super.noSuchMethod(
-        Invocation.method(#searchMeals, [], {
-          #query: query,
-          #minCalories: minCalories,
-          #maxCalories: maxCalories,
-          #minProtein: minProtein,
-        }),
-        returnValue: Future.value(<MealModel>[]),
-      ) as Future<List<MealModel>>;
+            Invocation.method(#searchMeals, [], {
+              #query: query,
+              #minCalories: minCalories,
+              #maxCalories: maxCalories,
+              #minProtein: minProtein,
+            }),
+            returnValue: Future.value(<MealModel>[]),
+          )
+          as Future<List<MealModel>>;
 
   @override
   Future<MealModel?> getMealById(String? id) =>
       super.noSuchMethod(
-        Invocation.method(#getMealById, [id]),
-        returnValue: Future.value(null),
-      ) as Future<MealModel?>;
+            Invocation.method(#getMealById, [id]),
+            returnValue: Future.value(null),
+          )
+          as Future<MealModel?>;
 }
 
 void main() {
@@ -53,7 +56,10 @@ void main() {
     });
 
     test('returns failure when minCalories exceeds maxCalories', () async {
-      final res = await tools.searchMeals({'min_calories': 500, 'max_calories': 200});
+      final res = await tools.searchMeals({
+        'min_calories': 500,
+        'max_calories': 200,
+      });
       expect(res['success'], isFalse);
       expect(res['error'], contains('cannot exceed'));
     });

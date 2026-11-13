@@ -102,10 +102,7 @@ class ChatMessageModel extends Equatable {
     return ChatMessageModel.fromMap(data, id: doc.id);
   }
 
-  factory ChatMessageModel.fromMap(
-    Map<String, dynamic> data, {
-    String? id,
-  }) {
+  factory ChatMessageModel.fromMap(Map<String, dynamic> data, {String? id}) {
     final rawTimestamp = data[ApiParams.timestamp];
     DateTime parsedTime = DateTime.now();
 
