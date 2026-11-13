@@ -1,6 +1,7 @@
 {
   "@@locale": "ar",
 
+  "appName": "سوبر فيتنس",
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
   "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",

@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'Super Fitness';
+  String get appName => 'سوبر فيتنس';
 
   @override
   String get emptyValidationError => 'هذا الحقل مطلوب';
