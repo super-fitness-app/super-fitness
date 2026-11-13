@@ -87,7 +87,7 @@ void main() {
 
       expect(cubit.state.data, equals(1));
       expect(find.byType(SmartCoachView), findsOneWidget);
-      expect(find.text('Smart Coach'), findsNWidgets(2));
+      expect(find.text('Smart Coach'), findsOneWidget);
       expect(find.text('Workouts'), findsNothing);
     });
 
