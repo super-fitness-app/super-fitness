@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/features/ai_chat/domain/entities/chat_message_entity.dart';
@@ -128,19 +127,18 @@ class FakeChatRepository implements ChatRepository {
   Future<ExerciseEntity?> getExerciseById(String id) async => null;
 }
 
-class MockSessionService extends Mock implements SessionService {
+class FakeSessionService extends Fake implements SessionService {
+  String userData = '{"firstName": "Ahmed"}';
+
   @override
-  Future<String> getUserData() =>
-      super.noSuchMethod(
-            Invocation.method(#getUserData, []),
-            returnValue: Future.value('{"firstName": "Ahmed"}'),
-          )
-          as Future<String>;
+  Future<String> getUserData() async => userData;
 }
 
-class MockFirebaseAuth extends Mock implements FirebaseAuth {
+class FakeFirebaseAuth extends Fake implements FirebaseAuth {
+  User? mockCurrentUser;
+
   @override
-  User? get currentUser => null;
+  User? get currentUser => mockCurrentUser;
 }
 
 void main() {
@@ -149,8 +147,11 @@ void main() {
   late StreamMessageUseCase streamMessageUseCase;
   late GetChatHistoryUseCase getChatHistoryUseCase;
   late ClearChatUseCase clearChatUseCase;
-  late MockSessionService mockSessionService;
-  late MockFirebaseAuth mockFirebaseAuth;
+  late FakeSessionService fakeSessionService;
+  late FakeFirebaseAuth fakeFirebaseAuth;
+  late GetChatSessionsUseCase getChatSessionsUseCase;
+  late CreateNewSessionUseCase createNewSessionUseCase;
+  late DeleteSessionUseCase deleteSessionUseCase;
   late AiChatCubit cubit;
 
   setUp(() {
@@ -159,23 +160,18 @@ void main() {
     streamMessageUseCase = StreamMessageUseCase(fakeRepo);
     getChatHistoryUseCase = GetChatHistoryUseCase(fakeRepo);
     clearChatUseCase = ClearChatUseCase(fakeRepo);
-    mockSessionService = MockSessionService();
-    mockFirebaseAuth = MockFirebaseAuth();
-
-    when(
-      mockSessionService.getUserData(),
-    ).thenAnswer((_) async => '{"firstName": "Ahmed"}');
-
-    final getChatSessionsUseCase = GetChatSessionsUseCase(fakeRepo);
-    final createNewSessionUseCase = CreateNewSessionUseCase(fakeRepo);
-    final deleteSessionUseCase = DeleteSessionUseCase(fakeRepo);
+    fakeSessionService = FakeSessionService();
+    fakeFirebaseAuth = FakeFirebaseAuth();
+    getChatSessionsUseCase = GetChatSessionsUseCase(fakeRepo);
+    createNewSessionUseCase = CreateNewSessionUseCase(fakeRepo);
+    deleteSessionUseCase = DeleteSessionUseCase(fakeRepo);
 
     cubit = AiChatCubit(
       sendMessageUseCase,
       getChatHistoryUseCase,
       clearChatUseCase,
-      mockSessionService,
-      mockFirebaseAuth,
+      fakeSessionService,
+      fakeFirebaseAuth,
       streamMessageUseCase,
       getChatSessionsUseCase,
       createNewSessionUseCase,
@@ -183,11 +179,11 @@ void main() {
     );
   });
 
-  tearDown(() {
-    cubit.close();
+  tearDown(() async {
+    await cubit.close();
   });
 
-  group('AiChatCubit', () {
+  group('AiChatCubit State Management Tests', () {
     final testMsg = ChatMessageEntity(
       id: '1',
       role: 'assistant',
@@ -198,6 +194,20 @@ void main() {
     test('initial state has empty messages and not typing', () {
       expect(cubit.state.messages, isEmpty);
       expect(cubit.state.isTyping, isFalse);
+    });
+
+    test('token threshold limits are correctly evaluated in state', () {
+      final state1999 = cubit.state.copyWith(currentSessionTokens: 1999);
+      expect(state1999.isApproachingTokenLimit, isFalse);
+      expect(state1999.isSessionLocked, isFalse);
+
+      final state2500 = cubit.state.copyWith(currentSessionTokens: 2500);
+      expect(state2500.isApproachingTokenLimit, isTrue);
+      expect(state2500.isSessionLocked, isFalse);
+
+      final state3000 = cubit.state.copyWith(currentSessionTokens: 3000);
+      expect(state3000.isApproachingTokenLimit, isFalse);
+      expect(state3000.isSessionLocked, isTrue);
     });
 
     test(
@@ -333,7 +343,7 @@ void main() {
     test(
       'SendChatMessageEvent is ignored when session is locked (>=3000 tokens)',
       () async {
-        cubit.emit(cubit.state.copyWith(currentSessionTokens: 3200));
+        cubit.emit(cubit.state.copyWith(currentSessionTokens: 3000));
 
         cubit.doEvent(const SendChatMessageEvent('Should be blocked'));
         await pumpEventQueue();
