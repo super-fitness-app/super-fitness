@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/const/endpoints.dart';
 import 'package:super_fitness/features/profile/data/models/change_password_response.dart';
 import 'package:super_fitness/features/profile/data/models/edit_profile_response.dart';
