@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'edit_profile_request.g.dart';
@@ -32,6 +31,5 @@ class EditProfileRequest {
   factory EditProfileRequest.fromJson(Map<String, dynamic> json) =>
       _$EditProfileRequestFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$EditProfileRequestToJson(this);
+  Map<String, dynamic> toJson() => _$EditProfileRequestToJson(this);
 }

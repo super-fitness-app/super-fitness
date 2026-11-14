@@ -1,4 +1,3 @@
-
 import 'package:super_fitness/features/auth/data/mapper/auth_mapper.dart';
 import 'package:super_fitness/features/profile/data/models/logout_response.dart';
 import 'package:super_fitness/features/profile/data/models/change_password_response.dart';
@@ -21,9 +20,7 @@ abstract final class ProfileMapper {
     );
   }
 
-  static EditProfileEntity toEditProfileEntity(
-    EditProfileResponse response,
-  ) {
+  static EditProfileEntity toEditProfileEntity(EditProfileResponse response) {
     return EditProfileEntity(
       message: response.message,
       user: AuthMapper.loginUserToEntity(response.user),

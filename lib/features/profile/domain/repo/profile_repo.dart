@@ -12,7 +12,5 @@ abstract interface class ProfileRepo {
     ChangePasswordParams params,
   );
 
-  Future<ApiResults<EditProfileEntity>> editProfile(
-    EditProfileParams params,
-  );
+  Future<ApiResults<EditProfileEntity>> editProfile(EditProfileParams params);
 }

@@ -10,9 +10,7 @@ class ChangePasswordUseCase {
 
   const ChangePasswordUseCase(this._profileRepo);
 
-  Future<ApiResults<ChangePasswordEntity>> call(
-    ChangePasswordParams params,
-  ) {
+  Future<ApiResults<ChangePasswordEntity>> call(ChangePasswordParams params) {
     return _profileRepo.changePassword(params);
   }
 }

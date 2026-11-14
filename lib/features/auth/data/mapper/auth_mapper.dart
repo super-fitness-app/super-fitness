@@ -1,4 +1,3 @@
-
 import 'package:super_fitness/features/auth/data/models/login_response.dart';
 import 'package:super_fitness/features/auth/data/models/user_model.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';

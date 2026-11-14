@@ -19,7 +19,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ChangePasswordResponse> changePassword(ChangePasswordRequest request) async {
+  Future<ChangePasswordResponse> changePassword(
+    ChangePasswordRequest request,
+  ) async {
     return await _apiClient.changePassword(request);
   }
 

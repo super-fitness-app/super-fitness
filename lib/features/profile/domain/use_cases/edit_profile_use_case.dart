@@ -10,9 +10,7 @@ class EditProfileUseCase {
 
   const EditProfileUseCase(this._profileRepo);
 
-  Future<ApiResults<EditProfileEntity>> call(
-    EditProfileParams params,
-  ) {
+  Future<ApiResults<EditProfileEntity>> call(EditProfileParams params) {
     return _profileRepo.editProfile(params);
   }
 }
