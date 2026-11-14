@@ -8,4 +8,6 @@ abstract final class Endpoints {
   static const String verifyOtp = 'auth/verifyResetCode';
   static const String resetPassword = 'auth/resetPassword';
   static const String deleteAccount = 'auth/deleteMe';
+  static const String logout = 'auth/logout';
+  static const String editProfile = 'auth/editProfile';
 }

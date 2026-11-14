@@ -8,20 +8,24 @@ abstract final class AuthMapper {
     return LoginEntity(
       message: response.message,
       token: response.token,
-      user: UserEntity(
-        id: response.user.id,
-        firstName: response.user.firstName,
-        lastName: response.user.lastName,
-        email: response.user.email,
-        gender: response.user.gender,
-        age: response.user.age,
-        weight: response.user.weight,
-        height: response.user.height,
-        activityLevel: response.user.activityLevel,
-        goal: response.user.goal,
-        photo: response.user.photo,
-        createdAt: response.user.createdAt,
-      ),
+      user: loginUserToEntity(response.user),
+    );
+  }
+
+  static UserEntity loginUserToEntity(LoginUser user) {
+    return UserEntity(
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      gender: user.gender,
+      age: user.age,
+      weight: user.weight,
+      height: user.height,
+      activityLevel: user.activityLevel,
+      goal: user.goal,
+      photo: user.photo,
+      createdAt: user.createdAt,
     );
   }
 
