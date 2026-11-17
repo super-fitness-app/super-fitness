@@ -107,7 +107,7 @@ class ExerciseModel extends Equatable {
   }) {
     return ExerciseModel(
       id: id ?? this.id,
-      name: name ?? this.name,
+      name: name?.toLowerCase() ?? this.name,
       nameAr: nameAr ?? this.nameAr,
       muscleGroup: muscleGroup ?? this.muscleGroup,
       muscleGroupAr: muscleGroupAr ?? this.muscleGroupAr,

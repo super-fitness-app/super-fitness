@@ -53,14 +53,8 @@
   "profile": "الملف الشخصي",
   "heyThere": "مرحباً",
   "welcomeBack": "مرحباً بعودتك",
-  "login": "تسجيل الدخول",
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور",
   "forgotPassword": "نسيت كلمة المرور؟",
   "dontHaveAccount": "ليس لديك حساب بعد؟",
-  "register": "إنشاء حساب",
-
-  "heyThere": "مرحباً بك",
   "createAnAccount": "إنشاء حساب",
   "register": "تسجيل",
   "firstName": "الاسم الأول",
@@ -102,5 +96,42 @@
   "beginner": "مبتدئ",
   "intermediate": "متوسط",
   "advance": "متقدم",
-  "trueBeast": "محترف رياضي"
+  "trueBeast": "محترف رياضي",
+
+  "smartCoachGreeting": "مرحباً {userName} ،",
+  "smartCoachSubtitle": "أنا مدربك الذكي",
+  "smartCoachWelcomeAssist": "كيف يمكنني مساعدتك\nاليوم ؟",
+  "smartCoachGetStarted": "ابدأ الآن",
+  "smartCoachInputHint": "اسألني أي شيء عن اللياقة والتغذية...",
+  "smartCoachThinking": "المدرب الذكي يفكر...",
+  "smartCoachExerciseCardSets": "المجموعات والتكرارات",
+  "smartCoachExerciseCardMuscle": "العضلة المستهدفة",
+  "smartCoachNutritionCalories": "السعرات الحرارية",
+  "smartCoachNutritionProtein": "البروتين",
+  "smartCoachNutritionCarbs": "الكربوهيدرات",
+  "smartCoachNutritionFat": "الدهون",
+  "smartCoachClearChat": "مسح المحادثة",
+  "smartCoachClearChatConfirm": "هل أنت متأكد من رغبتك في مسح المحادثة؟",
+  "smartCoachClear": "مسح",
+  "smartCoachCancel": "إلغاء",
+  "smartCoachTokenWarning": "المحادثة تقترب من حد الذاكرة ({tokens}/3000 رمز). ابدأ محادثة جديدة قريباً.",
+  "@smartCoachTokenWarning": {
+    "placeholders": {
+      "tokens": {
+        "type": "int"
+      }
+    }
+  },
+  "smartCoachTokenLocked": "وصلت هذه المحادثة إلى حد 3000 رمز. يرجى بدء محادثة جديدة للمتابعة.",
+  "smartCoachStartNewChat": "محادثة جديدة",
+  "smartCoachPreviousConversations": "المحادثات السابقة",
+  "smartCoachNoPreviousChats": "لا توجد محادثات سابقة",
+  "smartCoachEmptyTitle": "كيف يمكنني مساعدتك اليوم؟",
+  "smartCoachEmptySubtitle": "اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.",
+  "smartCoachPromptWorkout": "🏋️ صمم لي جدول تمارين 3 أيام",
+  "smartCoachPromptNutrition": "🥗 أفكار لوجبات عالية البروتين",
+  "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟",
+  "smartCoachDeleteChatTitle": "حذف المحادثة؟",
+  "smartCoachDeleteChatConfirm": "هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "smartCoachDelete": "حذف"
 }

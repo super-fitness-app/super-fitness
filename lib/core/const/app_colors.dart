@@ -81,6 +81,13 @@ abstract final class AppColors {
   static const Color itemBorder = Color(0x2EFFFFFF);
   static const Color socialButtonBackground = Color(0xFF1E1E1E);
 
+  // Smart Coach AI Palette
+  static const Color chatAssistantBubble = Color(0xFF262626);
+  static const Color chatUserBubble = Color(0xFF8C3F0D);
+  static const Color chatBubbleStroke = Color(0x1AFFFFFF);
+  static const Color frostedGlassSurface = Color(0x801A1A1A);
+  static const Color frostedGlassBorder = Color(0x33FFFFFF);
+
   // Semantic Colors
   static const Color error = Color(0xFFFF4D4F);
   static const Color success = Color(0xFF00E676);
