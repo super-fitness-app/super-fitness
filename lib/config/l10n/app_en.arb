@@ -34,5 +34,46 @@
   "code429Message": "Too many requests. Please wait a moment and try again.",
   "code500sMessage": "Server error. Please try again in a few moments.",
 
-  "loginTitle": "Welcome Back!"
+  "loginTitle": "Welcome Back!",
+
+  "hiAhmed": "Hi Ahmed ,",
+  "letsStartYourDay": "Let's Start Your Day",
+  "category": "Category",
+  "gym": "Gym",
+  "fitness": "Fitness",
+  "yoga": "Yoga",
+  "aerobics": "Aerobics",
+  "trainer": "Trainer",
+  "recommendationToday": "Recommendation To Day",
+  "jogging": "Jogging",
+  "pushUp": "Push-Up",
+  "squat": "Squat",
+  "upcomingWorkouts": "Upcoming Workouts",
+  "seeAll": "See All",
+  "fullBody": "Full Body",
+  "chest": "Chest",
+  "arm": "Arm",
+  "shoulder": "Shoulder",
+  "back": "Back",
+  "legs": "Legs",
+  "arms": "Arms",
+  "recommendationForYou": "Recommendation For You",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "popularTraining": "Popular Training",
+  "exercisesThatStrengthenYourChest": "Exercises That Strengthen Your Chest",
+  "exercisesThatStrengthenYourBack": "Exercises That Strengthen Your Back",
+  "tasksCount": "{count} Tasks",
+  "@tasksCount": {
+    "description": "Task count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "explore": "Explore"
 }

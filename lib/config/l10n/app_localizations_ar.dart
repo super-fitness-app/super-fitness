@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'Super Fitness';
+  String get appName => 'سوبر فيتنس';
 
   @override
   String get emptyValidationError => 'هذا الحقل مطلوب';
@@ -106,4 +106,102 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginTitle => 'مرحباً بعودتك!';
+
+  @override
+  String get hiAhmed => 'مرحباً أحمد ،';
+
+  @override
+  String get letsStartYourDay => 'لنبدأ يومك';
+
+  @override
+  String get category => 'الفئات';
+
+  @override
+  String get gym => 'جيم';
+
+  @override
+  String get fitness => 'لياقة بدنية';
+
+  @override
+  String get yoga => 'يوغا';
+
+  @override
+  String get aerobics => 'تمارين هوائية';
+
+  @override
+  String get trainer => 'مدرب';
+
+  @override
+  String get recommendationToday => 'توصيات اليوم';
+
+  @override
+  String get jogging => 'ركض';
+
+  @override
+  String get pushUp => 'تمرين الضغط';
+
+  @override
+  String get squat => 'سكوات';
+
+  @override
+  String get upcomingWorkouts => 'التمارين القادمة';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get fullBody => 'كامل الجسم';
+
+  @override
+  String get chest => 'الصدر';
+
+  @override
+  String get arm => 'الذراع';
+
+  @override
+  String get shoulder => 'الكتف';
+
+  @override
+  String get back => 'الظهر';
+
+  @override
+  String get legs => 'الأرجل';
+
+  @override
+  String get arms => 'الذراعين';
+
+  @override
+  String get recommendationForYou => 'موصى به لك';
+
+  @override
+  String get breakfast => 'فطور';
+
+  @override
+  String get lunch => 'غداء';
+
+  @override
+  String get dinner => 'عشاء';
+
+  @override
+  String get popularTraining => 'التدريبات الشائعة';
+
+  @override
+  String get exercisesThatStrengthenYourChest => 'تمارين لتقوية عضلات الصدر';
+
+  @override
+  String get exercisesThatStrengthenYourBack => 'تمارين لتقوية عضلات الظهر';
+
+  @override
+  String tasksCount(int count) {
+    return '$count تمرين';
+  }
+
+  @override
+  String get beginner => 'مبتدئ';
+
+  @override
+  String get intermediate => 'متوسط';
+
+  @override
+  String get explore => 'استكشاف';
 }

@@ -1,6 +1,8 @@
 {
   "@@locale": "ar",
 
+  "appName": "سوبر فيتنس",
+
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
   "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",
@@ -30,5 +32,38 @@
   "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
   "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
 
-  "loginTitle": "مرحباً بعودتك!"
+  "loginTitle": "مرحباً بعودتك!",
+
+  "hiAhmed": "مرحباً أحمد ،",
+  "letsStartYourDay": "لنبدأ يومك",
+  "category": "الفئات",
+  "gym": "جيم",
+  "fitness": "لياقة بدنية",
+  "yoga": "يوغا",
+  "aerobics": "تمارين هوائية",
+  "trainer": "مدرب",
+  "recommendationToday": "توصيات اليوم",
+  "jogging": "ركض",
+  "pushUp": "تمرين الضغط",
+  "squat": "سكوات",
+  "upcomingWorkouts": "التمارين القادمة",
+  "seeAll": "عرض الكل",
+  "fullBody": "كامل الجسم",
+  "chest": "الصدر",
+  "arm": "الذراع",
+  "shoulder": "الكتف",
+  "back": "الظهر",
+  "legs": "الأرجل",
+  "arms": "الذراعين",
+  "recommendationForYou": "موصى به لك",
+  "breakfast": "فطور",
+  "lunch": "غداء",
+  "dinner": "عشاء",
+  "popularTraining": "التدريبات الشائعة",
+  "exercisesThatStrengthenYourChest": "تمارين لتقوية عضلات الصدر",
+  "exercisesThatStrengthenYourBack": "تمارين لتقوية عضلات الظهر",
+  "tasksCount": "{count} تمرين",
+  "beginner": "مبتدئ",
+  "intermediate": "متوسط",
+  "explore": "استكشاف"
 }

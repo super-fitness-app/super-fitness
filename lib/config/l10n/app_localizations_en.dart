@@ -108,4 +108,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginTitle => 'Welcome Back!';
+
+  @override
+  String get hiAhmed => 'Hi Ahmed ,';
+
+  @override
+  String get letsStartYourDay => 'Let\'s Start Your Day';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get gym => 'Gym';
+
+  @override
+  String get fitness => 'Fitness';
+
+  @override
+  String get yoga => 'Yoga';
+
+  @override
+  String get aerobics => 'Aerobics';
+
+  @override
+  String get trainer => 'Trainer';
+
+  @override
+  String get recommendationToday => 'Recommendation To Day';
+
+  @override
+  String get jogging => 'Jogging';
+
+  @override
+  String get pushUp => 'Push-Up';
+
+  @override
+  String get squat => 'Squat';
+
+  @override
+  String get upcomingWorkouts => 'Upcoming Workouts';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String get fullBody => 'Full Body';
+
+  @override
+  String get chest => 'Chest';
+
+  @override
+  String get arm => 'Arm';
+
+  @override
+  String get shoulder => 'Shoulder';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get legs => 'Legs';
+
+  @override
+  String get arms => 'Arms';
+
+  @override
+  String get recommendationForYou => 'Recommendation For You';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get popularTraining => 'Popular Training';
+
+  @override
+  String get exercisesThatStrengthenYourChest =>
+      'Exercises That Strengthen Your Chest';
+
+  @override
+  String get exercisesThatStrengthenYourBack =>
+      'Exercises That Strengthen Your Back';
+
+  @override
+  String tasksCount(int count) {
+    return '$count Tasks';
+  }
+
+  @override
+  String get beginner => 'Beginner';
+
+  @override
+  String get intermediate => 'Intermediate';
+
+  @override
+  String get explore => 'Explore';
 }

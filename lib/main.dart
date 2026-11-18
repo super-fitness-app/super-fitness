@@ -27,8 +27,7 @@ class SuperFitnessApp extends StatelessWidget {
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
           return MaterialApp.router(
-            onGenerateTitle: (context) =>
-                AppLocalizations.of(context)!.appName,
+            onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.darkTheme,
             locale: locale,
