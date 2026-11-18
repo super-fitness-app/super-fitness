@@ -17,7 +17,11 @@ class HomeRepoImpl implements HomeRepo {
   Future<ApiResults<List<MuscleEntity>>> getRandomMuscles() {
     return safeCall<List<MuscleEntity>>(() async {
       final response = await _homeRemoteDataSource.getRandomMuscles();
-      final list = response.muscles?.map((e) => e.toEntity()).toList() ?? [];
+      final list = response.muscles
+              ?.where((e) => e.image != null && e.image!.trim().isNotEmpty)
+              .map((e) => e.toEntity())
+              .toList() ??
+          [];
       return Success(list);
     });
   }

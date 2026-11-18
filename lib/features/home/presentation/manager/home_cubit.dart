@@ -76,7 +76,9 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     List<MuscleEntity> randomMuscles = [];
     if (randomMusclesResult is Success<List<MuscleEntity>>) {
-      randomMuscles = randomMusclesResult.data;
+      randomMuscles = randomMusclesResult.data
+          .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+          .toList();
     }
 
     List<MuscleGroupEntity> muscleGroups = [];
@@ -160,7 +162,8 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     List<MuscleEntity> randomMuscles = currentData.randomMuscles;
     if (result is Success<List<MuscleEntity>>) {
-      randomMuscles = result.data;
+      randomMuscles =
+          result.data.where((muscle) => muscle.imageUrl.trim().isNotEmpty).toList();
     }
 
     emit(

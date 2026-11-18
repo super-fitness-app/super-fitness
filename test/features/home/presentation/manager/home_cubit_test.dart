@@ -109,6 +109,32 @@ void main() {
       },
     );
 
+    test(
+      'GetHomeDataEvent filters out random muscles with empty imageUrl',
+      () async {
+        fakeRepo.randomMuscles = const [
+          MuscleEntity(id: '1', name: 'Valid', imageUrl: 'https://img.png'),
+          MuscleEntity(id: '2', name: 'Empty', imageUrl: ''),
+          MuscleEntity(id: '3', name: 'Spaces', imageUrl: '   '),
+        ];
+
+        homeCubit.doEvent(const GetHomeDataEvent());
+
+        await expectLater(
+          homeCubit.stream,
+          emitsThrough(
+            predicate<HomeState>((state) {
+              final data = state.data;
+              return data != null &&
+                  !data.isRandomMusclesLoading &&
+                  data.randomMuscles.length == 1 &&
+                  data.randomMuscles.first.name == 'Valid';
+            }),
+          ),
+        );
+      },
+    );
+
     test('SelectMuscleGroupEvent fetches muscles for selected group', () async {
       homeCubit.doEvent(const SelectMuscleGroupEvent('g2'));
 

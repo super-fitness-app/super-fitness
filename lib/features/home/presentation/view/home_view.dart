@@ -196,7 +196,9 @@ class _HomeViewState extends State<HomeView>
 
               // 1. Recommendation Today data
               final isTodayLoading = homeData?.isRandomMusclesLoading ?? false;
-              final todayMuscles = homeData?.randomMuscles ?? [];
+              final todayMuscles = (homeData?.randomMuscles ?? [])
+                  .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+                  .toList();
 
               // 2. Upcoming Workouts data
               final muscleGroups = homeData?.muscleGroups ?? [];

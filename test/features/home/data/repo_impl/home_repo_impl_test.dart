@@ -14,15 +14,17 @@ import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
 
 class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
+  RandomMusclesResponseDto randomMusclesResponse = const RandomMusclesResponseDto(
+    message: 'success',
+    totalMuscles: 1,
+    muscles: [
+      MuscleDto(id: 'm1', name: 'Deltoid', image: 'https://deltoid.png'),
+    ],
+  );
+
   @override
   Future<RandomMusclesResponseDto> getRandomMuscles() async {
-    return const RandomMusclesResponseDto(
-      message: 'success',
-      totalMuscles: 1,
-      muscles: [
-        MuscleDto(id: 'm1', name: 'Deltoid', image: 'https://deltoid.png'),
-      ],
-    );
+    return randomMusclesResponse;
   }
 
   @override
@@ -77,6 +79,28 @@ void main() {
         final data = (result as Success<List<MuscleEntity>>).data;
         expect(data.length, 1);
         expect(data.first.name, 'Deltoid');
+      },
+    );
+
+    test(
+      'getRandomMuscles filters out items where image is null or empty',
+      () async {
+        fakeDataSource.randomMusclesResponse = const RandomMusclesResponseDto(
+          message: 'success',
+          totalMuscles: 3,
+          muscles: [
+            MuscleDto(id: 'm1', name: 'WithImage', image: 'https://img.png'),
+            MuscleDto(id: 'm2', name: 'NullImage', image: null),
+            MuscleDto(id: 'm3', name: 'EmptyImage', image: '   '),
+          ],
+        );
+
+        final result = await repo.getRandomMuscles();
+
+        expect(result, isA<Success<List<MuscleEntity>>>());
+        final data = (result as Success<List<MuscleEntity>>).data;
+        expect(data.length, 1);
+        expect(data.first.name, 'WithImage');
       },
     );
 
