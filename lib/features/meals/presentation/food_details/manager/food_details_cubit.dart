@@ -13,7 +13,7 @@ class FoodDetailsCubit extends BaseCubit<FoodDetailsState, BaseEvent> {
   final MealsRepo? _mealsRepo;
 
   FoodDetailsCubit([this._mealsRepo])
-      : super(const BaseState<FoodDetailsData>.initial());
+    : super(const BaseState<FoodDetailsData>.initial());
 
   @override
   void doEvent(Object event) {
@@ -27,4 +27,3 @@ class FoodDetailsCubit extends BaseCubit<FoodDetailsState, BaseEvent> {
 
   void _onGetFoodDetailsData(GetFoodDetailsDataEvent event) {}
 }
-

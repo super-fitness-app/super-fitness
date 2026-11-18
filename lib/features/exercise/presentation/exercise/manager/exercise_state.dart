@@ -12,4 +12,3 @@ class ExerciseData extends Equatable {
   @override
   List<Object?> get props => [];
 }
-

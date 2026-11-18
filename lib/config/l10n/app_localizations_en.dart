@@ -15,96 +15,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyValidationError => 'This field is required';
 
   @override
-  String get invalidEmailError => 'Please enter a valid email address';
+  String get invalidEmailError => 'Please enter a valid email';
 
   @override
   String get invalidPhoneError => 'Please enter a valid Egyptian phone number';
 
   @override
-  String get nationalIdError => 'Please enter a valid national ID';
+  String get invalidPasswordError => 'Password must be at least 8 characters';
 
   @override
-  String get weakPasswordError => 'Password is too weak';
+  String get invalidConfirmPasswordError => 'Passwords do not match';
 
   @override
-  String get passwordMustBeAtLeast8Characters =>
-      'Password must be at least 8 characters';
+  String get authLoginFailed => 'Login failed. Please check your credentials.';
 
   @override
-  String get passwordMustContainUppercase =>
-      'Password must contain at least one uppercase letter';
+  String get authOtpExpired => 'OTP has expired. Please request a new one.';
 
   @override
-  String get passwordMustContainLowercase =>
-      'Password must contain at least one lowercase letter';
+  String get authInvalidOtp => 'Invalid OTP code. Please try again.';
 
   @override
-  String get passwordMustContainNumber =>
-      'Password must contain at least one number';
+  String get authUnauthenticated =>
+      'Your session has expired. Please log in again.';
 
   @override
-  String get passwordMustContainSpecialCharacter =>
-      'Password must contain at least one special character';
+  String get authCancelled => 'Authentication was cancelled.';
 
   @override
-  String get passwordMismatchError => 'Passwords do not match';
+  String get unknownErrorMessage =>
+      'An unexpected error occurred. Please try again later.';
 
   @override
-  String get fileRequiredError => 'Please upload the required file';
+  String get noInternetMessage =>
+      'No internet connection. Please check your network.';
 
   @override
-  String get dropdownRequiredError => 'Please select an option';
+  String get timeoutMessage => 'Request timed out. Please try again.';
 
   @override
-  String get generalValidationError => 'Invalid input';
+  String get formatErrorMessage => 'Data format error. Please try again later.';
 
   @override
-  String get invalidLoginPasswordError =>
-      'Password must be at least 6 characters with an uppercase letter and a number';
-
-  @override
-  String get generalErrorMessage =>
-      'Something went wrong. Please try again later.';
+  String get badCertificateMessage =>
+      'Secure connection error. Please try again later.';
 
   @override
   String get connectionErrorMessage =>
-      'Connection timed out. Please check your internet connection.';
-
-  @override
-  String get noConnectionErrorMessage =>
-      'No internet connection. Please verify your network.';
-
-  @override
-  String get securityErrorMessage =>
-      'A secure connection could not be established.';
-
-  @override
-  String get cancelErrorMessage => 'Request was cancelled.';
+      'Connection error. Please try again later.';
 
   @override
   String get code400Message =>
-      'Bad request. Please check your information and try again.';
+      'Invalid request. Please check the data provided.';
 
   @override
-  String get code401Message =>
-      'Session expired or invalid credentials. Please log in again.';
+  String get code401Message => 'Unauthorized access. Please log in again.';
 
   @override
-  String get code403Message =>
-      'You do not have permission to perform this action.';
+  String get code403Message => 'Access denied. You don\'t have permission.';
 
   @override
-  String get code404Message => 'Requested resource not found.';
+  String get code404Message => 'The requested resource was not found.';
 
   @override
-  String get code409Message => 'Account or resource already exists.';
+  String get code409Message =>
+      'Conflict occurred. The resource already exists.';
 
   @override
-  String get code422Message => 'Validation error. Please verify your inputs.';
+  String get code422Message => 'Validation error. Please check your input.';
 
   @override
-  String get code429Message =>
-      'Too many requests. Please wait a moment and try again.';
+  String get code429Message => 'Too many requests. Please wait a moment.';
 
   @override
   String get code500sMessage =>
@@ -183,10 +164,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontHaveAccount => 'Don\'t Have An Account Yet ?';
 
   @override
-  String get register => 'Register';
+  String get createAnAccount => 'CREATE AN ACCOUNT';
 
   @override
-  String get createAnAccount => 'CREATE AN ACCOUNT';
+  String get register => 'Register';
 
   @override
   String get firstName => 'First Name';
@@ -314,4 +295,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trueBeast => 'True Beast';
+
+  @override
+  String get hiAhmed => 'Hi Ahmed ,';
+
+  @override
+  String get letsStartYourDay => 'Let\'s Start Your Day';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get gym => 'Gym';
+
+  @override
+  String get fitness => 'Fitness';
+
+  @override
+  String get yoga => 'Yoga';
+
+  @override
+  String get aerobics => 'Aerobics';
+
+  @override
+  String get trainer => 'Trainer';
+
+  @override
+  String get recommendationToday => 'Recommendation To Day';
+
+  @override
+  String get jogging => 'Jogging';
+
+  @override
+  String get pushUp => 'Push-Up';
+
+  @override
+  String get squat => 'Squat';
+
+  @override
+  String get upcomingWorkouts => 'Upcoming Workouts';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String get fullBody => 'Full Body';
+
+  @override
+  String get chest => 'Chest';
+
+  @override
+  String get arm => 'Arm';
+
+  @override
+  String get shoulder => 'Shoulder';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get legs => 'Legs';
+
+  @override
+  String get arms => 'Arms';
+
+  @override
+  String get recommendationForYou => 'Recommendation For You';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get popularTraining => 'Popular Training';
+
+  @override
+  String get exercisesThatStrengthenYourChest =>
+      'Exercises That Strengthen Your Chest';
+
+  @override
+  String get exercisesThatStrengthenYourBack =>
+      'Exercises That Strengthen Your Back';
+
+  @override
+  String tasksCount(int count) {
+    return '$count Tasks';
+  }
 }

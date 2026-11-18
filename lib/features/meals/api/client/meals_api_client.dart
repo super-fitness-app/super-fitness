@@ -10,4 +10,3 @@ abstract class MealsApiClient {
   @factoryMethod
   factory MealsApiClient(Dio dio) = _MealsApiClient;
 }
-

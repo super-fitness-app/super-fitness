@@ -1,7 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:super_fitness/core/errors/app_failure.dart';
 
-sealed class BaseEvent {
+abstract class BaseEvent extends Equatable {
   const BaseEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class DisplayError extends BaseEvent {
@@ -20,15 +24,6 @@ class DisplayError extends BaseEvent {
 
 class DisplaySuccess extends BaseEvent {
   final String successMsg;
+
   const DisplaySuccess(this.successMsg);
-}
-
-class NavigateEvent extends BaseEvent {
-  final String routeName;
-  final Object? extra;
-  const NavigateEvent(this.routeName, {this.extra});
-}
-
-abstract base class FeatureEvent extends BaseEvent {
-  const FeatureEvent();
 }

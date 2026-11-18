@@ -8,4 +8,3 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
 
   ExerciseRemoteDataSourceImpl(this._exerciseApiClient);
 }
-

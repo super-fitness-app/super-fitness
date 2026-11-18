@@ -98,7 +98,7 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
-  /// App Name
+  /// No description provided for @appName.
   ///
   /// In en, this message translates to:
   /// **'Super Fitness'**
@@ -113,7 +113,7 @@ abstract class AppLocalizations {
   /// No description provided for @invalidEmailError.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email address'**
+  /// **'Please enter a valid email'**
   String get invalidEmailError;
 
   /// No description provided for @invalidPhoneError.
@@ -122,148 +122,124 @@ abstract class AppLocalizations {
   /// **'Please enter a valid Egyptian phone number'**
   String get invalidPhoneError;
 
-  /// No description provided for @nationalIdError.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid national ID'**
-  String get nationalIdError;
-
-  /// No description provided for @weakPasswordError.
-  ///
-  /// In en, this message translates to:
-  /// **'Password is too weak'**
-  String get weakPasswordError;
-
-  /// No description provided for @passwordMustBeAtLeast8Characters.
+  /// No description provided for @invalidPasswordError.
   ///
   /// In en, this message translates to:
   /// **'Password must be at least 8 characters'**
-  String get passwordMustBeAtLeast8Characters;
+  String get invalidPasswordError;
 
-  /// No description provided for @passwordMustContainUppercase.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least one uppercase letter'**
-  String get passwordMustContainUppercase;
-
-  /// No description provided for @passwordMustContainLowercase.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least one lowercase letter'**
-  String get passwordMustContainLowercase;
-
-  /// No description provided for @passwordMustContainNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least one number'**
-  String get passwordMustContainNumber;
-
-  /// No description provided for @passwordMustContainSpecialCharacter.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least one special character'**
-  String get passwordMustContainSpecialCharacter;
-
-  /// No description provided for @passwordMismatchError.
+  /// No description provided for @invalidConfirmPasswordError.
   ///
   /// In en, this message translates to:
   /// **'Passwords do not match'**
-  String get passwordMismatchError;
+  String get invalidConfirmPasswordError;
 
-  /// No description provided for @fileRequiredError.
+  /// No description provided for @authLoginFailed.
   ///
   /// In en, this message translates to:
-  /// **'Please upload the required file'**
-  String get fileRequiredError;
+  /// **'Login failed. Please check your credentials.'**
+  String get authLoginFailed;
 
-  /// No description provided for @dropdownRequiredError.
+  /// No description provided for @authOtpExpired.
   ///
   /// In en, this message translates to:
-  /// **'Please select an option'**
-  String get dropdownRequiredError;
+  /// **'OTP has expired. Please request a new one.'**
+  String get authOtpExpired;
 
-  /// No description provided for @generalValidationError.
+  /// No description provided for @authInvalidOtp.
   ///
   /// In en, this message translates to:
-  /// **'Invalid input'**
-  String get generalValidationError;
+  /// **'Invalid OTP code. Please try again.'**
+  String get authInvalidOtp;
 
-  /// No description provided for @invalidLoginPasswordError.
+  /// No description provided for @authUnauthenticated.
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters with an uppercase letter and a number'**
-  String get invalidLoginPasswordError;
+  /// **'Your session has expired. Please log in again.'**
+  String get authUnauthenticated;
 
-  /// No description provided for @generalErrorMessage.
+  /// No description provided for @authCancelled.
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong. Please try again later.'**
-  String get generalErrorMessage;
+  /// **'Authentication was cancelled.'**
+  String get authCancelled;
+
+  /// No description provided for @unknownErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again later.'**
+  String get unknownErrorMessage;
+
+  /// No description provided for @noInternetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network.'**
+  String get noInternetMessage;
+
+  /// No description provided for @timeoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please try again.'**
+  String get timeoutMessage;
+
+  /// No description provided for @formatErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Data format error. Please try again later.'**
+  String get formatErrorMessage;
+
+  /// No description provided for @badCertificateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure connection error. Please try again later.'**
+  String get badCertificateMessage;
 
   /// No description provided for @connectionErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Connection timed out. Please check your internet connection.'**
+  /// **'Connection error. Please try again later.'**
   String get connectionErrorMessage;
-
-  /// No description provided for @noConnectionErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'No internet connection. Please verify your network.'**
-  String get noConnectionErrorMessage;
-
-  /// No description provided for @securityErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'A secure connection could not be established.'**
-  String get securityErrorMessage;
-
-  /// No description provided for @cancelErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Request was cancelled.'**
-  String get cancelErrorMessage;
 
   /// No description provided for @code400Message.
   ///
   /// In en, this message translates to:
-  /// **'Bad request. Please check your information and try again.'**
+  /// **'Invalid request. Please check the data provided.'**
   String get code400Message;
 
   /// No description provided for @code401Message.
   ///
   /// In en, this message translates to:
-  /// **'Session expired or invalid credentials. Please log in again.'**
+  /// **'Unauthorized access. Please log in again.'**
   String get code401Message;
 
   /// No description provided for @code403Message.
   ///
   /// In en, this message translates to:
-  /// **'You do not have permission to perform this action.'**
+  /// **'Access denied. You don\'t have permission.'**
   String get code403Message;
 
   /// No description provided for @code404Message.
   ///
   /// In en, this message translates to:
-  /// **'Requested resource not found.'**
+  /// **'The requested resource was not found.'**
   String get code404Message;
 
   /// No description provided for @code409Message.
   ///
   /// In en, this message translates to:
-  /// **'Account or resource already exists.'**
+  /// **'Conflict occurred. The resource already exists.'**
   String get code409Message;
 
   /// No description provided for @code422Message.
   ///
   /// In en, this message translates to:
-  /// **'Validation error. Please verify your inputs.'**
+  /// **'Validation error. Please check your input.'**
   String get code422Message;
 
   /// No description provided for @code429Message.
   ///
   /// In en, this message translates to:
-  /// **'Too many requests. Please wait a moment and try again.'**
+  /// **'Too many requests. Please wait a moment.'**
   String get code429Message;
 
   /// No description provided for @code500sMessage.
@@ -410,17 +386,17 @@ abstract class AppLocalizations {
   /// **'Don\'t Have An Account Yet ?'**
   String get dontHaveAccount;
 
-  /// No description provided for @register.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get register;
-
   /// No description provided for @createAnAccount.
   ///
   /// In en, this message translates to:
   /// **'CREATE AN ACCOUNT'**
   String get createAnAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
 
   /// No description provided for @firstName.
   ///
@@ -661,6 +637,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'True Beast'**
   String get trueBeast;
+
+  /// No description provided for @hiAhmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi Ahmed ,'**
+  String get hiAhmed;
+
+  /// No description provided for @letsStartYourDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Start Your Day'**
+  String get letsStartYourDay;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @gym.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym'**
+  String get gym;
+
+  /// No description provided for @fitness.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness'**
+  String get fitness;
+
+  /// No description provided for @yoga.
+  ///
+  /// In en, this message translates to:
+  /// **'Yoga'**
+  String get yoga;
+
+  /// No description provided for @aerobics.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobics'**
+  String get aerobics;
+
+  /// No description provided for @trainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Trainer'**
+  String get trainer;
+
+  /// No description provided for @recommendationToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation To Day'**
+  String get recommendationToday;
+
+  /// No description provided for @jogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Jogging'**
+  String get jogging;
+
+  /// No description provided for @pushUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Push-Up'**
+  String get pushUp;
+
+  /// No description provided for @squat.
+  ///
+  /// In en, this message translates to:
+  /// **'Squat'**
+  String get squat;
+
+  /// No description provided for @upcomingWorkouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Workouts'**
+  String get upcomingWorkouts;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get seeAll;
+
+  /// No description provided for @fullBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Body'**
+  String get fullBody;
+
+  /// No description provided for @chest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get chest;
+
+  /// No description provided for @arm.
+  ///
+  /// In en, this message translates to:
+  /// **'Arm'**
+  String get arm;
+
+  /// No description provided for @shoulder.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulder'**
+  String get shoulder;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @legs.
+  ///
+  /// In en, this message translates to:
+  /// **'Legs'**
+  String get legs;
+
+  /// No description provided for @arms.
+  ///
+  /// In en, this message translates to:
+  /// **'Arms'**
+  String get arms;
+
+  /// No description provided for @recommendationForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation For You'**
+  String get recommendationForYou;
+
+  /// No description provided for @breakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get breakfast;
+
+  /// No description provided for @lunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get lunch;
+
+  /// No description provided for @dinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get dinner;
+
+  /// No description provided for @popularTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Training'**
+  String get popularTraining;
+
+  /// No description provided for @exercisesThatStrengthenYourChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises That Strengthen Your Chest'**
+  String get exercisesThatStrengthenYourChest;
+
+  /// No description provided for @exercisesThatStrengthenYourBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises That Strengthen Your Back'**
+  String get exercisesThatStrengthenYourBack;
+
+  /// Task count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Tasks'**
+  String tasksCount(int count);
 }
 
 class _AppLocalizationsDelegate

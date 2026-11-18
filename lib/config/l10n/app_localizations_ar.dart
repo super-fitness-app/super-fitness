@@ -21,89 +21,71 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidPhoneError => 'يرجى إدخال رقم هاتف مصري صحيح';
 
   @override
-  String get nationalIdError => 'يرجى إدخال رقم قومي صحيح';
-
-  @override
-  String get weakPasswordError => 'كلمة المرور ضعيفة جداً';
-
-  @override
-  String get passwordMustBeAtLeast8Characters =>
+  String get invalidPasswordError =>
       'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
 
   @override
-  String get passwordMustContainUppercase =>
-      'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل';
+  String get invalidConfirmPasswordError => 'كلمات المرور غير متطابقة';
 
   @override
-  String get passwordMustContainLowercase =>
-      'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل';
+  String get authLoginFailed => 'فشل تسجيل الدخول. يرجى التحقق من بياناتك.';
 
   @override
-  String get passwordMustContainNumber =>
-      'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل';
+  String get authOtpExpired => 'انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.';
 
   @override
-  String get passwordMustContainSpecialCharacter =>
-      'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل';
+  String get authInvalidOtp => 'رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.';
 
   @override
-  String get passwordMismatchError => 'كلمتا المرور غير متطابقتين';
+  String get authUnauthenticated => 'انتهت جلستك. يرجى تسجيل الدخول مجدداً.';
 
   @override
-  String get fileRequiredError => 'يرجى تحميل الملف المطلوب';
+  String get authCancelled => 'تم إلغاء عملية تسجيل الدخول.';
 
   @override
-  String get dropdownRequiredError => 'يرجى اختيار قيمة';
+  String get unknownErrorMessage =>
+      'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.';
 
   @override
-  String get generalValidationError => 'مدخلات غير صحيحة';
-
-  @override
-  String get invalidLoginPasswordError =>
-      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم';
-
-  @override
-  String get generalErrorMessage =>
-      'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
-
-  @override
-  String get connectionErrorMessage =>
-      'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.';
-
-  @override
-  String get noConnectionErrorMessage =>
+  String get noInternetMessage =>
       'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.';
 
   @override
-  String get securityErrorMessage => 'تعذر إنشاء اتصال آمن.';
+  String get timeoutMessage => 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.';
 
   @override
-  String get cancelErrorMessage => 'تم إلغاء الطلب.';
+  String get formatErrorMessage =>
+      'خطأ في تنسيق البيانات. يرجى المحاولة لاحقاً.';
 
   @override
-  String get code400Message =>
-      'طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.';
+  String get badCertificateMessage =>
+      'خطأ في الاتصال الآمن. يرجى المحاولة لاحقاً.';
 
   @override
-  String get code401Message =>
-      'انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.';
+  String get connectionErrorMessage =>
+      'خطأ في الاتصال بالشبكة. يرجى المحاولة لاحقاً.';
 
   @override
-  String get code403Message => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+  String get code400Message => 'طلب غير صحيح. يرجى التأكد من صحة البيانات.';
 
   @override
-  String get code404Message => 'العنصر المطلوب غير موجود.';
+  String get code401Message => 'غير مصرح بالوصول. يرجى تسجيل الدخول مجدداً.';
 
   @override
-  String get code409Message => 'الحساب أو المورد مسجل مسبقاً.';
+  String get code403Message => 'تم رفض الوصول. ليس لديك صلاحية.';
+
+  @override
+  String get code404Message => 'المورد المطلوب غير موجود.';
+
+  @override
+  String get code409Message => 'حدث تعارض. المورد موجود مسبقاً.';
 
   @override
   String get code422Message =>
       'خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.';
 
   @override
-  String get code429Message =>
-      'محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.';
+  String get code429Message => 'طلبات كثيرة جداً. يرجى الانتظار قليلاً.';
 
   @override
   String get code500sMessage => 'خطأ في الخادم. يرجى المحاولة بعد لحظات.';
@@ -164,7 +146,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'الملف الشخصي';
 
   @override
-  String get heyThere => 'مرحباً بك';
+  String get heyThere => 'مرحباً';
 
   @override
   String get welcomeBack => 'مرحباً بعودتك';
@@ -182,10 +164,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontHaveAccount => 'ليس لديك حساب بعد؟';
 
   @override
-  String get register => 'تسجيل';
+  String get createAnAccount => 'إنشاء حساب';
 
   @override
-  String get createAnAccount => 'إنشاء حساب';
+  String get register => 'تسجيل';
 
   @override
   String get firstName => 'الاسم الأول';
@@ -312,4 +294,93 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trueBeast => 'محترف رياضي';
+
+  @override
+  String get hiAhmed => 'مرحباً أحمد ،';
+
+  @override
+  String get letsStartYourDay => 'لنبدأ يومك';
+
+  @override
+  String get category => 'الفئات';
+
+  @override
+  String get gym => 'جيم';
+
+  @override
+  String get fitness => 'لياقة بدنية';
+
+  @override
+  String get yoga => 'يوغا';
+
+  @override
+  String get aerobics => 'تمارين هوائية';
+
+  @override
+  String get trainer => 'مدرب';
+
+  @override
+  String get recommendationToday => 'توصيات اليوم';
+
+  @override
+  String get jogging => 'ركض';
+
+  @override
+  String get pushUp => 'تمرين الضغط';
+
+  @override
+  String get squat => 'سكوات';
+
+  @override
+  String get upcomingWorkouts => 'التمارين القادمة';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get fullBody => 'كامل الجسم';
+
+  @override
+  String get chest => 'الصدر';
+
+  @override
+  String get arm => 'الذراع';
+
+  @override
+  String get shoulder => 'الكتف';
+
+  @override
+  String get back => 'الظهر';
+
+  @override
+  String get legs => 'الأرجل';
+
+  @override
+  String get arms => 'الذراعين';
+
+  @override
+  String get recommendationForYou => 'موصى به لك';
+
+  @override
+  String get breakfast => 'فطور';
+
+  @override
+  String get lunch => 'غداء';
+
+  @override
+  String get dinner => 'عشاء';
+
+  @override
+  String get popularTraining => 'التدريبات الشائعة';
+
+  @override
+  String get exercisesThatStrengthenYourChest => 'تمارين لتقوية عضلات الصدر';
+
+  @override
+  String get exercisesThatStrengthenYourBack => 'تمارين لتقوية عضلات الظهر';
+
+  @override
+  String tasksCount(int count) {
+    return '$count تمرين';
+  }
 }

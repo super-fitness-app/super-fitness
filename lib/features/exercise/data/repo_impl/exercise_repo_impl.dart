@@ -8,4 +8,3 @@ class ExerciseRepoImpl implements ExerciseRepo {
 
   ExerciseRepoImpl(this._exerciseRemoteDataSource);
 }
-

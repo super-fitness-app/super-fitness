@@ -3,10 +3,10 @@ import 'package:super_fitness/core/errors/app_failure.dart';
 import 'package:super_fitness/core/ui/handlers/app_error_handler.dart';
 
 extension AppFailureLocalization on AppFailure {
-  String toLocalizedMessage(BuildContext context) {
+  String toLocalizedString(BuildContext context) {
     return switch (this) {
       ServerMessageFailure(:final message) => message,
-      NetworkFailure(:final error) => AppErrorHandler.getLocalizedMessage(
+      NetworkFailure(:final error) => AppErrorHandler.getErrorMessage(
         context,
         error,
       ),

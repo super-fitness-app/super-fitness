@@ -12,4 +12,3 @@ class FoodData extends Equatable {
   @override
   List<Object?> get props => [];
 }
-
