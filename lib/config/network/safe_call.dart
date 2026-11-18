@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/core/const/api_params.dart';
@@ -16,6 +17,9 @@ Future<ApiResults<T>> safeCall<T>(Future<ApiResults<T>> Function() call) async {
 }
 
 AppFailure errorParser(Exception exception) {
+  if (exception is FirebaseException) {
+    return _handleFirebaseException(exception);
+  }
   if (exception is DioException) {
     return _handleDioException(exception);
   }
@@ -26,6 +30,29 @@ AppFailure errorParser(Exception exception) {
     return const NetworkFailure(AppError.badResponse);
   }
   return const NetworkFailure(AppError.unknown);
+}
+
+AppFailure _handleFirebaseException(FirebaseException exception) {
+  switch (exception.code) {
+    case 'network-request-failed':
+      return const NetworkFailure(AppError.noConnection);
+    case 'user-disabled':
+      return const ServerMessageFailure('This account has been disabled.');
+    case 'invalid-credential':
+    case 'invalid-verification-code':
+    case 'invalid-verification-id':
+      return const ServerMessageFailure('Invalid Google credentials.');
+    case 'operation-not-allowed':
+      return const ServerMessageFailure('Google sign-in is not enabled.');
+    case 'account-exists-with-different-credential':
+      return const ServerMessageFailure(
+        'An account already exists with the same email address.',
+      );
+    default:
+      return ServerMessageFailure(
+        exception.message ?? 'Google authentication failed.',
+      );
+  }
 }
 
 AppFailure _handleDioException(DioException exception) {

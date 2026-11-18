@@ -5,7 +5,7 @@ abstract interface class SessionService {
   Future<bool> isGuest();
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   });
   Future<void> updateTokens({
@@ -14,5 +14,7 @@ abstract interface class SessionService {
   });
   Future<String> getToken();
   Future<String> getRefreshToken();
+  Future<void> saveUserData(String userData);
+  Future<String> getUserData();
   Future<void> clearSession();
 }

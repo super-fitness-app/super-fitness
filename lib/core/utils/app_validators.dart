@@ -14,6 +14,7 @@ enum ValidationError {
   passwordMismatch,
   fileRequired,
   dropdownRequired,
+  invalidLoginPassword,
 }
 
 abstract final class AppValidators {
@@ -38,8 +39,9 @@ abstract final class AppValidators {
   static final RegExp passwordUppercaseRegex = RegExp(passwordUppercasePattern);
   static final RegExp passwordLowercaseRegex = RegExp(passwordLowercasePattern);
   static final RegExp passwordNumberRegex = RegExp(passwordNumberPattern);
-  static final RegExp passwordSpecialCharRegex =
-      RegExp(passwordSpecialCharPattern);
+  static final RegExp passwordSpecialCharRegex = RegExp(
+    passwordSpecialCharPattern,
+  );
 
   static final Map<String, RegExp> _compiledRegexCache = {
     emailPattern: emailRegex,
@@ -54,8 +56,10 @@ abstract final class AppValidators {
   };
 
   static bool validate(String pattern, String input) {
-    final regex =
-        _compiledRegexCache.putIfAbsent(pattern, () => RegExp(pattern));
+    final regex = _compiledRegexCache.putIfAbsent(
+      pattern,
+      () => RegExp(pattern),
+    );
     return regex.hasMatch(input);
   }
 
@@ -96,6 +100,16 @@ abstract final class AppValidators {
         !passwordNumberRegex.hasMatch(val) ||
         !passwordSpecialCharRegex.hasMatch(val)) {
       return ValidationError.weakPassword;
+    }
+    return null;
+  }
+
+  static ValidationError? validateLoginPassword(String? val) {
+    if (val == null || val.isEmpty) return ValidationError.empty;
+    if (val.length < 6 ||
+        !passwordUppercaseRegex.hasMatch(val) ||
+        !passwordNumberRegex.hasMatch(val)) {
+      return ValidationError.invalidLoginPassword;
     }
     return null;
   }

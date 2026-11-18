@@ -114,10 +114,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: AppTextField(
-              label: 'FallbackLabel',
-              hint: '',
-            ),
+            body: AppTextField(label: 'FallbackLabel', hint: ''),
           ),
         ),
       );

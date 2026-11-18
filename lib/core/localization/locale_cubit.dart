@@ -9,14 +9,15 @@ class LocaleCubit extends Cubit<Locale> {
   final StorageService _storageService;
 
   LocaleCubit(this._storageService)
-      : super(const Locale(AppConstants.localeEnglish)) {
+    : super(const Locale(AppConstants.localeEnglish)) {
     loadSavedLocale();
   }
 
   Future<void> loadSavedLocale() async {
     try {
-      final savedLanguageCode =
-          await _storageService.get(AppConstants.localeKey);
+      final savedLanguageCode = await _storageService.get(
+        AppConstants.localeKey,
+      );
       if (savedLanguageCode == AppConstants.localeArabic) {
         emit(const Locale(AppConstants.localeArabic));
       } else if (savedLanguageCode == AppConstants.localeEnglish) {

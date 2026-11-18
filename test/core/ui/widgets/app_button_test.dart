@@ -14,10 +14,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppButton(
-              text: 'Submit',
-              onPressed: () => tapped = true,
-            ),
+            body: AppButton(text: 'Submit', onPressed: () => tapped = true),
           ),
         ),
       );
@@ -94,12 +91,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AppButton(
-              text: 'Disabled',
-              onPressed: null,
-            ),
-          ),
+          home: Scaffold(body: AppButton(text: 'Disabled', onPressed: null)),
         ),
       );
 

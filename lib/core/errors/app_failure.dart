@@ -23,3 +23,11 @@ final class ServerMessageFailure extends AppFailure {
   @override
   List<Object?> get props => [message];
 }
+
+final class CancelledFailure extends AppFailure {
+  final String? message;
+  const CancelledFailure([this.message]);
+
+  @override
+  List<Object?> get props => [message];
+}

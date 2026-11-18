@@ -19,12 +19,19 @@ void main() {
       const s3 = ServerMessageFailure('Error 2');
       expect(s1, equals(s2));
       expect(s1, isNot(equals(s3)));
+
+      const c1 = CancelledFailure('Cancelled');
+      const c2 = CancelledFailure('Cancelled');
+      const c3 = CancelledFailure('Different');
+      expect(c1, equals(c2));
+      expect(c1, isNot(equals(c3)));
     });
 
     testWidgets(
-      'ServerMessageFailure returns custom message directly',
+      'CancelledFailure returns custom message or localized fallback',
       (tester) async {
-        late String localizedMsg;
+        late String customCancelledMsg;
+        late String defaultCancelledMsg;
 
         await tester.pumpWidget(
           MaterialApp(
@@ -32,48 +39,68 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
               builder: (context) {
-                const failure = ServerMessageFailure('Custom server error');
-                localizedMsg = failure.toLocalizedMessage(context);
+                const failure1 = CancelledFailure('User cancelled sign-in');
+                const failure2 = CancelledFailure();
+                customCancelledMsg = failure1.toLocalizedMessage(context);
+                defaultCancelledMsg = failure2.toLocalizedMessage(context);
                 return const SizedBox();
               },
             ),
           ),
         );
 
-        expect(localizedMsg, 'Custom server error');
+        expect(customCancelledMsg, 'User cancelled sign-in');
+        expect(defaultCancelledMsg, isNotEmpty);
       },
     );
 
-    testWidgets(
-      'NetworkFailure returns localized message for AppError',
-      (tester) async {
-        late String timeoutMsg;
-        late String noConnectionMsg;
+    testWidgets('ServerMessageFailure returns custom message directly', (
+      tester,
+    ) async {
+      late String localizedMsg;
 
-        await tester.pumpWidget(
-          MaterialApp(
-            locale: const Locale('en'),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Builder(
-              builder: (context) {
-                const timeoutFailure = NetworkFailure(AppError.timeout);
-                const noConnectionFailure = NetworkFailure(
-                  AppError.noConnection,
-                );
-                timeoutMsg = timeoutFailure.toLocalizedMessage(context);
-                noConnectionMsg = noConnectionFailure.toLocalizedMessage(
-                  context,
-                );
-                return const SizedBox();
-              },
-            ),
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) {
+              const failure = ServerMessageFailure('Custom server error');
+              localizedMsg = failure.toLocalizedMessage(context);
+              return const SizedBox();
+            },
           ),
-        );
+        ),
+      );
 
-        expect(timeoutMsg, contains('Connection timed out'));
-        expect(noConnectionMsg, contains('No internet connection'));
-      },
-    );
+      expect(localizedMsg, 'Custom server error');
+    });
+
+    testWidgets('NetworkFailure returns localized message for AppError', (
+      tester,
+    ) async {
+      late String timeoutMsg;
+      late String noConnectionMsg;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) {
+              const timeoutFailure = NetworkFailure(AppError.timeout);
+              const noConnectionFailure = NetworkFailure(AppError.noConnection);
+              timeoutMsg = timeoutFailure.toLocalizedMessage(context);
+              noConnectionMsg = noConnectionFailure.toLocalizedMessage(context);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      expect(timeoutMsg, contains('Connection timed out'));
+      expect(noConnectionMsg, contains('No internet connection'));
+    });
   });
 }
