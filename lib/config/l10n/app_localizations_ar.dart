@@ -18,74 +18,95 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidEmailError => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
+  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
   String get invalidPhoneError => 'يرجى إدخال رقم هاتف مصري صحيح';
 
   @override
-  String get invalidPasswordError =>
+  String get nationalIdError => 'يرجى إدخال رقم قومي صحيح';
+
+  @override
+  String get weakPasswordError => 'كلمة المرور ضعيفة جداً';
+
+  @override
+  String get passwordMustBeAtLeast8Characters =>
       'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
 
   @override
-  String get invalidConfirmPasswordError => 'كلمات المرور غير متطابقة';
+  String get passwordMustContainUppercase =>
+      'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل';
 
   @override
-  String get authLoginFailed => 'فشل تسجيل الدخول. يرجى التحقق من بياناتك.';
+  String get passwordMustContainLowercase =>
+      'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل';
 
   @override
-  String get authOtpExpired => 'انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.';
+  String get passwordMustContainNumber =>
+      'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل';
 
   @override
-  String get authInvalidOtp => 'رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.';
+  String get passwordMustContainSpecialCharacter =>
+      'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل';
 
   @override
-  String get authUnauthenticated => 'انتهت جلستك. يرجى تسجيل الدخول مجدداً.';
+  String get passwordMismatchError => 'كلمتا المرور غير متطابقتين';
 
   @override
-  String get authCancelled => 'تم إلغاء عملية تسجيل الدخول.';
+  String get fileRequiredError => 'يرجى تحميل الملف المطلوب';
 
   @override
-  String get unknownErrorMessage =>
-      'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.';
+  String get dropdownRequiredError => 'يرجى اختيار قيمة';
 
   @override
-  String get noInternetMessage =>
-      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.';
+  String get generalValidationError => 'مدخلات غير صحيحة';
 
   @override
-  String get timeoutMessage => 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.';
+  String get invalidLoginPasswordError =>
+      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم';
 
   @override
-  String get formatErrorMessage =>
-      'خطأ في تنسيق البيانات. يرجى المحاولة لاحقاً.';
-
-  @override
-  String get badCertificateMessage =>
-      'خطأ في الاتصال الآمن. يرجى المحاولة لاحقاً.';
+  String get generalErrorMessage =>
+      'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
 
   @override
   String get connectionErrorMessage =>
-      'خطأ في الاتصال بالشبكة. يرجى المحاولة لاحقاً.';
+      'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.';
 
   @override
-  String get code400Message => 'طلب غير صحيح. يرجى التأكد من صحة البيانات.';
+  String get noConnectionErrorMessage =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.';
 
   @override
-  String get code401Message => 'غير مصرح بالوصول. يرجى تسجيل الدخول مجدداً.';
+  String get securityErrorMessage => 'تعذر إنشاء اتصال آمن.';
 
   @override
-  String get code403Message => 'تم رفض الوصول. ليس لديك صلاحية.';
+  String get cancelErrorMessage => 'تم إلغاء الطلب.';
 
   @override
-  String get code404Message => 'المورد المطلوب غير موجود.';
+  String get code400Message =>
+      'طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.';
 
   @override
-  String get code409Message => 'حدث تعارض. المورد موجود مسبقاً.';
+  String get code401Message =>
+      'انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.';
+
+  @override
+  String get code403Message => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+
+  @override
+  String get code404Message => 'العنصر المطلوب غير موجود.';
+
+  @override
+  String get code409Message => 'الحساب أو المورد مسجل مسبقاً.';
 
   @override
   String get code422Message =>
       'خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.';
 
   @override
-  String get code429Message => 'طلبات كثيرة جداً. يرجى الانتظار قليلاً.';
+  String get code429Message =>
+      'محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.';
 
   @override
   String get code500sMessage => 'خطأ في الخادم. يرجى المحاولة بعد لحظات.';
@@ -180,9 +201,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'اسم العائلة مطلوب';
-
-  @override
-  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
   String get passwordMinLength =>

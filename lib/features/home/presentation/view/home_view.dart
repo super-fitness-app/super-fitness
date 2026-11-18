@@ -39,7 +39,8 @@ class PopularTrainingItemModel {
 
 class HomeView extends StatefulWidget {
   final HomeCubit? cubit;
-  const HomeView({super.key, this.cubit});
+  final bool showBottomNavBar;
+  const HomeView({super.key, this.cubit, this.showBottomNavBar = false});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -176,14 +177,16 @@ class _HomeViewState extends State<HomeView>
       child: Scaffold(
         backgroundColor: AppColors.background,
         extendBody: true,
-        bottomNavigationBar: FloatingBottomNavBar(
-          currentIndex: _currentNavIndex,
-          onTap: (index) {
-            setState(() {
-              _currentNavIndex = index;
-            });
-          },
-        ),
+        bottomNavigationBar: widget.showBottomNavBar
+            ? FloatingBottomNavBar(
+                currentIndex: _currentNavIndex,
+                onTap: (index) {
+                  setState(() {
+                    _currentNavIndex = index;
+                  });
+                },
+              )
+            : null,
         body: SafeArea(
           bottom: false,
           child: BlocBuilder<HomeCubit, HomeState>(

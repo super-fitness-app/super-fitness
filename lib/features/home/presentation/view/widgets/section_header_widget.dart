@@ -24,19 +24,23 @@ class SectionHeaderWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            title,
-            style:
-                context.textTheme.titleMedium?.copyWith(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ) ??
-                const TextStyle(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  context.textTheme.titleMedium?.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ) ??
+                  const TextStyle(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+            ),
           ),
           if (onActionTap != null)
             GestureDetector(

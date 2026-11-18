@@ -3,18 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/core/errors/app_failure.dart';
+import 'package:super_fitness/core/ui/extensions/app_failure_extension.dart';
 
 void main() {
-  group('AppFailure Tests', () {
-    test('value equality works for all AppFailure types', () {
-      const n1 = NetworkFailure(AppError.noInternet);
-      const n2 = NetworkFailure(AppError.noInternet);
-      const n3 = NetworkFailure(AppError.timeout);
-      expect(n1, equals(n2));
-      expect(n1, isNot(equals(n3)));
+  group('AppFailure & Localization Tests', () {
+    test('AppFailure equality and props work correctly', () {
+      const f1 = NetworkFailure(AppError.timeout);
+      const f2 = NetworkFailure(AppError.timeout);
+      const f3 = NetworkFailure(AppError.noConnection);
+      expect(f1, equals(f2));
+      expect(f1, isNot(equals(f3)));
 
-      const s1 = ServerMessageFailure('Error');
-      const s2 = ServerMessageFailure('Error');
+      const s1 = ServerMessageFailure('Error 1');
+      const s2 = ServerMessageFailure('Error 1');
       const s3 = ServerMessageFailure('Error 2');
       expect(s1, equals(s2));
       expect(s1, isNot(equals(s3)));

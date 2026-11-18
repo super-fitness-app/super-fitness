@@ -98,7 +98,7 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
-  /// No description provided for @appName.
+  /// App Name
   ///
   /// In en, this message translates to:
   /// **'Super Fitness'**
@@ -113,8 +113,14 @@ abstract class AppLocalizations {
   /// No description provided for @invalidEmailError.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email'**
+  /// **'Please enter a valid email address'**
   String get invalidEmailError;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get invalidEmail;
 
   /// No description provided for @invalidPhoneError.
   ///
@@ -122,124 +128,148 @@ abstract class AppLocalizations {
   /// **'Please enter a valid Egyptian phone number'**
   String get invalidPhoneError;
 
-  /// No description provided for @invalidPasswordError.
+  /// No description provided for @nationalIdError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid national ID'**
+  String get nationalIdError;
+
+  /// No description provided for @weakPasswordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get weakPasswordError;
+
+  /// No description provided for @passwordMustBeAtLeast8Characters.
   ///
   /// In en, this message translates to:
   /// **'Password must be at least 8 characters'**
-  String get invalidPasswordError;
+  String get passwordMustBeAtLeast8Characters;
 
-  /// No description provided for @invalidConfirmPasswordError.
+  /// No description provided for @passwordMustContainUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one uppercase letter'**
+  String get passwordMustContainUppercase;
+
+  /// No description provided for @passwordMustContainLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one lowercase letter'**
+  String get passwordMustContainLowercase;
+
+  /// No description provided for @passwordMustContainNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one number'**
+  String get passwordMustContainNumber;
+
+  /// No description provided for @passwordMustContainSpecialCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one special character'**
+  String get passwordMustContainSpecialCharacter;
+
+  /// No description provided for @passwordMismatchError.
   ///
   /// In en, this message translates to:
   /// **'Passwords do not match'**
-  String get invalidConfirmPasswordError;
+  String get passwordMismatchError;
 
-  /// No description provided for @authLoginFailed.
+  /// No description provided for @fileRequiredError.
   ///
   /// In en, this message translates to:
-  /// **'Login failed. Please check your credentials.'**
-  String get authLoginFailed;
+  /// **'Please upload the required file'**
+  String get fileRequiredError;
 
-  /// No description provided for @authOtpExpired.
+  /// No description provided for @dropdownRequiredError.
   ///
   /// In en, this message translates to:
-  /// **'OTP has expired. Please request a new one.'**
-  String get authOtpExpired;
+  /// **'Please select an option'**
+  String get dropdownRequiredError;
 
-  /// No description provided for @authInvalidOtp.
+  /// No description provided for @generalValidationError.
   ///
   /// In en, this message translates to:
-  /// **'Invalid OTP code. Please try again.'**
-  String get authInvalidOtp;
+  /// **'Invalid input'**
+  String get generalValidationError;
 
-  /// No description provided for @authUnauthenticated.
+  /// No description provided for @invalidLoginPasswordError.
   ///
   /// In en, this message translates to:
-  /// **'Your session has expired. Please log in again.'**
-  String get authUnauthenticated;
+  /// **'Password must be at least 6 characters with an uppercase letter and a number'**
+  String get invalidLoginPasswordError;
 
-  /// No description provided for @authCancelled.
+  /// No description provided for @generalErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Authentication was cancelled.'**
-  String get authCancelled;
-
-  /// No description provided for @unknownErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'An unexpected error occurred. Please try again later.'**
-  String get unknownErrorMessage;
-
-  /// No description provided for @noInternetMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'No internet connection. Please check your network.'**
-  String get noInternetMessage;
-
-  /// No description provided for @timeoutMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Request timed out. Please try again.'**
-  String get timeoutMessage;
-
-  /// No description provided for @formatErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Data format error. Please try again later.'**
-  String get formatErrorMessage;
-
-  /// No description provided for @badCertificateMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Secure connection error. Please try again later.'**
-  String get badCertificateMessage;
+  /// **'Something went wrong. Please try again later.'**
+  String get generalErrorMessage;
 
   /// No description provided for @connectionErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Connection error. Please try again later.'**
+  /// **'Connection timed out. Please check your internet connection.'**
   String get connectionErrorMessage;
+
+  /// No description provided for @noConnectionErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please verify your network.'**
+  String get noConnectionErrorMessage;
+
+  /// No description provided for @securityErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A secure connection could not be established.'**
+  String get securityErrorMessage;
+
+  /// No description provided for @cancelErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Request was cancelled.'**
+  String get cancelErrorMessage;
 
   /// No description provided for @code400Message.
   ///
   /// In en, this message translates to:
-  /// **'Invalid request. Please check the data provided.'**
+  /// **'Bad request. Please check your information and try again.'**
   String get code400Message;
 
   /// No description provided for @code401Message.
   ///
   /// In en, this message translates to:
-  /// **'Unauthorized access. Please log in again.'**
+  /// **'Session expired or invalid credentials. Please log in again.'**
   String get code401Message;
 
   /// No description provided for @code403Message.
   ///
   /// In en, this message translates to:
-  /// **'Access denied. You don\'t have permission.'**
+  /// **'You do not have permission to perform this action.'**
   String get code403Message;
 
   /// No description provided for @code404Message.
   ///
   /// In en, this message translates to:
-  /// **'The requested resource was not found.'**
+  /// **'Requested resource not found.'**
   String get code404Message;
 
   /// No description provided for @code409Message.
   ///
   /// In en, this message translates to:
-  /// **'Conflict occurred. The resource already exists.'**
+  /// **'Account or resource already exists.'**
   String get code409Message;
 
   /// No description provided for @code422Message.
   ///
   /// In en, this message translates to:
-  /// **'Validation error. Please check your input.'**
+  /// **'Validation error. Please verify your inputs.'**
   String get code422Message;
 
   /// No description provided for @code429Message.
   ///
   /// In en, this message translates to:
-  /// **'Too many requests. Please wait a moment.'**
+  /// **'Too many requests. Please wait a moment and try again.'**
   String get code429Message;
 
   /// No description provided for @code500sMessage.
@@ -421,12 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last name is required'**
   String get lastNameRequired;
-
-  /// No description provided for @invalidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get invalidEmail;
 
   /// No description provided for @passwordMinLength.
   ///

@@ -15,77 +15,99 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyValidationError => 'This field is required';
 
   @override
-  String get invalidEmailError => 'Please enter a valid email';
+  String get invalidEmailError => 'Please enter a valid email address';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email';
 
   @override
   String get invalidPhoneError => 'Please enter a valid Egyptian phone number';
 
   @override
-  String get invalidPasswordError => 'Password must be at least 8 characters';
+  String get nationalIdError => 'Please enter a valid national ID';
 
   @override
-  String get invalidConfirmPasswordError => 'Passwords do not match';
+  String get weakPasswordError => 'Password is too weak';
 
   @override
-  String get authLoginFailed => 'Login failed. Please check your credentials.';
+  String get passwordMustBeAtLeast8Characters =>
+      'Password must be at least 8 characters';
 
   @override
-  String get authOtpExpired => 'OTP has expired. Please request a new one.';
+  String get passwordMustContainUppercase =>
+      'Password must contain at least one uppercase letter';
 
   @override
-  String get authInvalidOtp => 'Invalid OTP code. Please try again.';
+  String get passwordMustContainLowercase =>
+      'Password must contain at least one lowercase letter';
 
   @override
-  String get authUnauthenticated =>
-      'Your session has expired. Please log in again.';
+  String get passwordMustContainNumber =>
+      'Password must contain at least one number';
 
   @override
-  String get authCancelled => 'Authentication was cancelled.';
+  String get passwordMustContainSpecialCharacter =>
+      'Password must contain at least one special character';
 
   @override
-  String get unknownErrorMessage =>
-      'An unexpected error occurred. Please try again later.';
+  String get passwordMismatchError => 'Passwords do not match';
 
   @override
-  String get noInternetMessage =>
-      'No internet connection. Please check your network.';
+  String get fileRequiredError => 'Please upload the required file';
 
   @override
-  String get timeoutMessage => 'Request timed out. Please try again.';
+  String get dropdownRequiredError => 'Please select an option';
 
   @override
-  String get formatErrorMessage => 'Data format error. Please try again later.';
+  String get generalValidationError => 'Invalid input';
 
   @override
-  String get badCertificateMessage =>
-      'Secure connection error. Please try again later.';
+  String get invalidLoginPasswordError =>
+      'Password must be at least 6 characters with an uppercase letter and a number';
+
+  @override
+  String get generalErrorMessage =>
+      'Something went wrong. Please try again later.';
 
   @override
   String get connectionErrorMessage =>
-      'Connection error. Please try again later.';
+      'Connection timed out. Please check your internet connection.';
+
+  @override
+  String get noConnectionErrorMessage =>
+      'No internet connection. Please verify your network.';
+
+  @override
+  String get securityErrorMessage =>
+      'A secure connection could not be established.';
+
+  @override
+  String get cancelErrorMessage => 'Request was cancelled.';
 
   @override
   String get code400Message =>
-      'Invalid request. Please check the data provided.';
+      'Bad request. Please check your information and try again.';
 
   @override
-  String get code401Message => 'Unauthorized access. Please log in again.';
+  String get code401Message =>
+      'Session expired or invalid credentials. Please log in again.';
 
   @override
-  String get code403Message => 'Access denied. You don\'t have permission.';
+  String get code403Message =>
+      'You do not have permission to perform this action.';
 
   @override
-  String get code404Message => 'The requested resource was not found.';
+  String get code404Message => 'Requested resource not found.';
 
   @override
-  String get code409Message =>
-      'Conflict occurred. The resource already exists.';
+  String get code409Message => 'Account or resource already exists.';
 
   @override
-  String get code422Message => 'Validation error. Please check your input.';
+  String get code422Message => 'Validation error. Please verify your inputs.';
 
   @override
-  String get code429Message => 'Too many requests. Please wait a moment.';
+  String get code429Message =>
+      'Too many requests. Please wait a moment and try again.';
 
   @override
   String get code500sMessage =>
@@ -180,9 +202,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'Last name is required';
-
-  @override
-  String get invalidEmail => 'Please enter a valid email';
 
   @override
   String get passwordMinLength => 'Password must be at least 8 characters';

@@ -18,7 +18,7 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
-      home: const HomeView(),
+      home: const HomeView(showBottomNavBar: true),
     );
   }
 

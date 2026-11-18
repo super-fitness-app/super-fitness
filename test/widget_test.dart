@@ -150,6 +150,132 @@ class _FakeAuthRepo implements AuthRepo {
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
+    late FakeStorageService storage;
+    late FakeSessionService sessionService;
+    late LocaleCubit localeCubit;
+
+    setUp(() {
+      storage = FakeStorageService();
+      sessionService = FakeSessionService();
+      localeCubit = LocaleCubit(storage);
+
+      const fakeAuthRepo = _FakeAuthRepo();
+
+      // Storage Service
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+
+      getIt.registerSingleton<StorageService>(storage);
+
+      // Session Service
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+
+      getIt.registerSingleton<SessionService>(sessionService);
+
+      // Login Cubit
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+
+      getIt.registerFactory<LoginCubit>(
+        () => LoginCubit(
+          LoginUseCase(fakeAuthRepo),
+          getIt<SessionService>(),
+          SignInWithGoogleUseCase(fakeAuthRepo),
+          SignInWithFacebookUseCase(fakeAuthRepo),
+          const PasswordGenerator(),
+        ),
+      );
+      // Forget Password Cubit
+      if (getIt.isRegistered<ForgetPasswordCubit>()) {
+        getIt.unregister<ForgetPasswordCubit>();
+      }
+
+      getIt.registerFactory<ForgetPasswordCubit>(
+        () => ForgetPasswordCubit(
+          ForgetPasswordUseCase(fakeAuthRepo),
+          VerifyOtpUseCase(fakeAuthRepo),
+          ResetPasswordUseCase(fakeAuthRepo),
+        ),
+      );
+
+      // Onboarding Cubit
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+
+      getIt.registerFactory<OnboardingCubit>(
+        () => OnboardingCubit(getIt<StorageService>()),
+      );
+    });
+
+    tearDown(() async {
+      await localeCubit.close();
+
+      if (getIt.isRegistered<LoginCubit>()) {
+        getIt.unregister<LoginCubit>();
+      }
+
+      if (getIt.isRegistered<ForgetPasswordCubit>()) {
+        getIt.unregister<ForgetPasswordCubit>();
+      }
+
+      if (getIt.isRegistered<OnboardingCubit>()) {
+        getIt.unregister<OnboardingCubit>();
+      }
+
+      if (getIt.isRegistered<SessionService>()) {
+        getIt.unregister<SessionService>();
+      }
+
+      if (getIt.isRegistered<StorageService>()) {
+        getIt.unregister<StorageService>();
+      }
+    });
+
+    testWidgets(
+      'renders SuperFitnessApp and routes first-time user to OnboardingView',
+      (WidgetTester tester) async {
+        final router = AppRouter.createRouter(
+          storageService: storage,
+          sessionService: sessionService,
+        );
+
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MaterialApp), findsOneWidget);
+        expect(find.byType(OnboardingView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders SuperFitnessApp and routes returning user to LoginView',
+      (WidgetTester tester) async {
+        await storage.save(AppConstants.hasSeenOnboardingKey, 'true');
+
+        final router = AppRouter.createRouter(
+          storageService: storage,
+          sessionService: sessionService,
+        );
+
+        await tester.pumpWidget(
+          SuperFitnessApp(localeCubit: localeCubit, router: router),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MaterialApp), findsOneWidget);
+        expect(find.byType(LoginView), findsOneWidget);
+      },
+    );
+
     testWidgets(
       'LoginView renders with exact theme, styling, and text alignment',
       (WidgetTester tester) async {
@@ -179,6 +305,7 @@ void main() {
         expect(find.text('Login'), findsNWidgets(2));
       },
     );
+
     testWidgets('LoginView renders in Arabic locale (RTL) without overflow', (
       WidgetTester tester,
     ) async {
