@@ -7,4 +7,3 @@ abstract base class FoodDetailsEvent extends FeatureEvent {
 final class GetFoodDetailsDataEvent extends FoodDetailsEvent {
   const GetFoodDetailsDataEvent();
 }
-

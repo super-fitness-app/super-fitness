@@ -8,4 +8,3 @@ class MealsRepoImpl implements MealsRepo {
 
   MealsRepoImpl(this._mealsRemoteDataSource);
 }
-

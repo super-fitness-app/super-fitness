@@ -8,4 +8,3 @@ class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
 
   MealsRemoteDataSourceImpl(this._mealsApiClient);
 }
-

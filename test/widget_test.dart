@@ -22,61 +22,66 @@ class FakeStorageService implements StorageService {
 
 void main() {
   group('Super Fitness App & LoginView Deep Widget Tests', () {
-    testWidgets('renders SuperFitnessApp successfully with injected LocaleCubit',
-        (WidgetTester tester) async {
-      final storage = FakeStorageService();
-      final localeCubit = LocaleCubit(storage);
+    testWidgets(
+      'renders SuperFitnessApp successfully with injected LocaleCubit',
+      (WidgetTester tester) async {
+        final storage = FakeStorageService();
+        final localeCubit = LocaleCubit(storage);
 
-      await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(SuperFitnessApp(localeCubit: localeCubit));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(MaterialApp), findsOneWidget);
-      expect(find.byType(LoginView), findsOneWidget);
+        expect(find.byType(MaterialApp), findsOneWidget);
+        expect(find.byType(LoginView), findsOneWidget);
 
-      await localeCubit.close();
-    });
+        await localeCubit.close();
+      },
+    );
 
-    testWidgets('LoginView renders with exact theme, styling, and text alignment',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.darkTheme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('en'),
-          home: const LoginView(),
-        ),
-      );
+    testWidgets(
+      'LoginView renders with exact theme, styling, and text alignment',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.darkTheme,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: const Locale('en'),
+            home: const LoginView(),
+          ),
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Verify Scaffold properties
-      final scaffoldFinder = find.byType(Scaffold);
-      expect(scaffoldFinder, findsOneWidget);
-      final scaffold = tester.widget<Scaffold>(scaffoldFinder);
-      expect(scaffold.backgroundColor, AppColors.background);
+        // Verify Scaffold properties
+        final scaffoldFinder = find.byType(Scaffold);
+        expect(scaffoldFinder, findsOneWidget);
+        final scaffold = tester.widget<Scaffold>(scaffoldFinder);
+        expect(scaffold.backgroundColor, AppColors.background);
 
-      // Verify SafeArea and Padding
-      expect(find.byType(SafeArea), findsOneWidget);
-      final paddingFinder = find.descendant(
-        of: find.byType(SafeArea),
-        matching: find.byType(Padding),
-      );
-      expect(paddingFinder, findsWidgets);
+        // Verify SafeArea and Padding
+        expect(find.byType(SafeArea), findsOneWidget);
+        final paddingFinder = find.descendant(
+          of: find.byType(SafeArea),
+          matching: find.byType(Padding),
+        );
+        expect(paddingFinder, findsWidgets);
 
-      // Verify localized title text and typography
-      final titleFinder = find.text('Welcome Back!');
-      expect(titleFinder, findsOneWidget);
+        // Verify localized title text and typography
+        final titleFinder = find.text('Welcome Back!');
+        expect(titleFinder, findsOneWidget);
 
-      final textWidget = tester.widget<Text>(titleFinder);
-      expect(textWidget.textAlign, TextAlign.center);
-      expect(textWidget.style?.fontSize, AppTextStyles.appTitle.fontSize);
-      expect(textWidget.style?.fontWeight, AppTextStyles.appTitle.fontWeight);
-      expect(textWidget.style?.color, AppTextStyles.appTitle.color);
-    });
+        final textWidget = tester.widget<Text>(titleFinder);
+        expect(textWidget.textAlign, TextAlign.center);
+        expect(textWidget.style?.fontSize, AppTextStyles.appTitle.fontSize);
+        expect(textWidget.style?.fontWeight, AppTextStyles.appTitle.fontWeight);
+        expect(textWidget.style?.color, AppTextStyles.appTitle.color);
+      },
+    );
 
-    testWidgets('LoginView renders in Arabic locale (RTL) without overflow',
-        (WidgetTester tester) async {
+    testWidgets('LoginView renders in Arabic locale (RTL) without overflow', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.darkTheme,

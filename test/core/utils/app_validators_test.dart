@@ -48,7 +48,10 @@ void main() {
 
       test('returns null for valid emails (including trimmed input)', () {
         expect(AppValidators.validateEmail('test@example.com'), isNull);
-        expect(AppValidators.validateEmail('user.name+tag@domain.co.uk'), isNull);
+        expect(
+          AppValidators.validateEmail('user.name+tag@domain.co.uk'),
+          isNull,
+        );
         expect(AppValidators.validateEmail('  clean@domain.org  '), isNull);
       });
     });
@@ -94,14 +97,16 @@ void main() {
         );
       });
 
-      test('returns null for valid Egyptian mobile numbers (010, 011, 012, 015)',
-          () {
-        expect(AppValidators.validatePhone('01012345678'), isNull);
-        expect(AppValidators.validatePhone('01112345678'), isNull);
-        expect(AppValidators.validatePhone('01212345678'), isNull);
-        expect(AppValidators.validatePhone('01512345678'), isNull);
-        expect(AppValidators.validatePhone('  01099998888  '), isNull);
-      });
+      test(
+        'returns null for valid Egyptian mobile numbers (010, 011, 012, 015)',
+        () {
+          expect(AppValidators.validatePhone('01012345678'), isNull);
+          expect(AppValidators.validatePhone('01112345678'), isNull);
+          expect(AppValidators.validatePhone('01212345678'), isNull);
+          expect(AppValidators.validatePhone('01512345678'), isNull);
+          expect(AppValidators.validatePhone('  01099998888  '), isNull);
+        },
+      );
     });
 
     group('validateNationalId', () {
@@ -110,28 +115,30 @@ void main() {
         expect(AppValidators.validateNationalId(''), ValidationError.empty);
       });
 
-      test('returns invalidNationalId for non-14 digits or non-numeric input',
-          () {
-        // 13 digits (boundary minus 1)
-        expect(
-          AppValidators.validateNationalId('1234567890123'),
-          ValidationError.invalidNationalId,
-        );
-        // 15 digits (boundary plus 1)
-        expect(
-          AppValidators.validateNationalId('123456789012345'),
-          ValidationError.invalidNationalId,
-        );
-        // Special characters or letters
-        expect(
-          AppValidators.validateNationalId('1234567890123a'),
-          ValidationError.invalidNationalId,
-        );
-        expect(
-          AppValidators.validateNationalId('1234-5678-90123'),
-          ValidationError.invalidNationalId,
-        );
-      });
+      test(
+        'returns invalidNationalId for non-14 digits or non-numeric input',
+        () {
+          // 13 digits (boundary minus 1)
+          expect(
+            AppValidators.validateNationalId('1234567890123'),
+            ValidationError.invalidNationalId,
+          );
+          // 15 digits (boundary plus 1)
+          expect(
+            AppValidators.validateNationalId('123456789012345'),
+            ValidationError.invalidNationalId,
+          );
+          // Special characters or letters
+          expect(
+            AppValidators.validateNationalId('1234567890123a'),
+            ValidationError.invalidNationalId,
+          );
+          expect(
+            AppValidators.validateNationalId('1234-5678-90123'),
+            ValidationError.invalidNationalId,
+          );
+        },
+      );
 
       test('returns null for exact 14 digits', () {
         expect(AppValidators.validateNationalId('12345678901234'), isNull);
@@ -210,10 +217,7 @@ void main() {
           AppValidators.validatePasswordDetailed('NoSpecialChar12'),
           ValidationError.passwordMissingSpecialChar,
         );
-        expect(
-          AppValidators.validatePasswordDetailed('ValidPass123!'),
-          isNull,
-        );
+        expect(AppValidators.validatePasswordDetailed('ValidPass123!'), isNull);
       });
     });
 
@@ -254,28 +258,39 @@ void main() {
         expect(AppValidators.validateDropdown(123), isNull);
       });
 
-      test('validateFile requires file presence with fallback customization', () {
-        expect(AppValidators.validateFile(null), ValidationError.fileRequired);
-        expect(
-          AppValidators.validateFile(null, ValidationError.empty),
-          ValidationError.empty,
-        );
-        expect(AppValidators.validateFile(File('path/file.png')), isNull);
-      });
+      test(
+        'validateFile requires file presence with fallback customization',
+        () {
+          expect(
+            AppValidators.validateFile(null),
+            ValidationError.fileRequired,
+          );
+          expect(
+            AppValidators.validateFile(null, ValidationError.empty),
+            ValidationError.empty,
+          );
+          expect(AppValidators.validateFile(File('path/file.png')), isNull);
+        },
+      );
     });
 
     group('validate & validateRegex caching', () {
-      test('validate matches regex pattern correctly and caches compiled RegExp',
-          () {
-        expect(AppValidators.validate(r'^\d+$', '12345'), isTrue);
-        expect(AppValidators.validate(r'^\d+$', 'abc'), isFalse);
-        // Call second time to hit cache
-        expect(AppValidators.validate(r'^\d+$', '999'), isTrue);
-      });
+      test(
+        'validate matches regex pattern correctly and caches compiled RegExp',
+        () {
+          expect(AppValidators.validate(r'^\d+$', '12345'), isTrue);
+          expect(AppValidators.validate(r'^\d+$', 'abc'), isFalse);
+          // Call second time to hit cache
+          expect(AppValidators.validate(r'^\d+$', '999'), isTrue);
+        },
+      );
 
       test('validateRegex uses pre-compiled RegExp directly', () {
         expect(
-          AppValidators.validateRegex(AppValidators.emailRegex, 'test@example.com'),
+          AppValidators.validateRegex(
+            AppValidators.emailRegex,
+            'test@example.com',
+          ),
           isTrue,
         );
         expect(

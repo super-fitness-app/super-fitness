@@ -26,4 +26,3 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
 
   void _onGetFoodData(GetFoodDataEvent event) {}
 }
-
