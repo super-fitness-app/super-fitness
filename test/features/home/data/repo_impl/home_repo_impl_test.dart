@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/features/home/data/data_source/remote/home_remote_data_source.dart';
 import 'package:super_fitness/features/home/data/models/meal_categories_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_category_dto.dart';
@@ -12,6 +13,25 @@ import 'package:super_fitness/features/home/data/repo_impl/home_repo_impl.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+
+class FakeStorageService implements StorageService {
+  final Map<String, String> _storage = {};
+
+  @override
+  Future<void> delete(String key) async {
+    _storage.remove(key);
+  }
+
+  @override
+  Future<String> get(String key) async {
+    return _storage[key] ?? '';
+  }
+
+  @override
+  Future<void> save(String key, String value) async {
+    _storage[key] = value;
+  }
+}
 
 class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
   RandomMusclesResponseDto randomMusclesResponse = const RandomMusclesResponseDto(
@@ -101,6 +121,66 @@ void main() {
         final data = (result as Success<List<MuscleEntity>>).data;
         expect(data.length, 1);
         expect(data.first.name, 'WithImage');
+      },
+    );
+
+    test(
+      'getRandomMuscles returns at most 6 elements when data source has more than 6',
+      () async {
+        fakeDataSource.randomMusclesResponse = RandomMusclesResponseDto(
+          message: 'success',
+          totalMuscles: 10,
+          muscles: List.generate(
+            10,
+            (i) => MuscleDto(
+              id: 'm$i',
+              name: 'Muscle $i',
+              image: 'https://img$i.png',
+            ),
+          ),
+        );
+
+        final result = await repo.getRandomMuscles();
+
+        expect(result, isA<Success<List<MuscleEntity>>>());
+        final data = (result as Success<List<MuscleEntity>>).data;
+        expect(data.length, 6);
+      },
+    );
+
+    test(
+      'getRandomMuscles rotates elements by prioritizing unseen ones on next app start',
+      () async {
+        final fakeStorage = FakeStorageService();
+        final repoWithStorage = HomeRepoImpl(fakeDataSource, fakeStorage);
+
+        fakeDataSource.randomMusclesResponse = RandomMusclesResponseDto(
+          message: 'success',
+          totalMuscles: 12,
+          muscles: List.generate(
+            12,
+            (i) => MuscleDto(
+              id: 'm$i',
+              name: 'Muscle $i',
+              image: 'https://img$i.png',
+            ),
+          ),
+        );
+
+        // First app launch
+        final firstResult = await repoWithStorage.getRandomMuscles();
+        final firstList = (firstResult as Success<List<MuscleEntity>>).data;
+        expect(firstList.length, 6);
+        final firstIds = firstList.map((m) => m.id).toSet();
+
+        // Second app launch (simulating app restart with persisted storage)
+        final secondResult = await repoWithStorage.getRandomMuscles();
+        final secondList = (secondResult as Success<List<MuscleEntity>>).data;
+        expect(secondList.length, 6);
+        final secondIds = secondList.map((m) => m.id).toSet();
+
+        // Since 12 muscles exist and 6 were shown, the next 6 are completely disjoint!
+        expect(firstIds.intersection(secondIds), isEmpty);
       },
     );
 

@@ -62,7 +62,7 @@ class _HomeViewState extends State<HomeView>
       _ownsCubit = false;
     } else if (getIt.isRegistered<HomeCubit>()) {
       _cubit = getIt<HomeCubit>();
-      _ownsCubit = false;
+      _ownsCubit = true;
     } else {
       _cubit = HomeCubit();
       _ownsCubit = true;
@@ -95,6 +95,21 @@ class _HomeViewState extends State<HomeView>
         title: context.l10n.squat,
         imageUrl:
             'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300',
+      ),
+      RecommendationItemModel(
+        title: context.l10n.yoga,
+        imageUrl:
+            'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300',
+      ),
+      RecommendationItemModel(
+        title: context.l10n.fitness,
+        imageUrl:
+            'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=300',
+      ),
+      RecommendationItemModel(
+        title: context.l10n.aerobics,
+        imageUrl:
+            'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=300',
       ),
     ];
   }
@@ -198,6 +213,7 @@ class _HomeViewState extends State<HomeView>
               final isTodayLoading = homeData?.isRandomMusclesLoading ?? false;
               final todayMuscles = (homeData?.randomMuscles ?? [])
                   .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+                  .take(6)
                   .toList();
 
               // 2. Upcoming Workouts data

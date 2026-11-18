@@ -135,6 +135,34 @@ void main() {
       },
     );
 
+    test(
+      'GetHomeDataEvent limits random muscles to at most 6 elements',
+      () async {
+        fakeRepo.randomMuscles = List.generate(
+          10,
+          (i) => MuscleEntity(
+            id: 'm$i',
+            name: 'Muscle $i',
+            imageUrl: 'https://img$i.png',
+          ),
+        );
+
+        homeCubit.doEvent(const GetHomeDataEvent());
+
+        await expectLater(
+          homeCubit.stream,
+          emitsThrough(
+            predicate<HomeState>((state) {
+              final data = state.data;
+              return data != null &&
+                  !data.isRandomMusclesLoading &&
+                  data.randomMuscles.length == 6;
+            }),
+          ),
+        );
+      },
+    );
+
     test('SelectMuscleGroupEvent fetches muscles for selected group', () async {
       homeCubit.doEvent(const SelectMuscleGroupEvent('g2'));
 

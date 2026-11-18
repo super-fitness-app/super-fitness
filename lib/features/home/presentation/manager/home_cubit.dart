@@ -55,65 +55,100 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
       ),
     );
 
-    final randomMusclesFuture =
-        _getRandomMusclesUseCase?.call() ?? Future.value(const Success([]));
-    final muscleGroupsFuture =
-        _getMuscleGroupsUseCase?.call() ?? Future.value(const Success([]));
-    final mealCategoriesFuture =
-        _getMealCategoriesUseCase?.call() ?? Future.value(const Success([]));
-
-    final results = await Future.wait([
-      randomMusclesFuture,
-      muscleGroupsFuture,
-      mealCategoriesFuture,
-    ]);
-
-    final randomMusclesResult = results[0] as ApiResults<List<MuscleEntity>>;
-    final muscleGroupsResult =
-        results[1] as ApiResults<List<MuscleGroupEntity>>;
-    final mealCategoriesResult =
-        results[2] as ApiResults<List<MealCategoryEntity>>;
-
-    List<MuscleEntity> randomMuscles = [];
-    if (randomMusclesResult is Success<List<MuscleEntity>>) {
-      randomMuscles = randomMusclesResult.data
-          .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
-          .toList();
-    }
-
-    List<MuscleGroupEntity> muscleGroups = [];
-    String? initialGroupId;
-    if (muscleGroupsResult is Success<List<MuscleGroupEntity>>) {
-      muscleGroups = muscleGroupsResult.data;
-      if (muscleGroups.isNotEmpty) {
-        initialGroupId = muscleGroups.first.id;
+    final randomMusclesTask = () async {
+      try {
+        final result = await (_getRandomMusclesUseCase?.call() ??
+            Future.value(const Success([])));
+        List<MuscleEntity> randomMuscles = [];
+        if (result is Success<List<MuscleEntity>>) {
+          randomMuscles = result.data
+              .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+              .take(6)
+              .toList();
+        }
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(
+            latest.copyWith(
+              randomMuscles: randomMuscles,
+              isRandomMusclesLoading: false,
+            ),
+          ),
+        );
+      } catch (_) {
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(latest.copyWith(isRandomMusclesLoading: false)),
+        );
       }
-    }
+    }();
 
-    List<MealCategoryEntity> mealCategories = [];
-    if (mealCategoriesResult is Success<List<MealCategoryEntity>>) {
-      mealCategories = mealCategoriesResult.data;
-    }
+    final muscleGroupsTask = () async {
+      try {
+        final result = await (_getMuscleGroupsUseCase?.call() ??
+            Future.value(const Success([])));
+        List<MuscleGroupEntity> muscleGroups = [];
+        String? initialGroupId;
+        if (result is Success<List<MuscleGroupEntity>>) {
+          muscleGroups = result.data;
+          if (muscleGroups.isNotEmpty) {
+            initialGroupId = muscleGroups.first.id;
+          }
+        }
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(
+            latest.copyWith(
+              muscleGroups: muscleGroups,
+              selectedMuscleGroupId: initialGroupId,
+            ),
+          ),
+        );
 
-    final updatedData = (state.data ?? const HomeData()).copyWith(
-      randomMuscles: randomMuscles,
-      isRandomMusclesLoading: false,
-      muscleGroups: muscleGroups,
-      selectedMuscleGroupId: initialGroupId,
-      mealCategories: mealCategories,
-      isMealCategoriesLoading: false,
-    );
-    emit(BaseState.success(updatedData));
+        if (initialGroupId != null && initialGroupId.isNotEmpty) {
+          await _fetchMusclesForGroup(initialGroupId);
+        } else {
+          final latestAfter = state.data ?? const HomeData();
+          emit(
+            BaseState.success(
+              latestAfter.copyWith(isMusclesByGroupLoading: false),
+            ),
+          );
+        }
+      } catch (_) {
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(latest.copyWith(isMusclesByGroupLoading: false)),
+        );
+      }
+    }();
 
-    if (initialGroupId != null && initialGroupId.isNotEmpty) {
-      await _fetchMusclesForGroup(initialGroupId);
-    } else {
-      emit(
-        BaseState.success(
-          (state.data ?? updatedData).copyWith(isMusclesByGroupLoading: false),
-        ),
-      );
-    }
+    final mealCategoriesTask = () async {
+      try {
+        final result = await (_getMealCategoriesUseCase?.call() ??
+            Future.value(const Success([])));
+        List<MealCategoryEntity> mealCategories = [];
+        if (result is Success<List<MealCategoryEntity>>) {
+          mealCategories = result.data;
+        }
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(
+            latest.copyWith(
+              mealCategories: mealCategories,
+              isMealCategoriesLoading: false,
+            ),
+          ),
+        );
+      } catch (_) {
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(latest.copyWith(isMealCategoriesLoading: false)),
+        );
+      }
+    }();
+
+    await Future.wait([randomMusclesTask, muscleGroupsTask, mealCategoriesTask]);
   }
 
   Future<void> _onSelectMuscleGroup(SelectMuscleGroupEvent event) async {
@@ -163,7 +198,10 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
     List<MuscleEntity> randomMuscles = currentData.randomMuscles;
     if (result is Success<List<MuscleEntity>>) {
       randomMuscles =
-          result.data.where((muscle) => muscle.imageUrl.trim().isNotEmpty).toList();
+          result.data
+              .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+              .take(6)
+              .toList();
     }
 
     emit(
