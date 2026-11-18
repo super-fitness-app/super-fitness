@@ -13,7 +13,7 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
   final ExerciseRepo? _exerciseRepo;
 
   ExerciseCubit([this._exerciseRepo])
-      : super(const BaseState<ExerciseData>.initial());
+    : super(const BaseState<ExerciseData>.initial());
 
   @override
   void doEvent(Object event) {
@@ -27,4 +27,3 @@ class ExerciseCubit extends BaseCubit<ExerciseState, BaseEvent> {
 
   void _onGetExerciseData(GetExerciseDataEvent event) {}
 }
-
