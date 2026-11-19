@@ -3,6 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:super_fitness/config/network/network_constants.dart';
 import 'package:super_fitness/core/const/endpoints.dart';
+import 'package:super_fitness/features/home/data/models/difficulty_levels_response_dto.dart';
+import 'package:super_fitness/features/home/data/models/exercises_by_muscle_difficulty_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_categories_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_groups_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscles_by_group_response_dto.dart';
@@ -30,4 +32,13 @@ abstract class HomeApiClient {
   @GET(Endpoints.mealCategoriesUrl)
   @Extra({NetworkConstants.requiresToken: false})
   Future<MealCategoriesResponseDto> getMealCategories();
+
+  @GET(Endpoints.levels)
+  Future<DifficultyLevelsResponseDto> getDifficultyLevels();
+
+  @GET(Endpoints.exercisesByMuscleDifficulty)
+  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty(
+    @Query('difficultyLevelId') String difficultyLevelId,
+    @Query('primeMoverMuscleId') String primeMoverMuscleId,
+  );
 }

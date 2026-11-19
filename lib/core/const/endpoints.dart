@@ -17,6 +17,11 @@ abstract final class Endpoints {
   static const String muscles = 'muscles';
   static const String musclesGroup = 'musclesGroup/{id}';
 
+  // Exercise & Levels endpoints
+  static const String levels = 'levels';
+  static const String exercisesByMuscleDifficulty =
+      'exercises/by-muscle-difficulty';
+
   // Meals endpoints
   static const String mealCategories = 'categories.php';
   static const String mealCategoriesUrl = '$mealBaseUrl$mealCategories';
