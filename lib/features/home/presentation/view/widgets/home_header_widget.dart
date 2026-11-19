@@ -1,19 +1,20 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/core/ui/extensions/context_extension.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final String? greeting;
   final String? title;
-  final String avatarUrl;
+  final String? avatarUrl;
   final VoidCallback? onAvatarTap;
 
   const HomeHeaderWidget({
     super.key,
     this.greeting,
     this.title,
-    this.avatarUrl =
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    this.avatarUrl,
     this.onAvatarTap,
   });
 
@@ -72,22 +73,67 @@ class HomeHeaderWidget extends StatelessWidget {
               border: Border.all(color: AppColors.grey80, width: 1.5),
             ),
             child: ClipOval(
-              child: Image.network(
-                avatarUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: AppColors.surface,
-                  child: const Icon(
-                    Icons.person,
-                    color: AppColors.grey40,
-                    size: 26,
-                  ),
-                ),
-              ),
+              child: _buildAvatar(),
             ),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildAvatar() {
+    if (avatarUrl == null || avatarUrl!.trim().isEmpty) {
+      return Image.asset(
+        AppImages.defaultAvatar,
+        fit: BoxFit.cover,
+        width: 48,
+        height: 48,
+      );
+    }
+
+    final url = avatarUrl!.trim();
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+        width: 48,
+        height: 48,
+        errorBuilder: (context, error, stackTrace) => Image.asset(
+          AppImages.defaultAvatar,
+          fit: BoxFit.cover,
+          width: 48,
+          height: 48,
+        ),
+      );
+    } else if (url.startsWith('/') || url.startsWith('file://')) {
+      final path = url.startsWith('file://')
+          ? url.replaceFirst('file://', '')
+          : url;
+      return Image.file(
+        File(path),
+        fit: BoxFit.cover,
+        width: 48,
+        height: 48,
+        errorBuilder: (context, error, stackTrace) => Image.asset(
+          AppImages.defaultAvatar,
+          fit: BoxFit.cover,
+          width: 48,
+          height: 48,
+        ),
+      );
+    } else {
+      return Image.asset(
+        url,
+        fit: BoxFit.cover,
+        width: 48,
+        height: 48,
+        errorBuilder: (context, error, stackTrace) => Image.asset(
+          AppImages.defaultAvatar,
+          fit: BoxFit.cover,
+          width: 48,
+          height: 48,
+        ),
+      );
+    }
   }
 }

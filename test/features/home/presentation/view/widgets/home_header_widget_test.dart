@@ -21,8 +21,7 @@ void main() {
         body: HomeHeaderWidget(
           greeting: greeting,
           title: title,
-          avatarUrl: avatarUrl ??
-              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          avatarUrl: avatarUrl,
           onAvatarTap: onAvatarTap,
         ),
       ),
@@ -70,6 +69,29 @@ void main() {
       await tester.pump();
 
       expect(avatarTapped, isTrue);
+    });
+
+    testWidgets('renders default solid avatar asset when avatarUrl is null', (
+      tester,
+    ) async {
+      await tester.pumpWidget(buildWidget(avatarUrl: null));
+      await tester.pump();
+
+      expect(find.byType(Image), findsOneWidget);
+    });
+
+    testWidgets('renders network image when avatarUrl is http URL', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        buildWidget(avatarUrl: 'https://example.com/avatar.png'),
+      );
+      await tester.pump();
+
+      expect(
+        find.byWidgetPredicate((w) => w is Image && w.image is NetworkImage),
+        findsOneWidget,
+      );
     });
   });
 }

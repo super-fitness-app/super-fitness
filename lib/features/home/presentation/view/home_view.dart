@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/session/session_service.dart';
+import 'package:super_fitness/config/session/user_profile_notifier.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/ui/extensions/context_extension.dart';
 import 'package:super_fitness/features/home/presentation/manager/home_cubit.dart';
@@ -68,6 +70,9 @@ class _HomeViewState extends State<HomeView>
       _ownsCubit = true;
     }
     super.initState();
+    if (getIt.isRegistered<SessionService>()) {
+      UserProfileNotifier.init(getIt<SessionService>());
+    }
     _cubit.doEvent(const GetHomeDataEvent());
   }
 
@@ -283,7 +288,14 @@ class _HomeViewState extends State<HomeView>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 1. Header Section
-                    const HomeHeaderWidget(),
+                    ValueListenableBuilder<String?>(
+                      valueListenable: UserProfileNotifier.userPhoto,
+                      builder: (context, photo, _) {
+                        return HomeHeaderWidget(
+                          avatarUrl: photo,
+                        );
+                      },
+                    ),
                     const SizedBox(height: 24),
 
                     // 2. Category Section

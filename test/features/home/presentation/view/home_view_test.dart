@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/session/user_profile_notifier.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
 import 'package:super_fitness/features/home/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
@@ -331,6 +332,32 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(HomeView), findsOneWidget);
+    });
+
+    testWidgets('header updates when UserProfileNotifier photo changes', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      UserProfileNotifier.clear();
+
+      await tester.pumpWidget(buildTestWidget());
+      await tester.pumpAndSettle();
+
+      final headerFinder = find.byType(HomeHeaderWidget);
+      expect(headerFinder, findsOneWidget);
+      expect(tester.widget<HomeHeaderWidget>(headerFinder).avatarUrl, isNull);
+
+      UserProfileNotifier.userPhoto.value = 'https://updated-photo.png';
+      await tester.pump();
+
+      expect(
+        tester.widget<HomeHeaderWidget>(headerFinder).avatarUrl,
+        'https://updated-photo.png',
+      );
     });
   });
 }
