@@ -30,13 +30,23 @@ class FakeHomeRepo implements HomeRepo {
     ),
   ];
 
+  bool failRandomMuscles = false;
+  bool failMuscleGroups = false;
+  bool failGroupMuscles = false;
+  bool failMealCategories = false;
+  bool throwException = false;
+
   @override
   Future<ApiResults<List<MuscleEntity>>> getRandomMuscles() async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failRandomMuscles) return const Failure(ServerMessageFailure('Random muscles error'));
     return Success(randomMuscles);
   }
 
   @override
   Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failMuscleGroups) return const Failure(ServerMessageFailure('Muscle groups error'));
     return Success(muscleGroups);
   }
 
@@ -44,11 +54,15 @@ class FakeHomeRepo implements HomeRepo {
   Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(
     String id,
   ) async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failGroupMuscles) return const Failure(ServerMessageFailure('Group muscles error'));
     return Success(groupMuscles);
   }
 
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failMealCategories) return const Failure(ServerMessageFailure('Meal categories error'));
     return Success(mealCategories);
   }
 }
@@ -177,6 +191,162 @@ void main() {
           }),
         ),
       );
+    });
+
+    test('GetHomeDataEvent handles section failures gracefully', () async {
+      fakeRepo.failRandomMuscles = true;
+      fakeRepo.failMuscleGroups = true;
+      fakeRepo.failMealCategories = true;
+
+      homeCubit.doEvent(const GetHomeDataEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                !data.isRandomMusclesLoading &&
+                !data.isMusclesByGroupLoading &&
+                !data.isMealCategoriesLoading;
+          }),
+        ),
+      );
+    });
+
+    test('GetHomeDataEvent handles exceptions thrown in tasks gracefully', () async {
+      fakeRepo.throwException = true;
+
+      homeCubit.doEvent(const GetHomeDataEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                !data.isRandomMusclesLoading &&
+                !data.isMusclesByGroupLoading &&
+                !data.isMealCategoriesLoading;
+          }),
+        ),
+      );
+    });
+
+    test('GetHomeDataEvent handles empty muscle groups gracefully', () async {
+      fakeRepo.muscleGroups = [];
+
+      homeCubit.doEvent(const GetHomeDataEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                data.muscleGroups.isEmpty &&
+                data.selectedMuscleGroupId == null &&
+                !data.isMusclesByGroupLoading;
+          }),
+        ),
+      );
+    });
+
+    test('SelectMuscleGroupEvent ignores selection if already selected', () async {
+      homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
+      await pumpEventQueue();
+
+      final statesCountBefore = homeCubit.state;
+      homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
+      await pumpEventQueue();
+
+      expect(homeCubit.state, equals(statesCountBefore));
+    });
+
+    test('SelectMuscleGroupEvent handles failure gracefully', () async {
+      fakeRepo.failGroupMuscles = true;
+
+      homeCubit.doEvent(const SelectMuscleGroupEvent('g3'));
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                data.selectedMuscleGroupId == 'g3' &&
+                data.musclesByGroup.isEmpty &&
+                !data.isMusclesByGroupLoading;
+          }),
+        ),
+      );
+    });
+
+    test('RefreshRandomMusclesEvent refreshes and filters random muscles', () async {
+      fakeRepo.randomMuscles = const [
+        MuscleEntity(id: 'm1', name: 'Valid', imageUrl: 'https://valid.png'),
+        MuscleEntity(id: 'm2', name: 'NoImage', imageUrl: ''),
+      ];
+
+      homeCubit.doEvent(const RefreshRandomMusclesEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                !data.isRandomMusclesLoading &&
+                data.randomMuscles.length == 1 &&
+                data.randomMuscles.first.name == 'Valid';
+          }),
+        ),
+      );
+    });
+
+    test('RefreshRandomMusclesEvent handles failure gracefully', () async {
+      fakeRepo.failRandomMuscles = true;
+
+      homeCubit.doEvent(const RefreshRandomMusclesEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null && !data.isRandomMusclesLoading;
+          }),
+        ),
+      );
+    });
+
+    test('HomeData copyWith and props behave correctly', () {
+      const data1 = HomeData();
+      final data2 = data1.copyWith(
+        randomMuscles: const [
+          MuscleEntity(id: '1', name: 'M1', imageUrl: 'img'),
+        ],
+        isRandomMusclesLoading: true,
+        selectedMuscleGroupId: 'g1',
+        isMusclesByGroupLoading: true,
+        isMealCategoriesLoading: true,
+      );
+
+      expect(data2.randomMuscles.length, 1);
+      expect(data2.isRandomMusclesLoading, isTrue);
+      expect(data2.selectedMuscleGroupId, 'g1');
+      expect(data2.isMusclesByGroupLoading, isTrue);
+      expect(data2.isMealCategoriesLoading, isTrue);
+
+      final data3 = data2.copyWith();
+      expect(data3, equals(data2));
+      expect(data1 == data2, isFalse);
+    });
+
+    test('HomeEvent classes instantiate correctly', () {
+      expect(const GetHomeDataEvent(), isA<HomeEvent>());
+      expect(const SelectMuscleGroupEvent('1'), isA<HomeEvent>());
+      expect(const RefreshRandomMusclesEvent(), isA<HomeEvent>());
     });
   });
 }

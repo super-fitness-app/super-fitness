@@ -41,42 +41,50 @@ class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
       MuscleDto(id: 'm1', name: 'Deltoid', image: 'https://deltoid.png'),
     ],
   );
+  MuscleGroupsResponseDto muscleGroupsResponse = const MuscleGroupsResponseDto(
+    message: 'success',
+    musclesGroup: [MuscleGroupDto(id: 'g1', name: 'Shoulders')],
+  );
+  MusclesByGroupResponseDto musclesByGroupResponse = const MusclesByGroupResponseDto(
+    message: 'success',
+    muscles: [
+      MuscleDto(id: 'm2', name: 'Anterior Deltoid', image: 'https://ant.png'),
+    ],
+  );
+  MealCategoriesResponseDto mealCategoriesResponse = const MealCategoriesResponseDto(
+    categories: [
+      MealCategoryDto(
+        idCategory: 'c1',
+        strCategory: 'Chicken',
+        strCategoryThumb: 'https://chicken.png',
+        strCategoryDescription: 'Chicken desc',
+      ),
+    ],
+  );
+  Exception? errorToThrow;
 
   @override
   Future<RandomMusclesResponseDto> getRandomMuscles() async {
+    if (errorToThrow != null) throw errorToThrow!;
     return randomMusclesResponse;
   }
 
   @override
   Future<MuscleGroupsResponseDto> getMuscleGroups() async {
-    return const MuscleGroupsResponseDto(
-      message: 'success',
-      musclesGroup: [MuscleGroupDto(id: 'g1', name: 'Shoulders')],
-    );
+    if (errorToThrow != null) throw errorToThrow!;
+    return muscleGroupsResponse;
   }
 
   @override
   Future<MusclesByGroupResponseDto> getMusclesByMuscleGroupId(String id) async {
-    return const MusclesByGroupResponseDto(
-      message: 'success',
-      muscles: [
-        MuscleDto(id: 'm2', name: 'Anterior Deltoid', image: 'https://ant.png'),
-      ],
-    );
+    if (errorToThrow != null) throw errorToThrow!;
+    return musclesByGroupResponse;
   }
 
   @override
   Future<MealCategoriesResponseDto> getMealCategories() async {
-    return const MealCategoriesResponseDto(
-      categories: [
-        MealCategoryDto(
-          idCategory: 'c1',
-          strCategory: 'Chicken',
-          strCategoryThumb: 'https://chicken.png',
-          strCategoryDescription: 'Chicken desc',
-        ),
-      ],
-    );
+    if (errorToThrow != null) throw errorToThrow!;
+    return mealCategoriesResponse;
   }
 }
 
@@ -219,5 +227,88 @@ void main() {
         expect(data.first.name, 'Chicken');
       },
     );
+
+    test('getRandomMuscles returns empty list when response muscles is null', () async {
+      fakeDataSource.randomMusclesResponse = const RandomMusclesResponseDto(
+        message: 'success',
+        muscles: null,
+      );
+
+      final result = await repo.getRandomMuscles();
+
+      expect(result, isA<Success<List<MuscleEntity>>>());
+      final data = (result as Success<List<MuscleEntity>>).data;
+      expect(data, isEmpty);
+    });
+
+    test('getRandomMuscles returns Failure when data source throws', () async {
+      fakeDataSource.errorToThrow = Exception('Server error');
+
+      final result = await repo.getRandomMuscles();
+
+      expect(result, isA<Failure<List<MuscleEntity>>>());
+    });
+
+    test('getMuscleGroups returns empty list when response musclesGroup is null', () async {
+      fakeDataSource.muscleGroupsResponse = const MuscleGroupsResponseDto(
+        message: 'success',
+        musclesGroup: null,
+      );
+
+      final result = await repo.getMuscleGroups();
+
+      expect(result, isA<Success<List<MuscleGroupEntity>>>());
+      final data = (result as Success<List<MuscleGroupEntity>>).data;
+      expect(data, isEmpty);
+    });
+
+    test('getMuscleGroups returns Failure when data source throws', () async {
+      fakeDataSource.errorToThrow = Exception('Server error');
+
+      final result = await repo.getMuscleGroups();
+
+      expect(result, isA<Failure<List<MuscleGroupEntity>>>());
+    });
+
+    test('getMusclesByMuscleGroupId returns empty list when response muscles is null', () async {
+      fakeDataSource.musclesByGroupResponse = const MusclesByGroupResponseDto(
+        message: 'success',
+        muscles: null,
+      );
+
+      final result = await repo.getMusclesByMuscleGroupId('g1');
+
+      expect(result, isA<Success<List<MuscleEntity>>>());
+      final data = (result as Success<List<MuscleEntity>>).data;
+      expect(data, isEmpty);
+    });
+
+    test('getMusclesByMuscleGroupId returns Failure when data source throws', () async {
+      fakeDataSource.errorToThrow = Exception('Server error');
+
+      final result = await repo.getMusclesByMuscleGroupId('g1');
+
+      expect(result, isA<Failure<List<MuscleEntity>>>());
+    });
+
+    test('getMealCategories returns empty list when response categories is null', () async {
+      fakeDataSource.mealCategoriesResponse = const MealCategoriesResponseDto(
+        categories: null,
+      );
+
+      final result = await repo.getMealCategories();
+
+      expect(result, isA<Success<List<MealCategoryEntity>>>());
+      final data = (result as Success<List<MealCategoryEntity>>).data;
+      expect(data, isEmpty);
+    });
+
+    test('getMealCategories returns Failure when data source throws', () async {
+      fakeDataSource.errorToThrow = Exception('Server error');
+
+      final result = await repo.getMealCategories();
+
+      expect(result, isA<Failure<List<MealCategoryEntity>>>());
+    });
   });
 }
