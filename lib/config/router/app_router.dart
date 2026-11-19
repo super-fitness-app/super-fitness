@@ -18,6 +18,7 @@ import 'package:super_fitness/features/auth/presentation/register/view/register_
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/cubit/profile_cubit.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/create_new_password_screen.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/view/edit_profile_view.dart';
 
 abstract final class AppRoutes {
@@ -37,6 +38,7 @@ abstract final class AppRoutes {
   static const home = '/home';
   static const main = '/main';
   static const editProfile = '/editProfile';
+  static const createNewPassword = '/createNewPassword';
 }
 
 abstract final class AppRouter {
@@ -169,6 +171,18 @@ abstract final class AppRouter {
             return BlocProvider.value(
               value: cubit,
               child: const EditProfileView(),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.createNewPassword,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final cubit = state.extra as ProfileCubit;
+
+            return BlocProvider.value(
+              value: cubit,
+              child: const CreateNewPasswordScreen(),
             );
           },
         ),

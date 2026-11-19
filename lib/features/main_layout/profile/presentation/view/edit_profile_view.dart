@@ -13,9 +13,9 @@ import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/cubit/profile_cubit.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/cubit/profile_event.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/cubit/profile_state.dart';
-import 'package:super_fitness/features/main_layout/profile/presentation/view/edit_profile_activity_view.dart';
-import 'package:super_fitness/features/main_layout/profile/presentation/view/edit_profile_goal_view.dart';
-import 'package:super_fitness/features/main_layout/profile/presentation/view/edit_profile_weight_view.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/widgets/edit_profile_activity_view.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/widgets/edit_profile_goal_view.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/widgets/edit_profile_weight_view.dart';
 
 import 'package:super_fitness/features/profile/domain/params/edit_profile_params.dart';
 

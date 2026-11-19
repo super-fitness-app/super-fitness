@@ -140,5 +140,12 @@
   "rookie": "مبتدئ",
   "beginner": "مبتدئ",
   "intermediate": "متوسط",
-  "advanced": "متقدم"
+  "advanced": "متقدم",
+    "createNewPassword": "إنشاء كلمة مرور جديدة",
+  "makeSurePasswordIs8Characters": "تأكد من أن كلمة المرور 8 أحرف أو أكثر",
+  "oldPassword": "كلمة المرور القديمة",
+  "newPassword": "كلمة المرور الجديدة",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح"
 }

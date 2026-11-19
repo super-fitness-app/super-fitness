@@ -143,5 +143,12 @@
   "rookie": "Rookie",
   "beginner": "Beginner",
   "intermediate": "Intermediate",
-  "advanced": "Advanced"
+  "advanced": "Advanced",
+    "createNewPassword": "Create New Password",
+  "makeSurePasswordIs8Characters": "Make Sure It's 8 Characters Or More",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordChangedSuccessfully": "Password changed successfully"
 }

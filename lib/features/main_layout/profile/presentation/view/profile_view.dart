@@ -18,6 +18,7 @@ import 'package:super_fitness/config/di/di.dart';
 
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/view/widgets/profile_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends StatefulWidget {
   final ProfileCubit? cubit;
@@ -156,6 +157,48 @@ class _ProfileViewState extends State<ProfileView>
                                 : AppConstants.localeArabic,
                           ),
                         );
+                      },
+                      onChangePassword: () {
+                        context.push(
+                          AppRoutes.createNewPassword,
+                          extra: context.read<ProfileCubit>(),
+                        );
+                      },
+                      onHelp: () async {
+                        final uri = Uri.parse(
+                          'https://elevate-flutter-team.github.io/fitness-app-webviews/help.html',
+                        );
+
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
+                      },
+                      onPrivacyPolicy: () async {
+                        final uri = Uri.parse(
+                          'https://elevate-flutter-team.github.io/fitness-app-webviews/privacy-policy.html',
+                        );
+
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
+                      },
+                      onSecurity: () async {
+                        final uri = Uri.parse(
+                          'https://elevate-flutter-team.github.io/fitness-app-webviews/security.html',
+                        );
+
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
                       },
                     ),
                   ],

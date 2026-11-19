@@ -394,4 +394,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get advanced => 'متقدم';
+
+  @override
+  String get createNewPassword => 'إنشاء كلمة مرور جديدة';
+
+  @override
+  String get makeSurePasswordIs8Characters =>
+      'تأكد من أن كلمة المرور 8 أحرف أو أكثر';
+
+  @override
+  String get oldPassword => 'كلمة المرور القديمة';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
 }

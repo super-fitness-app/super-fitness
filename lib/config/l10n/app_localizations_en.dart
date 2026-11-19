@@ -396,4 +396,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advanced => 'Advanced';
+
+  @override
+  String get createNewPassword => 'Create New Password';
+
+  @override
+  String get makeSurePasswordIs8Characters =>
+      'Make Sure It\'s 8 Characters Or More';
+
+  @override
+  String get oldPassword => 'Old Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
 }
