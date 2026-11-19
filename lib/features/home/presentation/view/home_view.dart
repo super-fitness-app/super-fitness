@@ -291,8 +291,14 @@ class _HomeViewState extends State<HomeView>
                     ValueListenableBuilder<String?>(
                       valueListenable: UserProfileNotifier.userPhoto,
                       builder: (context, photo, _) {
-                        return HomeHeaderWidget(
-                          avatarUrl: photo,
+                        return ValueListenableBuilder<String?>(
+                          valueListenable: UserProfileNotifier.userName,
+                          builder: (context, name, _) {
+                            return HomeHeaderWidget(
+                              avatarUrl: photo,
+                              userName: name,
+                            );
+                          },
                         );
                       },
                     ),

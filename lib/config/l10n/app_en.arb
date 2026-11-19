@@ -105,6 +105,15 @@
   "trueBeast": "True Beast",
 
   "hiAhmed": "Hi Ahmed ,",
+  "hiWithName": "Hi {name} ,",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "letsStartYourDay": "Let's Start Your Day",
   "category": "Category",
   "gym": "Gym",

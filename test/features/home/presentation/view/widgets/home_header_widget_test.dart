@@ -7,6 +7,7 @@ import 'package:super_fitness/features/home/presentation/view/widgets/home_heade
 void main() {
   Widget buildWidget({
     String? greeting,
+    String? userName,
     String? title,
     String? avatarUrl,
     VoidCallback? onAvatarTap,
@@ -20,6 +21,7 @@ void main() {
       home: Scaffold(
         body: HomeHeaderWidget(
           greeting: greeting,
+          userName: userName,
           title: title,
           avatarUrl: avatarUrl,
           onAvatarTap: onAvatarTap,
@@ -35,6 +37,22 @@ void main() {
 
       expect(find.text('Hi Ahmed ,'), findsOneWidget);
       expect(find.text("Let's Start Your Day"), findsOneWidget);
+    });
+
+    testWidgets('renders dynamic user name when userName is provided', (tester) async {
+      await tester.pumpWidget(buildWidget(userName: 'Mohamed'));
+      await tester.pump();
+
+      expect(find.text('Hi Mohamed ,'), findsOneWidget);
+    });
+
+    testWidgets('renders dynamic user name in Arabic locale', (tester) async {
+      await tester.pumpWidget(
+        buildWidget(userName: 'هادي', locale: const Locale('ar')),
+      );
+      await tester.pump();
+
+      expect(find.text('مرحباً هادي ،'), findsOneWidget);
     });
 
     testWidgets('renders custom greeting and title', (tester) async {

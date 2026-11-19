@@ -102,6 +102,15 @@
   "trueBeast": "محترف رياضي",
 
   "hiAhmed": "مرحباً أحمد ،",
+  "hiWithName": "مرحباً {name} ،",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "letsStartYourDay": "لنبدأ يومك",
   "category": "الفئات",
   "gym": "جيم",

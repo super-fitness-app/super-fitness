@@ -6,6 +6,7 @@ import 'package:super_fitness/core/ui/extensions/context_extension.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final String? greeting;
+  final String? userName;
   final String? title;
   final String? avatarUrl;
   final VoidCallback? onAvatarTap;
@@ -13,10 +14,22 @@ class HomeHeaderWidget extends StatelessWidget {
   const HomeHeaderWidget({
     super.key,
     this.greeting,
+    this.userName,
     this.title,
     this.avatarUrl,
     this.onAvatarTap,
   });
+
+  String _resolveGreeting(BuildContext context) {
+    if (greeting != null && greeting!.isNotEmpty) {
+      return greeting!;
+    }
+    final name = userName?.trim();
+    if (name != null && name.isNotEmpty) {
+      return context.l10n.hiWithName(name);
+    }
+    return context.l10n.hiAhmed;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +43,7 @@ class HomeHeaderWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                greeting ?? context.l10n.hiAhmed,
+                _resolveGreeting(context),
                 style:
                     context.textTheme.bodyMedium?.copyWith(
                       color: AppColors.grey30,

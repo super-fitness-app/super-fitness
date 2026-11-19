@@ -15,15 +15,49 @@ class UserProfileNotifier {
       if (userDataStr.isNotEmpty) {
         final Map<String, dynamic> json = jsonDecode(userDataStr);
         final photo = json['photo'] as String?;
-        final firstName = json['firstName'] as String?;
+        final firstName = (json['firstName'] as String?)?.trim();
+        final lastName = (json['lastName'] as String?)?.trim();
+        final name = (json['name'] as String?)?.trim() ??
+            (json['fullName'] as String?)?.trim();
+
         if (photo != null && photo.trim().isNotEmpty) {
           userPhoto.value = photo.trim();
         }
-        if (firstName != null && firstName.trim().isNotEmpty) {
-          userName.value = firstName.trim();
+
+        String? resolvedName;
+        if (firstName != null && firstName.isNotEmpty) {
+          resolvedName = firstName;
+        } else if (name != null && name.isNotEmpty) {
+          resolvedName = name;
+        } else if (lastName != null && lastName.isNotEmpty) {
+          resolvedName = lastName;
+        }
+
+        if (resolvedName != null && resolvedName.isNotEmpty) {
+          userName.value = resolvedName;
         }
       }
     } catch (_) {}
+  }
+
+  /// Updates the user's name and persists it via [sessionService] if provided
+  static Future<void> updateName(
+    String newName, [
+    SessionService? sessionService,
+  ]) async {
+    userName.value = newName.trim().isNotEmpty ? newName.trim() : null;
+
+    if (sessionService != null) {
+      try {
+        final userDataStr = await sessionService.getUserData();
+        Map<String, dynamic> json = {};
+        if (userDataStr.isNotEmpty) {
+          json = jsonDecode(userDataStr) as Map<String, dynamic>;
+        }
+        json['firstName'] = newName;
+        await sessionService.saveUserData(jsonEncode(json));
+      } catch (_) {}
+    }
   }
 
   /// Updates the user's photo and persists it via [sessionService] if provided

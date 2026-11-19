@@ -319,6 +319,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hiAhmed => 'Hi Ahmed ,';
 
   @override
+  String hiWithName(String name) {
+    return 'Hi $name ,';
+  }
+
+  @override
   String get letsStartYourDay => 'Let\'s Start Your Day';
 
   @override

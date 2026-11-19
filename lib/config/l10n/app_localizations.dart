@@ -668,6 +668,12 @@ abstract class AppLocalizations {
   /// **'Hi Ahmed ,'**
   String get hiAhmed;
 
+  /// Greeting with dynamic user name
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name} ,'**
+  String hiWithName(String name);
+
   /// No description provided for @letsStartYourDay.
   ///
   /// In en, this message translates to:
