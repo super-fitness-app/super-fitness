@@ -10,7 +10,7 @@ import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floating_bottom_nav_bar.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/nav_bar_item_widget.dart';
 import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
-import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/profile_view.dart';
 import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
 

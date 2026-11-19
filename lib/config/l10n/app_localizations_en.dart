@@ -283,10 +283,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whatIsYourGoal => 'WHAT IS YOUR GOAL ?';
 
   @override
-  String get gainWeight => 'Gain Weight';
+  String get gainWeight => 'Gain weight';
 
   @override
-  String get loseWeight => 'Lose Weight';
+  String get loseWeight => 'Lose weight';
 
   @override
   String get getFitter => 'Get Fitter';
@@ -314,4 +314,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trueBeast => 'True Beast';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get selectLanguage => 'Select Language: ';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabic => 'Arabic';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get yourWeight => 'Your Weight';
+
+  @override
+  String get yourGoal => 'Your Goal';
+
+  @override
+  String get yourActivityLevel => 'Your Activity Level';
+
+  @override
+  String get tapToEdit => 'tap To Edit';
+
+  @override
+  String get notSpecified => 'Not specified';
+
+  @override
+  String get kgUnit => 'KG';
+
+  @override
+  String editWeight(Object unit) {
+    return 'Edit Weight ($unit)';
+  }
+
+  @override
+  String enterWeight(Object unit) {
+    return 'Enter weight in $unit';
+  }
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get completeRequiredFields => 'Please complete all required fields.';
+
+  @override
+  String get invalidWeight => 'Enter a valid weight.';
+
+  @override
+  String get selectGoal => 'Select Goal';
+
+  @override
+  String get selectActivityLevel => 'Select Activity Level';
+
+  @override
+  String get maintainWeight => 'Maintain weight';
+
+  @override
+  String get advanced => 'Advanced';
 }

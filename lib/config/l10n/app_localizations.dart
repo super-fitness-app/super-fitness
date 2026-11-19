@@ -599,13 +599,13 @@ abstract class AppLocalizations {
   /// No description provided for @gainWeight.
   ///
   /// In en, this message translates to:
-  /// **'Gain Weight'**
+  /// **'Gain weight'**
   String get gainWeight;
 
   /// No description provided for @loseWeight.
   ///
   /// In en, this message translates to:
-  /// **'Lose Weight'**
+  /// **'Lose weight'**
   String get loseWeight;
 
   /// No description provided for @getFitter.
@@ -661,6 +661,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'True Beast'**
   String get trueBeast;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language: '**
+  String get selectLanguage;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @arabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get arabic;
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get help;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @yourWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Weight'**
+  String get yourWeight;
+
+  /// No description provided for @yourGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Goal'**
+  String get yourGoal;
+
+  /// No description provided for @yourActivityLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Activity Level'**
+  String get yourActivityLevel;
+
+  /// No description provided for @tapToEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'tap To Edit'**
+  String get tapToEdit;
+
+  /// No description provided for @notSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get notSpecified;
+
+  /// No description provided for @kgUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'KG'**
+  String get kgUnit;
+
+  /// No description provided for @editWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Weight ({unit})'**
+  String editWeight(Object unit);
+
+  /// No description provided for @enterWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter weight in {unit}'**
+  String enterWeight(Object unit);
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @completeRequiredFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete all required fields.'**
+  String get completeRequiredFields;
+
+  /// No description provided for @invalidWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid weight.'**
+  String get invalidWeight;
+
+  /// No description provided for @selectGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Goal'**
+  String get selectGoal;
+
+  /// No description provided for @selectActivityLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Activity Level'**
+  String get selectActivityLevel;
+
+  /// No description provided for @maintainWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain weight'**
+  String get maintainWeight;
+
+  /// No description provided for @advanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
 }
 
 class _AppLocalizationsDelegate
