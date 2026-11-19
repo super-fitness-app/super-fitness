@@ -1,14 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:super_fitness/core/const/app_colors.dart';
+import 'package:super_fitness/features/home/data/models/difficulty_level_dto.dart';
+import 'package:super_fitness/features/home/data/models/difficulty_levels_response_dto.dart';
+import 'package:super_fitness/features/home/data/models/exercises_by_muscle_difficulty_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_categories_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_category_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_group_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_groups_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscles_by_group_response_dto.dart';
+import 'package:super_fitness/features/home/data/models/popular_exercise_dto.dart';
 import 'package:super_fitness/features/home/data/models/random_muscles_response_dto.dart';
+import 'package:super_fitness/features/home/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/home/domain/entities/popular_training_entity.dart';
 
 void main() {
   group('Home Models & Entities Unit Tests', () {
@@ -261,6 +269,129 @@ void main() {
           'https://pasta.png',
           'Italian pasta',
         ]);
+      });
+
+      test('DifficultyLevelEntity equality and props', () {
+        const lvl1 = DifficultyLevelEntity(id: '1', name: 'Beginner');
+        const lvl2 = DifficultyLevelEntity(id: '1', name: 'Beginner');
+        expect(lvl1, equals(lvl2));
+        expect(lvl1.props, ['1', 'Beginner']);
+      });
+
+      test('PopularTrainingEntity equality, props, and levelColor', () {
+        const ent1 = PopularTrainingEntity(
+          id: 'ex1',
+          title: 'Push-Up',
+          totalTasks: 20,
+          levelText: 'Beginner',
+          imageUrl: 'https://img.png',
+          videoUrl: 'https://yt.com/1',
+        );
+        const ent2 = PopularTrainingEntity(
+          id: 'ex1',
+          title: 'Push-Up',
+          totalTasks: 20,
+          levelText: 'Beginner',
+          imageUrl: 'https://img.png',
+          videoUrl: 'https://yt.com/1',
+        );
+        expect(ent1, equals(ent2));
+        expect(ent1.levelColor, AppColors.primaryColor);
+
+        const entIntermediate = PopularTrainingEntity(
+          id: 'ex2',
+          title: 'Dip',
+          totalTasks: 10,
+          levelText: 'Intermediate',
+          imageUrl: 'https://img.png',
+        );
+        expect(entIntermediate.levelColor, const Color(0xFFFF9500));
+
+        const entAdvanced = PopularTrainingEntity(
+          id: 'ex3',
+          title: 'Handstand Pushup',
+          totalTasks: 5,
+          levelText: 'Advanced',
+          imageUrl: 'https://img.png',
+        );
+        expect(entAdvanced.levelColor, const Color(0xFFFF3B30));
+
+        final copied = ent1.copyWith(levelText: 'Advanced');
+        expect(copied.levelText, 'Advanced');
+        expect(copied.id, ent1.id);
+        expect(copied.title, ent1.title);
+      });
+    });
+
+    group('DifficultyLevelDto and Response', () {
+      test('fromJson, toJson, and toEntity', () {
+        final json = {'_id': 'lvl1', 'name': ' Expert '};
+        final dto = DifficultyLevelDto.fromJson(json);
+        expect(dto.id, 'lvl1');
+        expect(dto.name, ' Expert ');
+        expect(dto.toJson()['_id'], 'lvl1');
+
+        final entity = dto.toEntity();
+        expect(entity.id, 'lvl1');
+        expect(entity.name, 'Expert');
+
+        const nullDto = DifficultyLevelDto();
+        expect(nullDto.toEntity().id, '');
+        expect(nullDto.toEntity().name, '');
+      });
+
+      test('DifficultyLevelsResponseDto fromJson and toJson', () {
+        final json = {
+          'message': 'success',
+          'levels': [
+            {'_id': '1', 'name': 'Novice'}
+          ],
+        };
+        final dto = DifficultyLevelsResponseDto.fromJson(json);
+        expect(dto.message, 'success');
+        expect(dto.levels?.length, 1);
+        expect(dto.toJson()['levels'], isNotNull);
+      });
+    });
+
+    group('PopularExerciseDto and Response', () {
+      test('fromJson and toJson', () {
+        final json = {
+          '_id': 'e1',
+          'exercise': 'Plank',
+          'difficulty_level': 'Beginner',
+          'target_muscle_group': 'Core',
+          'prime_mover_muscle': 'Abs',
+          'image': 'https://plank.png',
+          'short_youtube_demonstration_link': 'https://youtu.be/abc',
+        };
+        final dto = PopularExerciseDto.fromJson(json);
+        expect(dto.id, 'e1');
+        expect(dto.exercise, 'Plank');
+        expect(dto.difficultyLevel, 'Beginner');
+        expect(dto.image, 'https://plank.png');
+        expect(dto.shortYoutubeDemonstrationLink, 'https://youtu.be/abc');
+
+        final serialized = dto.toJson();
+        expect(serialized['_id'], 'e1');
+        expect(serialized['exercise'], 'Plank');
+        expect(serialized['image'], 'https://plank.png');
+      });
+
+      test('ExercisesByMuscleDifficultyResponseDto fromJson and toJson', () {
+        final json = {
+          'message': 'success',
+          'totalExercises': 10,
+          'totalPages': 1,
+          'currentPage': 1,
+          'exercises': [
+            {'_id': 'e1', 'exercise': 'Bench Press'}
+          ],
+        };
+        final dto = ExercisesByMuscleDifficultyResponseDto.fromJson(json);
+        expect(dto.totalExercises, 10);
+        expect(dto.exercises?.length, 1);
+        expect(dto.toJson()['totalExercises'], 10);
       });
     });
   });

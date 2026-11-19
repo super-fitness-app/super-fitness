@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/features/home/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/home/domain/entities/popular_training_entity.dart';
 import 'package:super_fitness/features/home/domain/repo/home_repo.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_meal_categories_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscle_groups_use_case.dart';
@@ -14,6 +16,9 @@ class FakeHomeRepo implements HomeRepo {
   ApiResults<List<MuscleGroupEntity>> muscleGroupsResult = const Success([]);
   ApiResults<List<MuscleEntity>> musclesByGroupResult = const Success([]);
   ApiResults<List<MealCategoryEntity>> mealCategoriesResult = const Success([]);
+  ApiResults<List<DifficultyLevelEntity>> difficultyLevelsResult =
+      const Success([]);
+  ApiResults<List<PopularTrainingEntity>> exercisesResult = const Success([]);
 
   String? lastMusclesByGroupId;
 
@@ -36,6 +41,22 @@ class FakeHomeRepo implements HomeRepo {
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async {
     return mealCategoriesResult;
+  }
+
+  @override
+  Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels() async {
+    return difficultyLevelsResult;
+  }
+
+  @override
+  Future<ApiResults<List<PopularTrainingEntity>>>
+      getExercisesByMuscleAndDifficulty({
+    required String difficultyLevelId,
+    required String primeMoverMuscleId,
+    String? fallbackImageUrl,
+    String? levelName,
+  }) async {
+    return exercisesResult;
   }
 }
 

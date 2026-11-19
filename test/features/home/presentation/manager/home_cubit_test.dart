@@ -1,13 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/features/home/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/home/domain/entities/popular_training_entity.dart';
 import 'package:super_fitness/features/home/domain/repo/home_repo.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_meal_categories_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscle_groups_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscles_by_group_use_case.dart';
+import 'package:super_fitness/features/home/domain/use_cases/get_popular_training_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_random_muscles_use_case.dart';
 import 'package:super_fitness/features/home/presentation/manager/home_cubit.dart';
 
@@ -29,11 +32,25 @@ class FakeHomeRepo implements HomeRepo {
       description: 'Beef desc',
     ),
   ];
+  List<DifficultyLevelEntity> difficultyLevels = const [
+    DifficultyLevelEntity(id: 'lvl1', name: 'Beginner'),
+  ];
+  List<PopularTrainingEntity> popularTrainings = const [
+    PopularTrainingEntity(
+      id: 'p1',
+      title: 'Push Up',
+      totalTasks: 12,
+      levelText: 'Beginner',
+      imageUrl: 'https://pushup.png',
+    ),
+  ];
 
   bool failRandomMuscles = false;
   bool failMuscleGroups = false;
   bool failGroupMuscles = false;
   bool failMealCategories = false;
+  bool failDifficultyLevels = false;
+  bool failExercises = false;
   bool throwException = false;
 
   @override
@@ -65,6 +82,30 @@ class FakeHomeRepo implements HomeRepo {
     if (failMealCategories) return const Failure(ServerMessageFailure('Meal categories error'));
     return Success(mealCategories);
   }
+
+  @override
+  Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels() async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failDifficultyLevels) {
+      return const Failure(ServerMessageFailure('Levels error'));
+    }
+    return Success(difficultyLevels);
+  }
+
+  @override
+  Future<ApiResults<List<PopularTrainingEntity>>>
+      getExercisesByMuscleAndDifficulty({
+    required String difficultyLevelId,
+    required String primeMoverMuscleId,
+    String? fallbackImageUrl,
+    String? levelName,
+  }) async {
+    if (throwException) throw Exception('Unexpected error');
+    if (failExercises) {
+      return const Failure(ServerMessageFailure('Exercises error'));
+    }
+    return Success(popularTrainings);
+  }
 }
 
 void main() {
@@ -73,6 +114,7 @@ void main() {
   late GetMuscleGroupsUseCase getMuscleGroupsUseCase;
   late GetMusclesByGroupUseCase getMusclesByGroupUseCase;
   late GetMealCategoriesUseCase getMealCategoriesUseCase;
+  late GetPopularTrainingUseCase getPopularTrainingUseCase;
   late HomeCubit homeCubit;
 
   setUp(() {
@@ -81,12 +123,14 @@ void main() {
     getMuscleGroupsUseCase = GetMuscleGroupsUseCase(fakeRepo);
     getMusclesByGroupUseCase = GetMusclesByGroupUseCase(fakeRepo);
     getMealCategoriesUseCase = GetMealCategoriesUseCase(fakeRepo);
+    getPopularTrainingUseCase = GetPopularTrainingUseCase(fakeRepo);
 
     homeCubit = HomeCubit(
       getRandomMusclesUseCase,
       getMuscleGroupsUseCase,
       getMusclesByGroupUseCase,
       getMealCategoriesUseCase,
+      getPopularTrainingUseCase,
     );
   });
 
@@ -343,10 +387,40 @@ void main() {
       expect(data1 == data2, isFalse);
     });
 
+    test('RefreshHomeDataEvent reloads all home sections', () async {
+      homeCubit.doEvent(const RefreshHomeDataEvent());
+
+      await expectLater(
+        homeCubit.stream,
+        emitsThrough(
+          predicate<HomeState>((state) {
+            final data = state.data;
+            return data != null &&
+                data.randomMuscles.isNotEmpty &&
+                !data.isRandomMusclesLoading &&
+                !data.isPopularTrainingsLoading;
+          }),
+        ),
+      );
+    });
+
+    test('refreshData() reloads all home sections and completes', () async {
+      await homeCubit.refreshData();
+
+      final data = homeCubit.state.data;
+      expect(data, isNotNull);
+      expect(data!.randomMuscles.isNotEmpty, isTrue);
+      expect(data.popularTrainings.isNotEmpty, isTrue);
+      expect(data.isRandomMusclesLoading, isFalse);
+      expect(data.isPopularTrainingsLoading, isFalse);
+    });
+
     test('HomeEvent classes instantiate correctly', () {
       expect(const GetHomeDataEvent(), isA<HomeEvent>());
       expect(const SelectMuscleGroupEvent('1'), isA<HomeEvent>());
       expect(const RefreshRandomMusclesEvent(), isA<HomeEvent>());
+      expect(const RefreshPopularTrainingEvent(), isA<HomeEvent>());
+      expect(const RefreshHomeDataEvent(), isA<HomeEvent>());
     });
   });
 }

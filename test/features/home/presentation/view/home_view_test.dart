@@ -4,13 +4,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
+import 'package:super_fitness/features/home/domain/entities/difficulty_level_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/home/domain/entities/popular_training_entity.dart';
 import 'package:super_fitness/features/home/domain/repo/home_repo.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_meal_categories_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscle_groups_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscles_by_group_use_case.dart';
+import 'package:super_fitness/features/home/domain/use_cases/get_popular_training_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_random_muscles_use_case.dart';
 import 'package:super_fitness/features/home/presentation/manager/home_cubit.dart';
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
@@ -42,6 +45,18 @@ class FakeHomeRepo implements HomeRepo {
       description: 'Healthy breakfast',
     ),
   ];
+  List<DifficultyLevelEntity> difficultyLevels = [
+    const DifficultyLevelEntity(id: 'lvl1', name: 'Beginner'),
+  ];
+  List<PopularTrainingEntity> popularTrainings = [
+    const PopularTrainingEntity(
+      id: 'p1',
+      title: 'Push Up',
+      totalTasks: 12,
+      levelText: 'Beginner',
+      imageUrl: 'https://pushup.png',
+    ),
+  ];
 
   @override
   Future<ApiResults<List<MuscleEntity>>> getRandomMuscles() async =>
@@ -58,6 +73,20 @@ class FakeHomeRepo implements HomeRepo {
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async =>
       Success(mealCategories);
+
+  @override
+  Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels() async =>
+      Success(difficultyLevels);
+
+  @override
+  Future<ApiResults<List<PopularTrainingEntity>>>
+      getExercisesByMuscleAndDifficulty({
+    required String difficultyLevelId,
+    required String primeMoverMuscleId,
+    String? fallbackImageUrl,
+    String? levelName,
+  }) async =>
+          Success(popularTrainings);
 }
 
 class PendingHomeRepo extends FakeHomeRepo {
@@ -78,6 +107,7 @@ void main() {
       GetMuscleGroupsUseCase(fakeRepo),
       GetMusclesByGroupUseCase(fakeRepo),
       GetMealCategoriesUseCase(fakeRepo),
+      GetPopularTrainingUseCase(fakeRepo),
     );
   });
 
@@ -190,6 +220,7 @@ void main() {
         GetMuscleGroupsUseCase(pendingRepo),
         GetMusclesByGroupUseCase(pendingRepo),
         GetMealCategoriesUseCase(pendingRepo),
+        GetPopularTrainingUseCase(pendingRepo),
       );
 
       await tester.pumpWidget(
@@ -243,6 +274,63 @@ void main() {
         await tester.pumpAndSettle();
         expect(homeCubit.state.data?.selectedMuscleGroupId, 'g2');
       }
+    });
+
+    testWidgets('ignores popular training items with empty image URL', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      fakeRepo.popularTrainings = [
+        const PopularTrainingEntity(
+          id: 'p_valid',
+          title: 'Valid Training',
+          totalTasks: 10,
+          levelText: 'Beginner',
+          imageUrl: 'https://valid.png',
+        ),
+        const PopularTrainingEntity(
+          id: 'p_invalid',
+          title: 'Ignored Training',
+          totalTasks: 5,
+          levelText: 'Beginner',
+          imageUrl: '',
+        ),
+      ];
+
+      await tester.pumpWidget(buildTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Valid Training'), findsOneWidget);
+      expect(find.text('Ignored Training'), findsNothing);
+    });
+
+    testWidgets('pull to refresh triggers refresh on HomeView', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(buildTestWidget());
+      await tester.pumpAndSettle();
+
+      expect(find.byType(RefreshIndicator), findsOneWidget);
+
+      await tester.fling(
+        find.byType(SingleChildScrollView),
+        const Offset(0.0, 300.0),
+        1000.0,
+      );
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(HomeView), findsOneWidget);
     });
   });
 }

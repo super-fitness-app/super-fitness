@@ -1,12 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/features/home/api/client/home_api_client.dart';
 import 'package:super_fitness/features/home/api/data_source_impl/remote/home_remote_data_source_impl.dart';
+import 'package:super_fitness/features/home/data/models/difficulty_level_dto.dart';
+import 'package:super_fitness/features/home/data/models/difficulty_levels_response_dto.dart';
+import 'package:super_fitness/features/home/data/models/exercises_by_muscle_difficulty_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_categories_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/meal_category_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_group_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscle_groups_response_dto.dart';
 import 'package:super_fitness/features/home/data/models/muscles_by_group_response_dto.dart';
+import 'package:super_fitness/features/home/data/models/popular_exercise_dto.dart';
 import 'package:super_fitness/features/home/data/models/random_muscles_response_dto.dart';
 
 class FakeHomeApiClient implements HomeApiClient {
@@ -14,6 +18,8 @@ class FakeHomeApiClient implements HomeApiClient {
   MuscleGroupsResponseDto? muscleGroupsResponse;
   MusclesByGroupResponseDto? musclesByGroupResponse;
   MealCategoriesResponseDto? mealCategoriesResponse;
+  DifficultyLevelsResponseDto? difficultyLevelsResponse;
+  ExercisesByMuscleDifficultyResponseDto? exercisesByMuscleDifficultyResponse;
   Exception? errorToThrow;
 
   @override
@@ -42,6 +48,23 @@ class FakeHomeApiClient implements HomeApiClient {
     if (errorToThrow != null) throw errorToThrow!;
     return mealCategoriesResponse ??
         const MealCategoriesResponseDto(categories: []);
+  }
+
+  @override
+  Future<DifficultyLevelsResponseDto> getDifficultyLevels() async {
+    if (errorToThrow != null) throw errorToThrow!;
+    return difficultyLevelsResponse ??
+        const DifficultyLevelsResponseDto(message: 'success', levels: []);
+  }
+
+  @override
+  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty(
+    String difficultyLevelId,
+    String primeMoverMuscleId,
+  ) async {
+    if (errorToThrow != null) throw errorToThrow!;
+    return exercisesByMuscleDifficultyResponse ??
+        const ExercisesByMuscleDifficultyResponseDto(message: 'success', exercises: []);
   }
 }
 
@@ -121,6 +144,42 @@ void main() {
       expect(result.categories?.first.strCategory, 'Beef');
     });
 
+    test('getDifficultyLevels calls client.getDifficultyLevels and returns response', () async {
+      const expectedResponse = DifficultyLevelsResponseDto(
+        message: 'success',
+        levels: [DifficultyLevelDto(id: 'lvl1', name: 'Novice')],
+      );
+      fakeApiClient.difficultyLevelsResponse = expectedResponse;
+
+      final result = await remoteDataSource.getDifficultyLevels();
+
+      expect(result.levels?.length, 1);
+      expect(result.levels?.first.name, 'Novice');
+    });
+
+    test('getExercisesByMuscleAndDifficulty calls client and returns response', () async {
+      const expectedResponse = ExercisesByMuscleDifficultyResponseDto(
+        message: 'success',
+        totalExercises: 5,
+        exercises: [
+          PopularExerciseDto(
+            id: 'ex1',
+            exercise: 'Push-up',
+            difficultyLevel: 'Novice',
+          ),
+        ],
+      );
+      fakeApiClient.exercisesByMuscleDifficultyResponse = expectedResponse;
+
+      final result = await remoteDataSource.getExercisesByMuscleAndDifficulty(
+        difficultyLevelId: 'lvl1',
+        primeMoverMuscleId: 'm1',
+      );
+
+      expect(result.totalExercises, 5);
+      expect(result.exercises?.first.exercise, 'Push-up');
+    });
+
     test('rethrows exception when client throws', () async {
       fakeApiClient.errorToThrow = Exception('Network error');
 
@@ -138,6 +197,17 @@ void main() {
       );
       expect(
         () => remoteDataSource.getMealCategories(),
+        throwsA(isA<Exception>()),
+      );
+      expect(
+        () => remoteDataSource.getDifficultyLevels(),
+        throwsA(isA<Exception>()),
+      );
+      expect(
+        () => remoteDataSource.getExercisesByMuscleAndDifficulty(
+          difficultyLevelId: '1',
+          primeMoverMuscleId: '1',
+        ),
         throwsA(isA<Exception>()),
       );
     });
