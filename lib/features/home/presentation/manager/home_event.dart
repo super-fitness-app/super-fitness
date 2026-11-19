@@ -16,3 +16,11 @@ final class SelectMuscleGroupEvent extends HomeEvent {
 final class RefreshRandomMusclesEvent extends HomeEvent {
   const RefreshRandomMusclesEvent();
 }
+
+final class RefreshPopularTrainingEvent extends HomeEvent {
+  const RefreshPopularTrainingEvent();
+}
+
+final class RefreshHomeDataEvent extends HomeEvent {
+  const RefreshHomeDataEvent();
+}

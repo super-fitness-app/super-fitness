@@ -7,9 +7,11 @@ import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/features/home/domain/entities/meal_category_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/home/domain/entities/muscle_group_entity.dart';
+import 'package:super_fitness/features/home/domain/entities/popular_training_entity.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_meal_categories_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscle_groups_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_muscles_by_group_use_case.dart';
+import 'package:super_fitness/features/home/domain/use_cases/get_popular_training_use_case.dart';
 import 'package:super_fitness/features/home/domain/use_cases/get_random_muscles_use_case.dart';
 
 part 'home_event.dart';
@@ -21,12 +23,14 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
   final GetMuscleGroupsUseCase? _getMuscleGroupsUseCase;
   final GetMusclesByGroupUseCase? _getMusclesByGroupUseCase;
   final GetMealCategoriesUseCase? _getMealCategoriesUseCase;
+  final GetPopularTrainingUseCase? _getPopularTrainingUseCase;
 
   HomeCubit([
     this._getRandomMusclesUseCase,
     this._getMuscleGroupsUseCase,
     this._getMusclesByGroupUseCase,
     this._getMealCategoriesUseCase,
+    this._getPopularTrainingUseCase,
   ]) : super(const BaseState<HomeData>.initial());
 
   @override
@@ -38,9 +42,17 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
         _onSelectMuscleGroup(event);
       case RefreshRandomMusclesEvent():
         _onRefreshRandomMuscles(event);
+      case RefreshPopularTrainingEvent():
+        _onRefreshPopularTraining(event);
+      case RefreshHomeDataEvent():
+        _onGetHomeData(const GetHomeDataEvent());
       default:
         break;
     }
+  }
+
+  Future<void> refreshData() async {
+    await _onGetHomeData(const GetHomeDataEvent());
   }
 
   Future<void> _onGetHomeData(GetHomeDataEvent event) async {
@@ -51,6 +63,7 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
           isRandomMusclesLoading: true,
           isMusclesByGroupLoading: true,
           isMealCategoriesLoading: true,
+          isPopularTrainingsLoading: true,
         ),
       ),
     );
@@ -148,7 +161,39 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
       }
     }();
 
-    await Future.wait([randomMusclesTask, muscleGroupsTask, mealCategoriesTask]);
+    final popularTrainingTask = () async {
+      try {
+        final result = await (_getPopularTrainingUseCase?.call() ??
+            Future.value(const Success([])));
+        List<PopularTrainingEntity> popularTrainings = [];
+        if (result is Success<List<PopularTrainingEntity>>) {
+          popularTrainings = result.data;
+        }
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(
+            latest.copyWith(
+              popularTrainings: popularTrainings,
+              isPopularTrainingsLoading: false,
+            ),
+          ),
+        );
+      } catch (_) {
+        final latest = state.data ?? const HomeData();
+        emit(
+          BaseState.success(
+            latest.copyWith(isPopularTrainingsLoading: false),
+          ),
+        );
+      }
+    }();
+
+    await Future.wait([
+      randomMusclesTask,
+      muscleGroupsTask,
+      mealCategoriesTask,
+      popularTrainingTask,
+    ]);
   }
 
   Future<void> _onSelectMuscleGroup(SelectMuscleGroupEvent event) async {
@@ -209,6 +254,30 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
         (state.data ?? currentData).copyWith(
           randomMuscles: randomMuscles,
           isRandomMusclesLoading: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefreshPopularTraining(
+    RefreshPopularTrainingEvent event,
+  ) async {
+    final currentData = state.data ?? const HomeData();
+    emit(BaseState.success(currentData.copyWith(isPopularTrainingsLoading: true)));
+
+    final result = await (_getPopularTrainingUseCase?.call() ??
+        Future.value(const Success([])));
+
+    List<PopularTrainingEntity> popularTrainings = currentData.popularTrainings;
+    if (result is Success<List<PopularTrainingEntity>>) {
+      popularTrainings = result.data;
+    }
+
+    emit(
+      BaseState.success(
+        (state.data ?? currentData).copyWith(
+          popularTrainings: popularTrainings,
+          isPopularTrainingsLoading: false,
         ),
       ),
     );

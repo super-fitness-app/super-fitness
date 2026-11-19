@@ -17,6 +17,10 @@ class HomeData extends Equatable {
   final List<MealCategoryEntity> mealCategories;
   final bool isMealCategoriesLoading;
 
+  // Popular Training (Exercises by Random Level & Prime Mover Muscle)
+  final List<PopularTrainingEntity> popularTrainings;
+  final bool isPopularTrainingsLoading;
+
   const HomeData({
     this.randomMuscles = const [],
     this.isRandomMusclesLoading = false,
@@ -26,6 +30,8 @@ class HomeData extends Equatable {
     this.isMusclesByGroupLoading = false,
     this.mealCategories = const [],
     this.isMealCategoriesLoading = false,
+    this.popularTrainings = const [],
+    this.isPopularTrainingsLoading = false,
   });
 
   HomeData copyWith({
@@ -37,6 +43,8 @@ class HomeData extends Equatable {
     bool? isMusclesByGroupLoading,
     List<MealCategoryEntity>? mealCategories,
     bool? isMealCategoriesLoading,
+    List<PopularTrainingEntity>? popularTrainings,
+    bool? isPopularTrainingsLoading,
   }) {
     return HomeData(
       randomMuscles: randomMuscles ?? this.randomMuscles,
@@ -51,6 +59,9 @@ class HomeData extends Equatable {
       mealCategories: mealCategories ?? this.mealCategories,
       isMealCategoriesLoading:
           isMealCategoriesLoading ?? this.isMealCategoriesLoading,
+      popularTrainings: popularTrainings ?? this.popularTrainings,
+      isPopularTrainingsLoading:
+          isPopularTrainingsLoading ?? this.isPopularTrainingsLoading,
     );
   }
 
@@ -64,5 +75,7 @@ class HomeData extends Equatable {
     isMusclesByGroupLoading,
     mealCategories,
     isMealCategoriesLoading,
+    popularTrainings,
+    isPopularTrainingsLoading,
   ];
 }

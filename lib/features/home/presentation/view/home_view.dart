@@ -185,6 +185,36 @@ class _HomeViewState extends State<HomeView>
     );
   }
 
+  Widget _buildPopularLoadingCards() {
+    return SizedBox(
+      height: 200,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 2,
+        separatorBuilder: (context, index) => const SizedBox(width: 14),
+        itemBuilder: (context, index) => Container(
+          width: 280,
+          height: 195,
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Center(
+            child: SizedBox(
+              width: 28,
+              height: 28,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.primaryColor,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -207,7 +237,12 @@ class _HomeViewState extends State<HomeView>
           child: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               final homeData = state.data;
-              final popularTrainings = _getPopularTrainings(context);
+              final popularTrainings = (homeData?.popularTrainings ?? [])
+                  .where((item) => item.imageUrl.trim().isNotEmpty)
+                  .toList();
+              final isPopularLoading =
+                  homeData?.isPopularTrainingsLoading ?? false;
+              final fallbackTrainings = _getPopularTrainings(context);
 
               // 1. Recommendation Today data
               final isTodayLoading = homeData?.isRandomMusclesLoading ?? false;
@@ -230,15 +265,21 @@ class _HomeViewState extends State<HomeView>
               final isMealsLoading = homeData?.isMealCategoriesLoading ?? false;
               final mealCategories = homeData?.mealCategories ?? [];
 
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 16,
-                  bottom: 110,
-                ),
-                child: Column(
+              return RefreshIndicator(
+                color: AppColors.primaryColor,
+                backgroundColor: AppColors.surface,
+                onRefresh: () => _cubit.refreshData(),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
+                  ),
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 16,
+                    bottom: 110,
+                  ),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 1. Header Section
@@ -355,29 +396,46 @@ class _HomeViewState extends State<HomeView>
                     // 6. Popular Training Section
                     SectionHeaderWidget(title: context.l10n.popularTraining),
                     const SizedBox(height: 14),
-                    SizedBox(
-                      height: 200,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: popularTrainings.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 14),
-                        itemBuilder: (context, index) {
-                          final item = popularTrainings[index];
-                          return PopularTrainingCardWidget(
-                            title: item.title,
-                            taskCountText: item.taskCountText,
-                            levelText: item.levelText,
-                            levelColor: item.levelColor,
-                            imageUrl: item.imageUrl,
-                          );
-                        },
+                    if (isPopularLoading && popularTrainings.isEmpty)
+                      _buildPopularLoadingCards()
+                    else
+                      SizedBox(
+                        height: 200,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: popularTrainings.isNotEmpty
+                              ? popularTrainings.length
+                              : fallbackTrainings.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 14),
+                          itemBuilder: (context, index) {
+                            if (popularTrainings.isNotEmpty) {
+                              final item = popularTrainings[index];
+                              return PopularTrainingCardWidget(
+                                title: item.title,
+                                taskCountText:
+                                    context.l10n.tasksCount(item.totalTasks),
+                                levelText: item.levelText,
+                                levelColor: item.levelColor,
+                                imageUrl: item.imageUrl,
+                              );
+                            }
+                            final item = fallbackTrainings[index];
+                            return PopularTrainingCardWidget(
+                              title: item.title,
+                              taskCountText: item.taskCountText,
+                              levelText: item.levelText,
+                              levelColor: item.levelColor,
+                              imageUrl: item.imageUrl,
+                            );
+                          },
+                        ),
                       ),
-                    ),
                   ],
                 ),
-              );
+              ),
+            );
             },
           ),
         ),
