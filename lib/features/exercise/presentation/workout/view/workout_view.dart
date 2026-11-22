@@ -21,15 +21,33 @@ class WorkoutView extends StatefulWidget {
 class _WorkoutViewState extends State<WorkoutView>
     with BaseViewMixin<WorkoutView, WorkoutCubit, BaseEvent> {
   late final WorkoutCubit _cubit;
+  bool _ownsCubit = false;
 
   @override
   WorkoutCubit get cubit => _cubit;
 
   @override
   void initState() {
-    _cubit = widget.cubit ?? getIt<WorkoutCubit>();
+    if (widget.cubit != null) {
+      _cubit = widget.cubit!;
+      _ownsCubit = false;
+    } else if (getIt.isRegistered<WorkoutCubit>()) {
+      _cubit = getIt<WorkoutCubit>();
+      _ownsCubit = false;
+    } else {
+      _cubit = WorkoutCubit();
+      _ownsCubit = true;
+    }
     super.initState();
     cubit.doEvent(const FetchMuscleGroupsEvent());
+  }
+
+  @override
+  void dispose() {
+    if (_ownsCubit) {
+      _cubit.close();
+    }
+    super.dispose();
   }
 
   @override
@@ -58,8 +76,14 @@ class _WorkoutBody extends StatelessWidget {
         _DarkOverlay(),
         SafeArea(
           child: BlocBuilder<WorkoutCubit, WorkoutState>(
-            builder: (context, state) =>
-                _WorkoutScrollView(state: state, cubit: cubit),
+            builder: (context, state) => Column(
+              children: [
+                _WorkoutHeader(state: state, cubit: cubit),
+                Expanded(
+                  child: _WorkoutScrollView(state: state, cubit: cubit),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -91,12 +115,7 @@ class _WorkoutScrollView extends StatelessWidget {
   Widget build(BuildContext context) {
     final muscles = state.data?.muscles ?? [];
     return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: _WorkoutHeader(state: state, cubit: cubit),
-        ),
-        _WorkoutContent(state: state, muscles: muscles),
-      ],
+      slivers: [_WorkoutContent(state: state, muscles: muscles, cubit: cubit)],
     );
   }
 }
@@ -131,16 +150,36 @@ class _WorkoutTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 16),
-      child: Text(
-        'Workouts',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: AppColors.white,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
-        ),
+    final canPop = Navigator.canPop(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (canPop)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 16),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: AppColors.white,
+                  ),
+                  onPressed: () => Navigator.maybePop(context),
+                ),
+              ),
+            ),
+          const Text(
+            'Workouts',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -149,13 +188,19 @@ class _WorkoutTitle extends StatelessWidget {
 class _WorkoutContent extends StatelessWidget {
   final WorkoutState state;
   final List<MuscleEntity> muscles;
+  final WorkoutCubit cubit;
 
-  const _WorkoutContent({required this.state, required this.muscles});
+  const _WorkoutContent({
+    required this.state,
+    required this.muscles,
+    required this.cubit,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (state.isLoading && muscles.isEmpty) {
       return const SliverFillRemaining(
+        hasScrollBody: false,
         child: Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
@@ -163,16 +208,33 @@ class _WorkoutContent extends StatelessWidget {
     }
     if (state.failure != null && muscles.isEmpty) {
       return SliverFillRemaining(
+        hasScrollBody: false,
         child: Center(
-          child: Text(
-            state.errorMessage ?? 'Something went wrong',
-            style: const TextStyle(color: AppColors.white),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                state.errorMessage ?? 'Something went wrong',
+                style: const TextStyle(color: AppColors.white),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
+                onPressed: () => cubit.doEvent(const FetchMuscleGroupsEvent()),
+                child: const Text('Retry'),
+              ),
+            ],
           ),
         ),
       );
     }
     if (muscles.isEmpty) {
       return const SliverFillRemaining(
+        hasScrollBody: false,
         child: Center(
           child: Text(
             'No exercises found',
@@ -182,7 +244,7 @@ class _WorkoutContent extends StatelessWidget {
       );
     }
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       sliver: SliverGrid(
         delegate: SliverChildBuilderDelegate(
           (context, index) => WorkoutMuscleCard(muscle: muscles[index]),

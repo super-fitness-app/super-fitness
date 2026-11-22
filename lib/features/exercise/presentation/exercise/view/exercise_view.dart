@@ -130,7 +130,12 @@ class _ExerciseViewState extends State<ExerciseView>
               ),
             ),
 
-            Positioned(top: 50, left: 0, right: 335, child: ExerciseHeader()),
+            Positioned.directional(
+              textDirection: Directionality.of(context),
+              top: 50,
+              start: 16,
+              child: const ExerciseHeader(),
+            ),
 
             Positioned(
               top: 150,

@@ -15,10 +15,10 @@ abstract class ExerciseApiClient {
   @factoryMethod
   factory ExerciseApiClient(Dio dio) = _ExerciseApiClient;
 
-  @GET('/muscles')
+  @GET(Endpoints.muscles)
   Future<MuscleGroupsResponseModel> getMuscleGroups();
 
-  @GET('/musclesGroup/by-muscle-group')
+  @GET(Endpoints.musclesByGroup)
   Future<MusclesByGroupResponseModel> getMusclesByGroup(
     @Query('muscleGroupId') String muscleGroupId,
   );

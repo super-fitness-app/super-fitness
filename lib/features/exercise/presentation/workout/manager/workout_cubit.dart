@@ -14,10 +14,10 @@ part 'workout_state.dart';
 
 @injectable
 class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
-  final GetMuscleGroupsUseCase _getMuscleGroupsUseCase;
-  final GetMusclesByGroupUseCase _getMusclesByGroupUseCase;
+  final GetMuscleGroupsUseCase? _getMuscleGroupsUseCase;
+  final GetMusclesByGroupUseCase? _getMusclesByGroupUseCase;
 
-  WorkoutCubit(this._getMuscleGroupsUseCase, this._getMusclesByGroupUseCase)
+  WorkoutCubit([this._getMuscleGroupsUseCase, this._getMusclesByGroupUseCase])
     : super(const BaseState<WorkoutData>.initial());
 
   @override
@@ -31,6 +31,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
   }
 
   Future<void> _onFetchMuscleGroups() async {
+    if (_getMuscleGroupsUseCase == null) return;
     emit(BaseState<WorkoutData>.loading(data: state.data));
     final result = await _getMuscleGroupsUseCase();
     switch (result) {
@@ -57,6 +58,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, BaseEvent> {
   }
 
   Future<void> _fetchMusclesForGroup(String groupId) async {
+    if (_getMusclesByGroupUseCase == null) return;
     final updated = (state.data ?? const WorkoutData()).copyWith(
       selectedGroupId: groupId,
       muscles: [],

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/session/user_profile_notifier.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/ui/extensions/context_extension.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart'
+    as exercise_entity;
 import 'package:super_fitness/features/home/presentation/manager/home_cubit.dart';
 import 'package:super_fitness/features/home/presentation/view/widgets/category_section_widget.dart';
 import 'package:super_fitness/features/home/presentation/view/widgets/floating_bottom_nav_bar.dart';
@@ -305,7 +309,11 @@ class _HomeViewState extends State<HomeView>
                       const SizedBox(height: 24),
 
                       // 2. Category Section
-                      const CategorySectionWidget(),
+                      CategorySectionWidget(
+                        onCategoryTap: (index) {
+                          context.push(AppRoutes.workout);
+                        },
+                      ),
                       const SizedBox(height: 24),
 
                       // 3. Recommendation To Day Section (Random Prime Mover Muscles)
@@ -332,6 +340,16 @@ class _HomeViewState extends State<HomeView>
                                 return RecommendationCardWidget(
                                   title: muscle.name,
                                   imageUrl: muscle.imageUrl,
+                                  onTap: () {
+                                    context.push(
+                                      AppRoutes.exercise,
+                                      extra: exercise_entity.MuscleEntity(
+                                        id: muscle.id,
+                                        name: muscle.name,
+                                        image: muscle.imageUrl,
+                                      ),
+                                    );
+                                  },
                                 );
                               }
                               final fallback = _getTodayFallback(
@@ -340,6 +358,9 @@ class _HomeViewState extends State<HomeView>
                               return RecommendationCardWidget(
                                 title: fallback.title,
                                 imageUrl: fallback.imageUrl,
+                                onTap: () {
+                                  context.push(AppRoutes.workout);
+                                },
                               );
                             },
                           ),
@@ -355,6 +376,29 @@ class _HomeViewState extends State<HomeView>
                             ? selectedGroupIndex
                             : 0,
                         isLoadingWorkouts: isGroupMusclesLoading,
+                        onSeeAllTap: () => context.push(AppRoutes.workout),
+                        onWorkoutTap: (workout) {
+                          final matching = groupMuscles.where(
+                            (m) => m.name == workout.title,
+                          );
+                          final matched = matching.isNotEmpty
+                              ? matching.first
+                              : (groupMuscles.isNotEmpty
+                                    ? groupMuscles.first
+                                    : null);
+                          if (matched != null) {
+                            context.push(
+                              AppRoutes.exercise,
+                              extra: exercise_entity.MuscleEntity(
+                                id: matched.id,
+                                name: matched.name,
+                                image: matched.imageUrl,
+                              ),
+                            );
+                          } else {
+                            context.push(AppRoutes.workout);
+                          }
+                        },
                         workouts: groupMuscles.isNotEmpty
                             ? groupMuscles
                                   .map(
@@ -379,7 +423,7 @@ class _HomeViewState extends State<HomeView>
                       SectionHeaderWidget(
                         title: context.l10n.recommendationForYou,
                         actionTitle: context.l10n.seeAll,
-                        onActionTap: () {},
+                        onActionTap: () => context.push(AppRoutes.food),
                       ),
                       const SizedBox(height: 14),
                       if (isMealsLoading && mealCategories.isEmpty)
@@ -401,6 +445,7 @@ class _HomeViewState extends State<HomeView>
                                 return RecommendationCardWidget(
                                   title: meal.name,
                                   imageUrl: meal.thumbnailUrl,
+                                  onTap: () => context.push(AppRoutes.food),
                                 );
                               }
                               final fallback = _getMealsFallback(
@@ -409,6 +454,7 @@ class _HomeViewState extends State<HomeView>
                               return RecommendationCardWidget(
                                 title: fallback.title,
                                 imageUrl: fallback.imageUrl,
+                                onTap: () => context.push(AppRoutes.food),
                               );
                             },
                           ),
@@ -442,6 +488,7 @@ class _HomeViewState extends State<HomeView>
                                   levelText: item.levelText,
                                   levelColor: item.levelColor,
                                   imageUrl: item.imageUrl,
+                                  onTap: () => context.push(AppRoutes.workout),
                                 );
                               }
                               final item = fallbackTrainings[index];
@@ -451,6 +498,7 @@ class _HomeViewState extends State<HomeView>
                                 levelText: item.levelText,
                                 levelColor: item.levelColor,
                                 imageUrl: item.imageUrl,
+                                onTap: () => context.push(AppRoutes.workout),
                               );
                             },
                           ),
