@@ -15,6 +15,7 @@ import 'package:super_fitness/features/auth/presentation/onboarding/view/onboard
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
 import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
 import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
 import 'package:super_fitness/features/home/presentation/view/home_view.dart';
@@ -41,6 +42,7 @@ abstract final class AppRoutes {
   static const main = '/main';
   static const workout = '/workout';
   static const exercise = '/exercise';
+  static const exerciseview = '/exercise-details';
   static const food = '/food';
   static const foodDetails = '/food-details';
   static const appVideoPlayer = '/app-video-player';
@@ -160,7 +162,12 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.exercise,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const ExerciseView(),
+          builder: (context, state) {
+            final muscle = state.extra is MuscleEntity
+                ? state.extra! as MuscleEntity
+                : const MuscleEntity(id: '', name: '', image: '');
+            return ExerciseView(muscle: muscle);
+          },
         ),
         GoRoute(
           path: AppRoutes.food,

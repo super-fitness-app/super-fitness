@@ -152,5 +152,29 @@
   "fat": "دهون",
   "failedToLoadMealDetails": "فشل في تحميل تفاصيل الوجبة",
   "playVideo": "تشغيل الفيديو",
-  "noIngredientsAvailable": "لا توجد مكونات متوفرة"
+  "noIngredientsAvailable": "لا توجد مكونات متوفرة",
+
+  "chestExercise": "تمارين الصدر",
+  "exerciseDescription": "ابدأ رحلتك الرياضية مع تمارين الصدر.",
+  "durationMinutes": "{minutes} دقيقة",
+  "@durationMinutes": {
+    "description": "مدة التمرين بالدقائق",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} سعرة حرارية",
+  "@calories": {
+    "description": "عدد السعرات الحرارية",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "متقدم",
+  "failedToLoadExercises": "فشل تحميل التمارين",
+  "noExercisesFound": "لم يتم العثور على تمارين"
 }

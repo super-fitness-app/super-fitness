@@ -22,4 +22,8 @@ abstract final class AppImages {
   static const String step4 = 'assets/images/auth/Group 14.png';
   static const String step5 = 'assets/images/auth/Group 15.png';
   static const String step6 = 'assets/images/auth/Group 16.png';
+
+  static const String exerciseBackground = 'assets/workout/exercise_bg.png';
+  static const String bodyBuilder = 'assets/workout/body_builder.jpg';
+  static const String workoutBackground = 'assets/images/back_workouts.png';
 }

@@ -163,5 +163,29 @@
   "fat": "Fat",
   "failedToLoadMealDetails": "Failed to load meal details",
   "playVideo": "Play Video",
-  "noIngredientsAvailable": "No ingredients available"
+  "noIngredientsAvailable": "No ingredients available",
+
+  "durationMinutes": "{minutes} Min",
+  "@durationMinutes": {
+    "description": "Exercise duration in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} Cal",
+  "@calories": {
+    "description": "Exercise calories",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "Advanced",
+  "failedToLoadExercises": "Failed to load exercises",
+  "noExercisesFound": "No exercises found",
+  "chestExercise": "Chest Exercise",
+  "exerciseDescription": "Start your fitness journey with chest exercises."
 }

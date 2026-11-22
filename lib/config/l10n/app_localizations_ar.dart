@@ -445,4 +445,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noIngredientsAvailable => 'لا توجد مكونات متوفرة';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories سعرة حرارية';
+  }
+
+  @override
+  String get advanced => 'متقدم';
+
+  @override
+  String get failedToLoadExercises => 'فشل تحميل التمارين';
+
+  @override
+  String get noExercisesFound => 'لم يتم العثور على تمارين';
+
+  @override
+  String get chestExercise => 'تمارين الصدر';
+
+  @override
+  String get exerciseDescription => 'ابدأ رحلتك الرياضية مع تمارين الصدر.';
 }

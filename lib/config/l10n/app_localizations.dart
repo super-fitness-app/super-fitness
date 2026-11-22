@@ -919,6 +919,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No ingredients available'**
   String get noIngredientsAvailable;
+
+  /// Exercise duration in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} Min'**
+  String durationMinutes(int minutes);
+
+  /// Exercise calories
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} Cal'**
+  String calories(int calories);
+
+  /// No description provided for @advanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
+
+  /// No description provided for @failedToLoadExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load exercises'**
+  String get failedToLoadExercises;
+
+  /// No description provided for @noExercisesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises found'**
+  String get noExercisesFound;
+
+  /// No description provided for @chestExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest Exercise'**
+  String get chestExercise;
+
+  /// No description provided for @exerciseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your fitness journey with chest exercises.'**
+  String get exerciseDescription;
 }
 
 class _AppLocalizationsDelegate

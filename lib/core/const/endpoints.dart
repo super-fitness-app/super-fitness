@@ -17,9 +17,11 @@ abstract final class Endpoints {
   static const String randomMuscles = 'muscles/random';
   static const String muscles = 'muscles';
   static const String musclesGroup = 'musclesGroup/{id}';
+  static const String musclesByGroup = 'musclesGroup/by-muscle-group';
 
   // Exercise & Levels endpoints
   static const String levels = 'levels';
+  static const String getAllDifficultyLevels = 'levels';
   static const String exercisesByMuscleDifficulty =
       'exercises/by-muscle-difficulty';
 

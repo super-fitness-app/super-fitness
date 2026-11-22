@@ -449,4 +449,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noIngredientsAvailable => 'No ingredients available';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes Min';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories Cal';
+  }
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get failedToLoadExercises => 'Failed to load exercises';
+
+  @override
+  String get noExercisesFound => 'No exercises found';
+
+  @override
+  String get chestExercise => 'Chest Exercise';
+
+  @override
+  String get exerciseDescription =>
+      'Start your fitness journey with chest exercises.';
 }
