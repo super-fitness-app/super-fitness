@@ -64,12 +64,7 @@ void main() {
     testWidgets('falls back to default image URL when imageUrl is empty', (
       tester,
     ) async {
-      await tester.pumpWidget(
-        buildWidget(
-          title: 'Jogging',
-          imageUrl: '',
-        ),
-      );
+      await tester.pumpWidget(buildWidget(title: 'Jogging', imageUrl: ''));
       await tester.pump();
 
       expect(find.text('Jogging'), findsOneWidget);

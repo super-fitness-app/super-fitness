@@ -54,9 +54,7 @@ class ProfileView extends StatelessWidget {
                               width: 2.5,
                             ),
                           ),
-                          child: ClipOval(
-                            child: _buildAvatarImage(photo),
-                          ),
+                          child: ClipOval(child: _buildAvatarImage(photo)),
                         );
                       },
                     ),
@@ -64,7 +62,8 @@ class ProfileView extends StatelessWidget {
                       right: 4,
                       bottom: 4,
                       child: GestureDetector(
-                        onTap: () => _showChangePhotoDialog(context, sessionService),
+                        onTap: () =>
+                            _showChangePhotoDialog(context, sessionService),
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: const BoxDecoration(
@@ -87,8 +86,13 @@ class ProfileView extends StatelessWidget {
 
               // Change Photo Action Button
               TextButton.icon(
-                onPressed: () => _showChangePhotoDialog(context, sessionService),
-                icon: const Icon(Icons.edit, color: AppColors.primaryColor, size: 18),
+                onPressed: () =>
+                    _showChangePhotoDialog(context, sessionService),
+                icon: const Icon(
+                  Icons.edit,
+                  color: AppColors.primaryColor,
+                  size: 18,
+                ),
                 label: const Text(
                   'Change Photo',
                   style: TextStyle(
@@ -161,7 +165,10 @@ class ProfileView extends StatelessWidget {
     }
   }
 
-  void _showChangePhotoDialog(BuildContext context, SessionService? sessionService) {
+  void _showChangePhotoDialog(
+    BuildContext context,
+    SessionService? sessionService,
+  ) {
     final textController = TextEditingController();
 
     showModalBottomSheet<void>(
@@ -232,7 +239,10 @@ class ProfileView extends StatelessWidget {
                         height: 52,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.grey50, width: 1.5),
+                          border: Border.all(
+                            color: AppColors.grey50,
+                            width: 1.5,
+                          ),
                         ),
                         child: ClipOval(
                           child: Image.network(
@@ -240,13 +250,13 @@ class ProfileView extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                              color: AppColors.surface,
-                              child: const Icon(
-                                Icons.person,
-                                color: AppColors.grey40,
-                                size: 24,
-                              ),
-                            ),
+                                  color: AppColors.surface,
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: AppColors.grey40,
+                                    size: 24,
+                                  ),
+                                ),
                           ),
                         ),
                       ),
@@ -267,7 +277,10 @@ class ProfileView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -289,7 +302,10 @@ class ProfileView extends StatelessWidget {
                   ),
                   child: const Text(
                     'Save Photo',
-                    style: TextStyle(color: AppColors.background, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: AppColors.background,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

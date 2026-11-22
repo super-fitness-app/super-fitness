@@ -33,30 +33,27 @@ class MealDetailsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        category,
-        area,
-        instructions,
-        imageUrl,
-        youtubeUrl,
-        sourceUrl,
-        ingredients,
-        energy,
-        protein,
-        carbs,
-        fat,
-      ];
+    id,
+    name,
+    category,
+    area,
+    instructions,
+    imageUrl,
+    youtubeUrl,
+    sourceUrl,
+    ingredients,
+    energy,
+    protein,
+    carbs,
+    fat,
+  ];
 }
 
 class MealIngredientEntity extends Equatable {
   final String name;
   final String? measure;
 
-  const MealIngredientEntity({
-    required this.name,
-    this.measure,
-  });
+  const MealIngredientEntity({required this.name, this.measure});
 
   @override
   List<Object?> get props => [name, measure];

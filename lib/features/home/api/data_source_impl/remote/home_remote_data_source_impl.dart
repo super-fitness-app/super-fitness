@@ -40,7 +40,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty({
+  Future<ExercisesByMuscleDifficultyResponseDto>
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
   }) {

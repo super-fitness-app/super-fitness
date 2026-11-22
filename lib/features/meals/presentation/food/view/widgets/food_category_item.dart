@@ -33,12 +33,12 @@ class FoodCategoryItem extends StatelessWidget {
   }
 
   BoxDecoration get _decoration => BoxDecoration(
-        color: isSelected ? AppColors.primary : AppColors.transparent,
-        borderRadius: const BorderRadius.all(Radius.circular(100)),
-      );
+    color: isSelected ? AppColors.primary : AppColors.transparent,
+    borderRadius: const BorderRadius.all(Radius.circular(100)),
+  );
 
   TextStyle get _textStyle => AppTextStyles.medium16.copyWith(
-        color: isSelected ? AppColors.white : AppColors.grey30,
-        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-      );
+    color: isSelected ? AppColors.white : AppColors.grey30,
+    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+  );
 }

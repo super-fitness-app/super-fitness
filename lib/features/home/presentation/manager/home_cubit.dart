@@ -70,8 +70,9 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     final randomMusclesTask = () async {
       try {
-        final result = await (_getRandomMusclesUseCase?.call() ??
-            Future.value(const Success([])));
+        final result =
+            await (_getRandomMusclesUseCase?.call() ??
+                Future.value(const Success([])));
         List<MuscleEntity> randomMuscles = [];
         if (result is Success<List<MuscleEntity>>) {
           randomMuscles = result.data
@@ -90,16 +91,15 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
         );
       } catch (_) {
         final latest = state.data ?? const HomeData();
-        emit(
-          BaseState.success(latest.copyWith(isRandomMusclesLoading: false)),
-        );
+        emit(BaseState.success(latest.copyWith(isRandomMusclesLoading: false)));
       }
     }();
 
     final muscleGroupsTask = () async {
       try {
-        final result = await (_getMuscleGroupsUseCase?.call() ??
-            Future.value(const Success([])));
+        final result =
+            await (_getMuscleGroupsUseCase?.call() ??
+                Future.value(const Success([])));
         List<MuscleGroupEntity> muscleGroups = [];
         String? initialGroupId;
         if (result is Success<List<MuscleGroupEntity>>) {
@@ -138,8 +138,9 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     final mealCategoriesTask = () async {
       try {
-        final result = await (_getMealCategoriesUseCase?.call() ??
-            Future.value(const Success([])));
+        final result =
+            await (_getMealCategoriesUseCase?.call() ??
+                Future.value(const Success([])));
         List<MealCategoryEntity> mealCategories = [];
         if (result is Success<List<MealCategoryEntity>>) {
           mealCategories = result.data;
@@ -163,8 +164,9 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     final popularTrainingTask = () async {
       try {
-        final result = await (_getPopularTrainingUseCase?.call() ??
-            Future.value(const Success([])));
+        final result =
+            await (_getPopularTrainingUseCase?.call() ??
+                Future.value(const Success([])));
         List<PopularTrainingEntity> popularTrainings = [];
         if (result is Success<List<PopularTrainingEntity>>) {
           popularTrainings = result.data;
@@ -181,9 +183,7 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
       } catch (_) {
         final latest = state.data ?? const HomeData();
         emit(
-          BaseState.success(
-            latest.copyWith(isPopularTrainingsLoading: false),
-          ),
+          BaseState.success(latest.copyWith(isPopularTrainingsLoading: false)),
         );
       }
     }();
@@ -242,11 +242,10 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
 
     List<MuscleEntity> randomMuscles = currentData.randomMuscles;
     if (result is Success<List<MuscleEntity>>) {
-      randomMuscles =
-          result.data
-              .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
-              .take(6)
-              .toList();
+      randomMuscles = result.data
+          .where((muscle) => muscle.imageUrl.trim().isNotEmpty)
+          .take(6)
+          .toList();
     }
 
     emit(
@@ -263,10 +262,13 @@ class HomeCubit extends BaseCubit<HomeState, BaseEvent> {
     RefreshPopularTrainingEvent event,
   ) async {
     final currentData = state.data ?? const HomeData();
-    emit(BaseState.success(currentData.copyWith(isPopularTrainingsLoading: true)));
+    emit(
+      BaseState.success(currentData.copyWith(isPopularTrainingsLoading: true)),
+    );
 
-    final result = await (_getPopularTrainingUseCase?.call() ??
-        Future.value(const Success([])));
+    final result =
+        await (_getPopularTrainingUseCase?.call() ??
+            Future.value(const Success([])));
 
     List<PopularTrainingEntity> popularTrainings = currentData.popularTrainings;
     if (result is Success<List<PopularTrainingEntity>>) {

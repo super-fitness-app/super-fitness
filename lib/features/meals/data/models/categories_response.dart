@@ -6,9 +6,7 @@ part 'categories_response.g.dart';
 class CategoriesResponse {
   final List<Category>? categories;
 
-  const CategoriesResponse({
-    this.categories,
-  });
+  const CategoriesResponse({this.categories});
 
   factory CategoriesResponse.fromJson(Map<String, dynamic> json) =>
       _$CategoriesResponseFromJson(json);
@@ -30,12 +28,7 @@ class Category {
   @JsonKey(name: 'strCategoryDescription')
   final String? description;
 
-  const Category({
-    this.id,
-    this.name,
-    this.imageUrl,
-    this.description,
-  });
+  const Category({this.id, this.name, this.imageUrl, this.description});
 
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);

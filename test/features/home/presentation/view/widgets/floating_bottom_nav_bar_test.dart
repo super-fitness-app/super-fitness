@@ -28,12 +28,7 @@ void main() {
     testWidgets('renders all navigation items and highlights current index', (
       tester,
     ) async {
-      await tester.pumpWidget(
-        buildWidget(
-          currentIndex: 0,
-          onTap: (_) {},
-        ),
-      );
+      await tester.pumpWidget(buildWidget(currentIndex: 0, onTap: (_) {}));
       await tester.pump();
 
       expect(find.byType(FloatingBottomNavBar), findsOneWidget);

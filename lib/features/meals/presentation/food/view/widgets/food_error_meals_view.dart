@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_dimensions.dart';
@@ -32,10 +32,7 @@ class FoodErrorMealsView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppDimensions.defaultScreenPadding),
-            AppButton(
-              text: localizations.retry,
-              onPressed: onRetry,
-            ),
+            AppButton(text: localizations.retry, onPressed: onRetry),
           ],
         ),
       ),

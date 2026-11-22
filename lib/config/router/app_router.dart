@@ -179,8 +179,9 @@ abstract final class AppRouter {
               _ => '',
             };
             return BlocProvider(
-              create: (_) => getIt<FoodDetailsCubit>()
-                ..doEvent(LoadMealDetailsEvent(mealId)),
+              create: (_) =>
+                  getIt<FoodDetailsCubit>()
+                    ..doEvent(LoadMealDetailsEvent(mealId)),
               child: FoodDetailsView(mealId: mealId),
             );
           },

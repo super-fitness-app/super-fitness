@@ -25,7 +25,9 @@ class GetPopularTrainingUseCase {
 
     if (levelsResult is! Success<List<DifficultyLevelEntity>> ||
         musclesResult is! Success<List<MuscleEntity>>) {
-      return const Failure(ServerMessageFailure('Failed to load popular training data'));
+      return const Failure(
+        ServerMessageFailure('Failed to load popular training data'),
+      );
     }
 
     final levels = levelsResult.data;
@@ -37,8 +39,8 @@ class GetPopularTrainingUseCase {
       return const Success([]);
     }
 
-    final shuffledLevels =
-        List<DifficultyLevelEntity>.from(levels)..shuffle(rng);
+    final shuffledLevels = List<DifficultyLevelEntity>.from(levels)
+      ..shuffle(rng);
     final shuffledMuscles = List<MuscleEntity>.from(muscles)..shuffle(rng);
 
     // 2. Select distinct random levels for items to make them differ from one another
@@ -65,10 +67,9 @@ class GetPopularTrainingUseCase {
 
     for (final res in resultsList) {
       if (res is Success<List<PopularTrainingEntity>>) {
-        final validList = res.data
-            .where((e) => e.imageUrl.trim().isNotEmpty)
-            .toList()
-          ..shuffle(rng);
+        final validList =
+            res.data.where((e) => e.imageUrl.trim().isNotEmpty).toList()
+              ..shuffle(rng);
         if (validList.isNotEmpty) {
           selectedExercises.add(validList.first);
           if (validList.length > 1) {
@@ -95,12 +96,12 @@ class GetPopularTrainingUseCase {
         final selectedLevel = shuffledLevels[i % shuffledLevels.length];
         final selectedMuscle = shuffledMuscles[i];
 
-        final exercisesResult =
-            await _homeRepo.getExercisesByMuscleAndDifficulty(
-          difficultyLevelId: selectedLevel.id,
-          primeMoverMuscleId: selectedMuscle.id,
-          levelName: selectedLevel.name,
-        );
+        final exercisesResult = await _homeRepo
+            .getExercisesByMuscleAndDifficulty(
+              difficultyLevelId: selectedLevel.id,
+              primeMoverMuscleId: selectedMuscle.id,
+              levelName: selectedLevel.name,
+            );
 
         if (exercisesResult is Success<List<PopularTrainingEntity>>) {
           final exercises = exercisesResult.data
@@ -130,8 +131,9 @@ class GetPopularTrainingUseCase {
       final ex = selectedExercises[i];
       String level = ex.levelText.trim();
       if (level.isEmpty || usedLevels.contains(level)) {
-        final unused =
-            availableLevelNames.where((l) => !usedLevels.contains(l)).toList();
+        final unused = availableLevelNames
+            .where((l) => !usedLevels.contains(l))
+            .toList();
         level = unused.isNotEmpty
             ? unused.first
             : availableLevelNames[i % availableLevelNames.length];

@@ -37,7 +37,8 @@ abstract class HomeApiClient {
   Future<DifficultyLevelsResponseDto> getDifficultyLevels();
 
   @GET(Endpoints.exercisesByMuscleDifficulty)
-  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty(
+  Future<ExercisesByMuscleDifficultyResponseDto>
+  getExercisesByMuscleAndDifficulty(
     @Query('difficultyLevelId') String difficultyLevelId,
     @Query('primeMoverMuscleId') String primeMoverMuscleId,
   );

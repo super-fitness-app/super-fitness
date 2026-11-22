@@ -39,7 +39,9 @@ void main() {
       expect(find.text("Let's Start Your Day"), findsOneWidget);
     });
 
-    testWidgets('renders dynamic user name when userName is provided', (tester) async {
+    testWidgets('renders dynamic user name when userName is provided', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildWidget(userName: 'Mohamed'));
       await tester.pump();
 

@@ -21,8 +21,7 @@ class ExercisesByMuscleDifficultyResponseDto {
 
   factory ExercisesByMuscleDifficultyResponseDto.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$ExercisesByMuscleDifficultyResponseDtoFromJson(json);
+  ) => _$ExercisesByMuscleDifficultyResponseDtoFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$ExercisesByMuscleDifficultyResponseDtoToJson(this);

@@ -55,15 +55,23 @@ class FakeHomeRepo implements HomeRepo {
 
   @override
   Future<ApiResults<List<MuscleEntity>>> getRandomMuscles() async {
-    if (throwException) throw Exception('Unexpected error');
-    if (failRandomMuscles) return const Failure(ServerMessageFailure('Random muscles error'));
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
+    if (failRandomMuscles) {
+      return const Failure(ServerMessageFailure('Random muscles error'));
+    }
     return Success(randomMuscles);
   }
 
   @override
   Future<ApiResults<List<MuscleGroupEntity>>> getMuscleGroups() async {
-    if (throwException) throw Exception('Unexpected error');
-    if (failMuscleGroups) return const Failure(ServerMessageFailure('Muscle groups error'));
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
+    if (failMuscleGroups) {
+      return const Failure(ServerMessageFailure('Muscle groups error'));
+    }
     return Success(muscleGroups);
   }
 
@@ -71,21 +79,31 @@ class FakeHomeRepo implements HomeRepo {
   Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(
     String id,
   ) async {
-    if (throwException) throw Exception('Unexpected error');
-    if (failGroupMuscles) return const Failure(ServerMessageFailure('Group muscles error'));
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
+    if (failGroupMuscles) {
+      return const Failure(ServerMessageFailure('Group muscles error'));
+    }
     return Success(groupMuscles);
   }
 
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async {
-    if (throwException) throw Exception('Unexpected error');
-    if (failMealCategories) return const Failure(ServerMessageFailure('Meal categories error'));
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
+    if (failMealCategories) {
+      return const Failure(ServerMessageFailure('Meal categories error'));
+    }
     return Success(mealCategories);
   }
 
   @override
   Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels() async {
-    if (throwException) throw Exception('Unexpected error');
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
     if (failDifficultyLevels) {
       return const Failure(ServerMessageFailure('Levels error'));
     }
@@ -94,13 +112,15 @@ class FakeHomeRepo implements HomeRepo {
 
   @override
   Future<ApiResults<List<PopularTrainingEntity>>>
-      getExercisesByMuscleAndDifficulty({
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
     String? fallbackImageUrl,
     String? levelName,
   }) async {
-    if (throwException) throw Exception('Unexpected error');
+    if (throwException) {
+      throw Exception('Unexpected error');
+    }
     if (failExercises) {
       return const Failure(ServerMessageFailure('Exercises error'));
     }
@@ -258,24 +278,27 @@ void main() {
       );
     });
 
-    test('GetHomeDataEvent handles exceptions thrown in tasks gracefully', () async {
-      fakeRepo.throwException = true;
+    test(
+      'GetHomeDataEvent handles exceptions thrown in tasks gracefully',
+      () async {
+        fakeRepo.throwException = true;
 
-      homeCubit.doEvent(const GetHomeDataEvent());
+        homeCubit.doEvent(const GetHomeDataEvent());
 
-      await expectLater(
-        homeCubit.stream,
-        emitsThrough(
-          predicate<HomeState>((state) {
-            final data = state.data;
-            return data != null &&
-                !data.isRandomMusclesLoading &&
-                !data.isMusclesByGroupLoading &&
-                !data.isMealCategoriesLoading;
-          }),
-        ),
-      );
-    });
+        await expectLater(
+          homeCubit.stream,
+          emitsThrough(
+            predicate<HomeState>((state) {
+              final data = state.data;
+              return data != null &&
+                  !data.isRandomMusclesLoading &&
+                  !data.isMusclesByGroupLoading &&
+                  !data.isMealCategoriesLoading;
+            }),
+          ),
+        );
+      },
+    );
 
     test('GetHomeDataEvent handles empty muscle groups gracefully', () async {
       fakeRepo.muscleGroups = [];
@@ -296,16 +319,19 @@ void main() {
       );
     });
 
-    test('SelectMuscleGroupEvent ignores selection if already selected', () async {
-      homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
-      await pumpEventQueue();
+    test(
+      'SelectMuscleGroupEvent ignores selection if already selected',
+      () async {
+        homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
+        await pumpEventQueue();
 
-      final statesCountBefore = homeCubit.state;
-      homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
-      await pumpEventQueue();
+        final statesCountBefore = homeCubit.state;
+        homeCubit.doEvent(const SelectMuscleGroupEvent('g1'));
+        await pumpEventQueue();
 
-      expect(homeCubit.state, equals(statesCountBefore));
-    });
+        expect(homeCubit.state, equals(statesCountBefore));
+      },
+    );
 
     test('SelectMuscleGroupEvent handles failure gracefully', () async {
       fakeRepo.failGroupMuscles = true;
@@ -326,27 +352,30 @@ void main() {
       );
     });
 
-    test('RefreshRandomMusclesEvent refreshes and filters random muscles', () async {
-      fakeRepo.randomMuscles = const [
-        MuscleEntity(id: 'm1', name: 'Valid', imageUrl: 'https://valid.png'),
-        MuscleEntity(id: 'm2', name: 'NoImage', imageUrl: ''),
-      ];
+    test(
+      'RefreshRandomMusclesEvent refreshes and filters random muscles',
+      () async {
+        fakeRepo.randomMuscles = const [
+          MuscleEntity(id: 'm1', name: 'Valid', imageUrl: 'https://valid.png'),
+          MuscleEntity(id: 'm2', name: 'NoImage', imageUrl: ''),
+        ];
 
-      homeCubit.doEvent(const RefreshRandomMusclesEvent());
+        homeCubit.doEvent(const RefreshRandomMusclesEvent());
 
-      await expectLater(
-        homeCubit.stream,
-        emitsThrough(
-          predicate<HomeState>((state) {
-            final data = state.data;
-            return data != null &&
-                !data.isRandomMusclesLoading &&
-                data.randomMuscles.length == 1 &&
-                data.randomMuscles.first.name == 'Valid';
-          }),
-        ),
-      );
-    });
+        await expectLater(
+          homeCubit.stream,
+          emitsThrough(
+            predicate<HomeState>((state) {
+              final data = state.data;
+              return data != null &&
+                  !data.isRandomMusclesLoading &&
+                  data.randomMuscles.length == 1 &&
+                  data.randomMuscles.first.name == 'Valid';
+            }),
+          ),
+        );
+      },
+    );
 
     test('RefreshRandomMusclesEvent handles failure gracefully', () async {
       fakeRepo.failRandomMuscles = true;

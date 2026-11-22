@@ -78,18 +78,21 @@ void main() {
       expect(UserProfileNotifier.userName.value, 'John');
     });
 
-    test('updatePhoto updates notifier value and persists to session service', () async {
-      await UserProfileNotifier.updatePhoto(
-        'https://new-photo.png',
-        sessionService,
-      );
+    test(
+      'updatePhoto updates notifier value and persists to session service',
+      () async {
+        await UserProfileNotifier.updatePhoto(
+          'https://new-photo.png',
+          sessionService,
+        );
 
-      expect(UserProfileNotifier.userPhoto.value, 'https://new-photo.png');
+        expect(UserProfileNotifier.userPhoto.value, 'https://new-photo.png');
 
-      final saved = await sessionService.getUserData();
-      final decoded = jsonDecode(saved);
-      expect(decoded['photo'], 'https://new-photo.png');
-    });
+        final saved = await sessionService.getUserData();
+        final decoded = jsonDecode(saved);
+        expect(decoded['photo'], 'https://new-photo.png');
+      },
+    );
 
     test('updatePhoto with empty string resets userPhoto to null', () async {
       await UserProfileNotifier.updatePhoto('https://photo.png');
@@ -99,18 +102,18 @@ void main() {
       expect(UserProfileNotifier.userPhoto.value, isNull);
     });
 
-    test('updateName updates notifier value and persists to session service', () async {
-      await UserProfileNotifier.updateName(
-        'Sarah',
-        sessionService,
-      );
+    test(
+      'updateName updates notifier value and persists to session service',
+      () async {
+        await UserProfileNotifier.updateName('Sarah', sessionService);
 
-      expect(UserProfileNotifier.userName.value, 'Sarah');
+        expect(UserProfileNotifier.userName.value, 'Sarah');
 
-      final saved = await sessionService.getUserData();
-      final decoded = jsonDecode(saved);
-      expect(decoded['firstName'], 'Sarah');
-    });
+        final saved = await sessionService.getUserData();
+        final decoded = jsonDecode(saved);
+        expect(decoded['firstName'], 'Sarah');
+      },
+    );
 
     test('updateName with empty string resets userName to null', () async {
       await UserProfileNotifier.updateName('Sarah');
@@ -120,19 +123,22 @@ void main() {
       expect(UserProfileNotifier.userName.value, isNull);
     });
 
-    test('init resolves fallback name fields (name, fullName, lastName)', () async {
-      await sessionService.saveUserData(jsonEncode({'name': 'Alex'}));
-      await UserProfileNotifier.init(sessionService);
-      expect(UserProfileNotifier.userName.value, 'Alex');
+    test(
+      'init resolves fallback name fields (name, fullName, lastName)',
+      () async {
+        await sessionService.saveUserData(jsonEncode({'name': 'Alex'}));
+        await UserProfileNotifier.init(sessionService);
+        expect(UserProfileNotifier.userName.value, 'Alex');
 
-      await sessionService.saveUserData(jsonEncode({'fullName': 'Bob'}));
-      await UserProfileNotifier.init(sessionService);
-      expect(UserProfileNotifier.userName.value, 'Bob');
+        await sessionService.saveUserData(jsonEncode({'fullName': 'Bob'}));
+        await UserProfileNotifier.init(sessionService);
+        expect(UserProfileNotifier.userName.value, 'Bob');
 
-      await sessionService.saveUserData(jsonEncode({'lastName': 'Smith'}));
-      await UserProfileNotifier.init(sessionService);
-      expect(UserProfileNotifier.userName.value, 'Smith');
-    });
+        await sessionService.saveUserData(jsonEncode({'lastName': 'Smith'}));
+        await UserProfileNotifier.init(sessionService);
+        expect(UserProfileNotifier.userName.value, 'Smith');
+      },
+    );
 
     test('clear resets all values to null', () {
       UserProfileNotifier.userPhoto.value = 'https://photo.png';

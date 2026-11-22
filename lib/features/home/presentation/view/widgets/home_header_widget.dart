@@ -85,9 +85,7 @@ class HomeHeaderWidget extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.grey80, width: 1.5),
             ),
-            child: ClipOval(
-              child: _buildAvatar(),
-            ),
+            child: ClipOval(child: _buildAvatar()),
           ),
         ),
       ],

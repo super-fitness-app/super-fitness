@@ -285,175 +285,180 @@ class _HomeViewState extends State<HomeView>
                     bottom: 110,
                   ),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 1. Header Section
-                    ValueListenableBuilder<String?>(
-                      valueListenable: UserProfileNotifier.userPhoto,
-                      builder: (context, photo, _) {
-                        return ValueListenableBuilder<String?>(
-                          valueListenable: UserProfileNotifier.userName,
-                          builder: (context, name, _) {
-                            return HomeHeaderWidget(
-                              avatarUrl: photo,
-                              userName: name,
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // 2. Category Section
-                    const CategorySectionWidget(),
-                    const SizedBox(height: 24),
-
-                    // 3. Recommendation To Day Section (Random Prime Mover Muscles)
-                    SectionHeaderWidget(
-                      title: context.l10n.recommendationToday,
-                    ),
-                    const SizedBox(height: 14),
-                    if (isTodayLoading && todayMuscles.isEmpty)
-                      _buildLoadingCards()
-                    else
-                      SizedBox(
-                        height: 145,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: todayMuscles.isNotEmpty
-                              ? todayMuscles.length
-                              : _getTodayFallback(context).length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 14),
-                          itemBuilder: (context, index) {
-                            if (todayMuscles.isNotEmpty) {
-                              final muscle = todayMuscles[index];
-                              return RecommendationCardWidget(
-                                title: muscle.name,
-                                imageUrl: muscle.imageUrl,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Header Section
+                      ValueListenableBuilder<String?>(
+                        valueListenable: UserProfileNotifier.userPhoto,
+                        builder: (context, photo, _) {
+                          return ValueListenableBuilder<String?>(
+                            valueListenable: UserProfileNotifier.userName,
+                            builder: (context, name, _) {
+                              return HomeHeaderWidget(
+                                avatarUrl: photo,
+                                userName: name,
                               );
-                            }
-                            final fallback = _getTodayFallback(context)[index];
-                            return RecommendationCardWidget(
-                              title: fallback.title,
-                              imageUrl: fallback.imageUrl,
-                            );
-                          },
-                        ),
-                      ),
-                    const SizedBox(height: 24),
-
-                    // 4. Upcoming Workouts Section (Muscle Groups & Group Muscles)
-                    UpcomingWorkoutsSection(
-                      filterOptions: muscleGroups.isNotEmpty
-                          ? muscleGroups.map((g) => g.name).toList()
-                          : null,
-                      selectedFilterIndex: selectedGroupIndex >= 0
-                          ? selectedGroupIndex
-                          : 0,
-                      isLoadingWorkouts: isGroupMusclesLoading,
-                      workouts: groupMuscles.isNotEmpty
-                          ? groupMuscles
-                                .map(
-                                  (m) => WorkoutCardData(
-                                    title: m.name,
-                                    imageUrl: m.imageUrl,
-                                  ),
-                                )
-                                .toList()
-                          : null,
-                      onFilterChanged: (index) {
-                        if (index >= 0 && index < muscleGroups.length) {
-                          _cubit.doEvent(
-                            SelectMuscleGroupEvent(muscleGroups[index].id),
+                            },
                           );
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // 5. Recommendation For You Section (Meals Categories)
-                    SectionHeaderWidget(
-                      title: context.l10n.recommendationForYou,
-                      actionTitle: context.l10n.seeAll,
-                      onActionTap: () {},
-                    ),
-                    const SizedBox(height: 14),
-                    if (isMealsLoading && mealCategories.isEmpty)
-                      _buildLoadingCards()
-                    else
-                      SizedBox(
-                        height: 145,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: mealCategories.isNotEmpty
-                              ? mealCategories.length
-                              : _getMealsFallback(context).length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 14),
-                          itemBuilder: (context, index) {
-                            if (mealCategories.isNotEmpty) {
-                              final meal = mealCategories[index];
-                              return RecommendationCardWidget(
-                                title: meal.name,
-                                imageUrl: meal.thumbnailUrl,
-                              );
-                            }
-                            final fallback = _getMealsFallback(context)[index];
-                            return RecommendationCardWidget(
-                              title: fallback.title,
-                              imageUrl: fallback.imageUrl,
-                            );
-                          },
-                        ),
+                        },
                       ),
-                    const SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
-                    // 6. Popular Training Section
-                    SectionHeaderWidget(title: context.l10n.popularTraining),
-                    const SizedBox(height: 14),
-                    if (isPopularLoading && popularTrainings.isEmpty)
-                      _buildPopularLoadingCards()
-                    else
-                      SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: popularTrainings.isNotEmpty
-                              ? popularTrainings.length
-                              : fallbackTrainings.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 14),
-                          itemBuilder: (context, index) {
-                            if (popularTrainings.isNotEmpty) {
-                              final item = popularTrainings[index];
+                      // 2. Category Section
+                      const CategorySectionWidget(),
+                      const SizedBox(height: 24),
+
+                      // 3. Recommendation To Day Section (Random Prime Mover Muscles)
+                      SectionHeaderWidget(
+                        title: context.l10n.recommendationToday,
+                      ),
+                      const SizedBox(height: 14),
+                      if (isTodayLoading && todayMuscles.isEmpty)
+                        _buildLoadingCards()
+                      else
+                        SizedBox(
+                          height: 145,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: todayMuscles.isNotEmpty
+                                ? todayMuscles.length
+                                : _getTodayFallback(context).length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 14),
+                            itemBuilder: (context, index) {
+                              if (todayMuscles.isNotEmpty) {
+                                final muscle = todayMuscles[index];
+                                return RecommendationCardWidget(
+                                  title: muscle.name,
+                                  imageUrl: muscle.imageUrl,
+                                );
+                              }
+                              final fallback = _getTodayFallback(
+                                context,
+                              )[index];
+                              return RecommendationCardWidget(
+                                title: fallback.title,
+                                imageUrl: fallback.imageUrl,
+                              );
+                            },
+                          ),
+                        ),
+                      const SizedBox(height: 24),
+
+                      // 4. Upcoming Workouts Section (Muscle Groups & Group Muscles)
+                      UpcomingWorkoutsSection(
+                        filterOptions: muscleGroups.isNotEmpty
+                            ? muscleGroups.map((g) => g.name).toList()
+                            : null,
+                        selectedFilterIndex: selectedGroupIndex >= 0
+                            ? selectedGroupIndex
+                            : 0,
+                        isLoadingWorkouts: isGroupMusclesLoading,
+                        workouts: groupMuscles.isNotEmpty
+                            ? groupMuscles
+                                  .map(
+                                    (m) => WorkoutCardData(
+                                      title: m.name,
+                                      imageUrl: m.imageUrl,
+                                    ),
+                                  )
+                                  .toList()
+                            : null,
+                        onFilterChanged: (index) {
+                          if (index >= 0 && index < muscleGroups.length) {
+                            _cubit.doEvent(
+                              SelectMuscleGroupEvent(muscleGroups[index].id),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 5. Recommendation For You Section (Meals Categories)
+                      SectionHeaderWidget(
+                        title: context.l10n.recommendationForYou,
+                        actionTitle: context.l10n.seeAll,
+                        onActionTap: () {},
+                      ),
+                      const SizedBox(height: 14),
+                      if (isMealsLoading && mealCategories.isEmpty)
+                        _buildLoadingCards()
+                      else
+                        SizedBox(
+                          height: 145,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: mealCategories.isNotEmpty
+                                ? mealCategories.length
+                                : _getMealsFallback(context).length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 14),
+                            itemBuilder: (context, index) {
+                              if (mealCategories.isNotEmpty) {
+                                final meal = mealCategories[index];
+                                return RecommendationCardWidget(
+                                  title: meal.name,
+                                  imageUrl: meal.thumbnailUrl,
+                                );
+                              }
+                              final fallback = _getMealsFallback(
+                                context,
+                              )[index];
+                              return RecommendationCardWidget(
+                                title: fallback.title,
+                                imageUrl: fallback.imageUrl,
+                              );
+                            },
+                          ),
+                        ),
+                      const SizedBox(height: 24),
+
+                      // 6. Popular Training Section
+                      SectionHeaderWidget(title: context.l10n.popularTraining),
+                      const SizedBox(height: 14),
+                      if (isPopularLoading && popularTrainings.isEmpty)
+                        _buildPopularLoadingCards()
+                      else
+                        SizedBox(
+                          height: 200,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: popularTrainings.isNotEmpty
+                                ? popularTrainings.length
+                                : fallbackTrainings.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 14),
+                            itemBuilder: (context, index) {
+                              if (popularTrainings.isNotEmpty) {
+                                final item = popularTrainings[index];
+                                return PopularTrainingCardWidget(
+                                  title: item.title,
+                                  taskCountText: context.l10n.tasksCount(
+                                    item.totalTasks,
+                                  ),
+                                  levelText: item.levelText,
+                                  levelColor: item.levelColor,
+                                  imageUrl: item.imageUrl,
+                                );
+                              }
+                              final item = fallbackTrainings[index];
                               return PopularTrainingCardWidget(
                                 title: item.title,
-                                taskCountText:
-                                    context.l10n.tasksCount(item.totalTasks),
+                                taskCountText: item.taskCountText,
                                 levelText: item.levelText,
                                 levelColor: item.levelColor,
                                 imageUrl: item.imageUrl,
                               );
-                            }
-                            final item = fallbackTrainings[index];
-                            return PopularTrainingCardWidget(
-                              title: item.title,
-                              taskCountText: item.taskCountText,
-                              levelText: item.levelText,
-                              levelColor: item.levelColor,
-                              imageUrl: item.imageUrl,
-                            );
-                          },
+                            },
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
             },
           ),
         ),

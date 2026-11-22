@@ -21,10 +21,10 @@ class BaseState<T> extends Equatable {
   const BaseState.initial() : this(isLoading: false, failure: null, data: null);
 
   const BaseState.loading({T? data})
-      : this(isLoading: true, failure: null, data: data);
+    : this(isLoading: true, failure: null, data: data);
 
   const BaseState.success(T data)
-      : this(isLoading: false, failure: null, data: data);
+    : this(isLoading: false, failure: null, data: data);
 
   factory BaseState.error(String message, {T? data, AppFailure? failure}) =>
       BaseState(
@@ -34,7 +34,7 @@ class BaseState<T> extends Equatable {
       );
 
   const BaseState.failure(AppFailure failure, {T? data})
-      : this(isLoading: false, failure: failure, data: data);
+    : this(isLoading: false, failure: failure, data: data);
 
   String? get errorMessage => failure is ServerMessageFailure
       ? (failure as ServerMessageFailure).message

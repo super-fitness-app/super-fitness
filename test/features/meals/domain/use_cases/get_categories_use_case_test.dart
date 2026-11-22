@@ -15,8 +15,9 @@ class FakeMealsRepo implements MealsRepo {
       categoriesResult;
 
   @override
-  Future<ApiResults<List<MealEntity>>> getMealsByCategory(String category) async =>
-      const Success([]);
+  Future<ApiResults<List<MealEntity>>> getMealsByCategory(
+    String category,
+  ) async => const Success([]);
 
   @override
   Future<ApiResults<MealDetailsEntity>> getMealDetails(String mealId) async =>
@@ -34,9 +35,7 @@ void main() {
 
   group('GetCategoriesUseCase Tests', () {
     test('delegates call to MealsRepo and returns Success', () async {
-      const categories = [
-        CategoryEntity(id: '1', name: 'Dessert'),
-      ];
+      const categories = [CategoryEntity(id: '1', name: 'Dessert')];
       repo.categoriesResult = const Success(categories);
 
       final result = await useCase();
@@ -46,7 +45,9 @@ void main() {
     });
 
     test('delegates call to MealsRepo and returns Failure', () async {
-      repo.categoriesResult = const Failure(NetworkFailure(AppError.noConnection));
+      repo.categoriesResult = const Failure(
+        NetworkFailure(AppError.noConnection),
+      );
 
       final result = await useCase();
 

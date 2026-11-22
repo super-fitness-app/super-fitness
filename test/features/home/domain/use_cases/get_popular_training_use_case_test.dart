@@ -18,8 +18,16 @@ class FakePopularHomeRepo implements HomeRepo {
     const DifficultyLevelEntity(id: 'lvl5', name: 'Expert'),
   ];
   List<MuscleEntity> randomMuscles = [
-    const MuscleEntity(id: 'm1', name: 'Pectoralis Major', imageUrl: 'https://pec.png'),
-    const MuscleEntity(id: 'm2', name: 'Biceps', imageUrl: 'https://biceps.png'),
+    const MuscleEntity(
+      id: 'm1',
+      name: 'Pectoralis Major',
+      imageUrl: 'https://pec.png',
+    ),
+    const MuscleEntity(
+      id: 'm2',
+      name: 'Biceps',
+      imageUrl: 'https://biceps.png',
+    ),
   ];
   List<PopularTrainingEntity> exercises = List.generate(
     10,
@@ -39,18 +47,23 @@ class FakePopularHomeRepo implements HomeRepo {
 
   @override
   Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels() async {
-    if (failLevels) return const Failure(ServerMessageFailure('Levels error'));
+    if (failLevels) {
+      return const Failure(ServerMessageFailure('Levels error'));
+    }
     return Success(levels);
   }
 
   @override
   Future<ApiResults<List<MuscleEntity>>> getRandomMuscles() async {
-    if (failMuscles) return const Failure(ServerMessageFailure('Muscles error'));
+    if (failMuscles) {
+      return const Failure(ServerMessageFailure('Muscles error'));
+    }
     return Success(randomMuscles);
   }
 
   @override
-  Future<ApiResults<List<PopularTrainingEntity>>> getExercisesByMuscleAndDifficulty({
+  Future<ApiResults<List<PopularTrainingEntity>>>
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
     String? fallbackImageUrl,
@@ -66,8 +79,9 @@ class FakePopularHomeRepo implements HomeRepo {
       const Success([]);
 
   @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(String id) async =>
-      const Success([]);
+  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(
+    String id,
+  ) async => const Success([]);
 
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async =>
@@ -84,26 +98,32 @@ void main() {
   });
 
   group('GetPopularTrainingUseCase Tests', () {
-    test('fetches levels and muscles, picks random pair, and returns 3 to 5 exercises', () async {
-      // Use seeded Random for deterministic testing
-      final fixedRandom = Random(42);
-      final result = await useCase(random: fixedRandom);
+    test(
+      'fetches levels and muscles, picks random pair, and returns 3 to 5 exercises',
+      () async {
+        // Use seeded Random for deterministic testing
+        final fixedRandom = Random(42);
+        final result = await useCase(random: fixedRandom);
 
-      expect(result, isA<Success<List<PopularTrainingEntity>>>());
-      final data = (result as Success<List<PopularTrainingEntity>>).data;
+        expect(result, isA<Success<List<PopularTrainingEntity>>>());
+        final data = (result as Success<List<PopularTrainingEntity>>).data;
 
-      // Must be between 3 and 5 elements
-      expect(data.length, inInclusiveRange(3, 5));
+        // Must be between 3 and 5 elements
+        expect(data.length, inInclusiveRange(3, 5));
 
-      // Verifies it called the API with the selected level and muscle
-      expect(fakeRepo.lastLevelId, isNotNull);
-      expect(fakeRepo.lastMuscleId, isNotNull);
-      expect(
-        ['lvl1', 'lvl2', 'lvl3', 'lvl4', 'lvl5'],
-        contains(fakeRepo.lastLevelId),
-      );
-      expect(['m1', 'm2'], contains(fakeRepo.lastMuscleId));
-    });
+        // Verifies it called the API with the selected level and muscle
+        expect(fakeRepo.lastLevelId, isNotNull);
+        expect(fakeRepo.lastMuscleId, isNotNull);
+        expect([
+          'lvl1',
+          'lvl2',
+          'lvl3',
+          'lvl4',
+          'lvl5',
+        ], contains(fakeRepo.lastLevelId));
+        expect(['m1', 'm2'], contains(fakeRepo.lastMuscleId));
+      },
+    );
 
     test('ensures items in popular training have differing levels', () async {
       final fixedRandom = Random(42);

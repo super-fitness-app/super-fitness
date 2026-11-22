@@ -17,7 +17,8 @@ class UserProfileNotifier {
         final photo = json['photo'] as String?;
         final firstName = (json['firstName'] as String?)?.trim();
         final lastName = (json['lastName'] as String?)?.trim();
-        final name = (json['name'] as String?)?.trim() ??
+        final name =
+            (json['name'] as String?)?.trim() ??
             (json['fullName'] as String?)?.trim();
 
         if (photo != null && photo.trim().isNotEmpty) {

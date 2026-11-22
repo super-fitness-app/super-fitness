@@ -73,7 +73,9 @@ class _FoodGridViewState extends State<FoodGridView> {
     }
     if (widget.failure != null && widget.meals.isEmpty) {
       return FoodErrorMealsView(
-          failure: widget.failure!, onRetry: widget.onRetry);
+        failure: widget.failure!,
+        onRetry: widget.onRetry,
+      );
     }
     if (widget.meals.isEmpty) {
       return const FoodEmptyMealsView();
@@ -129,8 +131,7 @@ class _MealsGrid extends StatelessWidget {
             ),
           ),
         ),
-        if (isLoadingMore)
-          const SliverToBoxAdapter(child: _BottomLoader()),
+        if (isLoadingMore) const SliverToBoxAdapter(child: _BottomLoader()),
       ],
     );
   }
@@ -142,8 +143,9 @@ class _BottomLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding:
-          EdgeInsets.symmetric(vertical: AppDimensions.defaultScreenPadding),
+      padding: EdgeInsets.symmetric(
+        vertical: AppDimensions.defaultScreenPadding,
+      ),
       child: Center(
         child: SizedBox(
           width: 24,

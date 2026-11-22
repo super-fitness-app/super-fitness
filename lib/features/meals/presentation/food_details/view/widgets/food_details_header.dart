@@ -29,10 +29,7 @@ class FoodDetailsHeader extends StatelessWidget {
           const _GradientOverlay(),
           _HeaderBackButton(onBack: () => context.pop()),
           if (_hasValidVideo(youtubeUrl))
-            _PlayVideoButton(
-              youtubeUrl: youtubeUrl!,
-              title: title,
-            ),
+            _PlayVideoButton(youtubeUrl: youtubeUrl!, title: title),
         ],
       ),
     );
@@ -125,10 +122,7 @@ class _PlayVideoButton extends StatelessWidget {
   final String youtubeUrl;
   final String title;
 
-  const _PlayVideoButton({
-    required this.youtubeUrl,
-    required this.title,
-  });
+  const _PlayVideoButton({required this.youtubeUrl, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -136,10 +130,7 @@ class _PlayVideoButton extends StatelessWidget {
       child: InkWell(
         onTap: () => context.push(
           AppRoutes.appVideoPlayer,
-          extra: {
-            'videoUrl': youtubeUrl,
-            'title': title,
-          },
+          extra: {'videoUrl': youtubeUrl, 'title': title},
         ),
         borderRadius: BorderRadius.circular(28),
         child: Container(

@@ -37,19 +37,22 @@ void main() {
   }
 
   group('UpcomingWorkoutsSection Tests', () {
-    testWidgets('renders section header, filter chips, and default workout items', (
+    testWidgets(
+      'renders section header, filter chips, and default workout items',
+      (tester) async {
+        await tester.pumpWidget(buildWidget());
+        await tester.pump();
+
+        expect(find.text('Upcoming Workouts'), findsOneWidget);
+        expect(find.text('Full Body'), findsOneWidget);
+        expect(find.text('Chest'), findsWidgets);
+        expect(find.text('Arm'), findsOneWidget);
+      },
+    );
+
+    testWidgets('triggers onSeeAllTap when "See All" is tapped', (
       tester,
     ) async {
-      await tester.pumpWidget(buildWidget());
-      await tester.pump();
-
-      expect(find.text('Upcoming Workouts'), findsOneWidget);
-      expect(find.text('Full Body'), findsOneWidget);
-      expect(find.text('Chest'), findsWidgets);
-      expect(find.text('Arm'), findsOneWidget);
-    });
-
-    testWidgets('triggers onSeeAllTap when "See All" is tapped', (tester) async {
       bool seeAllTapped = false;
 
       await tester.pumpWidget(
@@ -116,18 +119,16 @@ void main() {
       expect(tappedWorkout?.title, 'Heavy Bench');
     });
 
-    testWidgets('shows loading cards when isLoadingWorkouts is true and workouts is empty', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        buildWidget(
-          isLoadingWorkouts: true,
-          workouts: [],
-        ),
-      );
-      await tester.pump();
+    testWidgets(
+      'shows loading cards when isLoadingWorkouts is true and workouts is empty',
+      (tester) async {
+        await tester.pumpWidget(
+          buildWidget(isLoadingWorkouts: true, workouts: []),
+        );
+        await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsWidgets);
-    });
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
+      },
+    );
   });
 }

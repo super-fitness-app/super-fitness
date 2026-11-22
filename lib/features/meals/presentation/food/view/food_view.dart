@@ -95,7 +95,8 @@ class _FoodViewState extends State<FoodView>
                       onRefresh: _onRefresh,
                       child: _MealsSection(
                         onMealTapped: _onMealTapped,
-                        onRetry: () => _cubit.doEvent(const LoadFoodDataEvent()),
+                        onRetry: () =>
+                            _cubit.doEvent(const LoadFoodDataEvent()),
                         onLoadMore: _onLoadMore,
                       ),
                     ),
@@ -118,13 +119,8 @@ class _FoodBackgroundLayer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          AppImages.food,
-          fit: BoxFit.cover,
-        ),
-        ColoredBox(
-          color: AppColors.background.withValues(alpha: 0.75),
-        ),
+        Image.asset(AppImages.food, fit: BoxFit.cover),
+        ColoredBox(color: AppColors.background.withValues(alpha: 0.75)),
       ],
     );
   }
@@ -184,5 +180,3 @@ class _MealsSection extends StatelessWidget {
     );
   }
 }
-
-

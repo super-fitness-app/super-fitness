@@ -27,7 +27,9 @@ void main() {
   }
 
   group('CategorySectionWidget Tests', () {
-    testWidgets('renders default title and 5 default category items', (tester) async {
+    testWidgets('renders default title and 5 default category items', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildWidget());
       await tester.pump();
 
@@ -39,9 +41,14 @@ void main() {
       expect(find.text('Trainer'), findsOneWidget);
     });
 
-    testWidgets('renders custom title and custom category items', (tester) async {
+    testWidgets('renders custom title and custom category items', (
+      tester,
+    ) async {
       const customItems = [
-        CategoryItemData(label: 'Pilates', imagePath: 'assets/home/fitness.png'),
+        CategoryItemData(
+          label: 'Pilates',
+          imagePath: 'assets/home/fitness.png',
+        ),
         CategoryItemData(
           label: 'Cardio',
           imagePath: 'https://example.com/cardio.png',
@@ -62,7 +69,9 @@ void main() {
       expect(find.text('Cardio'), findsOneWidget);
     });
 
-    testWidgets('triggers onCategoryTap when a category item is tapped', (tester) async {
+    testWidgets('triggers onCategoryTap when a category item is tapped', (
+      tester,
+    ) async {
       int? tappedIndex;
 
       await tester.pumpWidget(

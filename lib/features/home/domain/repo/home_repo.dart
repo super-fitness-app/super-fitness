@@ -11,7 +11,8 @@ abstract class HomeRepo {
   Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(String id);
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories();
   Future<ApiResults<List<DifficultyLevelEntity>>> getDifficultyLevels();
-  Future<ApiResults<List<PopularTrainingEntity>>> getExercisesByMuscleAndDifficulty({
+  Future<ApiResults<List<PopularTrainingEntity>>>
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
     String? fallbackImageUrl,

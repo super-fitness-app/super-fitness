@@ -33,7 +33,9 @@ class FakeHomeRepo implements HomeRepo {
   }
 
   @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(String id) async {
+  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(
+    String id,
+  ) async {
     lastMusclesByGroupId = id;
     return musclesByGroupResult;
   }
@@ -50,7 +52,7 @@ class FakeHomeRepo implements HomeRepo {
 
   @override
   Future<ApiResults<List<PopularTrainingEntity>>>
-      getExercisesByMuscleAndDifficulty({
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
     String? fallbackImageUrl,
@@ -82,9 +84,7 @@ void main() {
     });
 
     test('GetMuscleGroupsUseCase calls repo.getMuscleGroups()', () async {
-      const expectedGroups = [
-        MuscleGroupEntity(id: 'g1', name: 'Shoulders'),
-      ];
+      const expectedGroups = [MuscleGroupEntity(id: 'g1', name: 'Shoulders')];
       fakeRepo.muscleGroupsResult = const Success(expectedGroups);
 
       final useCase = GetMuscleGroupsUseCase(fakeRepo);
@@ -94,19 +94,22 @@ void main() {
       expect((result as Success<List<MuscleGroupEntity>>).data, expectedGroups);
     });
 
-    test('GetMusclesByGroupUseCase calls repo.getMusclesByMuscleGroupId with target id', () async {
-      const expectedMuscles = [
-        MuscleEntity(id: 'm2', name: 'Front Delt', imageUrl: 'https://f.png'),
-      ];
-      fakeRepo.musclesByGroupResult = const Success(expectedMuscles);
+    test(
+      'GetMusclesByGroupUseCase calls repo.getMusclesByMuscleGroupId with target id',
+      () async {
+        const expectedMuscles = [
+          MuscleEntity(id: 'm2', name: 'Front Delt', imageUrl: 'https://f.png'),
+        ];
+        fakeRepo.musclesByGroupResult = const Success(expectedMuscles);
 
-      final useCase = GetMusclesByGroupUseCase(fakeRepo);
-      final result = await useCase('g1');
+        final useCase = GetMusclesByGroupUseCase(fakeRepo);
+        final result = await useCase('g1');
 
-      expect(fakeRepo.lastMusclesByGroupId, 'g1');
-      expect(result, isA<Success<List<MuscleEntity>>>());
-      expect((result as Success<List<MuscleEntity>>).data, expectedMuscles);
-    });
+        expect(fakeRepo.lastMusclesByGroupId, 'g1');
+        expect(result, isA<Success<List<MuscleEntity>>>());
+        expect((result as Success<List<MuscleEntity>>).data, expectedMuscles);
+      },
+    );
 
     test('GetMealCategoriesUseCase calls repo.getMealCategories()', () async {
       const expectedCategories = [

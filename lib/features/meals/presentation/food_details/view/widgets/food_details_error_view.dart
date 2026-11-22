@@ -18,8 +18,8 @@ class FoodDetailsErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final message = failure?.toLocalizedMessage(context) ??
-        l10n.failedToLoadMealDetails;
+    final message =
+        failure?.toLocalizedMessage(context) ?? l10n.failedToLoadMealDetails;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -50,10 +50,7 @@ class _RetryButton extends StatelessWidget {
   final VoidCallback onRetry;
   final String label;
 
-  const _RetryButton({
-    required this.onRetry,
-    required this.label,
-  });
+  const _RetryButton({required this.onRetry, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +59,9 @@ class _RetryButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
-      child: Text(
-        label,
-        style: AppTextStyles.buttonText,
-      ),
+      child: Text(label, style: AppTextStyles.buttonText),
     );
   }
 }

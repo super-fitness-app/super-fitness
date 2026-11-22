@@ -27,39 +27,41 @@ void main() {
   }
 
   group('SectionHeaderWidget Tests', () {
-    testWidgets('renders title and does not show action when onActionTap is null', (
-      tester,
-    ) async {
-      await tester.pumpWidget(buildWidget(title: 'Top Exercises'));
-      await tester.pump();
+    testWidgets(
+      'renders title and does not show action when onActionTap is null',
+      (tester) async {
+        await tester.pumpWidget(buildWidget(title: 'Top Exercises'));
+        await tester.pump();
 
-      expect(find.text('Top Exercises'), findsOneWidget);
-      expect(find.text('See All'), findsNothing);
-    });
+        expect(find.text('Top Exercises'), findsOneWidget);
+        expect(find.text('See All'), findsNothing);
+      },
+    );
 
-    testWidgets('shows localized "See All" when onActionTap is provided without custom actionTitle', (
-      tester,
-    ) async {
-      bool actionTapped = false;
+    testWidgets(
+      'shows localized "See All" when onActionTap is provided without custom actionTitle',
+      (tester) async {
+        bool actionTapped = false;
 
-      await tester.pumpWidget(
-        buildWidget(
-          title: 'Upcoming Workouts',
-          onActionTap: () {
-            actionTapped = true;
-          },
-        ),
-      );
-      await tester.pump();
+        await tester.pumpWidget(
+          buildWidget(
+            title: 'Upcoming Workouts',
+            onActionTap: () {
+              actionTapped = true;
+            },
+          ),
+        );
+        await tester.pump();
 
-      expect(find.text('Upcoming Workouts'), findsOneWidget);
-      expect(find.text('See All'), findsOneWidget);
+        expect(find.text('Upcoming Workouts'), findsOneWidget);
+        expect(find.text('See All'), findsOneWidget);
 
-      await tester.tap(find.text('See All'));
-      await tester.pump();
+        await tester.tap(find.text('See All'));
+        await tester.pump();
 
-      expect(actionTapped, isTrue);
-    });
+        expect(actionTapped, isTrue);
+      },
+    );
 
     testWidgets('renders custom actionTitle and triggers callback on tap', (
       tester,

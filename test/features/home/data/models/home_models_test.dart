@@ -40,33 +40,33 @@ void main() {
         expect(serialized['image'], 'https://image.com/biceps.png');
       });
 
-      test('toEntity maps correctly with trimmed strings and fallback for nulls', () {
-        const dto = MuscleDto(
-          id: 'm101',
-          name: '  Triceps  ',
-          image: 'https://img.png',
-        );
+      test(
+        'toEntity maps correctly with trimmed strings and fallback for nulls',
+        () {
+          const dto = MuscleDto(
+            id: 'm101',
+            name: '  Triceps  ',
+            image: 'https://img.png',
+          );
 
-        final entity = dto.toEntity();
+          final entity = dto.toEntity();
 
-        expect(entity.id, 'm101');
-        expect(entity.name, 'Triceps');
-        expect(entity.imageUrl, 'https://img.png');
+          expect(entity.id, 'm101');
+          expect(entity.name, 'Triceps');
+          expect(entity.imageUrl, 'https://img.png');
 
-        const nullDto = MuscleDto();
-        final nullEntity = nullDto.toEntity();
-        expect(nullEntity.id, '');
-        expect(nullEntity.name, '');
-        expect(nullEntity.imageUrl, '');
-      });
+          const nullDto = MuscleDto();
+          final nullEntity = nullDto.toEntity();
+          expect(nullEntity.id, '');
+          expect(nullEntity.name, '');
+          expect(nullEntity.imageUrl, '');
+        },
+      );
     });
 
     group('MuscleGroupDto', () {
       test('fromJson and toJson work correctly', () {
-        final json = {
-          '_id': 'g100',
-          'name': 'Chest',
-        };
+        final json = {'_id': 'g100', 'name': 'Chest'};
 
         final dto = MuscleGroupDto.fromJson(json);
 
@@ -142,7 +142,7 @@ void main() {
           'message': 'success',
           'totalMuscles': 1,
           'muscles': [
-            {'_id': 'm1', 'name': 'Muscle 1', 'image': 'https://m1.png'}
+            {'_id': 'm1', 'name': 'Muscle 1', 'image': 'https://m1.png'},
           ],
         };
 
@@ -159,7 +159,7 @@ void main() {
         final json = {
           'message': 'success',
           'musclesGroup': [
-            {'_id': 'g1', 'name': 'Arms'}
+            {'_id': 'g1', 'name': 'Arms'},
           ],
         };
 
@@ -175,7 +175,7 @@ void main() {
         final json = {
           'message': 'success',
           'muscles': [
-            {'_id': 'm1', 'name': 'Biceps', 'image': 'https://b.png'}
+            {'_id': 'm1', 'name': 'Biceps', 'image': 'https://b.png'},
           ],
         };
 
@@ -194,8 +194,8 @@ void main() {
               'idCategory': '1',
               'strCategory': 'Dessert',
               'strCategoryThumb': 'https://dessert.png',
-              'strCategoryDescription': 'Sweets'
-            }
+              'strCategoryDescription': 'Sweets',
+            },
           ],
         };
 
@@ -344,7 +344,7 @@ void main() {
         final json = {
           'message': 'success',
           'levels': [
-            {'_id': '1', 'name': 'Novice'}
+            {'_id': '1', 'name': 'Novice'},
           ],
         };
         final dto = DifficultyLevelsResponseDto.fromJson(json);
@@ -385,7 +385,7 @@ void main() {
           'totalPages': 1,
           'currentPage': 1,
           'exercises': [
-            {'_id': 'e1', 'exercise': 'Bench Press'}
+            {'_id': 'e1', 'exercise': 'Bench Press'},
           ],
         };
         final dto = ExercisesByMuscleDifficultyResponseDto.fromJson(json);

@@ -58,13 +58,17 @@ class FakeHomeApiClient implements HomeApiClient {
   }
 
   @override
-  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty(
+  Future<ExercisesByMuscleDifficultyResponseDto>
+  getExercisesByMuscleAndDifficulty(
     String difficultyLevelId,
     String primeMoverMuscleId,
   ) async {
     if (errorToThrow != null) throw errorToThrow!;
     return exercisesByMuscleDifficultyResponse ??
-        const ExercisesByMuscleDifficultyResponseDto(message: 'success', exercises: []);
+        const ExercisesByMuscleDifficultyResponseDto(
+          message: 'success',
+          exercises: [],
+        );
   }
 }
 
@@ -78,107 +82,125 @@ void main() {
   });
 
   group('HomeRemoteDataSourceImpl Unit Tests', () {
-    test('getRandomMuscles calls client.getRandomMuscles and returns response', () async {
-      const expectedResponse = RandomMusclesResponseDto(
-        message: 'success',
-        totalMuscles: 1,
-        muscles: [
-          MuscleDto(id: 'm1', name: 'Biceps', image: 'https://biceps.png'),
-        ],
-      );
-      fakeApiClient.randomMusclesResponse = expectedResponse;
+    test(
+      'getRandomMuscles calls client.getRandomMuscles and returns response',
+      () async {
+        const expectedResponse = RandomMusclesResponseDto(
+          message: 'success',
+          totalMuscles: 1,
+          muscles: [
+            MuscleDto(id: 'm1', name: 'Biceps', image: 'https://biceps.png'),
+          ],
+        );
+        fakeApiClient.randomMusclesResponse = expectedResponse;
 
-      final result = await remoteDataSource.getRandomMuscles();
+        final result = await remoteDataSource.getRandomMuscles();
 
-      expect(result.message, 'success');
-      expect(result.muscles?.length, 1);
-      expect(result.muscles?.first.name, 'Biceps');
-    });
+        expect(result.message, 'success');
+        expect(result.muscles?.length, 1);
+        expect(result.muscles?.first.name, 'Biceps');
+      },
+    );
 
-    test('getMuscleGroups calls client.getMuscleGroups and returns response', () async {
-      const expectedResponse = MuscleGroupsResponseDto(
-        message: 'success',
-        musclesGroup: [MuscleGroupDto(id: 'g1', name: 'Chest')],
-      );
-      fakeApiClient.muscleGroupsResponse = expectedResponse;
+    test(
+      'getMuscleGroups calls client.getMuscleGroups and returns response',
+      () async {
+        const expectedResponse = MuscleGroupsResponseDto(
+          message: 'success',
+          musclesGroup: [MuscleGroupDto(id: 'g1', name: 'Chest')],
+        );
+        fakeApiClient.muscleGroupsResponse = expectedResponse;
 
-      final result = await remoteDataSource.getMuscleGroups();
+        final result = await remoteDataSource.getMuscleGroups();
 
-      expect(result.message, 'success');
-      expect(result.musclesGroup?.length, 1);
-      expect(result.musclesGroup?.first.name, 'Chest');
-    });
+        expect(result.message, 'success');
+        expect(result.musclesGroup?.length, 1);
+        expect(result.musclesGroup?.first.name, 'Chest');
+      },
+    );
 
-    test('getMusclesByMuscleGroupId calls client.getMusclesByMuscleGroupId and returns response', () async {
-      const expectedResponse = MusclesByGroupResponseDto(
-        message: 'success',
-        muscles: [
-          MuscleDto(id: 'm2', name: 'Pectoralis', image: 'https://pec.png'),
-        ],
-      );
-      fakeApiClient.musclesByGroupResponse = expectedResponse;
+    test(
+      'getMusclesByMuscleGroupId calls client.getMusclesByMuscleGroupId and returns response',
+      () async {
+        const expectedResponse = MusclesByGroupResponseDto(
+          message: 'success',
+          muscles: [
+            MuscleDto(id: 'm2', name: 'Pectoralis', image: 'https://pec.png'),
+          ],
+        );
+        fakeApiClient.musclesByGroupResponse = expectedResponse;
 
-      final result = await remoteDataSource.getMusclesByMuscleGroupId('g1');
+        final result = await remoteDataSource.getMusclesByMuscleGroupId('g1');
 
-      expect(result.message, 'success');
-      expect(result.muscles?.length, 1);
-      expect(result.muscles?.first.name, 'Pectoralis');
-    });
+        expect(result.message, 'success');
+        expect(result.muscles?.length, 1);
+        expect(result.muscles?.first.name, 'Pectoralis');
+      },
+    );
 
-    test('getMealCategories calls client.getMealCategories and returns response', () async {
-      const expectedResponse = MealCategoriesResponseDto(
-        categories: [
-          MealCategoryDto(
-            idCategory: 'c1',
-            strCategory: 'Beef',
-            strCategoryThumb: 'https://beef.png',
-            strCategoryDescription: 'Beef meals',
-          ),
-        ],
-      );
-      fakeApiClient.mealCategoriesResponse = expectedResponse;
+    test(
+      'getMealCategories calls client.getMealCategories and returns response',
+      () async {
+        const expectedResponse = MealCategoriesResponseDto(
+          categories: [
+            MealCategoryDto(
+              idCategory: 'c1',
+              strCategory: 'Beef',
+              strCategoryThumb: 'https://beef.png',
+              strCategoryDescription: 'Beef meals',
+            ),
+          ],
+        );
+        fakeApiClient.mealCategoriesResponse = expectedResponse;
 
-      final result = await remoteDataSource.getMealCategories();
+        final result = await remoteDataSource.getMealCategories();
 
-      expect(result.categories?.length, 1);
-      expect(result.categories?.first.strCategory, 'Beef');
-    });
+        expect(result.categories?.length, 1);
+        expect(result.categories?.first.strCategory, 'Beef');
+      },
+    );
 
-    test('getDifficultyLevels calls client.getDifficultyLevels and returns response', () async {
-      const expectedResponse = DifficultyLevelsResponseDto(
-        message: 'success',
-        levels: [DifficultyLevelDto(id: 'lvl1', name: 'Novice')],
-      );
-      fakeApiClient.difficultyLevelsResponse = expectedResponse;
+    test(
+      'getDifficultyLevels calls client.getDifficultyLevels and returns response',
+      () async {
+        const expectedResponse = DifficultyLevelsResponseDto(
+          message: 'success',
+          levels: [DifficultyLevelDto(id: 'lvl1', name: 'Novice')],
+        );
+        fakeApiClient.difficultyLevelsResponse = expectedResponse;
 
-      final result = await remoteDataSource.getDifficultyLevels();
+        final result = await remoteDataSource.getDifficultyLevels();
 
-      expect(result.levels?.length, 1);
-      expect(result.levels?.first.name, 'Novice');
-    });
+        expect(result.levels?.length, 1);
+        expect(result.levels?.first.name, 'Novice');
+      },
+    );
 
-    test('getExercisesByMuscleAndDifficulty calls client and returns response', () async {
-      const expectedResponse = ExercisesByMuscleDifficultyResponseDto(
-        message: 'success',
-        totalExercises: 5,
-        exercises: [
-          PopularExerciseDto(
-            id: 'ex1',
-            exercise: 'Push-up',
-            difficultyLevel: 'Novice',
-          ),
-        ],
-      );
-      fakeApiClient.exercisesByMuscleDifficultyResponse = expectedResponse;
+    test(
+      'getExercisesByMuscleAndDifficulty calls client and returns response',
+      () async {
+        const expectedResponse = ExercisesByMuscleDifficultyResponseDto(
+          message: 'success',
+          totalExercises: 5,
+          exercises: [
+            PopularExerciseDto(
+              id: 'ex1',
+              exercise: 'Push-up',
+              difficultyLevel: 'Novice',
+            ),
+          ],
+        );
+        fakeApiClient.exercisesByMuscleDifficultyResponse = expectedResponse;
 
-      final result = await remoteDataSource.getExercisesByMuscleAndDifficulty(
-        difficultyLevelId: 'lvl1',
-        primeMoverMuscleId: 'm1',
-      );
+        final result = await remoteDataSource.getExercisesByMuscleAndDifficulty(
+          difficultyLevelId: 'lvl1',
+          primeMoverMuscleId: 'm1',
+        );
 
-      expect(result.totalExercises, 5);
-      expect(result.exercises?.first.exercise, 'Push-up');
-    });
+        expect(result.totalExercises, 5);
+        expect(result.exercises?.first.exercise, 'Push-up');
+      },
+    );
 
     test('rethrows exception when client throws', () async {
       fakeApiClient.errorToThrow = Exception('Network error');

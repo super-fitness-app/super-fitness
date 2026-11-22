@@ -28,15 +28,27 @@ import 'package:super_fitness/features/home/presentation/view/widgets/upcoming_w
 
 class FakeHomeRepo implements HomeRepo {
   List<MuscleEntity> randomMuscles = [
-    const MuscleEntity(id: 'm1', name: 'Deltoid', imageUrl: 'https://deltoid.png'),
-    const MuscleEntity(id: 'm2', name: 'Biceps', imageUrl: 'https://biceps.png'),
+    const MuscleEntity(
+      id: 'm1',
+      name: 'Deltoid',
+      imageUrl: 'https://deltoid.png',
+    ),
+    const MuscleEntity(
+      id: 'm2',
+      name: 'Biceps',
+      imageUrl: 'https://biceps.png',
+    ),
   ];
   List<MuscleGroupEntity> muscleGroups = [
     const MuscleGroupEntity(id: 'g1', name: 'Chest'),
     const MuscleGroupEntity(id: 'g2', name: 'Back'),
   ];
   List<MuscleEntity> groupMuscles = [
-    const MuscleEntity(id: 'gm1', name: 'Pectoral', imageUrl: 'https://pec.png'),
+    const MuscleEntity(
+      id: 'gm1',
+      name: 'Pectoral',
+      imageUrl: 'https://pec.png',
+    ),
   ];
   List<MealCategoryEntity> mealCategories = [
     const MealCategoryEntity(
@@ -68,8 +80,9 @@ class FakeHomeRepo implements HomeRepo {
       Success(muscleGroups);
 
   @override
-  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(String id) async =>
-      Success(groupMuscles);
+  Future<ApiResults<List<MuscleEntity>>> getMusclesByMuscleGroupId(
+    String id,
+  ) async => Success(groupMuscles);
 
   @override
   Future<ApiResults<List<MealCategoryEntity>>> getMealCategories() async =>
@@ -81,13 +94,12 @@ class FakeHomeRepo implements HomeRepo {
 
   @override
   Future<ApiResults<List<PopularTrainingEntity>>>
-      getExercisesByMuscleAndDifficulty({
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
     String? fallbackImageUrl,
     String? levelName,
-  }) async =>
-          Success(popularTrainings);
+  }) async => Success(popularTrainings);
 }
 
 class PendingHomeRepo extends FakeHomeRepo {
@@ -189,74 +201,74 @@ void main() {
       expect(find.text('Biceps'), findsOneWidget);
     });
 
-    testWidgets('renders fallback recommendation items when random muscles list is empty', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'renders fallback recommendation items when random muscles list is empty',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      fakeRepo.randomMuscles = [];
+        fakeRepo.randomMuscles = [];
 
-      await tester.pumpWidget(buildTestWidget());
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(buildTestWidget());
+        await tester.pumpAndSettle();
 
-      expect(find.text('Jogging'), findsOneWidget);
-      expect(find.text('Push-Up'), findsOneWidget);
-      expect(find.text('Squat'), findsOneWidget);
-    });
+        expect(find.text('Jogging'), findsOneWidget);
+        expect(find.text('Push-Up'), findsOneWidget);
+        expect(find.text('Squat'), findsOneWidget);
+      },
+    );
 
-    testWidgets('shows loading card indicators when isRandomMusclesLoading is true and list is empty', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'shows loading card indicators when isRandomMusclesLoading is true and list is empty',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      final pendingRepo = PendingHomeRepo();
-      final loadingCubit = HomeCubit(
-        GetRandomMusclesUseCase(pendingRepo),
-        GetMuscleGroupsUseCase(pendingRepo),
-        GetMusclesByGroupUseCase(pendingRepo),
-        GetMealCategoriesUseCase(pendingRepo),
-        GetPopularTrainingUseCase(pendingRepo),
-      );
+        final pendingRepo = PendingHomeRepo();
+        final loadingCubit = HomeCubit(
+          GetRandomMusclesUseCase(pendingRepo),
+          GetMuscleGroupsUseCase(pendingRepo),
+          GetMusclesByGroupUseCase(pendingRepo),
+          GetMealCategoriesUseCase(pendingRepo),
+          GetPopularTrainingUseCase(pendingRepo),
+        );
 
-      await tester.pumpWidget(
-        buildTestWidget(
-          cubit: loadingCubit,
-          showBottomNavBar: false,
-        ),
-      );
-      await tester.pump();
+        await tester.pumpWidget(
+          buildTestWidget(cubit: loadingCubit, showBottomNavBar: false),
+        );
+        await tester.pump();
 
-      expect(find.byType(FloatingBottomNavBar), findsNothing);
-      expect(find.byType(CircularProgressIndicator), findsWidgets);
+        expect(find.byType(FloatingBottomNavBar), findsNothing);
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
 
-      pendingRepo.completer.complete(const Success([]));
-      await tester.pumpAndSettle();
-      loadingCubit.close();
-    });
+        pendingRepo.completer.complete(const Success([]));
+        await tester.pumpAndSettle();
+        loadingCubit.close();
+      },
+    );
 
-    testWidgets('tapping bottom nav bar item updates internal navigation index', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 2.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'tapping bottom nav bar item updates internal navigation index',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.pumpWidget(buildTestWidget(showBottomNavBar: true));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(buildTestWidget(showBottomNavBar: true));
+        await tester.pumpAndSettle();
 
-      final trackFinder = find.byIcon(Icons.track_changes_rounded);
-      expect(trackFinder, findsOneWidget);
+        final trackFinder = find.byIcon(Icons.track_changes_rounded);
+        expect(trackFinder, findsOneWidget);
 
-      await tester.tap(trackFinder);
-      await tester.pump();
-    });
+        await tester.tap(trackFinder);
+        await tester.pump();
+      },
+    );
 
     testWidgets('tapping muscle group filter updates selected group', (
       WidgetTester tester,

@@ -11,7 +11,8 @@ abstract class HomeRemoteDataSource {
   Future<MusclesByGroupResponseDto> getMusclesByMuscleGroupId(String id);
   Future<MealCategoriesResponseDto> getMealCategories();
   Future<DifficultyLevelsResponseDto> getDifficultyLevels();
-  Future<ExercisesByMuscleDifficultyResponseDto> getExercisesByMuscleAndDifficulty({
+  Future<ExercisesByMuscleDifficultyResponseDto>
+  getExercisesByMuscleAndDifficulty({
     required String difficultyLevelId,
     required String primeMoverMuscleId,
   });
