@@ -14,7 +14,7 @@ class FoodDetailsCubit extends BaseCubit<FoodDetailsState, BaseEvent> {
   final GetMealDetailsUseCase _getMealDetailsUseCase;
 
   FoodDetailsCubit(this._getMealDetailsUseCase)
-      : super(const BaseState.initial());
+    : super(const BaseState.initial());
 
   @override
   void doEvent(Object event) {

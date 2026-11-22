@@ -6,15 +6,12 @@ part 'meals_details_response.g.dart';
 class MealDetailsResponse {
   final List<MealDetails>? meals;
 
-  const MealDetailsResponse({
-    this.meals,
-  });
+  const MealDetailsResponse({this.meals});
 
   factory MealDetailsResponse.fromJson(Map<String, dynamic> json) =>
       _$MealDetailsResponseFromJson(json);
 
-  Map<String, dynamic> toJson() =>
-      _$MealDetailsResponseToJson(this);
+  Map<String, dynamic> toJson() => _$MealDetailsResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -108,7 +105,8 @@ class MealDetails {
               (json['strIngredient$i'] as String).trim().isNotEmpty)
             MealIngredient(
               name: (json['strIngredient$i'] as String).trim(),
-              measure: (json['strMeasure$i'] is String &&
+              measure:
+                  (json['strMeasure$i'] is String &&
                       (json['strMeasure$i'] as String).trim().isNotEmpty)
                   ? (json['strMeasure$i'] as String).trim()
                   : null,
@@ -117,16 +115,12 @@ class MealDetails {
     );
   }
 
-  Map<String, dynamic> toJson() =>
-      _$MealDetailsToJson(this);
+  Map<String, dynamic> toJson() => _$MealDetailsToJson(this);
 }
 
 class MealIngredient {
   final String? name;
   final String? measure;
 
-  const MealIngredient({
-    this.name,
-    this.measure,
-  });
+  const MealIngredient({this.name, this.measure});
 }

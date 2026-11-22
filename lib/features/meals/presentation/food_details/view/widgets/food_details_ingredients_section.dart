@@ -8,10 +8,7 @@ import 'package:super_fitness/features/meals/domain/entities/meal_details_entity
 class FoodDetailsIngredientsSection extends StatelessWidget {
   final List<MealIngredientEntity> ingredients;
 
-  const FoodDetailsIngredientsSection({
-    super.key,
-    required this.ingredients,
-  });
+  const FoodDetailsIngredientsSection({super.key, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +34,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: AppTextStyles.bold20,
-      textAlign: TextAlign.start,
-    );
+    return Text(title, style: AppTextStyles.bold20, textAlign: TextAlign.start);
   }
 }
 
@@ -78,14 +71,10 @@ class _IngredientsList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         physics: const NeverScrollableScrollPhysics(),
         itemCount: ingredients.length,
-        separatorBuilder: (_, _) => const Divider(
-          color: AppColors.divider,
-          height: 16,
-          thickness: 0.8,
-        ),
-        itemBuilder: (context, index) => _IngredientRow(
-          ingredient: ingredients[index],
-        ),
+        separatorBuilder: (_, _) =>
+            const Divider(color: AppColors.divider, height: 16, thickness: 0.8),
+        itemBuilder: (context, index) =>
+            _IngredientRow(ingredient: ingredients[index]),
       ),
     );
   }

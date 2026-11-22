@@ -8,9 +8,7 @@ import 'package:super_fitness/features/meals/domain/entities/meal_details_entity
 
 @lazySingleton
 class MealsMapper {
-  List<CategoryEntity> mapCategoryListToEntityList(
-    List<Category> categories,
-  ) {
+  List<CategoryEntity> mapCategoryListToEntityList(List<Category> categories) {
     return categories.map((category) {
       return CategoryEntity(
         id: category.id,
@@ -23,11 +21,7 @@ class MealsMapper {
 
   List<MealEntity> mapMealListToEntityList(List<Meal> meals) {
     return meals.map((meal) {
-      return MealEntity(
-        id: meal.id,
-        name: meal.name,
-        imageUrl: meal.imageUrl,
-      );
+      return MealEntity(id: meal.id, name: meal.name, imageUrl: meal.imageUrl);
     }).toList();
   }
 

@@ -10,4 +10,3 @@ abstract class ExerciseApiClient {
   @factoryMethod
   factory ExerciseApiClient(Dio dio) = _ExerciseApiClient;
 }
-

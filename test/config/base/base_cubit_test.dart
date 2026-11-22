@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_cubit.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 
-sealed class TestIntent {
-  const TestIntent();
+sealed class TestEvent {
+  const TestEvent();
 }
 
-final class SubmitAction extends TestIntent {
+final class SubmitAction extends TestEvent {
   final String payload;
   const SubmitAction(this.payload);
 }
@@ -42,7 +42,7 @@ void main() {
       expect(cubit.state, 0);
     });
 
-    test('doEvent handles intent, updates state and emits UI event', () async {
+    test('doEvent handles event, updates state and emits UI event', () async {
       final emittedEvents = <BaseEvent>[];
       final subscription = cubit.eventStream.listen(emittedEvents.add);
 

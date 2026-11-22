@@ -22,7 +22,7 @@ class _FakeSessionService implements SessionService {
   @override
   Future<void> saveTokens({
     required String token,
-    required String refreshToken,
+    String? refreshToken,
     bool rememberMe = true,
   }) async {}
 
@@ -37,6 +37,12 @@ class _FakeSessionService implements SessionService {
     required String token,
     required String refreshToken,
   }) async {}
+
+  @override
+  Future<void> saveUserData(String userData) async {}
+
+  @override
+  Future<String> getUserData() async => '';
 }
 
 class _TestDioPackageModule extends DioPackageModule {}

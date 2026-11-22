@@ -19,11 +19,7 @@ class FoodDetailsView extends StatefulWidget {
   final FoodDetailsCubit? cubit;
   final String? mealId;
 
-  const FoodDetailsView({
-    super.key,
-    this.cubit,
-    this.mealId,
-  });
+  const FoodDetailsView({super.key, this.cubit, this.mealId});
 
   @override
   State<FoodDetailsView> createState() => _FoodDetailsViewState();
@@ -89,18 +85,13 @@ class _FoodDetailsBackgroundLayer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          AppImages.food,
-          fit: BoxFit.cover,
-        ),
+        Image.asset(AppImages.food, fit: BoxFit.cover),
         BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: AppDimensions.blurRadius8,
             sigmaY: AppDimensions.blurRadius8,
           ),
-          child: ColoredBox(
-            color: Colors.black.withValues(alpha: 0.65),
-          ),
+          child: ColoredBox(color: Colors.black.withValues(alpha: 0.65)),
         ),
       ],
     );
@@ -130,9 +121,7 @@ class _FoodDetailsContent extends StatelessWidget {
                 top: Radius.circular(AppDimensions.cardRadius),
               ),
             ),
-            padding: const EdgeInsets.all(
-              AppDimensions.defaultScreenPadding,
-            ),
+            padding: const EdgeInsets.all(AppDimensions.defaultScreenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -148,9 +137,7 @@ class _FoodDetailsContent extends StatelessWidget {
                   fat: meal.fat,
                 ),
                 const SizedBox(height: 28),
-                FoodDetailsIngredientsSection(
-                  ingredients: meal.ingredients,
-                ),
+                FoodDetailsIngredientsSection(ingredients: meal.ingredients),
                 const SizedBox(height: 32),
               ],
             ),

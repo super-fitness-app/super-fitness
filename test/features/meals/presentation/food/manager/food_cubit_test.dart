@@ -100,7 +100,9 @@ void main() {
     blocTest<FoodCubit, FoodState>(
       'LoadFoodDataEvent emits failure state and broadcasts DisplayError',
       setUp: () {
-        repo.categoriesResult = const Failure(NetworkFailure(AppError.noConnection));
+        repo.categoriesResult = const Failure(
+          NetworkFailure(AppError.noConnection),
+        );
       },
       build: () => FoodCubit(getCategoriesUseCase, getMealsByCategoryUseCase),
       act: (cubit) => cubit.doEvent(const LoadFoodDataEvent()),
@@ -111,7 +113,10 @@ void main() {
         ),
       ],
       verify: (cubit) {
-        expect(cubit.state.failure, const NetworkFailure(AppError.noConnection));
+        expect(
+          cubit.state.failure,
+          const NetworkFailure(AppError.noConnection),
+        );
       },
     );
 
@@ -204,4 +209,3 @@ void main() {
     });
   });
 }
-

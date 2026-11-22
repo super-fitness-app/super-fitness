@@ -19,10 +19,8 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
   final GetCategoriesUseCase _getCategoriesUseCase;
   final GetMealsByCategoryUseCase _getMealsByCategoryUseCase;
 
-  FoodCubit(
-    this._getCategoriesUseCase,
-    this._getMealsByCategoryUseCase,
-  ) : super(const FoodState());
+  FoodCubit(this._getCategoriesUseCase, this._getMealsByCategoryUseCase)
+    : super(const FoodState());
 
   @override
   void doEvent(Object event) {
@@ -65,12 +63,14 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
     switch (result) {
       case Success(:final data):
         final firstBatch = data.take(_pageSize).toList();
-        emit(state.copyWith(
-          allCategoryMeals: data,
-          displayedMeals: firstBatch,
-          hasReachedMax: firstBatch.length >= data.length,
-          baseState: BaseState.success(firstBatch),
-        ));
+        emit(
+          state.copyWith(
+            allCategoryMeals: data,
+            displayedMeals: firstBatch,
+            hasReachedMax: firstBatch.length >= data.length,
+            baseState: BaseState.success(firstBatch),
+          ),
+        );
       case Failure(:final failure):
         emit(state.copyWith(baseState: BaseState.failure(failure)));
         emitEvent(DisplayError.fromFailure(failure));
@@ -79,14 +79,16 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
 
   Future<void> _onSelectCategory(String categoryName) async {
     if (categoryName == state.selectedCategory && !state.isLoading) return;
-    emit(state.copyWith(
-      selectedCategory: categoryName,
-      allCategoryMeals: const [],
-      displayedMeals: const [],
-      isLoadingMore: false,
-      hasReachedMax: false,
-      baseState: const BaseState.loading(),
-    ));
+    emit(
+      state.copyWith(
+        selectedCategory: categoryName,
+        allCategoryMeals: const [],
+        displayedMeals: const [],
+        isLoadingMore: false,
+        hasReachedMax: false,
+        baseState: const BaseState.loading(),
+      ),
+    );
     await _loadMealsForCategory(categoryName);
   }
 
@@ -94,16 +96,20 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
     if (state.isLoadingMore || state.hasReachedMax || state.isLoading) return;
     emit(state.copyWith(isLoadingMore: true));
     final currentCount = state.displayedMeals.length;
-    final nextBatch =
-        state.allCategoryMeals.skip(currentCount).take(_pageSize).toList();
+    final nextBatch = state.allCategoryMeals
+        .skip(currentCount)
+        .take(_pageSize)
+        .toList();
     final updated = List<MealEntity>.from(state.displayedMeals)
       ..addAll(nextBatch);
-    emit(state.copyWith(
-      displayedMeals: updated,
-      isLoadingMore: false,
-      hasReachedMax: updated.length >= state.allCategoryMeals.length,
-      baseState: BaseState.success(updated),
-    ));
+    emit(
+      state.copyWith(
+        displayedMeals: updated,
+        isLoadingMore: false,
+        hasReachedMax: updated.length >= state.allCategoryMeals.length,
+        baseState: BaseState.success(updated),
+      ),
+    );
   }
 
   void _onMealClicked(MealEntity meal) {
@@ -118,4 +124,3 @@ class FoodCubit extends BaseCubit<FoodState, BaseEvent> {
     }
   }
 }
-

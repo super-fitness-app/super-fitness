@@ -40,9 +40,7 @@ class _TestViewState extends State<TestView>
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Test View Content')),
-    );
+    return const Scaffold(body: Center(child: Text('Test View Content')));
   }
 }
 
@@ -71,8 +69,9 @@ void main() {
       );
     }
 
-    testWidgets('displays success SnackBar when DisplaySuccess is emitted',
-        (tester) async {
+    testWidgets('displays success SnackBar when DisplaySuccess is emitted', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
       await tester.pumpAndSettle();
 
@@ -87,37 +86,44 @@ void main() {
       expect(snackBar.backgroundColor, AppColors.success);
     });
 
-    testWidgets('displays error SnackBar when DisplayError with message is emitted',
-        (tester) async {
-      await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'displays error SnackBar when DisplayError with message is emitted',
+      (tester) async {
+        await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
+        await tester.pumpAndSettle();
 
-      cubit.doEvent(const DisplayError('An error occurred'));
-      await tester.pumpAndSettle();
+        cubit.doEvent(const DisplayError('An error occurred'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('An error occurred'), findsOneWidget);
+        expect(find.text('An error occurred'), findsOneWidget);
 
-      final snackBarFinder = find.byType(SnackBar);
-      expect(snackBarFinder, findsOneWidget);
-      final snackBar = tester.widget<SnackBar>(snackBarFinder);
-      expect(snackBar.backgroundColor, AppColors.error);
-    });
+        final snackBarFinder = find.byType(SnackBar);
+        expect(snackBarFinder, findsOneWidget);
+        final snackBar = tester.widget<SnackBar>(snackBarFinder);
+        expect(snackBar.backgroundColor, AppColors.error);
+      },
+    );
 
-    testWidgets('displays localized error message when DisplayError with AppFailure is emitted',
-        (tester) async {
-      await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'displays localized error message when DisplayError with AppFailure is emitted',
+      (tester) async {
+        await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
+        await tester.pumpAndSettle();
 
-      cubit.doEvent(
-        DisplayError.fromFailure(const ServerMessageFailure('Failed to connect')),
-      );
-      await tester.pumpAndSettle();
+        cubit.doEvent(
+          DisplayError.fromFailure(
+            const ServerMessageFailure('Failed to connect'),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('Failed to connect'), findsOneWidget);
-    });
+        expect(find.text('Failed to connect'), findsOneWidget);
+      },
+    );
 
-    testWidgets('triggers onCustomEvent for custom feature events',
-        (tester) async {
+    testWidgets('triggers onCustomEvent for custom feature events', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestApp(TestView(cubit: cubit)));
       await tester.pumpAndSettle();
 

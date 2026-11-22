@@ -9,11 +9,7 @@ class FoodCard extends StatelessWidget {
   final MealEntity meal;
   final VoidCallback onTap;
 
-  const FoodCard({
-    super.key,
-    required this.meal,
-    required this.onTap,
-  });
+  const FoodCard({super.key, required this.meal, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

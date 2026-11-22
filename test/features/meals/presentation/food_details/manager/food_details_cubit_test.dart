@@ -12,8 +12,9 @@ import 'package:super_fitness/features/meals/domain/use_cases/get_meal_details_u
 import 'package:super_fitness/features/meals/presentation/food_details/manager/food_details_cubit.dart';
 
 class FakeMealsRepo implements MealsRepo {
-  ApiResults<MealDetailsEntity> mealDetailsResult =
-      const Success(MealDetailsEntity());
+  ApiResults<MealDetailsEntity> mealDetailsResult = const Success(
+    MealDetailsEntity(),
+  );
   String? lastRequestedId;
 
   @override
@@ -23,8 +24,7 @@ class FakeMealsRepo implements MealsRepo {
   @override
   Future<ApiResults<List<MealEntity>>> getMealsByCategory(
     String category,
-  ) async =>
-      const Success([]);
+  ) async => const Success([]);
 
   @override
   Future<ApiResults<MealDetailsEntity>> getMealDetails(String mealId) async {
@@ -105,8 +105,9 @@ void main() {
     blocTest<FoodDetailsCubit, FoodDetailsState>(
       'LoadMealDetailsEvent emits [loading, failure] on error',
       build: () {
-        repo.mealDetailsResult =
-            const Failure(NetworkFailure(AppError.noConnection));
+        repo.mealDetailsResult = const Failure(
+          NetworkFailure(AppError.noConnection),
+        );
         return FoodDetailsCubit(useCase);
       },
       act: (cubit) => cubit.doEvent(const LoadMealDetailsEvent('53380')),
@@ -119,14 +120,12 @@ void main() {
     );
 
     test('LoadMealDetailsEvent broadcasts DisplayError on failure', () async {
-      repo.mealDetailsResult =
-          const Failure(NetworkFailure(AppError.noConnection));
+      repo.mealDetailsResult = const Failure(
+        NetworkFailure(AppError.noConnection),
+      );
       final cubit = FoodDetailsCubit(useCase);
 
-      expectLater(
-        cubit.eventStream,
-        emits(isA<DisplayError>()),
-      );
+      expectLater(cubit.eventStream, emits(isA<DisplayError>()));
 
       cubit.doEvent(const LoadMealDetailsEvent('53380'));
       await cubit.stream.firstWhere((s) => s.failure != null);

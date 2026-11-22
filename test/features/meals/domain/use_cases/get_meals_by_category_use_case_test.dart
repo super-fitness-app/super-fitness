@@ -16,7 +16,9 @@ class FakeMealsRepo implements MealsRepo {
       const Success([]);
 
   @override
-  Future<ApiResults<List<MealEntity>>> getMealsByCategory(String category) async {
+  Future<ApiResults<List<MealEntity>>> getMealsByCategory(
+    String category,
+  ) async {
     requestedCategory = category;
     return mealsResult;
   }
@@ -36,18 +38,19 @@ void main() {
   });
 
   group('GetMealsByCategoryUseCase Tests', () {
-    test('delegates call with correct category argument and returns Success', () async {
-      const meals = [
-        MealEntity(id: '10', name: 'Fish Pie', imageUrl: ''),
-      ];
-      repo.mealsResult = const Success(meals);
+    test(
+      'delegates call with correct category argument and returns Success',
+      () async {
+        const meals = [MealEntity(id: '10', name: 'Fish Pie', imageUrl: '')];
+        repo.mealsResult = const Success(meals);
 
-      final result = await useCase('Seafood');
+        final result = await useCase('Seafood');
 
-      expect(repo.requestedCategory, 'Seafood');
-      expect(result, isA<Success<List<MealEntity>>>());
-      expect((result as Success<List<MealEntity>>).data, meals);
-    });
+        expect(repo.requestedCategory, 'Seafood');
+        expect(result, isA<Success<List<MealEntity>>>());
+        expect((result as Success<List<MealEntity>>).data, meals);
+      },
+    );
 
     test('delegates call and returns Failure on error', () async {
       repo.mealsResult = const Failure(NetworkFailure(AppError.server));

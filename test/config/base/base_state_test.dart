@@ -15,14 +15,17 @@ void main() {
       expect(state.props, [false, null, null]);
     });
 
-    test('loading factory sets isLoading to true and preserves optional data', () {
-      final state = BaseState<String>.loading(data: 'cached');
+    test(
+      'loading factory sets isLoading to true and preserves optional data',
+      () {
+        final state = BaseState<String>.loading(data: 'cached');
 
-      expect(state.isLoading, isTrue);
-      expect(state.failure, isNull);
-      expect(state.data, 'cached');
-      expect(state.props, [true, null, 'cached']);
-    });
+        expect(state.isLoading, isTrue);
+        expect(state.failure, isNull);
+        expect(state.data, 'cached');
+        expect(state.props, [true, null, 'cached']);
+      },
+    );
 
     test('success factory sets data and resets loading and failure', () {
       final state = BaseState<int>.success(42);
@@ -39,7 +42,11 @@ void main() {
       expect(state.isLoading, isFalse);
       expect(state.failure, const ServerMessageFailure('Server crashed'));
       expect(state.errorMessage, 'Server crashed');
-      expect(state.props, [false, const ServerMessageFailure('Server crashed'), null]);
+      expect(state.props, [
+        false,
+        const ServerMessageFailure('Server crashed'),
+        null,
+      ]);
     });
 
     test('failure factory sets typed AppFailure', () {
@@ -52,32 +59,32 @@ void main() {
       expect(state.props, [false, failure, null]);
     });
 
-    test('copyWith updates specified fields and supports clearing with null', () {
-      const initial = BaseState<String>(
-        isLoading: false,
-        failure: null,
-        data: 'initial',
-      );
+    test(
+      'copyWith updates specified fields and supports clearing with null',
+      () {
+        const initial = BaseState<String>(
+          isLoading: false,
+          failure: null,
+          data: 'initial',
+        );
 
-      final updated = initial.copyWith(
-        isLoading: true,
-        data: 'updated',
-        failure: const ServerMessageFailure('error'),
-      );
+        final updated = initial.copyWith(
+          isLoading: true,
+          data: 'updated',
+          failure: const ServerMessageFailure('error'),
+        );
 
-      expect(updated.isLoading, isTrue);
-      expect(updated.data, 'updated');
-      expect(updated.failure, const ServerMessageFailure('error'));
+        expect(updated.isLoading, isTrue);
+        expect(updated.data, 'updated');
+        expect(updated.failure, const ServerMessageFailure('error'));
 
-      final cleared = updated.copyWith(
-        data: null,
-        failure: null,
-      );
+        final cleared = updated.copyWith(data: null, failure: null);
 
-      expect(cleared.data, isNull);
-      expect(cleared.failure, isNull);
-      expect(cleared.isLoading, isTrue);
-    });
+        expect(cleared.data, isNull);
+        expect(cleared.failure, isNull);
+        expect(cleared.isLoading, isTrue);
+      },
+    );
 
     test('equatable value equality works correctly', () {
       const state1 = BaseState<String>(
@@ -99,6 +106,29 @@ void main() {
       expect(state1, equals(state2));
       expect(state1.hashCode, equals(state2.hashCode));
       expect(state1, isNot(equals(state3)));
+    });
+
+    test('isSuccess and isFailure return correct boolean values', () {
+      const initial = BaseState<String>.initial();
+      expect(initial.isSuccess, isFalse);
+      expect(initial.isFailure, isFalse);
+
+      final loading = BaseState<String>.loading();
+      expect(loading.isSuccess, isFalse);
+      expect(loading.isFailure, isFalse);
+
+      final success = BaseState<String>.success('data');
+      expect(success.isSuccess, isTrue);
+      expect(success.isFailure, isFalse);
+
+      const failure = NetworkFailure(AppError.noConnection);
+      final failureState = BaseState<String>.failure(failure);
+      expect(failureState.isSuccess, isFalse);
+      expect(failureState.isFailure, isTrue);
+
+      final errorState = BaseState<String>.error('Error');
+      expect(errorState.isSuccess, isFalse);
+      expect(errorState.isFailure, isTrue);
     });
 
     test('toString formats correctly', () {

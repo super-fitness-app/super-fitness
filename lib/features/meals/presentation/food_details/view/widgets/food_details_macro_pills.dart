@@ -37,10 +37,7 @@ class _MacroPill extends StatelessWidget {
   final String value;
   final String label;
 
-  const _MacroPill({
-    required this.value,
-    required this.label,
-  });
+  const _MacroPill({required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +47,7 @@ class _MacroPill extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.cardBackground,
-        border: Border.all(
-          color: AppColors.grey70,
-          width: 1.0,
-        ),
+        border: Border.all(color: AppColors.grey70, width: 1.0),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       child: Center(

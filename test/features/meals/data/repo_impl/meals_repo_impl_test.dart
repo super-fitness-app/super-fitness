@@ -10,9 +10,13 @@ import 'package:super_fitness/features/meals/data/models/meals_response.dart';
 import 'package:super_fitness/features/meals/data/repo_impl/meals_repo_impl.dart';
 
 class FakeMealsRemoteDataSource implements MealsRemoteDataSource {
-  CategoriesResponse categoriesResponse = const CategoriesResponse(categories: []);
+  CategoriesResponse categoriesResponse = const CategoriesResponse(
+    categories: [],
+  );
   MealsResponse mealsResponse = const MealsResponse(meals: []);
-  MealDetailsResponse mealDetailsResponse = const MealDetailsResponse(meals: []);
+  MealDetailsResponse mealDetailsResponse = const MealDetailsResponse(
+    meals: [],
+  );
 
   Exception? errorToThrow;
 
@@ -47,20 +51,21 @@ void main() {
   });
 
   group('MealsRepoImpl Tests', () {
-    test('getCategories returns Success on successful dataSource fetch', () async {
-      remoteDataSource.categoriesResponse = const CategoriesResponse(
-        categories: [
-          Category(id: '1', name: 'Seafood'),
-        ],
-      );
+    test(
+      'getCategories returns Success on successful dataSource fetch',
+      () async {
+        remoteDataSource.categoriesResponse = const CategoriesResponse(
+          categories: [Category(id: '1', name: 'Seafood')],
+        );
 
-      final result = await repo.getCategories();
+        final result = await repo.getCategories();
 
-      expect(result, isA<Success>());
-      final data = (result as Success).data;
-      expect(data.length, 1);
-      expect(data.first.name, 'Seafood');
-    });
+        expect(result, isA<Success>());
+        final data = (result as Success).data;
+        expect(data.length, 1);
+        expect(data.first.name, 'Seafood');
+      },
+    );
 
     test('getCategories returns Failure on DioException', () async {
       remoteDataSource.errorToThrow = DioException(
@@ -78,9 +83,7 @@ void main() {
 
     test('getMealsByCategory returns Success on successful fetch', () async {
       remoteDataSource.mealsResponse = const MealsResponse(
-        meals: [
-          Meal(id: '10', name: 'Salmon Salad'),
-        ],
+        meals: [Meal(id: '10', name: 'Salmon Salad')],
       );
 
       final result = await repo.getMealsByCategory('Seafood');
@@ -104,9 +107,7 @@ void main() {
 
     test('getMealDetails returns Success when meal is found', () async {
       remoteDataSource.mealDetailsResponse = const MealDetailsResponse(
-        meals: [
-          MealDetails(id: '501', name: 'Grilled Fish'),
-        ],
+        meals: [MealDetails(id: '501', name: 'Grilled Fish')],
       );
 
       final result = await repo.getMealDetails('501');
@@ -118,7 +119,9 @@ void main() {
     });
 
     test('getMealDetails returns Failure when meal is null or empty', () async {
-      remoteDataSource.mealDetailsResponse = const MealDetailsResponse(meals: []);
+      remoteDataSource.mealDetailsResponse = const MealDetailsResponse(
+        meals: [],
+      );
 
       final result = await repo.getMealDetails('999');
 

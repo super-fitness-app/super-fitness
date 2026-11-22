@@ -62,20 +62,24 @@ void main() {
       ],
     );
 
-    testWidgets('Renders background layer with blur and overlay',
-        (tester) async {
+    testWidgets('Renders background layer with blur and overlay', (
+      tester,
+    ) async {
       final cubit = MockFoodDetailsCubit(const BaseState.loading());
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
 
       expect(find.byType(BackdropFilter), findsOneWidget);
-      final backdrop = tester.widget<BackdropFilter>(find.byType(BackdropFilter));
+      final backdrop = tester.widget<BackdropFilter>(
+        find.byType(BackdropFilter),
+      );
       expect(backdrop.filter, ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0));
       await cubit.close();
     });
 
-    testWidgets('FoodDetailsShimmer is displayed during loading state',
-        (tester) async {
+    testWidgets('FoodDetailsShimmer is displayed during loading state', (
+      tester,
+    ) async {
       final cubit = MockFoodDetailsCubit(const BaseState.loading());
       await tester.pumpWidget(_buildTestWidget(cubit));
       await tester.pump();
@@ -84,8 +88,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('Renders header, macro pills, and ingredients on success',
-        (tester) async {
+    testWidgets('Renders header, macro pills, and ingredients on success', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 3.0;
       addTearDown(() {
@@ -111,8 +116,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('Tapping play button triggers video player navigation',
-        (tester) async {
+    testWidgets('Tapping play button triggers video player navigation', (
+      tester,
+    ) async {
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
       Map<String, dynamic>? capturedArgs;
 
@@ -157,8 +163,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('FoodDetailsErrorView is displayed on failure and retries',
-        (tester) async {
+    testWidgets('FoodDetailsErrorView is displayed on failure and retries', (
+      tester,
+    ) async {
       final cubit = MockFoodDetailsCubit(
         const BaseState.failure(NetworkFailure(AppError.noConnection)),
       );
@@ -178,8 +185,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('RTL Arabic layout renders successfully without overflow',
-        (tester) async {
+    testWidgets('RTL Arabic layout renders successfully without overflow', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 3.0;
       addTearDown(() {
@@ -188,7 +196,9 @@ void main() {
       });
 
       final cubit = MockFoodDetailsCubit(const BaseState.success(testMeal));
-      await tester.pumpWidget(_buildTestWidget(cubit, locale: const Locale('ar')));
+      await tester.pumpWidget(
+        _buildTestWidget(cubit, locale: const Locale('ar')),
+      );
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(FoodDetailsHeader), findsOneWidget);

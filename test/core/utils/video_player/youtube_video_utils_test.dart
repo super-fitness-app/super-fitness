@@ -60,12 +60,18 @@ void main() {
     });
 
     test('returns null for non-youtube domains', () {
-      expect(YoutubeVideoUtils.extractVideoId('https://vimeo.com/12345'), isNull);
+      expect(
+        YoutubeVideoUtils.extractVideoId('https://vimeo.com/12345'),
+        isNull,
+      );
       expect(YoutubeVideoUtils.extractVideoId('https://google.com'), isNull);
     });
 
     test('returns null for malformed or unknown youtube paths', () {
-      expect(YoutubeVideoUtils.extractVideoId('https://www.youtube.com/feed'), isNull);
+      expect(
+        YoutubeVideoUtils.extractVideoId('https://www.youtube.com/feed'),
+        isNull,
+      );
       expect(YoutubeVideoUtils.extractVideoId('invalid-url-string'), isNull);
     });
 

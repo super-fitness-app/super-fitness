@@ -9,16 +9,18 @@ import 'package:super_fitness/features/meals/domain/use_cases/get_meal_details_u
 
 class FakeMealsRepo implements MealsRepo {
   String? requestedMealId;
-  ApiResults<MealDetailsEntity> mealDetailsResult =
-      const Success(MealDetailsEntity());
+  ApiResults<MealDetailsEntity> mealDetailsResult = const Success(
+    MealDetailsEntity(),
+  );
 
   @override
   Future<ApiResults<List<CategoryEntity>>> getCategories() async =>
       const Success([]);
 
   @override
-  Future<ApiResults<List<MealEntity>>> getMealsByCategory(String category) async =>
-      const Success([]);
+  Future<ApiResults<List<MealEntity>>> getMealsByCategory(
+    String category,
+  ) async => const Success([]);
 
   @override
   Future<ApiResults<MealDetailsEntity>> getMealDetails(String mealId) async {
@@ -37,22 +39,27 @@ void main() {
   });
 
   group('GetMealDetailsUseCase Tests', () {
-    test('delegates call with correct mealId argument and returns Success', () async {
-      const details = MealDetailsEntity(
-        id: '52772',
-        name: 'Teriyaki Chicken Casserole',
-      );
-      repo.mealDetailsResult = const Success(details);
+    test(
+      'delegates call with correct mealId argument and returns Success',
+      () async {
+        const details = MealDetailsEntity(
+          id: '52772',
+          name: 'Teriyaki Chicken Casserole',
+        );
+        repo.mealDetailsResult = const Success(details);
 
-      final result = await useCase('52772');
+        final result = await useCase('52772');
 
-      expect(repo.requestedMealId, '52772');
-      expect(result, isA<Success<MealDetailsEntity>>());
-      expect((result as Success<MealDetailsEntity>).data, details);
-    });
+        expect(repo.requestedMealId, '52772');
+        expect(result, isA<Success<MealDetailsEntity>>());
+        expect((result as Success<MealDetailsEntity>).data, details);
+      },
+    );
 
     test('delegates call and returns Failure on repository error', () async {
-      repo.mealDetailsResult = const Failure(NetworkFailure(AppError.badRequest));
+      repo.mealDetailsResult = const Failure(
+        NetworkFailure(AppError.badRequest),
+      );
 
       final result = await useCase('99999');
 
