@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
 import 'package:super_fitness/config/di/di.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
@@ -75,7 +76,9 @@ class _WorkoutBody extends StatelessWidget {
         _BackgroundImage(),
         _DarkOverlay(),
         SafeArea(
+          bottom: false,
           child: BlocBuilder<WorkoutCubit, WorkoutState>(
+            bloc: cubit,
             builder: (context, state) => Column(
               children: [
                 _WorkoutHeader(state: state, cubit: cubit),
@@ -151,6 +154,8 @@ class _WorkoutTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canPop = Navigator.canPop(context);
+    final l10n = AppLocalizations.of(context);
+    final title = l10n?.workouts ?? 'Workouts';
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Stack(
@@ -170,10 +175,10 @@ class _WorkoutTitle extends StatelessWidget {
                 ),
               ),
             ),
-          const Text(
-            'Workouts',
+          Text(
+            title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.white,
               fontSize: 22,
               fontWeight: FontWeight.w700,
