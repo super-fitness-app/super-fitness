@@ -18,6 +18,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidEmailError => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
+  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
   String get invalidPhoneError => 'يرجى إدخال رقم هاتف مصري صحيح';
 
   @override
@@ -164,7 +167,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'الملف الشخصي';
 
   @override
-  String get heyThere => 'مرحباً بك';
+  String get heyThere => 'مرحباً';
 
   @override
   String get welcomeBack => 'مرحباً بعودتك';
@@ -182,10 +185,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontHaveAccount => 'ليس لديك حساب بعد؟';
 
   @override
-  String get register => 'تسجيل';
+  String get createAnAccount => 'إنشاء حساب';
 
   @override
-  String get createAnAccount => 'إنشاء حساب';
+  String get register => 'تسجيل';
 
   @override
   String get firstName => 'الاسم الأول';
@@ -198,9 +201,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'اسم العائلة مطلوب';
-
-  @override
-  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
   String get passwordMinLength =>
@@ -312,4 +312,162 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trueBeast => 'محترف رياضي';
+
+  @override
+  String get hiAhmed => 'مرحباً أحمد ،';
+
+  @override
+  String hiWithName(String name) {
+    return 'مرحباً $name ،';
+  }
+
+  @override
+  String get letsStartYourDay => 'لنبدأ يومك';
+
+  @override
+  String get category => 'الفئات';
+
+  @override
+  String get gym => 'جيم';
+
+  @override
+  String get fitness => 'لياقة بدنية';
+
+  @override
+  String get yoga => 'يوغا';
+
+  @override
+  String get aerobics => 'تمارين هوائية';
+
+  @override
+  String get trainer => 'مدرب';
+
+  @override
+  String get recommendationToday => 'توصيات اليوم';
+
+  @override
+  String get jogging => 'ركض';
+
+  @override
+  String get pushUp => 'تمرين الضغط';
+
+  @override
+  String get squat => 'سكوات';
+
+  @override
+  String get upcomingWorkouts => 'التمارين القادمة';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get fullBody => 'كامل الجسم';
+
+  @override
+  String get chest => 'الصدر';
+
+  @override
+  String get arm => 'الذراع';
+
+  @override
+  String get shoulder => 'الكتف';
+
+  @override
+  String get back => 'الظهر';
+
+  @override
+  String get legs => 'الأرجل';
+
+  @override
+  String get arms => 'الذراعين';
+
+  @override
+  String get recommendationForYou => 'موصى به لك';
+
+  @override
+  String get breakfast => 'فطور';
+
+  @override
+  String get lunch => 'غداء';
+
+  @override
+  String get dinner => 'عشاء';
+
+  @override
+  String get popularTraining => 'التدريبات الشائعة';
+
+  @override
+  String get exercisesThatStrengthenYourChest => 'تمارين لتقوية عضلات الصدر';
+
+  @override
+  String get exercisesThatStrengthenYourBack => 'تمارين لتقوية عضلات الظهر';
+
+  @override
+  String tasksCount(int count) {
+    return '$count تمرين';
+  }
+
+  @override
+  String get foodRecommendation => 'توصيات الطعام';
+
+  @override
+  String get noMealsFound => 'لم يتم العثور على وجبات';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get failedToLoadMeals => 'فشل في تحميل الوجبات';
+
+  @override
+  String get foodDetails => 'تفاصيل الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get energy => 'طاقة';
+
+  @override
+  String get protein => 'بروتين';
+
+  @override
+  String get carbs => 'كربوهيدرات';
+
+  @override
+  String get fat => 'دهون';
+
+  @override
+  String get failedToLoadMealDetails => 'فشل في تحميل تفاصيل الوجبة';
+
+  @override
+  String get playVideo => 'تشغيل الفيديو';
+
+  @override
+  String get noIngredientsAvailable => 'لا توجد مكونات متوفرة';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories سعرة حرارية';
+  }
+
+  @override
+  String get advanced => 'متقدم';
+
+  @override
+  String get failedToLoadExercises => 'فشل تحميل التمارين';
+
+  @override
+  String get noExercisesFound => 'لم يتم العثور على تمارين';
+
+  @override
+  String get chestExercise => 'تمارين الصدر';
+
+  @override
+  String get exerciseDescription => 'ابدأ رحلتك الرياضية مع تمارين الصدر.';
 }

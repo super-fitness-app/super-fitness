@@ -18,6 +18,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidEmailError => 'Please enter a valid email address';
 
   @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
   String get invalidPhoneError => 'Please enter a valid Egyptian phone number';
 
   @override
@@ -183,10 +186,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontHaveAccount => 'Don\'t Have An Account Yet ?';
 
   @override
-  String get register => 'Register';
+  String get createAnAccount => 'CREATE AN ACCOUNT';
 
   @override
-  String get createAnAccount => 'CREATE AN ACCOUNT';
+  String get register => 'Register';
 
   @override
   String get firstName => 'First Name';
@@ -199,9 +202,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'Last name is required';
-
-  @override
-  String get invalidEmail => 'Please enter a valid email';
 
   @override
   String get passwordMinLength => 'Password must be at least 8 characters';
@@ -314,4 +314,165 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trueBeast => 'True Beast';
+
+  @override
+  String get hiAhmed => 'Hi Ahmed ,';
+
+  @override
+  String hiWithName(String name) {
+    return 'Hi $name ,';
+  }
+
+  @override
+  String get letsStartYourDay => 'Let\'s Start Your Day';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get gym => 'Gym';
+
+  @override
+  String get fitness => 'Fitness';
+
+  @override
+  String get yoga => 'Yoga';
+
+  @override
+  String get aerobics => 'Aerobics';
+
+  @override
+  String get trainer => 'Trainer';
+
+  @override
+  String get recommendationToday => 'Recommendation To Day';
+
+  @override
+  String get jogging => 'Jogging';
+
+  @override
+  String get pushUp => 'Push-Up';
+
+  @override
+  String get squat => 'Squat';
+
+  @override
+  String get upcomingWorkouts => 'Upcoming Workouts';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String get fullBody => 'Full Body';
+
+  @override
+  String get chest => 'Chest';
+
+  @override
+  String get arm => 'Arm';
+
+  @override
+  String get shoulder => 'Shoulder';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get legs => 'Legs';
+
+  @override
+  String get arms => 'Arms';
+
+  @override
+  String get recommendationForYou => 'Recommendation For You';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get popularTraining => 'Popular Training';
+
+  @override
+  String get exercisesThatStrengthenYourChest =>
+      'Exercises That Strengthen Your Chest';
+
+  @override
+  String get exercisesThatStrengthenYourBack =>
+      'Exercises That Strengthen Your Back';
+
+  @override
+  String tasksCount(int count) {
+    return '$count Tasks';
+  }
+
+  @override
+  String get foodRecommendation => 'Food Recommendation';
+
+  @override
+  String get noMealsFound => 'No meals found';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get failedToLoadMeals => 'Failed to load meals';
+
+  @override
+  String get foodDetails => 'Food Details';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get energy => 'Energy';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fat => 'Fat';
+
+  @override
+  String get failedToLoadMealDetails => 'Failed to load meal details';
+
+  @override
+  String get playVideo => 'Play Video';
+
+  @override
+  String get noIngredientsAvailable => 'No ingredients available';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes Min';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories Cal';
+  }
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get failedToLoadExercises => 'Failed to load exercises';
+
+  @override
+  String get noExercisesFound => 'No exercises found';
+
+  @override
+  String get chestExercise => 'Chest Exercise';
+
+  @override
+  String get exerciseDescription =>
+      'Start your fitness journey with chest exercises.';
 }

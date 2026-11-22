@@ -1,6 +1,5 @@
 abstract final class AppImages {
   static const String _imagesPath = 'assets/images';
-
   static const String appIcon = '$_imagesPath/app_icon.png';
   static const String splash = '$_imagesPath/splash.png';
   static const String authBackground = 'assets/images/auth/auth_background.png';
@@ -14,6 +13,8 @@ abstract final class AppImages {
   static const String onboarding3 = '$_imagesPath/onboarding3.png';
   static const String appLogo = '$_imagesPath/app_icon.png';
   static const String background = '$_imagesPath/background.png';
+  static const String defaultAvatar = '$_imagesPath/default_avatar.png';
+  static const String food = '$_imagesPath/food.png';
 
   static const String step1 = 'assets/images/auth/Group 11.png';
   static const String step2 = 'assets/images/auth/Group 12.png';
@@ -21,4 +22,8 @@ abstract final class AppImages {
   static const String step4 = 'assets/images/auth/Group 14.png';
   static const String step5 = 'assets/images/auth/Group 15.png';
   static const String step6 = 'assets/images/auth/Group 16.png';
+
+  static const String exerciseBackground = 'assets/workout/exercise_bg.png';
+  static const String bodyBuilder = 'assets/workout/body_builder.jpg';
+  static const String workoutBackground = 'assets/images/back_workouts.png';
 }

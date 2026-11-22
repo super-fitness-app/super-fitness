@@ -4,6 +4,7 @@
 
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
+  "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
   "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",
   "nationalIdError": "يرجى إدخال رقم قومي صحيح",
   "weakPasswordError": "كلمة المرور ضعيفة جداً",
@@ -53,23 +54,16 @@
   "profile": "الملف الشخصي",
   "heyThere": "مرحباً",
   "welcomeBack": "مرحباً بعودتك",
-  "login": "تسجيل الدخول",
   "email": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgotPassword": "نسيت كلمة المرور؟",
   "dontHaveAccount": "ليس لديك حساب بعد؟",
-  "register": "إنشاء حساب",
-
-  "heyThere": "مرحباً بك",
   "createAnAccount": "إنشاء حساب",
   "register": "تسجيل",
   "firstName": "الاسم الأول",
   "lastName": "اسم العائلة",
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور",
   "firstNameRequired": "الاسم الأول مطلوب",
   "lastNameRequired": "اسم العائلة مطلوب",
-  "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
   "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
   "or": "أو",
   "forgetPassword": "نسيت كلمة المرور",
@@ -105,5 +99,82 @@
   "beginner": "مبتدئ",
   "intermediate": "متوسط",
   "advance": "متقدم",
-  "trueBeast": "محترف رياضي"
+  "trueBeast": "محترف رياضي",
+
+  "hiAhmed": "مرحباً أحمد ،",
+  "hiWithName": "مرحباً {name} ،",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "letsStartYourDay": "لنبدأ يومك",
+  "category": "الفئات",
+  "gym": "جيم",
+  "fitness": "لياقة بدنية",
+  "yoga": "يوغا",
+  "aerobics": "تمارين هوائية",
+  "trainer": "مدرب",
+  "recommendationToday": "توصيات اليوم",
+  "jogging": "ركض",
+  "pushUp": "تمرين الضغط",
+  "squat": "سكوات",
+  "upcomingWorkouts": "التمارين القادمة",
+  "seeAll": "عرض الكل",
+  "fullBody": "كامل الجسم",
+  "chest": "الصدر",
+  "arm": "الذراع",
+  "shoulder": "الكتف",
+  "back": "الظهر",
+  "legs": "الأرجل",
+  "arms": "الذراعين",
+  "recommendationForYou": "موصى به لك",
+  "breakfast": "فطور",
+  "lunch": "غداء",
+  "dinner": "عشاء",
+  "popularTraining": "التدريبات الشائعة",
+  "exercisesThatStrengthenYourChest": "تمارين لتقوية عضلات الصدر",
+  "exercisesThatStrengthenYourBack": "تمارين لتقوية عضلات الظهر",
+  "tasksCount": "{count} تمرين",
+
+  "foodRecommendation": "توصيات الطعام",
+  "noMealsFound": "لم يتم العثور على وجبات",
+  "retry": "إعادة المحاولة",
+  "failedToLoadMeals": "فشل في تحميل الوجبات",
+  "foodDetails": "تفاصيل الوجبة",
+  "ingredients": "المكونات",
+  "energy": "طاقة",
+  "protein": "بروتين",
+  "carbs": "كربوهيدرات",
+  "fat": "دهون",
+  "failedToLoadMealDetails": "فشل في تحميل تفاصيل الوجبة",
+  "playVideo": "تشغيل الفيديو",
+  "noIngredientsAvailable": "لا توجد مكونات متوفرة",
+
+  "chestExercise": "تمارين الصدر",
+  "exerciseDescription": "ابدأ رحلتك الرياضية مع تمارين الصدر.",
+  "durationMinutes": "{minutes} دقيقة",
+  "@durationMinutes": {
+    "description": "مدة التمرين بالدقائق",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} سعرة حرارية",
+  "@calories": {
+    "description": "عدد السعرات الحرارية",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "متقدم",
+  "failedToLoadExercises": "فشل تحميل التمارين",
+  "noExercisesFound": "لم يتم العثور على تمارين"
 }
