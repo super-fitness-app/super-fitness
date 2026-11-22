@@ -10,4 +10,6 @@ abstract final class AppConstants {
   static const String localeEnglish = 'en';
   static const String floatingNavBarConstrainedBoxKey =
       'floating_nav_bar_constrained_box';
+  static const String category = 'c';
+  static const String mealId = 'i';
 }

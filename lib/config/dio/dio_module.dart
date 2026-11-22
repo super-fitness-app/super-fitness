@@ -16,6 +16,7 @@ abstract class DioPackageModule {
     final dio = Dio(
       BaseOptions(
         baseUrl: Endpoints.baseUrl,
+        connectTimeout: const Duration(seconds: 8),
         sendTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),
@@ -42,6 +43,7 @@ abstract class DioPackageModule {
     final dio = Dio(
       BaseOptions(
         baseUrl: Endpoints.baseUrl,
+        connectTimeout: const Duration(seconds: 8),
         sendTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),

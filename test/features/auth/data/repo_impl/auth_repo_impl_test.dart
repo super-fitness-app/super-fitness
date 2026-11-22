@@ -15,30 +15,83 @@ import 'package:super_fitness/features/auth/domain/entities/register_entity.dart
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/params/login_params.dart';
+import 'package:super_fitness/features/auth/data/models/forget_password_response_dto.dart';
+import 'package:super_fitness/features/auth/data/models/verify_otp_response_dto.dart';
+import 'package:super_fitness/features/auth/data/models/reset_password_response_dto.dart';
 
 class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   RegisterResponseModel? responseToReturn;
   LoginResponse? loginResponseToReturn;
+  ForgetPasswordResponseDto? forgetPasswordResponseToReturn;
+  VerifyOtpResponseDto? verifyOtpResponseToReturn;
+  ResetPasswordResponseDto? resetPasswordResponseToReturn;
+
   Exception? exceptionToThrow;
+
   RegisterDto? capturedRequest;
   LoginRequest? capturedLoginRequest;
+
+  String? capturedEmail;
+  String? capturedOtp;
+  String? capturedOtpToken;
+  String? capturedPassword;
+  String? capturedConfirmPassword;
 
   @override
   Future<RegisterResponseModel> register(RegisterDto request) async {
     capturedRequest = request;
-    if (exceptionToThrow != null) {
-      throw exceptionToThrow!;
-    }
+
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+
     return responseToReturn!;
   }
 
   @override
   Future<LoginResponse> login(LoginRequest request) async {
     capturedLoginRequest = request;
-    if (exceptionToThrow != null) {
-      throw exceptionToThrow!;
-    }
+
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+
     return loginResponseToReturn!;
+  }
+
+  @override
+  Future<ForgetPasswordResponseDto> forgotPassword({
+    required String email,
+  }) async {
+    capturedEmail = email;
+
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+
+    return forgetPasswordResponseToReturn!;
+  }
+
+  @override
+  Future<VerifyOtpResponseDto> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    capturedEmail = email;
+    capturedOtp = otp;
+
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+
+    return verifyOtpResponseToReturn!;
+  }
+
+  @override
+  Future<ResetPasswordResponseDto> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    capturedOtpToken = otpToken;
+    capturedPassword = password;
+    capturedConfirmPassword = confirmPassword;
+
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+
+    return resetPasswordResponseToReturn!;
   }
 }
 

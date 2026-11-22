@@ -1,51 +1,55 @@
 {
   "@@locale": "ar",
   "appName": "سوبر فيتنس",
+  "@appName": {
+    "description": "App Name"
+  },
 
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
+  "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
   "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",
   "nationalIdError": "يرجى إدخال رقم قومي صحيح",
   "weakPasswordError": "كلمة المرور ضعيفة جداً",
-  "passwordMustBeAtLeast8Characters": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+  "passwordMustBeAtLeast8Characters": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
   "passwordMustContainUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
   "passwordMustContainLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
   "passwordMustContainNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
   "passwordMustContainSpecialCharacter": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل",
   "passwordMismatchError": "كلمتا المرور غير متطابقتين",
-  "fileRequiredError": "يرجى تحميل الملف المطلوب",
-  "dropdownRequiredError": "يرجى اختيار قيمة",
-  "generalValidationError": "مدخلات غير صحيحة",
-  "invalidLoginPasswordError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم",
+  "fileRequiredError": "يرجى رفع الملف المطلوب",
+  "dropdownRequiredError": "يرجى اختيار أحد الخيارات",
+  "generalValidationError": "إدخال غير صحيح",
+  "invalidLoginPasswordError": "يجب أن تكون كلمة المرور 6 أحرف على الأقل وتحتوي على حرف كبير ورقم",
 
   "generalErrorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
   "connectionErrorMessage": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
   "noConnectionErrorMessage": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
   "securityErrorMessage": "تعذر إنشاء اتصال آمن.",
   "cancelErrorMessage": "تم إلغاء الطلب.",
-  "code400Message": "طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.",
-  "code401Message": "انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.",
-  "code403Message": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
-  "code404Message": "العنصر المطلوب غير موجود.",
-  "code409Message": "الحساب أو المورد مسجل مسبقاً.",
-  "code422Message": "خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.",
-  "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
-  "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
+  "code400Message": "طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مرة أخرى.",
+  "code401Message": "انتهت الجلسة أو بيانات الاعتماد غير صالحة. يرجى تسجيل الدخول مرة أخرى.",
+  "code403Message": "ليس لديك إذن لتنفيذ هذا الإجراء.",
+  "code404Message": "المورد المطلوب غير موجود.",
+  "code409Message": "الحساب أو المورد موجود بالفعل.",
+  "code422Message": "خطأ في التحقق. يرجى التأكد من المدخلات.",
+  "code429Message": "طلبات كثيرة جداً. يرجى الانتظار لحظة والمحاولة مرة أخرى.",
+  "code500sMessage": "خطأ في الخادم. يرجى المحاولة مرة أخرى بعد قليل.",
 
   "loginTitle": "مرحباً بعودتك!",
-  "alreadyHaveAnAccount": "هل لديك حساب بالفعل؟ ",
+  "alreadyHaveAnAccount": "لديك حساب بالفعل؟ ",
   "login": "تسجيل الدخول",
 
   "onboardingSkip": "تخطي",
   "onboardingNext": "التالي",
-  "onboardingBack": "السابق",
+  "onboardingBack": "رجوع",
   "onboardingDoIt": "ابدأ الآن",
   "onboardingTitle1": "ثمن التميز\nهو الانضباط",
-  "onboardingSubtitle1": "النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتصل إلى أعلى مستويات اللياقة والتميز.",
-  "onboardingTitle2": "اللياقة البدنية لم تكن أبداً\nبهذا القدر من المتعة",
-  "onboardingSubtitle2": "حوّل تمارينك إلى رحلة ممتعة مع تحديات حماسية وخطط تدريب تجعل كل خطوة مليئة بالطاقة والشغف.",
-  "onboardingTitle3": "لا مزيد من الأعذار\nابدأ الآن",
-  "onboardingSubtitle3": "توقف عن انتظار اللحظة المثالية. ابدأ الآن وتخلص من التردد لتصنع التغيير الحقيقي وتبني قوتك.",
+  "onboardingSubtitle1": "النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتحقيق أفضل أداء.",
+  "onboardingTitle2": "اللياقة لم تكن أبداً\nبهذا القدر من المتعة",
+  "onboardingSubtitle2": "حوّل تمارينك إلى رحلة ممتعة مع تحديات ملهمة وروتين يحافظ على حماسك.",
+  "onboardingTitle3": "لا مزيد من الأعذار\nابدأ اليوم",
+  "onboardingSubtitle3": "لا تنتظر اللحظة المثالية. اتخذ الخطوة اليوم، وتجاوز العقبات، واصنع المستقبل الذي تستحقه.",
 
   "explore": "استكشف",
   "smartCoach": "المدرب الذكي",
@@ -53,17 +57,16 @@
   "profile": "الملف الشخصي",
   "heyThere": "مرحباً",
   "welcomeBack": "مرحباً بعودتك",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
   "forgotPassword": "نسيت كلمة المرور؟",
   "dontHaveAccount": "ليس لديك حساب بعد؟",
   "createAnAccount": "إنشاء حساب",
   "register": "تسجيل",
   "firstName": "الاسم الأول",
   "lastName": "اسم العائلة",
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور",
   "firstNameRequired": "الاسم الأول مطلوب",
   "lastNameRequired": "اسم العائلة مطلوب",
-  "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
   "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
   "or": "أو",
   "forgetPassword": "نسيت كلمة المرور",
@@ -71,6 +74,9 @@
   "missingRegistrationData": "يرجى إكمال جميع بيانات التسجيل المطلوبة",
   "googleAccountIdMissing": "معرف حساب Google مفقود. يرجى المحاولة مرة أخرى.",
   "googleAccountConnected": "تم ربط حساب Google. أكمل ملفك الشخصي.",
+  "facebookAccountIdMissing": "معرف حساب Facebook مفقود. يرجى المحاولة مرة أخرى.",
+  "facebookAccountConnected": "تم ربط حساب Facebook. أكمل ملفك الشخصي.",
+  "accountNotFoundRegisterFirst": "الحساب غير موجود. يرجى إنشاء حساب أولاً.",
 
   "tellUsAboutYourself": "أخبرنا عن نفسك!",
   "weNeedToKnowYourGender": "نحتاج إلى معرفة جنسك",
@@ -99,6 +105,23 @@
   "trueBeast": "محترف رياضي",
 
   "smartCoachGreeting": "مرحباً {userName} ،",
+  "@smartCoachGreeting": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "hiAhmed": "مرحباً أحمد ،",
+  "hiWithName": "مرحباً {name} ،",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "smartCoachSubtitle": "أنا مدربك الذكي",
   "smartCoachWelcomeAssist": "كيف يمكنني مساعدتك\nاليوم ؟",
   "smartCoachGetStarted": "ابدأ الآن",
@@ -133,5 +156,72 @@
   "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟",
   "smartCoachDeleteChatTitle": "حذف المحادثة؟",
   "smartCoachDeleteChatConfirm": "هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.",
-  "smartCoachDelete": "حذف"
+  "smartCoachDelete": "حذف",
+
+  "letsStartYourDay": "لنبدأ يومك",
+  "category": "الفئات",
+  "gym": "جيم",
+  "fitness": "لياقة بدنية",
+  "yoga": "يوغا",
+  "aerobics": "تمارين هوائية",
+  "trainer": "مدرب",
+  "recommendationToday": "توصيات اليوم",
+  "jogging": "ركض",
+  "pushUp": "تمرين الضغط",
+  "squat": "سكوات",
+  "upcomingWorkouts": "التمارين القادمة",
+  "seeAll": "عرض الكل",
+  "fullBody": "كامل الجسم",
+  "chest": "الصدر",
+  "arm": "الذراع",
+  "shoulder": "الكتف",
+  "back": "الظهر",
+  "legs": "الأرجل",
+  "arms": "الذراعين",
+  "recommendationForYou": "موصى به لك",
+  "breakfast": "فطور",
+  "lunch": "غداء",
+  "dinner": "عشاء",
+  "popularTraining": "التدريبات الشائعة",
+  "exercisesThatStrengthenYourChest": "تمارين لتقوية عضلات الصدر",
+  "exercisesThatStrengthenYourBack": "تمارين لتقوية عضلات الظهر",
+  "tasksCount": "{count} تمرين",
+
+  "foodRecommendation": "توصيات الطعام",
+  "noMealsFound": "لم يتم العثور على وجبات",
+  "retry": "إعادة المحاولة",
+  "failedToLoadMeals": "فشل في تحميل الوجبات",
+  "foodDetails": "تفاصيل الوجبة",
+  "ingredients": "المكونات",
+  "energy": "طاقة",
+  "protein": "بروتين",
+  "carbs": "كربوهيدرات",
+  "fat": "دهون",
+  "failedToLoadMealDetails": "فشل في تحميل تفاصيل الوجبة",
+  "playVideo": "تشغيل الفيديو",
+  "noIngredientsAvailable": "لا توجد مكونات متوفرة",
+
+  "chestExercise": "تمارين الصدر",
+  "exerciseDescription": "ابدأ رحلتك الرياضية مع تمارين الصدر.",
+  "durationMinutes": "{minutes} دقيقة",
+  "@durationMinutes": {
+    "description": "مدة التمرين بالدقائق",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} سعرة حرارية",
+  "@calories": {
+    "description": "عدد السعرات الحرارية",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "متقدم",
+  "failedToLoadExercises": "فشل تحميل التمارين",
+  "noExercisesFound": "لم يتم العثور على تمارين"
 }

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
@@ -9,6 +10,7 @@ import 'package:super_fitness/features/auth/domain/entities/register_params.dart
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 
@@ -19,6 +21,7 @@ class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? resultToReturn;
   RegisterParams? passedRequest;
   ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+  ApiResults<SocialAuthUserEntity>? facebookResultToReturn;
 
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterParams request) async {
@@ -32,8 +35,35 @@ class FakeAuthRepo implements AuthRepo {
   }
 
   @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
+    return facebookResultToReturn!;
+  }
+
+  @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
   }
 }
 
@@ -52,6 +82,7 @@ void main() {
     late FakeAuthRepo fakeAuthRepo;
     late RegisterUseCase registerUseCase;
     late SignInWithGoogleUseCase googleUseCase;
+    late SignInWithFacebookUseCase facebookUseCase;
     late RegisterCubit cubit;
 
     const testPasswordGenerator = PasswordGenerator.custom(
@@ -63,9 +94,11 @@ void main() {
       fakeAuthRepo = FakeAuthRepo();
       registerUseCase = RegisterUseCase(fakeAuthRepo);
       googleUseCase = SignInWithGoogleUseCase(fakeAuthRepo);
+      facebookUseCase = SignInWithFacebookUseCase(fakeAuthRepo);
       cubit = RegisterCubit(
         registerUseCase,
         googleUseCase,
+        facebookUseCase,
         testPasswordGenerator,
       );
     });
@@ -442,6 +475,108 @@ void main() {
         final displayError = receivedEvent as DisplayError;
         expect(displayError.errorMsg, 'Sign-in cancelled');
         expect(displayError.failure, isA<CancelledFailure>());
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithFacebookEvent success generates deterministic password, saves user data in Cubit state, and emits DisplaySuccess & NavigateEvent to complete register',
+      () async {
+        const facebookUser = SocialAuthUserEntity(
+          id: 'fb12345',
+          email: 'facebook.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.facebookResultToReturn = const Success(facebookUser);
+
+        final receivedEvents = <BaseEvent>[];
+        final sub = cubit.eventStream.listen(receivedEvents.add);
+
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+
+        final expectedPassword = testPasswordGenerator.generate('fb12345');
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.data.email, 'facebook.user@example.com');
+        expect(cubit.state.data.firstName, 'Jane');
+        expect(cubit.state.data.lastName, 'Doe');
+        expect(cubit.state.data.password, equals(expectedPassword));
+        expect(cubit.state.data.rePassword, equals(expectedPassword));
+        expect(receivedEvents, contains(isA<DisplaySuccess>()));
+        expect(
+          receivedEvents.any(
+            (e) =>
+                e is NavigateEvent &&
+                e.routeName == AppRoutes.completeRegister &&
+                e.extra == cubit,
+          ),
+          isTrue,
+        );
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithFacebookEvent with null or empty ID emits error state and DisplayError',
+      () async {
+        const facebookUser = SocialAuthUserEntity(
+          id: '',
+          email: 'facebook.user@example.com',
+          displayName: 'Jane Doe',
+        );
+        fakeAuthRepo.facebookResultToReturn = const Success(facebookUser);
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(
+          cubit.state.registerState,
+          isA<BaseState>().having(
+            (s) => s.errorMessage,
+            'errorMessage',
+            'Facebook account ID is missing. Please try again.',
+          ),
+        );
+        expect(receivedEvent, isA<DisplayError>());
+        final displayError = receivedEvent as DisplayError;
+        expect(
+          displayError.errorMsg,
+          'Facebook account ID is missing. Please try again.',
+        );
+
+        await sub.cancel();
+      },
+    );
+
+    test(
+      'SignInWithFacebookEvent failure emits failure state and DisplayError',
+      () async {
+        fakeAuthRepo.facebookResultToReturn = const FailureResponse(
+          ServerMessageFailure('Facebook authentication failed'),
+        );
+
+        BaseEvent? receivedEvent;
+        final sub = cubit.eventStream.listen((event) {
+          receivedEvent = event;
+        });
+
+        await cubit.signInWithFacebookIntent();
+        await pumpEventQueue();
+
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.failure, isA<ServerMessageFailure>());
+        expect(receivedEvent, isA<DisplayError>());
+        final displayError = receivedEvent as DisplayError;
+        expect(displayError.errorMsg, 'Facebook authentication failed');
+        expect(displayError.failure, isA<ServerMessageFailure>());
 
         await sub.cancel();
       },

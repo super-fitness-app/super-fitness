@@ -106,3 +106,8 @@ final class ResetRegistrationEvent extends RegisterEvent {
 final class SignInWithGoogleEvent extends RegisterEvent {
   const SignInWithGoogleEvent();
 }
+
+/// Facebook Sign-In Event
+final class SignInWithFacebookEvent extends RegisterEvent {
+  const SignInWithFacebookEvent();
+}

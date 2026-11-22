@@ -7,6 +7,7 @@
 
   "emptyValidationError": "This field is required",
   "invalidEmailError": "Please enter a valid email address",
+  "invalidEmail": "Please enter a valid email",
   "invalidPhoneError": "Please enter a valid Egyptian phone number",
   "nationalIdError": "Please enter a valid national ID",
   "weakPasswordError": "Password is too weak",
@@ -56,17 +57,16 @@
   "profile": "Profile",
   "heyThere": "Hey There",
   "welcomeBack": "WELCOME BACK",
+  "email": "Email",
+  "password": "Password",
   "forgotPassword": "Forgot Password ?",
   "dontHaveAccount": "Don't Have An Account Yet ?",
   "createAnAccount": "CREATE AN ACCOUNT",
   "register": "Register",
   "firstName": "First Name",
   "lastName": "Last Name",
-  "email": "Email",
-  "password": "Password",
   "firstNameRequired": "First name is required",
   "lastNameRequired": "Last name is required",
-  "invalidEmail": "Please enter a valid email",
   "passwordMinLength": "Password must be at least 8 characters",
   "or": "Or",
   "forgetPassword": "Forget Password",
@@ -74,6 +74,9 @@
   "missingRegistrationData": "Please fill all required registration details",
   "googleAccountIdMissing": "Google account ID is missing. Please try again.",
   "googleAccountConnected": "Google account connected. Complete your profile.",
+  "facebookAccountIdMissing": "Facebook account ID is missing. Please try again.",
+  "facebookAccountConnected": "Facebook account connected. Complete your profile.",
+  "accountNotFoundRegisterFirst": "Account not found. Please register first.",
 
   "tellUsAboutYourself": "TELL US ABOUT YOURSELF!",
   "weNeedToKnowYourGender": "We Need To Know Your Gender",
@@ -105,6 +108,16 @@
   "@smartCoachGreeting": {
     "placeholders": {
       "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "hiAhmed": "Hi Ahmed ,",
+  "hiWithName": "Hi {name} ,",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
         "type": "String"
       }
     }
@@ -143,5 +156,80 @@
   "smartCoachPromptForm": "🔥 How to fix my squat form?",
   "smartCoachDeleteChatTitle": "Delete Conversation?",
   "smartCoachDeleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
-  "smartCoachDelete": "Delete"
+  "smartCoachDelete": "Delete",
+
+  "letsStartYourDay": "Let's Start Your Day",
+  "category": "Category",
+  "gym": "Gym",
+  "fitness": "Fitness",
+  "yoga": "Yoga",
+  "aerobics": "Aerobics",
+  "trainer": "Trainer",
+  "recommendationToday": "Recommendation To Day",
+  "jogging": "Jogging",
+  "pushUp": "Push-Up",
+  "squat": "Squat",
+  "upcomingWorkouts": "Upcoming Workouts",
+  "seeAll": "See All",
+  "fullBody": "Full Body",
+  "chest": "Chest",
+  "arm": "Arm",
+  "shoulder": "Shoulder",
+  "back": "Back",
+  "legs": "Legs",
+  "arms": "Arms",
+  "recommendationForYou": "Recommendation For You",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "popularTraining": "Popular Training",
+  "exercisesThatStrengthenYourChest": "Exercises That Strengthen Your Chest",
+  "exercisesThatStrengthenYourBack": "Exercises That Strengthen Your Back",
+  "tasksCount": "{count} Tasks",
+  "@tasksCount": {
+    "description": "Task count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "foodRecommendation": "Food Recommendation",
+  "noMealsFound": "No meals found",
+  "retry": "Retry",
+  "failedToLoadMeals": "Failed to load meals",
+  "foodDetails": "Food Details",
+  "ingredients": "Ingredients",
+  "energy": "Energy",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "fat": "Fat",
+  "failedToLoadMealDetails": "Failed to load meal details",
+  "playVideo": "Play Video",
+  "noIngredientsAvailable": "No ingredients available",
+
+  "durationMinutes": "{minutes} Min",
+  "@durationMinutes": {
+    "description": "Exercise duration in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} Cal",
+  "@calories": {
+    "description": "Exercise calories",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "Advanced",
+  "failedToLoadExercises": "Failed to load exercises",
+  "noExercisesFound": "No exercises found",
+  "chestExercise": "Chest Exercise",
+  "exerciseDescription": "Start your fitness journey with chest exercises."
 }

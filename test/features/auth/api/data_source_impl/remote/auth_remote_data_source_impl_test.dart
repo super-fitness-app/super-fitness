@@ -7,30 +7,65 @@ import 'package:super_fitness/features/auth/data/models/login_response.dart';
 import 'package:super_fitness/features/auth/data/models/register_dto.dart';
 import 'package:super_fitness/features/auth/data/models/register_response_model.dart';
 import 'package:super_fitness/features/auth/data/models/request/login_request.dart';
+import 'package:super_fitness/features/auth/data/models/forget_password_request_dto.dart';
+import 'package:super_fitness/features/auth/data/models/forget_password_response_dto.dart';
+import 'package:super_fitness/features/auth/data/models/verify_otp_request_dto.dart';
+import 'package:super_fitness/features/auth/data/models/verify_otp_response_dto.dart';
+import 'package:super_fitness/features/auth/data/models/reset_password_request_dto.dart';
+import 'package:super_fitness/features/auth/data/models/reset_password_response_dto.dart';
 
 class FakeAuthApiClient implements AuthApiClient {
   RegisterResponseModel? responseToReturn;
   LoginResponse? loginResponseToReturn;
+  ForgetPasswordResponseDto? forgetPasswordResponseToReturn;
+  VerifyOtpResponseDto? verifyOtpResponseToReturn;
+  ResetPasswordResponseDto? resetPasswordResponseToReturn;
+
   Exception? exceptionToThrow;
+
   RegisterDto? capturedRequest;
   LoginRequest? capturedLoginRequest;
+  ForgetPasswordRequestDto? capturedForgetPasswordRequest;
+  VerifyOtpRequestDto? capturedVerifyOtpRequest;
+  ResetPasswordRequestDto? capturedResetPasswordRequest;
 
   @override
   Future<RegisterResponseModel> register(RegisterDto request) async {
     capturedRequest = request;
-    if (exceptionToThrow != null) {
-      throw exceptionToThrow!;
-    }
+    if (exceptionToThrow != null) throw exceptionToThrow!;
     return responseToReturn!;
   }
 
   @override
   Future<LoginResponse> login(LoginRequest request) async {
     capturedLoginRequest = request;
-    if (exceptionToThrow != null) {
-      throw exceptionToThrow!;
-    }
+    if (exceptionToThrow != null) throw exceptionToThrow!;
     return loginResponseToReturn!;
+  }
+
+  @override
+  Future<ForgetPasswordResponseDto> forgotPassword(
+    ForgetPasswordRequestDto request,
+  ) async {
+    capturedForgetPasswordRequest = request;
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+    return forgetPasswordResponseToReturn!;
+  }
+
+  @override
+  Future<VerifyOtpResponseDto> verifyOtp(VerifyOtpRequestDto request) async {
+    capturedVerifyOtpRequest = request;
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+    return verifyOtpResponseToReturn!;
+  }
+
+  @override
+  Future<ResetPasswordResponseDto> resetPassword(
+    ResetPasswordRequestDto request,
+  ) async {
+    capturedResetPasswordRequest = request;
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+    return resetPasswordResponseToReturn!;
   }
 }
 

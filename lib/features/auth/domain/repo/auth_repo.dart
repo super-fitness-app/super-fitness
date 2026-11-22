@@ -8,5 +8,18 @@ import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 abstract interface class AuthRepo {
   Future<ApiResults<RegisterEntity>> register(RegisterParams request);
   Future<ApiResults<SocialAuthUserEntity>> signInWithGoogle();
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook();
   Future<ApiResults<LoginEntity>> login(LoginParams params);
+  Future<ApiResults<void>> forgotPassword({required String email});
+
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  });
+
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  });
 }

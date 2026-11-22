@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
@@ -25,6 +26,7 @@ class _LoginViewState extends State<LoginView>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final scaffold = Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -39,20 +41,23 @@ class _LoginViewState extends State<LoginView>
               ),
             ),
           ),
-          const SafeArea(
+          SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsetsDirectional.symmetric(
+              padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: 24,
                 vertical: 16,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 12),
-                  LoginHeaderSection(),
-                  SizedBox(height: 28),
-                  LoginCard(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 12),
+                  LoginHeaderSection(
+                    firstTitle: l10n.heyThere,
+                    secondTitlel: l10n.welcomeBack,
+                  ),
+                  const SizedBox(height: 28),
+                  const LoginCard(),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

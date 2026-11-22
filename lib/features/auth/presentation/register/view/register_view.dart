@@ -73,6 +73,10 @@ class _RegisterViewState extends State<RegisterView>
     cubit.signInWithGoogleIntent();
   }
 
+  void _onFacebookTap() {
+    cubit.signInWithFacebookIntent();
+  }
+
   @override
   Widget build(BuildContext context) {
     final content = Scaffold(
@@ -133,6 +137,7 @@ class _RegisterViewState extends State<RegisterView>
                     onRegisterPressed: _onRegister,
                     onLoginTap: _onLoginTap,
                     onGoogleTap: _onGoogleTap,
+                    onFacebookTap: _onFacebookTap,
                   );
                 },
               ),

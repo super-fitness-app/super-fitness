@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/l10n/app_localizations_en.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
@@ -13,6 +14,7 @@ import 'package:super_fitness/features/auth/domain/entities/register_params.dart
 import 'package:super_fitness/features/auth/domain/entities/social_auth_user_entity.dart';
 import 'package:super_fitness/features/auth/domain/repo/auth_repo.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/register_usecase.dart';
+import 'package:super_fitness/features/auth/domain/use_cases/signin_with_facebook_usecase.dart';
 import 'package:super_fitness/features/auth/domain/use_cases/signin_with_google_usecase.dart';
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
@@ -29,6 +31,7 @@ import 'package:super_fitness/features/auth/domain/params/login_params.dart';
 class FakeAuthRepo implements AuthRepo {
   ApiResults<RegisterEntity>? registerResultToReturn;
   ApiResults<SocialAuthUserEntity>? googleResultToReturn;
+  ApiResults<SocialAuthUserEntity>? facebookResultToReturn;
 
   @override
   Future<ApiResults<RegisterEntity>> register(RegisterParams request) async =>
@@ -39,8 +42,34 @@ class FakeAuthRepo implements AuthRepo {
       googleResultToReturn ?? (throw UnimplementedError());
 
   @override
+  Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
+      facebookResultToReturn ?? (throw UnimplementedError());
+
+  @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async =>
       throw UnimplementedError();
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
 }
 
 RegisterCubit createTestCubit([FakeAuthRepo? repo]) {
@@ -48,6 +77,7 @@ RegisterCubit createTestCubit([FakeAuthRepo? repo]) {
   return RegisterCubit(
     RegisterUseCase(fakeRepo),
     SignInWithGoogleUseCase(fakeRepo),
+    SignInWithFacebookUseCase(fakeRepo),
     const PasswordGenerator(),
   );
 }
@@ -347,6 +377,34 @@ void main() {
         expect(find.text('Complete Register Screen'), findsOneWidget);
         expect(testCubit.state.data.email, 'google.user@example.com');
         expect(testCubit.state.data.firstName, 'Google');
+        expect(testCubit.state.data.lastName, 'User');
+      },
+    );
+
+    testWidgets(
+      'tapping facebook icon connects facebook account and redirects to complete register screen',
+      (tester) async {
+        final fakeRepo = FakeAuthRepo();
+        fakeRepo.facebookResultToReturn = const Success(
+          SocialAuthUserEntity(
+            id: 'facebook-user-123',
+            email: 'facebook.user@example.com',
+            displayName: 'Facebook User',
+          ),
+        );
+        final testCubit = createTestCubit(fakeRepo);
+        addTearDown(testCubit.close);
+
+        await tester.pumpWidget(_createTestWidget(testCubit));
+
+        // Find and tap the Facebook icon button using its semantic key
+        final facebookButton = find.byKey(SocialAuthKeys.facebook);
+        await tester.tap(facebookButton);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Complete Register Screen'), findsOneWidget);
+        expect(testCubit.state.data.email, 'facebook.user@example.com');
+        expect(testCubit.state.data.firstName, 'Facebook');
         expect(testCubit.state.data.lastName, 'User');
       },
     );

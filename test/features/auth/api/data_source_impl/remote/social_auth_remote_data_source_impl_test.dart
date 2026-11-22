@@ -1,7 +1,49 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:super_fitness/features/auth/api/data_source_impl/remote/social_auth_remote_data_source_impl.dart';
+
+class FakeAccessToken extends Fake implements AccessToken {
+  @override
+  final String tokenString;
+
+  FakeAccessToken({required this.tokenString});
+}
+
+class FakeFacebookAuth extends Fake implements FacebookAuth {
+  LoginResult? loginResultToReturn;
+  Map<String, dynamic> userDataToReturn = {};
+  Exception? exceptionToThrow;
+  int logOutCallCount = 0;
+  int loginCallCount = 0;
+
+  @override
+  Future<void> logOut() async {
+    logOutCallCount++;
+  }
+
+  @override
+  Future<LoginResult> login({
+    List<String> permissions = const ['email', 'public_profile'],
+    LoginBehavior loginBehavior = LoginBehavior.nativeWithFallback,
+    LoginTracking loginTracking = LoginTracking.limited,
+    String? nonce,
+  }) async {
+    loginCallCount++;
+    if (exceptionToThrow != null) {
+      throw exceptionToThrow!;
+    }
+    return loginResultToReturn!;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserData({
+    String fields = "name,email,picture.width(200)",
+  }) async {
+    return userDataToReturn;
+  }
+}
 
 class FakeGoogleSignInAccount extends Fake implements GoogleSignInAccount {
   @override
@@ -102,6 +144,7 @@ class FakeFirebaseAuth extends Fake implements FirebaseAuth {
 void main() {
   group('SocialAuthRemoteDataSourceImpl Tests', () {
     late FakeGoogleSignIn fakeGoogleSignIn;
+    late FakeFacebookAuth fakeFacebookAuth;
     late FakeFirebaseAuth fakeFirebaseAuth;
     late SocialAuthRemoteDataSourceImpl dataSource;
 
@@ -126,9 +169,11 @@ void main() {
 
     setUp(() {
       fakeGoogleSignIn = FakeGoogleSignIn();
+      fakeFacebookAuth = FakeFacebookAuth();
       fakeFirebaseAuth = FakeFirebaseAuth();
       dataSource = SocialAuthRemoteDataSourceImpl(
         fakeGoogleSignIn,
+        fakeFacebookAuth,
         fakeFirebaseAuth,
       );
     });
@@ -259,26 +304,118 @@ void main() {
     );
 
     test(
-      'signOut calls signOut on both GoogleSignIn and FirebaseAuth',
+      'signOut calls signOut on Google, logOut on Facebook, and signOut on Firebase',
       () async {
         await dataSource.signOut();
 
         expect(fakeGoogleSignIn.signOutCallCount, equals(1));
+        expect(fakeFacebookAuth.logOutCallCount, equals(1));
         expect(fakeFirebaseAuth.signOutCallCount, equals(1));
       },
     );
 
-    test('signInWithFacebook throws UnimplementedError', () {
-      expect(
-        () => dataSource.signInWithFacebook(),
-        throwsA(
-          isA<UnimplementedError>().having(
-            (e) => e.message,
-            'message',
-            equals('Facebook sign in is not implemented yet'),
-          ),
-        ),
+    test('signInWithFacebook returns null when user cancels', () async {
+      fakeFacebookAuth.loginResultToReturn = LoginResult(
+        status: LoginStatus.cancelled,
       );
+
+      final result = await dataSource.signInWithFacebook();
+
+      expect(result, isNull);
+      expect(fakeFacebookAuth.logOutCallCount, equals(1));
+      expect(fakeFacebookAuth.loginCallCount, equals(1));
     });
+
+    test(
+      'signInWithFacebook returns SocialAuthUserModel when Facebook and Firebase succeed',
+      () async {
+        fakeFacebookAuth.loginResultToReturn = LoginResult(
+          status: LoginStatus.success,
+          accessToken: FakeAccessToken(tokenString: 'fb_token_123'),
+        );
+        fakeFirebaseAuth.credentialToReturn = FakeUserCredential(
+          user: fakeFirebaseUser,
+        );
+
+        final result = await dataSource.signInWithFacebook();
+
+        expect(result, isNotNull);
+        expect(result!.id, equals('firebase_uid_123'));
+        expect(result.email, equals('firebase.user@example.com'));
+        expect(result.displayName, equals('Firebase User'));
+        expect(result.photoUrl, equals('https://example.com/firebase.png'));
+      },
+    );
+
+    test(
+      'signInWithFacebook throws Exception when login status is failed',
+      () async {
+        fakeFacebookAuth.loginResultToReturn = LoginResult(
+          status: LoginStatus.failed,
+          message: 'Network error during Facebook login',
+        );
+
+        expect(
+          () => dataSource.signInWithFacebook(),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
+
+    test(
+      'signInWithFacebook throws FirebaseAuthException when Firebase user is null',
+      () async {
+        fakeFacebookAuth.loginResultToReturn = LoginResult(
+          status: LoginStatus.success,
+          accessToken: FakeAccessToken(tokenString: 'fb_token_123'),
+        );
+        fakeFirebaseAuth.credentialToReturn = FakeUserCredential(user: null);
+
+        expect(
+          () => dataSource.signInWithFacebook(),
+          throwsA(
+            isA<FirebaseAuthException>().having(
+              (e) => e.code,
+              'code',
+              equals('user-not-found'),
+            ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'signInWithFacebook falls back to getUserData Graph API when Firebase user lacks email/name',
+      () async {
+        final incompleteUser = FakeUser(
+          uid: 'fb_uid_999',
+          email: null,
+          displayName: null,
+          photoURL: null,
+        );
+        fakeFacebookAuth.loginResultToReturn = LoginResult(
+          status: LoginStatus.success,
+          accessToken: FakeAccessToken(tokenString: 'fb_token_fallback'),
+        );
+        fakeFacebookAuth.userDataToReturn = {
+          'email': 'fb.graph@example.com',
+          'name': 'Graph User',
+          'picture': {
+            'data': {'url': 'https://graph.facebook.com/pic.png'},
+          },
+        };
+        fakeFirebaseAuth.credentialToReturn = FakeUserCredential(
+          user: incompleteUser,
+        );
+
+        final result = await dataSource.signInWithFacebook();
+
+        expect(result, isNotNull);
+        expect(result!.id, equals('fb_uid_999'));
+        expect(result.email, equals('fb.graph@example.com'));
+        expect(result.displayName, equals('Graph User'));
+        expect(result.photoUrl, equals('https://graph.facebook.com/pic.png'));
+      },
+    );
   });
 }

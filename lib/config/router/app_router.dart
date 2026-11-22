@@ -5,8 +5,10 @@ import 'package:super_fitness/config/di/di.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
+import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_welcome_view.dart';
+import 'package:super_fitness/features/auth/presentation/forget_password/manager/forget_password_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/login.dart';
@@ -15,8 +17,16 @@ import 'package:super_fitness/features/auth/presentation/onboarding/view/onboard
 import 'package:super_fitness/features/auth/presentation/register/manager/register_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/complete_register_view.dart';
 import 'package:super_fitness/features/auth/presentation/register/view/register_view.dart';
+import 'package:super_fitness/features/exercise/domain/entities/muscle_entity.dart';
+import 'package:super_fitness/features/exercise/presentation/exercise/view/exercise_view.dart';
+import 'package:super_fitness/features/exercise/presentation/workout/view/workout_view.dart';
+import 'package:super_fitness/features/home/presentation/view/home_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout_cubit.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
+import 'package:super_fitness/features/meals/presentation/food/manager/food_cubit.dart';
+import 'package:super_fitness/features/meals/presentation/food/view/food_view.dart';
+import 'package:super_fitness/features/meals/presentation/food_details/manager/food_details_cubit.dart';
+import 'package:super_fitness/features/meals/presentation/food_details/view/food_details_view.dart';
 
 abstract final class AppRoutes {
   static const login = '/login';
@@ -34,6 +44,12 @@ abstract final class AppRoutes {
   static const main = '/main';
   static const smartCoachWelcome = '/smart-coach-welcome';
   static const smartCoachChat = '/smart-coach-chat';
+  static const workout = '/workout';
+  static const exercise = '/exercise';
+  static const exerciseview = '/exercise-details';
+  static const food = '/food';
+  static const foodDetails = '/food-details';
+  static const appVideoPlayer = '/app-video-player';
 }
 
 abstract final class AppRouter {
@@ -42,7 +58,7 @@ abstract final class AppRouter {
   static GoRouter createRouter({
     required StorageService storageService,
     required SessionService sessionService,
-    String initialLocation = AppRoutes.onboarding,
+    String initialLocation = AppRoutes.login,
   }) {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
@@ -87,7 +103,7 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.login,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => BlocProvider<LoginCubit>(
+          builder: (context, state) => BlocProvider(
             create: (_) => getIt<LoginCubit>(),
             child: const LoginView(),
           ),
@@ -111,20 +127,18 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.completeRegister,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) {
-            final cubit = state.extra is RegisterCubit
-                ? state.extra! as RegisterCubit
-                : getIt<RegisterCubit>();
-            return BlocProvider.value(
-              value: cubit,
-              child: const CompleteRegisterView(),
-            );
-          },
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<RegisterCubit>(),
+            child: const CompleteRegisterView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.forgetPassword,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => const ForgetPasswordView(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<ForgetPasswordCubit>(),
+            child: const ForgetPasswordView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.main,
@@ -144,6 +158,63 @@ abstract final class AppRouter {
           parentNavigatorKey: _rootNavigatorKey,
           builder: (context, state) =>
               SmartCoachChatView(sessionId: state.extra as String?),
+        ),
+        GoRoute(
+          path: AppRoutes.home,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const HomeView(),
+        ),
+        GoRoute(
+          path: AppRoutes.workout,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const WorkoutView(),
+        ),
+        GoRoute(
+          path: AppRoutes.exercise,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final muscle = state.extra is MuscleEntity
+                ? state.extra! as MuscleEntity
+                : const MuscleEntity(id: '', name: '', image: '');
+            return ExerciseView(muscle: muscle);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.food,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<FoodCubit>(),
+            child: const FoodView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.foodDetails,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final mealId = switch (state.extra) {
+              String id => id,
+              _ => '',
+            };
+            return BlocProvider(
+              create: (_) =>
+                  getIt<FoodDetailsCubit>()
+                    ..doEvent(LoadMealDetailsEvent(mealId)),
+              child: FoodDetailsView(mealId: mealId),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.appVideoPlayer,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) {
+            final args = state.extra as Map<String, dynamic>?;
+            final videoUrl = args?['videoUrl'] as String?;
+            final title = args?['title'] as String?;
+            if (videoUrl == null || title == null) {
+              return const SizedBox.shrink();
+            }
+            return AppVideoPlayer(videoUrl: videoUrl, title: title);
+          },
         ),
       ],
     );

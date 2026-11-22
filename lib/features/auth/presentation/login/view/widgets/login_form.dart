@@ -10,6 +10,7 @@ import 'package:super_fitness/features/auth/presentation/login/cubit/login_event
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_state.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/forgot_password_button.dart';
 import 'package:super_fitness/features/auth/presentation/login/view/widgets/login_footer.dart';
+import 'package:super_fitness/features/auth/presentation/widgets/social_auth_buttons.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -60,7 +61,16 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const ForgotPasswordButton(),
-            const SizedBox(height: 28),
+            const SizedBox(height: 20),
+            SocialAuthButtons(
+              onFacebookTap: state.isLoading
+                  ? null
+                  : () => context.read<LoginCubit>().signInWithFacebookIntent(),
+              onGoogleTap: state.isLoading
+                  ? null
+                  : () => context.read<LoginCubit>().signInWithGoogleIntent(),
+            ),
+            const SizedBox(height: 24),
             AppButton(
               key: const Key('loginSubmitButton'),
               text: l10n.login,
