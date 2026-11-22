@@ -406,4 +406,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String tasksCount(int count) {
     return '$count تمرين';
   }
+
+  @override
+  String get foodRecommendation => 'توصيات الطعام';
+
+  @override
+  String get noMealsFound => 'لم يتم العثور على وجبات';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get failedToLoadMeals => 'فشل في تحميل الوجبات';
+
+  @override
+  String get foodDetails => 'تفاصيل الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get energy => 'طاقة';
+
+  @override
+  String get protein => 'بروتين';
+
+  @override
+  String get carbs => 'كربوهيدرات';
+
+  @override
+  String get fat => 'دهون';
+
+  @override
+  String get failedToLoadMealDetails => 'فشل في تحميل تفاصيل الوجبة';
+
+  @override
+  String get playVideo => 'تشغيل الفيديو';
+
+  @override
+  String get noIngredientsAvailable => 'لا توجد مكونات متوفرة';
 }

@@ -2,6 +2,7 @@ abstract final class Endpoints {
   // Base URLs
   static const String baseUrl = 'https://fitness.elevateegy.com/api/v1/';
   static const String mealBaseUrl = 'https://www.themealdb.com/api/json/v1/1/';
+  static const String mealsBaseUrl = mealBaseUrl;
 
   // Auth Endpoints
   static const String loginEndPoint = 'auth/signin';
@@ -25,4 +26,6 @@ abstract final class Endpoints {
   // Meals endpoints
   static const String mealCategories = 'categories.php';
   static const String mealCategoriesUrl = '$mealBaseUrl$mealCategories';
+  static const String filterMealsByCategory = 'filter.php';
+  static const String mealDetails = 'lookup.php';
 }

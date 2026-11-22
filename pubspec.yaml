@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.4.1
   bloc: ^9.2.1
   dio: ^5.10.0
   equatable: ^3.0.0
@@ -53,6 +54,7 @@ dependencies:
   crypto: ^3.0.8
   flutter_facebook_auth: ^7.1.5
   pin_code_fields: ^10.1.1
+  youtube_player_flutter: ^10.0.1
 
 dev_dependencies:
   bloc_test: ^10.0.0
