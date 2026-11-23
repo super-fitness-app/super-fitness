@@ -13,6 +13,7 @@ abstract final class AppImages {
   static const String onboarding3 = '$_imagesPath/onboarding3.png';
   static const String appLogo = '$_imagesPath/app_icon.png';
   static const String background = '$_imagesPath/background.png';
+  static const String robot = '$_imagesPath/robot.png';
   static const String defaultAvatar = '$_imagesPath/default_avatar.png';
   static const String food = '$_imagesPath/food.png';
 

@@ -1,6 +1,9 @@
 {
   "@@locale": "ar",
   "appName": "سوبر فيتنس",
+  "@appName": {
+    "description": "App Name"
+  },
 
   "emptyValidationError": "هذا الحقل مطلوب",
   "invalidEmailError": "يرجى إدخال بريد إلكتروني صحيح",
@@ -8,45 +11,45 @@
   "invalidPhoneError": "يرجى إدخال رقم هاتف مصري صحيح",
   "nationalIdError": "يرجى إدخال رقم قومي صحيح",
   "weakPasswordError": "كلمة المرور ضعيفة جداً",
-  "passwordMustBeAtLeast8Characters": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+  "passwordMustBeAtLeast8Characters": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
   "passwordMustContainUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
   "passwordMustContainLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
   "passwordMustContainNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
   "passwordMustContainSpecialCharacter": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل",
   "passwordMismatchError": "كلمتا المرور غير متطابقتين",
-  "fileRequiredError": "يرجى تحميل الملف المطلوب",
-  "dropdownRequiredError": "يرجى اختيار قيمة",
-  "generalValidationError": "مدخلات غير صحيحة",
-  "invalidLoginPasswordError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم",
+  "fileRequiredError": "يرجى رفع الملف المطلوب",
+  "dropdownRequiredError": "يرجى اختيار أحد الخيارات",
+  "generalValidationError": "إدخال غير صحيح",
+  "invalidLoginPasswordError": "يجب أن تكون كلمة المرور 6 أحرف على الأقل وتحتوي على حرف كبير ورقم",
 
   "generalErrorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
   "connectionErrorMessage": "انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
   "noConnectionErrorMessage": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
   "securityErrorMessage": "تعذر إنشاء اتصال آمن.",
   "cancelErrorMessage": "تم إلغاء الطلب.",
-  "code400Message": "طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.",
-  "code401Message": "انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.",
-  "code403Message": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
-  "code404Message": "العنصر المطلوب غير موجود.",
-  "code409Message": "الحساب أو المورد مسجل مسبقاً.",
-  "code422Message": "خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.",
-  "code429Message": "محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.",
-  "code500sMessage": "خطأ في الخادم. يرجى المحاولة بعد لحظات.",
+  "code400Message": "طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مرة أخرى.",
+  "code401Message": "انتهت الجلسة أو بيانات الاعتماد غير صالحة. يرجى تسجيل الدخول مرة أخرى.",
+  "code403Message": "ليس لديك إذن لتنفيذ هذا الإجراء.",
+  "code404Message": "المورد المطلوب غير موجود.",
+  "code409Message": "الحساب أو المورد موجود بالفعل.",
+  "code422Message": "خطأ في التحقق. يرجى التأكد من المدخلات.",
+  "code429Message": "طلبات كثيرة جداً. يرجى الانتظار لحظة والمحاولة مرة أخرى.",
+  "code500sMessage": "خطأ في الخادم. يرجى المحاولة مرة أخرى بعد قليل.",
 
   "loginTitle": "مرحباً بعودتك!",
-  "alreadyHaveAnAccount": "هل لديك حساب بالفعل؟ ",
+  "alreadyHaveAnAccount": "لديك حساب بالفعل؟ ",
   "login": "تسجيل الدخول",
 
   "onboardingSkip": "تخطي",
   "onboardingNext": "التالي",
-  "onboardingBack": "السابق",
+  "onboardingBack": "رجوع",
   "onboardingDoIt": "ابدأ الآن",
   "onboardingTitle1": "ثمن التميز\nهو الانضباط",
-  "onboardingSubtitle1": "النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتصل إلى أعلى مستويات اللياقة والتميز.",
-  "onboardingTitle2": "اللياقة البدنية لم تكن أبداً\nبهذا القدر من المتعة",
-  "onboardingSubtitle2": "حوّل تمارينك إلى رحلة ممتعة مع تحديات حماسية وخطط تدريب تجعل كل خطوة مليئة بالطاقة والشغف.",
-  "onboardingTitle3": "لا مزيد من الأعذار\nابدأ الآن",
-  "onboardingSubtitle3": "توقف عن انتظار اللحظة المثالية. ابدأ الآن وتخلص من التردد لتصنع التغيير الحقيقي وتبني قوتك.",
+  "onboardingSubtitle1": "النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتحقيق أفضل أداء.",
+  "onboardingTitle2": "اللياقة لم تكن أبداً\nبهذا القدر من المتعة",
+  "onboardingSubtitle2": "حوّل تمارينك إلى رحلة ممتعة مع تحديات ملهمة وروتين يحافظ على حماسك.",
+  "onboardingTitle3": "لا مزيد من الأعذار\nابدأ اليوم",
+  "onboardingSubtitle3": "لا تنتظر اللحظة المثالية. اتخذ الخطوة اليوم، وتجاوز العقبات، واصنع المستقبل الذي تستحقه.",
 
   "explore": "استكشف",
   "smartCoach": "المدرب الذكي",
@@ -101,6 +104,14 @@
   "advance": "متقدم",
   "trueBeast": "محترف رياضي",
 
+  "smartCoachGreeting": "مرحباً {userName} ،",
+  "@smartCoachGreeting": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
   "hiAhmed": "مرحباً أحمد ،",
   "hiWithName": "مرحباً {name} ،",
   "@hiWithName": {
@@ -111,6 +122,42 @@
       }
     }
   },
+  "smartCoachSubtitle": "أنا مدربك الذكي",
+  "smartCoachWelcomeAssist": "كيف يمكنني مساعدتك\nاليوم ؟",
+  "smartCoachGetStarted": "ابدأ الآن",
+  "smartCoachInputHint": "اسألني أي شيء عن اللياقة والتغذية...",
+  "smartCoachThinking": "المدرب الذكي يفكر...",
+  "smartCoachExerciseCardSets": "المجموعات والتكرارات",
+  "smartCoachExerciseCardMuscle": "العضلة المستهدفة",
+  "smartCoachNutritionCalories": "السعرات الحرارية",
+  "smartCoachNutritionProtein": "البروتين",
+  "smartCoachNutritionCarbs": "الكربوهيدرات",
+  "smartCoachNutritionFat": "الدهون",
+  "smartCoachClearChat": "مسح المحادثة",
+  "smartCoachClearChatConfirm": "هل أنت متأكد من رغبتك في مسح المحادثة؟",
+  "smartCoachClear": "مسح",
+  "smartCoachCancel": "إلغاء",
+  "smartCoachTokenWarning": "المحادثة تقترب من حد الذاكرة ({tokens}/3000 رمز). ابدأ محادثة جديدة قريباً.",
+  "@smartCoachTokenWarning": {
+    "placeholders": {
+      "tokens": {
+        "type": "int"
+      }
+    }
+  },
+  "smartCoachTokenLocked": "وصلت هذه المحادثة إلى حد 3000 رمز. يرجى بدء محادثة جديدة للمتابعة.",
+  "smartCoachStartNewChat": "محادثة جديدة",
+  "smartCoachPreviousConversations": "المحادثات السابقة",
+  "smartCoachNoPreviousChats": "لا توجد محادثات سابقة",
+  "smartCoachEmptyTitle": "كيف يمكنني مساعدتك اليوم؟",
+  "smartCoachEmptySubtitle": "اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.",
+  "smartCoachPromptWorkout": "🏋️ صمم لي جدول تمارين 3 أيام",
+  "smartCoachPromptNutrition": "🥗 أفكار لوجبات عالية البروتين",
+  "smartCoachPromptForm": "🔥 كيف أحسن أداء تمرين الاسكوات؟",
+  "smartCoachDeleteChatTitle": "حذف المحادثة؟",
+  "smartCoachDeleteChatConfirm": "هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "smartCoachDelete": "حذف",
+
   "letsStartYourDay": "لنبدأ يومك",
   "category": "الفئات",
   "gym": "جيم",

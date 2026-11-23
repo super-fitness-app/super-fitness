@@ -13,6 +13,12 @@ abstract final class Endpoints {
   static const String resetPassword = 'auth/resetPassword';
   static const String deleteAccount = 'auth/deleteMe';
 
+  // Smart Coach AI / Ollama Endpoints
+  static const String ollamaAndroidHost = 'http://10.0.2.2:11434/api/chat';
+  static const String ollamaDesktopHost = 'http://localhost:11434/api/chat';
+  static const String ollamaDefaultModel = 'gemma4:e2b';
+  static const String ollamaCloudModel = 'gemma4:31b-cloud';
+
   // Muscle endpoints
   static const String randomMuscles = 'muscles/random';
   static const String muscles = 'muscles';

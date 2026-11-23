@@ -104,6 +104,14 @@
   "advance": "Advance",
   "trueBeast": "True Beast",
 
+  "smartCoachGreeting": "Hi {userName} ,",
+  "@smartCoachGreeting": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
   "hiAhmed": "Hi Ahmed ,",
   "hiWithName": "Hi {name} ,",
   "@hiWithName": {
@@ -114,6 +122,42 @@
       }
     }
   },
+  "smartCoachSubtitle": "I Am Your Smart Coach",
+  "smartCoachWelcomeAssist": "How Can I Assist You\nToday ?",
+  "smartCoachGetStarted": "Get Started",
+  "smartCoachInputHint": "Ask me anything about fitness...",
+  "smartCoachThinking": "Smart Coach is thinking...",
+  "smartCoachExerciseCardSets": "Sets & Reps",
+  "smartCoachExerciseCardMuscle": "Target Muscle",
+  "smartCoachNutritionCalories": "Calories",
+  "smartCoachNutritionProtein": "Protein",
+  "smartCoachNutritionCarbs": "Carbs",
+  "smartCoachNutritionFat": "Fat",
+  "smartCoachClearChat": "Clear Chat",
+  "smartCoachClearChatConfirm": "Are you sure you want to clear this conversation?",
+  "smartCoachClear": "Clear",
+  "smartCoachCancel": "Cancel",
+  "smartCoachTokenWarning": "Conversation approaching memory limit ({tokens}/3000 tokens). Start a new chat soon.",
+  "@smartCoachTokenWarning": {
+    "placeholders": {
+      "tokens": {
+        "type": "int"
+      }
+    }
+  },
+  "smartCoachTokenLocked": "This conversation reached the 3000-token limit. Please start a new chat to continue.",
+  "smartCoachStartNewChat": "Start New Chat",
+  "smartCoachPreviousConversations": "Previous Conversations",
+  "smartCoachNoPreviousChats": "No previous chats",
+  "smartCoachEmptyTitle": "How can I help you today?",
+  "smartCoachEmptySubtitle": "Ask me about custom workout routines, diet macros, or form checks.",
+  "smartCoachPromptWorkout": "🏋️ Design a 3-day workout split",
+  "smartCoachPromptNutrition": "🥗 High protein meal ideas",
+  "smartCoachPromptForm": "🔥 How to fix my squat form?",
+  "smartCoachDeleteChatTitle": "Delete Conversation?",
+  "smartCoachDeleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
+  "smartCoachDelete": "Delete",
+
   "letsStartYourDay": "Let's Start Your Day",
   "category": "Category",
   "gym": "Gym",

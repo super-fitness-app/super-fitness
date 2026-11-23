@@ -11,6 +11,7 @@ extension AppFailureLocalization on AppFailure {
         error,
       ),
       CancelledFailure(:final message) => message ?? 'Sign-in cancelled',
+      AiChatFailure(:final message) => message,
     };
   }
 }

@@ -32,12 +32,16 @@ dependencies:
   bloc: ^9.2.1
   dio: ^5.10.0
   equatable: ^3.0.0
+  firebase_auth: ^7.0.1
+  firebase_core: ^5.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  flutter_secure_storage: ^9.2.4
+  flutter_launcher_icons: ^0.14.4
   flutter_localizations:
     sdk: flutter
+  flutter_native_splash: ^2.4.8
+  flutter_secure_storage: ^9.2.4
   get_it: ^9.2.1
   go_router: ^17.5.0
   google_fonts: ^8.2.1
@@ -45,13 +49,12 @@ dependencies:
   intl: any
   json_annotation: ^4.9.0
   logger: ^2.6.0
+  path: ^1.9.1
   retrofit: ^4.9.0
-  flutter_native_splash: ^2.4.8
-  flutter_launcher_icons: ^0.14.4
-  firebase_core: ^5.1.0
-  firebase_auth: ^7.0.1
+  cloud_firestore: ^7.1.0
   google_sign_in: ^6.2.2
   crypto: ^3.0.8
+  sqflite: ^2.4.5
   flutter_facebook_auth: ^7.1.5
   pin_code_fields: ^10.1.1
   youtube_player_flutter: ^10.0.1
@@ -90,6 +93,8 @@ flutter:
     - shorebird.yaml
     - assets/images/auth/
     - assets/icons/
+    - assets/databases/meals.db
+    - assets/databases/exercises.db
     - assets/home/
   #   - images/a_dot_ham.jpeg
 

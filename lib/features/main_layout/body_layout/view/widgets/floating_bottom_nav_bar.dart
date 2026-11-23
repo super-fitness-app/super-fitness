@@ -21,8 +21,8 @@ class FloatingBottomNavBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Align(
-      heightFactor: 1.0,
       alignment: Alignment.bottomCenter,
+      heightFactor: 1.0,
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.only(bottom: 16),

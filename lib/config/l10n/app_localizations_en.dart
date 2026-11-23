@@ -316,12 +316,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trueBeast => 'True Beast';
 
   @override
+  String smartCoachGreeting(String userName) {
+    return 'Hi $userName ,';
+  }
+
+  @override
   String get hiAhmed => 'Hi Ahmed ,';
 
   @override
   String hiWithName(String name) {
     return 'Hi $name ,';
   }
+
+  @override
+  String get smartCoachSubtitle => 'I Am Your Smart Coach';
+
+  @override
+  String get smartCoachWelcomeAssist => 'How Can I Assist You\nToday ?';
+
+  @override
+  String get smartCoachGetStarted => 'Get Started';
+
+  @override
+  String get smartCoachInputHint => 'Ask me anything about fitness...';
+
+  @override
+  String get smartCoachThinking => 'Smart Coach is thinking...';
+
+  @override
+  String get smartCoachExerciseCardSets => 'Sets & Reps';
+
+  @override
+  String get smartCoachExerciseCardMuscle => 'Target Muscle';
+
+  @override
+  String get smartCoachNutritionCalories => 'Calories';
+
+  @override
+  String get smartCoachNutritionProtein => 'Protein';
+
+  @override
+  String get smartCoachNutritionCarbs => 'Carbs';
+
+  @override
+  String get smartCoachNutritionFat => 'Fat';
+
+  @override
+  String get smartCoachClearChat => 'Clear Chat';
+
+  @override
+  String get smartCoachClearChatConfirm =>
+      'Are you sure you want to clear this conversation?';
+
+  @override
+  String get smartCoachClear => 'Clear';
+
+  @override
+  String get smartCoachCancel => 'Cancel';
+
+  @override
+  String smartCoachTokenWarning(int tokens) {
+    return 'Conversation approaching memory limit ($tokens/3000 tokens). Start a new chat soon.';
+  }
+
+  @override
+  String get smartCoachTokenLocked =>
+      'This conversation reached the 3000-token limit. Please start a new chat to continue.';
+
+  @override
+  String get smartCoachStartNewChat => 'Start New Chat';
+
+  @override
+  String get smartCoachPreviousConversations => 'Previous Conversations';
+
+  @override
+  String get smartCoachNoPreviousChats => 'No previous chats';
+
+  @override
+  String get smartCoachEmptyTitle => 'How can I help you today?';
+
+  @override
+  String get smartCoachEmptySubtitle =>
+      'Ask me about custom workout routines, diet macros, or form checks.';
+
+  @override
+  String get smartCoachPromptWorkout => '🏋️ Design a 3-day workout split';
+
+  @override
+  String get smartCoachPromptNutrition => '🥗 High protein meal ideas';
+
+  @override
+  String get smartCoachPromptForm => '🔥 How to fix my squat form?';
+
+  @override
+  String get smartCoachDeleteChatTitle => 'Delete Conversation?';
+
+  @override
+  String get smartCoachDeleteChatConfirm =>
+      'Are you sure you want to delete this chat? This action cannot be undone.';
+
+  @override
+  String get smartCoachDelete => 'Delete';
 
   @override
   String get letsStartYourDay => 'Let\'s Start Your Day';

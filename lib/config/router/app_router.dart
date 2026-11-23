@@ -6,6 +6,8 @@ import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
+import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_welcome_view.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/manager/forget_password_cubit.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/view/forget_password_view.dart';
 import 'package:super_fitness/features/auth/presentation/login/cubit/login_cubit.dart';
@@ -40,6 +42,8 @@ abstract final class AppRoutes {
   static const forgetPassword = '/forget-password';
   static const home = '/home';
   static const main = '/main';
+  static const smartCoachWelcome = '/smart-coach-welcome';
+  static const smartCoachChat = '/smart-coach-chat';
   static const workout = '/workout';
   static const exercise = '/exercise';
   static const exerciseview = '/exercise-details';
@@ -99,7 +103,7 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.login,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => BlocProvider<LoginCubit>(
+          builder: (context, state) => BlocProvider(
             create: (_) => getIt<LoginCubit>(),
             child: const LoginView(),
           ),
@@ -123,20 +127,15 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.completeRegister,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) {
-            final cubit = state.extra is RegisterCubit
-                ? state.extra! as RegisterCubit
-                : getIt<RegisterCubit>();
-            return BlocProvider.value(
-              value: cubit,
-              child: const CompleteRegisterView(),
-            );
-          },
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<RegisterCubit>(),
+            child: const CompleteRegisterView(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.forgetPassword,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) => BlocProvider<ForgetPasswordCubit>(
+          builder: (context, state) => BlocProvider(
             create: (_) => getIt<ForgetPasswordCubit>(),
             child: const ForgetPasswordView(),
           ),
@@ -148,6 +147,17 @@ abstract final class AppRouter {
             create: (_) => getIt<MainLayoutCubit>(),
             child: const MainLayoutView(),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.smartCoachWelcome,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const SmartCoachWelcomeView(),
+        ),
+        GoRoute(
+          path: AppRoutes.smartCoachChat,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) =>
+              SmartCoachChatView(sessionId: state.extra as String?),
         ),
         GoRoute(
           path: AppRoutes.home,

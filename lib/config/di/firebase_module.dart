@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,6 +11,9 @@ abstract class FirebaseModule {
 
   @lazySingleton
   GoogleSignIn provideGoogleSignIn() => GoogleSignIn();
+
+  @lazySingleton
+  FirebaseFirestore provideFirebaseFirestore() => FirebaseFirestore.instance;
 
   @lazySingleton
   FacebookAuth provideFacebookAuth() => FacebookAuth.instance;
