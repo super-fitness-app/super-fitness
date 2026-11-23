@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_view_mixin.dart';
+import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
@@ -32,13 +33,30 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView>
     with BaseViewMixin<ProfileView, ProfileCubit, BaseEvent> {
   late final ProfileCubit _cubit;
+  bool _ownsCubit = false;
 
   @override
   ProfileCubit get cubit => _cubit;
 
   @override
   void initState() {
-    _cubit = widget.cubit ?? context.read<ProfileCubit>();
+    if (widget.cubit != null) {
+      _cubit = widget.cubit!;
+      _ownsCubit = false;
+    } else {
+      try {
+        _cubit = context.read<ProfileCubit>();
+        _ownsCubit = false;
+      } catch (_) {
+        if (getIt.isRegistered<ProfileCubit>()) {
+          _cubit = getIt<ProfileCubit>();
+          _ownsCubit = false;
+        } else {
+          _cubit = ProfileCubit.dummy();
+          _ownsCubit = true;
+        }
+      }
+    }
     super.initState();
 
     // Load the user saved during login.
@@ -46,9 +64,17 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   @override
+  void dispose() {
+    if (_ownsCubit) {
+      _cubit.close();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final content = BlocConsumer<ProfileCubit, ProfileState>(
-      bloc: widget.cubit != null ? _cubit : null,
+      bloc: _cubit,
       listener: (context, state) {
         // Handle one-time UI effects through BaseViewMixin.
       },
@@ -83,7 +109,16 @@ class _ProfileViewState extends State<ProfileView>
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
+                    Text(
+                      AppLocalizations.of(context)!.profile,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
 
                     Container(
                       width: 118,
@@ -210,10 +245,6 @@ class _ProfileViewState extends State<ProfileView>
       },
     );
 
-    if (widget.cubit != null) {
-      return BlocProvider.value(value: _cubit, child: content);
-    }
-
-    return content;
+    return BlocProvider.value(value: _cubit, child: content);
   }
 }

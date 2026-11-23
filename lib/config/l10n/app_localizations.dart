@@ -116,6 +116,12 @@ abstract class AppLocalizations {
   /// **'Please enter a valid email address'**
   String get invalidEmailError;
 
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get invalidEmail;
+
   /// No description provided for @invalidPhoneError.
   ///
   /// In en, this message translates to:
@@ -410,17 +416,17 @@ abstract class AppLocalizations {
   /// **'Don\'t Have An Account Yet ?'**
   String get dontHaveAccount;
 
-  /// No description provided for @register.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get register;
-
   /// No description provided for @createAnAccount.
   ///
   /// In en, this message translates to:
   /// **'CREATE AN ACCOUNT'**
   String get createAnAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
 
   /// No description provided for @firstName.
   ///
@@ -445,12 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last name is required'**
   String get lastNameRequired;
-
-  /// No description provided for @invalidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get invalidEmail;
 
   /// No description provided for @passwordMinLength.
   ///
@@ -599,13 +599,13 @@ abstract class AppLocalizations {
   /// No description provided for @gainWeight.
   ///
   /// In en, this message translates to:
-  /// **'Gain weight'**
+  /// **'Gain Weight'**
   String get gainWeight;
 
   /// No description provided for @loseWeight.
   ///
   /// In en, this message translates to:
-  /// **'Lose weight'**
+  /// **'Lose Weight'**
   String get loseWeight;
 
   /// No description provided for @getFitter.
@@ -756,13 +756,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Edit Weight ({unit})'**
-  String editWeight(Object unit);
+  String editWeight(String unit);
 
   /// No description provided for @enterWeight.
   ///
   /// In en, this message translates to:
   /// **'Enter weight in {unit}'**
-  String enterWeight(Object unit);
+  String enterWeight(String unit);
 
   /// No description provided for @cancel.
   ///
@@ -812,12 +812,6 @@ abstract class AppLocalizations {
   /// **'Maintain weight'**
   String get maintainWeight;
 
-  /// No description provided for @advanced.
-  ///
-  /// In en, this message translates to:
-  /// **'Advanced'**
-  String get advanced;
-
   /// No description provided for @createNewPassword.
   ///
   /// In en, this message translates to:
@@ -859,6 +853,480 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password changed successfully'**
   String get passwordChangedSuccessfully;
+
+  /// No description provided for @smartCoachGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {userName} ,'**
+  String smartCoachGreeting(String userName);
+
+  /// No description provided for @hiAhmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi Ahmed ,'**
+  String get hiAhmed;
+
+  /// Greeting with dynamic user name
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name} ,'**
+  String hiWithName(String name);
+
+  /// No description provided for @smartCoachSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I Am Your Smart Coach'**
+  String get smartCoachSubtitle;
+
+  /// No description provided for @smartCoachWelcomeAssist.
+  ///
+  /// In en, this message translates to:
+  /// **'How Can I Assist You\nToday ?'**
+  String get smartCoachWelcomeAssist;
+
+  /// No description provided for @smartCoachGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get smartCoachGetStarted;
+
+  /// No description provided for @smartCoachInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me anything about fitness...'**
+  String get smartCoachInputHint;
+
+  /// No description provided for @smartCoachThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Coach is thinking...'**
+  String get smartCoachThinking;
+
+  /// No description provided for @smartCoachExerciseCardSets.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets & Reps'**
+  String get smartCoachExerciseCardSets;
+
+  /// No description provided for @smartCoachExerciseCardMuscle.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Muscle'**
+  String get smartCoachExerciseCardMuscle;
+
+  /// No description provided for @smartCoachNutritionCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get smartCoachNutritionCalories;
+
+  /// No description provided for @smartCoachNutritionProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get smartCoachNutritionProtein;
+
+  /// No description provided for @smartCoachNutritionCarbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get smartCoachNutritionCarbs;
+
+  /// No description provided for @smartCoachNutritionFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get smartCoachNutritionFat;
+
+  /// No description provided for @smartCoachClearChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Chat'**
+  String get smartCoachClearChat;
+
+  /// No description provided for @smartCoachClearChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear this conversation?'**
+  String get smartCoachClearChatConfirm;
+
+  /// No description provided for @smartCoachClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get smartCoachClear;
+
+  /// No description provided for @smartCoachCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get smartCoachCancel;
+
+  /// No description provided for @smartCoachTokenWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation approaching memory limit ({tokens}/3000 tokens). Start a new chat soon.'**
+  String smartCoachTokenWarning(int tokens);
+
+  /// No description provided for @smartCoachTokenLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation reached the 3000-token limit. Please start a new chat to continue.'**
+  String get smartCoachTokenLocked;
+
+  /// No description provided for @smartCoachStartNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Chat'**
+  String get smartCoachStartNewChat;
+
+  /// No description provided for @smartCoachPreviousConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Conversations'**
+  String get smartCoachPreviousConversations;
+
+  /// No description provided for @smartCoachNoPreviousChats.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous chats'**
+  String get smartCoachNoPreviousChats;
+
+  /// No description provided for @smartCoachEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How can I help you today?'**
+  String get smartCoachEmptyTitle;
+
+  /// No description provided for @smartCoachEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me about custom workout routines, diet macros, or form checks.'**
+  String get smartCoachEmptySubtitle;
+
+  /// No description provided for @smartCoachPromptWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'🏋️ Design a 3-day workout split'**
+  String get smartCoachPromptWorkout;
+
+  /// No description provided for @smartCoachPromptNutrition.
+  ///
+  /// In en, this message translates to:
+  /// **'🥗 High protein meal ideas'**
+  String get smartCoachPromptNutrition;
+
+  /// No description provided for @smartCoachPromptForm.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 How to fix my squat form?'**
+  String get smartCoachPromptForm;
+
+  /// No description provided for @smartCoachDeleteChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Conversation?'**
+  String get smartCoachDeleteChatTitle;
+
+  /// No description provided for @smartCoachDeleteChatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat? This action cannot be undone.'**
+  String get smartCoachDeleteChatConfirm;
+
+  /// No description provided for @smartCoachDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get smartCoachDelete;
+
+  /// No description provided for @letsStartYourDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Start Your Day'**
+  String get letsStartYourDay;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @gym.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym'**
+  String get gym;
+
+  /// No description provided for @fitness.
+  ///
+  /// In en, this message translates to:
+  /// **'Fitness'**
+  String get fitness;
+
+  /// No description provided for @yoga.
+  ///
+  /// In en, this message translates to:
+  /// **'Yoga'**
+  String get yoga;
+
+  /// No description provided for @aerobics.
+  ///
+  /// In en, this message translates to:
+  /// **'Aerobics'**
+  String get aerobics;
+
+  /// No description provided for @trainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Trainer'**
+  String get trainer;
+
+  /// No description provided for @recommendationToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation To Day'**
+  String get recommendationToday;
+
+  /// No description provided for @jogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Jogging'**
+  String get jogging;
+
+  /// No description provided for @pushUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Push-Up'**
+  String get pushUp;
+
+  /// No description provided for @squat.
+  ///
+  /// In en, this message translates to:
+  /// **'Squat'**
+  String get squat;
+
+  /// No description provided for @upcomingWorkouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Workouts'**
+  String get upcomingWorkouts;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get seeAll;
+
+  /// No description provided for @fullBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Body'**
+  String get fullBody;
+
+  /// No description provided for @chest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get chest;
+
+  /// No description provided for @arm.
+  ///
+  /// In en, this message translates to:
+  /// **'Arm'**
+  String get arm;
+
+  /// No description provided for @shoulder.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulder'**
+  String get shoulder;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @legs.
+  ///
+  /// In en, this message translates to:
+  /// **'Legs'**
+  String get legs;
+
+  /// No description provided for @arms.
+  ///
+  /// In en, this message translates to:
+  /// **'Arms'**
+  String get arms;
+
+  /// No description provided for @recommendationForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation For You'**
+  String get recommendationForYou;
+
+  /// No description provided for @breakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get breakfast;
+
+  /// No description provided for @lunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get lunch;
+
+  /// No description provided for @dinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get dinner;
+
+  /// No description provided for @popularTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Training'**
+  String get popularTraining;
+
+  /// No description provided for @exercisesThatStrengthenYourChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises That Strengthen Your Chest'**
+  String get exercisesThatStrengthenYourChest;
+
+  /// No description provided for @exercisesThatStrengthenYourBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises That Strengthen Your Back'**
+  String get exercisesThatStrengthenYourBack;
+
+  /// Task count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Tasks'**
+  String tasksCount(int count);
+
+  /// No description provided for @foodRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Recommendation'**
+  String get foodRecommendation;
+
+  /// No description provided for @noMealsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals found'**
+  String get noMealsFound;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @failedToLoadMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load meals'**
+  String get failedToLoadMeals;
+
+  /// No description provided for @foodDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Details'**
+  String get foodDetails;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get ingredients;
+
+  /// No description provided for @energy.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy'**
+  String get energy;
+
+  /// No description provided for @protein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get protein;
+
+  /// No description provided for @carbs.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get carbs;
+
+  /// No description provided for @fat.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get fat;
+
+  /// No description provided for @failedToLoadMealDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load meal details'**
+  String get failedToLoadMealDetails;
+
+  /// No description provided for @playVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Video'**
+  String get playVideo;
+
+  /// No description provided for @noIngredientsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No ingredients available'**
+  String get noIngredientsAvailable;
+
+  /// Exercise duration in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} Min'**
+  String durationMinutes(int minutes);
+
+  /// Exercise calories
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} Cal'**
+  String calories(int calories);
+
+  /// No description provided for @advanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
+
+  /// No description provided for @failedToLoadExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load exercises'**
+  String get failedToLoadExercises;
+
+  /// No description provided for @noExercisesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises found'**
+  String get noExercisesFound;
+
+  /// No description provided for @chestExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest Exercise'**
+  String get chestExercise;
+
+  /// No description provided for @exerciseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your fitness journey with chest exercises.'**
+  String get exerciseDescription;
 }
 
 class _AppLocalizationsDelegate

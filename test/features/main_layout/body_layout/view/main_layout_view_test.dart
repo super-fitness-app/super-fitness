@@ -9,7 +9,7 @@ import 'package:super_fitness/features/main_layout/body_layout/cubit/main_layout
 import 'package:super_fitness/features/main_layout/body_layout/view/main_layout_view.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/floating_bottom_nav_bar.dart';
 import 'package:super_fitness/features/main_layout/body_layout/view/widgets/nav_bar_item_widget.dart';
-import 'package:super_fitness/features/main_layout/explore/explore_view.dart';
+import 'package:super_fitness/features/home/presentation/view/home_view.dart';
 import 'package:super_fitness/features/main_layout/profile/presentation/view/profile_view.dart';
 import 'package:super_fitness/features/main_layout/smart_coach/smart_coach_view.dart';
 import 'package:super_fitness/features/main_layout/workout/workouts_view.dart';
@@ -60,14 +60,14 @@ void main() {
 
         expect(find.byType(FloatingBottomNavBar), findsOneWidget);
         expect(find.byType(NavBarItemWidget), findsNWidgets(4));
-        expect(find.byType(ExploreView), findsOneWidget);
+        expect(find.byType(HomeView), findsOneWidget);
 
         expect(_findTabByIcon(AppIcons.explore), findsOneWidget);
         expect(_findTabByIcon(AppIcons.smartCoach), findsOneWidget);
         expect(_findTabByIcon(AppIcons.workout), findsOneWidget);
         expect(_findTabByIcon(AppIcons.profile), findsOneWidget);
 
-        expect(find.text('Explore'), findsNWidgets(2));
+        expect(find.text('Explore'), findsOneWidget);
         expect(find.text('Smart Coach'), findsNothing);
         expect(find.text('Workouts'), findsNothing);
         expect(find.text('Profile'), findsNothing);
@@ -87,7 +87,7 @@ void main() {
 
       expect(cubit.state.data, equals(1));
       expect(find.byType(SmartCoachView), findsOneWidget);
-      expect(find.text('Smart Coach'), findsNWidgets(2));
+      expect(find.text('Smart Coach'), findsOneWidget);
       expect(find.text('Workouts'), findsNothing);
     });
 
@@ -162,7 +162,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(FloatingBottomNavBar), findsOneWidget);
-      expect(find.text('استكشف'), findsNWidgets(2));
+      expect(find.text('استكشف'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   });

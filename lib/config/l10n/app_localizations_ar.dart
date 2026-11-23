@@ -18,6 +18,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidEmailError => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
+  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
   String get invalidPhoneError => 'يرجى إدخال رقم هاتف مصري صحيح';
 
   @override
@@ -28,7 +31,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordMustBeAtLeast8Characters =>
-      'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+      'يجب أن تكون كلمة المرور 8 أحرف على الأقل';
 
   @override
   String get passwordMustContainUppercase =>
@@ -50,17 +53,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passwordMismatchError => 'كلمتا المرور غير متطابقتين';
 
   @override
-  String get fileRequiredError => 'يرجى تحميل الملف المطلوب';
+  String get fileRequiredError => 'يرجى رفع الملف المطلوب';
 
   @override
-  String get dropdownRequiredError => 'يرجى اختيار قيمة';
+  String get dropdownRequiredError => 'يرجى اختيار أحد الخيارات';
 
   @override
-  String get generalValidationError => 'مدخلات غير صحيحة';
+  String get generalValidationError => 'إدخال غير صحيح';
 
   @override
   String get invalidLoginPasswordError =>
-      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل مع حرف كبير ورقم';
+      'يجب أن تكون كلمة المرور 6 أحرف على الأقل وتحتوي على حرف كبير ورقم';
 
   @override
   String get generalErrorMessage =>
@@ -82,37 +85,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get code400Message =>
-      'طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مجدداً.';
+      'طلب غير صالح. يرجى التحقق من بياناتك والمحاولة مرة أخرى.';
 
   @override
   String get code401Message =>
-      'انتهت الجلسة أو بيانات الاعتماد غير صحيحة. يرجى تسجيل الدخول مجدداً.';
+      'انتهت الجلسة أو بيانات الاعتماد غير صالحة. يرجى تسجيل الدخول مرة أخرى.';
 
   @override
-  String get code403Message => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+  String get code403Message => 'ليس لديك إذن لتنفيذ هذا الإجراء.';
 
   @override
-  String get code404Message => 'العنصر المطلوب غير موجود.';
+  String get code404Message => 'المورد المطلوب غير موجود.';
 
   @override
-  String get code409Message => 'الحساب أو المورد مسجل مسبقاً.';
+  String get code409Message => 'الحساب أو المورد موجود بالفعل.';
 
   @override
-  String get code422Message =>
-      'خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.';
+  String get code422Message => 'خطأ في التحقق. يرجى التأكد من المدخلات.';
 
   @override
   String get code429Message =>
-      'محاولات كثيرة جداً. يرجى الانتظار قليلاً والمحاولة مجدداً.';
+      'طلبات كثيرة جداً. يرجى الانتظار لحظة والمحاولة مرة أخرى.';
 
   @override
-  String get code500sMessage => 'خطأ في الخادم. يرجى المحاولة بعد لحظات.';
+  String get code500sMessage =>
+      'خطأ في الخادم. يرجى المحاولة مرة أخرى بعد قليل.';
 
   @override
   String get loginTitle => 'مرحباً بعودتك!';
 
   @override
-  String get alreadyHaveAnAccount => 'هل لديك حساب بالفعل؟ ';
+  String get alreadyHaveAnAccount => 'لديك حساب بالفعل؟ ';
 
   @override
   String get login => 'تسجيل الدخول';
@@ -124,7 +127,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingNext => 'التالي';
 
   @override
-  String get onboardingBack => 'السابق';
+  String get onboardingBack => 'رجوع';
 
   @override
   String get onboardingDoIt => 'ابدأ الآن';
@@ -134,22 +137,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onboardingSubtitle1 =>
-      'النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتصل إلى أعلى مستويات اللياقة والتميز.';
+      'النجاح يبدأ بالالتزام اليومي. حافظ على استمرارك وتجاوز حدودك لتحقيق أفضل أداء.';
 
   @override
-  String get onboardingTitle2 =>
-      'اللياقة البدنية لم تكن أبداً\nبهذا القدر من المتعة';
+  String get onboardingTitle2 => 'اللياقة لم تكن أبداً\nبهذا القدر من المتعة';
 
   @override
   String get onboardingSubtitle2 =>
-      'حوّل تمارينك إلى رحلة ممتعة مع تحديات حماسية وخطط تدريب تجعل كل خطوة مليئة بالطاقة والشغف.';
+      'حوّل تمارينك إلى رحلة ممتعة مع تحديات ملهمة وروتين يحافظ على حماسك.';
 
   @override
-  String get onboardingTitle3 => 'لا مزيد من الأعذار\nابدأ الآن';
+  String get onboardingTitle3 => 'لا مزيد من الأعذار\nابدأ اليوم';
 
   @override
   String get onboardingSubtitle3 =>
-      'توقف عن انتظار اللحظة المثالية. ابدأ الآن وتخلص من التردد لتصنع التغيير الحقيقي وتبني قوتك.';
+      'لا تنتظر اللحظة المثالية. اتخذ الخطوة اليوم، وتجاوز العقبات، واصنع المستقبل الذي تستحقه.';
 
   @override
   String get explore => 'استكشف';
@@ -164,7 +166,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'الملف الشخصي';
 
   @override
-  String get heyThere => 'مرحباً بك';
+  String get heyThere => 'مرحباً';
 
   @override
   String get welcomeBack => 'مرحباً بعودتك';
@@ -182,10 +184,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontHaveAccount => 'ليس لديك حساب بعد؟';
 
   @override
-  String get register => 'تسجيل';
+  String get createAnAccount => 'إنشاء حساب';
 
   @override
-  String get createAnAccount => 'إنشاء حساب';
+  String get register => 'تسجيل';
 
   @override
   String get firstName => 'الاسم الأول';
@@ -198,9 +200,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'اسم العائلة مطلوب';
-
-  @override
-  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
 
   @override
   String get passwordMinLength =>
@@ -299,7 +298,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activityLevelTitle => 'ما هو مستوى نشاطك\nالبدني المعتاد؟';
 
   @override
-  String get rookie => 'مبتدئ';
+  String get rookie => 'مبتدئ جداً';
 
   @override
   String get beginner => 'مبتدئ';
@@ -359,12 +358,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get kgUnit => 'كجم';
 
   @override
-  String editWeight(Object unit) {
+  String editWeight(String unit) {
     return 'تعديل الوزن ($unit)';
   }
 
   @override
-  String enterWeight(Object unit) {
+  String enterWeight(String unit) {
     return 'أدخل الوزن بـ $unit';
   }
 
@@ -393,9 +392,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get maintainWeight => 'الحفاظ على الوزن';
 
   @override
-  String get advanced => 'متقدم';
-
-  @override
   String get createNewPassword => 'إنشاء كلمة مرور جديدة';
 
   @override
@@ -416,4 +412,257 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String smartCoachGreeting(String userName) {
+    return 'مرحباً $userName ،';
+  }
+
+  @override
+  String get hiAhmed => 'مرحباً أحمد ،';
+
+  @override
+  String hiWithName(String name) {
+    return 'مرحباً $name ،';
+  }
+
+  @override
+  String get smartCoachSubtitle => 'أنا مدربك الذكي';
+
+  @override
+  String get smartCoachWelcomeAssist => 'كيف يمكنني مساعدتك\nاليوم ؟';
+
+  @override
+  String get smartCoachGetStarted => 'ابدأ الآن';
+
+  @override
+  String get smartCoachInputHint => 'اسألني أي شيء عن اللياقة والتغذية...';
+
+  @override
+  String get smartCoachThinking => 'المدرب الذكي يفكر...';
+
+  @override
+  String get smartCoachExerciseCardSets => 'المجموعات والتكرارات';
+
+  @override
+  String get smartCoachExerciseCardMuscle => 'العضلة المستهدفة';
+
+  @override
+  String get smartCoachNutritionCalories => 'السعرات الحرارية';
+
+  @override
+  String get smartCoachNutritionProtein => 'البروتين';
+
+  @override
+  String get smartCoachNutritionCarbs => 'الكربوهيدرات';
+
+  @override
+  String get smartCoachNutritionFat => 'الدهون';
+
+  @override
+  String get smartCoachClearChat => 'مسح المحادثة';
+
+  @override
+  String get smartCoachClearChatConfirm =>
+      'هل أنت متأكد من رغبتك في مسح المحادثة؟';
+
+  @override
+  String get smartCoachClear => 'مسح';
+
+  @override
+  String get smartCoachCancel => 'إلغاء';
+
+  @override
+  String smartCoachTokenWarning(int tokens) {
+    return 'المحادثة تقترب من حد الذاكرة ($tokens/3000 رمز). ابدأ محادثة جديدة قريباً.';
+  }
+
+  @override
+  String get smartCoachTokenLocked =>
+      'وصلت هذه المحادثة إلى حد 3000 رمز. يرجى بدء محادثة جديدة للمتابعة.';
+
+  @override
+  String get smartCoachStartNewChat => 'محادثة جديدة';
+
+  @override
+  String get smartCoachPreviousConversations => 'المحادثات السابقة';
+
+  @override
+  String get smartCoachNoPreviousChats => 'لا توجد محادثات سابقة';
+
+  @override
+  String get smartCoachEmptyTitle => 'كيف يمكنني مساعدتك اليوم؟';
+
+  @override
+  String get smartCoachEmptySubtitle =>
+      'اسألني عن جداول التمارين المخصصة، أو الماكروز، أو تصحيح الأداء الحركي.';
+
+  @override
+  String get smartCoachPromptWorkout => '🏋️ صمم لي جدول تمارين 3 أيام';
+
+  @override
+  String get smartCoachPromptNutrition => '🥗 أفكار لوجبات عالية البروتين';
+
+  @override
+  String get smartCoachPromptForm => '🔥 كيف أحسن أداء تمرين الاسكوات؟';
+
+  @override
+  String get smartCoachDeleteChatTitle => 'حذف المحادثة؟';
+
+  @override
+  String get smartCoachDeleteChatConfirm =>
+      'هل أنت متأكد من رغبتك في حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get smartCoachDelete => 'حذف';
+
+  @override
+  String get letsStartYourDay => 'لنبدأ يومك';
+
+  @override
+  String get category => 'الفئات';
+
+  @override
+  String get gym => 'جيم';
+
+  @override
+  String get fitness => 'لياقة بدنية';
+
+  @override
+  String get yoga => 'يوغا';
+
+  @override
+  String get aerobics => 'تمارين هوائية';
+
+  @override
+  String get trainer => 'مدرب';
+
+  @override
+  String get recommendationToday => 'توصيات اليوم';
+
+  @override
+  String get jogging => 'ركض';
+
+  @override
+  String get pushUp => 'تمرين الضغط';
+
+  @override
+  String get squat => 'سكوات';
+
+  @override
+  String get upcomingWorkouts => 'التمارين القادمة';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get fullBody => 'كامل الجسم';
+
+  @override
+  String get chest => 'الصدر';
+
+  @override
+  String get arm => 'الذراع';
+
+  @override
+  String get shoulder => 'الكتف';
+
+  @override
+  String get back => 'الظهر';
+
+  @override
+  String get legs => 'الأرجل';
+
+  @override
+  String get arms => 'الذراعين';
+
+  @override
+  String get recommendationForYou => 'موصى به لك';
+
+  @override
+  String get breakfast => 'فطور';
+
+  @override
+  String get lunch => 'غداء';
+
+  @override
+  String get dinner => 'عشاء';
+
+  @override
+  String get popularTraining => 'التدريبات الشائعة';
+
+  @override
+  String get exercisesThatStrengthenYourChest => 'تمارين لتقوية عضلات الصدر';
+
+  @override
+  String get exercisesThatStrengthenYourBack => 'تمارين لتقوية عضلات الظهر';
+
+  @override
+  String tasksCount(int count) {
+    return '$count تمرين';
+  }
+
+  @override
+  String get foodRecommendation => 'توصيات الطعام';
+
+  @override
+  String get noMealsFound => 'لم يتم العثور على وجبات';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get failedToLoadMeals => 'فشل في تحميل الوجبات';
+
+  @override
+  String get foodDetails => 'تفاصيل الوجبة';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get energy => 'طاقة';
+
+  @override
+  String get protein => 'بروتين';
+
+  @override
+  String get carbs => 'كربوهيدرات';
+
+  @override
+  String get fat => 'دهون';
+
+  @override
+  String get failedToLoadMealDetails => 'فشل في تحميل تفاصيل الوجبة';
+
+  @override
+  String get playVideo => 'تشغيل الفيديو';
+
+  @override
+  String get noIngredientsAvailable => 'لا توجد مكونات متوفرة';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories سعرة حرارية';
+  }
+
+  @override
+  String get advanced => 'متقدم';
+
+  @override
+  String get failedToLoadExercises => 'فشل تحميل التمارين';
+
+  @override
+  String get noExercisesFound => 'لم يتم العثور على تمارين';
+
+  @override
+  String get chestExercise => 'تمارين الصدر';
+
+  @override
+  String get exerciseDescription => 'ابدأ رحلتك الرياضية مع تمارين الصدر.';
 }

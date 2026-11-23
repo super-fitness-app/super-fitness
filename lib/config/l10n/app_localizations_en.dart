@@ -18,6 +18,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidEmailError => 'Please enter a valid email address';
 
   @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
   String get invalidPhoneError => 'Please enter a valid Egyptian phone number';
 
   @override
@@ -183,10 +186,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontHaveAccount => 'Don\'t Have An Account Yet ?';
 
   @override
-  String get register => 'Register';
+  String get createAnAccount => 'CREATE AN ACCOUNT';
 
   @override
-  String get createAnAccount => 'CREATE AN ACCOUNT';
+  String get register => 'Register';
 
   @override
   String get firstName => 'First Name';
@@ -199,9 +202,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastNameRequired => 'Last name is required';
-
-  @override
-  String get invalidEmail => 'Please enter a valid email';
 
   @override
   String get passwordMinLength => 'Password must be at least 8 characters';
@@ -283,10 +283,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whatIsYourGoal => 'WHAT IS YOUR GOAL ?';
 
   @override
-  String get gainWeight => 'Gain weight';
+  String get gainWeight => 'Gain Weight';
 
   @override
-  String get loseWeight => 'Lose weight';
+  String get loseWeight => 'Lose Weight';
 
   @override
   String get getFitter => 'Get Fitter';
@@ -361,12 +361,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kgUnit => 'KG';
 
   @override
-  String editWeight(Object unit) {
+  String editWeight(String unit) {
     return 'Edit Weight ($unit)';
   }
 
   @override
-  String enterWeight(Object unit) {
+  String enterWeight(String unit) {
     return 'Enter weight in $unit';
   }
 
@@ -395,9 +395,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maintainWeight => 'Maintain weight';
 
   @override
-  String get advanced => 'Advanced';
-
-  @override
   String get createNewPassword => 'Create New Password';
 
   @override
@@ -418,4 +415,260 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String smartCoachGreeting(String userName) {
+    return 'Hi $userName ,';
+  }
+
+  @override
+  String get hiAhmed => 'Hi Ahmed ,';
+
+  @override
+  String hiWithName(String name) {
+    return 'Hi $name ,';
+  }
+
+  @override
+  String get smartCoachSubtitle => 'I Am Your Smart Coach';
+
+  @override
+  String get smartCoachWelcomeAssist => 'How Can I Assist You\nToday ?';
+
+  @override
+  String get smartCoachGetStarted => 'Get Started';
+
+  @override
+  String get smartCoachInputHint => 'Ask me anything about fitness...';
+
+  @override
+  String get smartCoachThinking => 'Smart Coach is thinking...';
+
+  @override
+  String get smartCoachExerciseCardSets => 'Sets & Reps';
+
+  @override
+  String get smartCoachExerciseCardMuscle => 'Target Muscle';
+
+  @override
+  String get smartCoachNutritionCalories => 'Calories';
+
+  @override
+  String get smartCoachNutritionProtein => 'Protein';
+
+  @override
+  String get smartCoachNutritionCarbs => 'Carbs';
+
+  @override
+  String get smartCoachNutritionFat => 'Fat';
+
+  @override
+  String get smartCoachClearChat => 'Clear Chat';
+
+  @override
+  String get smartCoachClearChatConfirm =>
+      'Are you sure you want to clear this conversation?';
+
+  @override
+  String get smartCoachClear => 'Clear';
+
+  @override
+  String get smartCoachCancel => 'Cancel';
+
+  @override
+  String smartCoachTokenWarning(int tokens) {
+    return 'Conversation approaching memory limit ($tokens/3000 tokens). Start a new chat soon.';
+  }
+
+  @override
+  String get smartCoachTokenLocked =>
+      'This conversation reached the 3000-token limit. Please start a new chat to continue.';
+
+  @override
+  String get smartCoachStartNewChat => 'Start New Chat';
+
+  @override
+  String get smartCoachPreviousConversations => 'Previous Conversations';
+
+  @override
+  String get smartCoachNoPreviousChats => 'No previous chats';
+
+  @override
+  String get smartCoachEmptyTitle => 'How can I help you today?';
+
+  @override
+  String get smartCoachEmptySubtitle =>
+      'Ask me about custom workout routines, diet macros, or form checks.';
+
+  @override
+  String get smartCoachPromptWorkout => '🏋️ Design a 3-day workout split';
+
+  @override
+  String get smartCoachPromptNutrition => '🥗 High protein meal ideas';
+
+  @override
+  String get smartCoachPromptForm => '🔥 How to fix my squat form?';
+
+  @override
+  String get smartCoachDeleteChatTitle => 'Delete Conversation?';
+
+  @override
+  String get smartCoachDeleteChatConfirm =>
+      'Are you sure you want to delete this chat? This action cannot be undone.';
+
+  @override
+  String get smartCoachDelete => 'Delete';
+
+  @override
+  String get letsStartYourDay => 'Let\'s Start Your Day';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get gym => 'Gym';
+
+  @override
+  String get fitness => 'Fitness';
+
+  @override
+  String get yoga => 'Yoga';
+
+  @override
+  String get aerobics => 'Aerobics';
+
+  @override
+  String get trainer => 'Trainer';
+
+  @override
+  String get recommendationToday => 'Recommendation To Day';
+
+  @override
+  String get jogging => 'Jogging';
+
+  @override
+  String get pushUp => 'Push-Up';
+
+  @override
+  String get squat => 'Squat';
+
+  @override
+  String get upcomingWorkouts => 'Upcoming Workouts';
+
+  @override
+  String get seeAll => 'See All';
+
+  @override
+  String get fullBody => 'Full Body';
+
+  @override
+  String get chest => 'Chest';
+
+  @override
+  String get arm => 'Arm';
+
+  @override
+  String get shoulder => 'Shoulder';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get legs => 'Legs';
+
+  @override
+  String get arms => 'Arms';
+
+  @override
+  String get recommendationForYou => 'Recommendation For You';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get popularTraining => 'Popular Training';
+
+  @override
+  String get exercisesThatStrengthenYourChest =>
+      'Exercises That Strengthen Your Chest';
+
+  @override
+  String get exercisesThatStrengthenYourBack =>
+      'Exercises That Strengthen Your Back';
+
+  @override
+  String tasksCount(int count) {
+    return '$count Tasks';
+  }
+
+  @override
+  String get foodRecommendation => 'Food Recommendation';
+
+  @override
+  String get noMealsFound => 'No meals found';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get failedToLoadMeals => 'Failed to load meals';
+
+  @override
+  String get foodDetails => 'Food Details';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get energy => 'Energy';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fat => 'Fat';
+
+  @override
+  String get failedToLoadMealDetails => 'Failed to load meal details';
+
+  @override
+  String get playVideo => 'Play Video';
+
+  @override
+  String get noIngredientsAvailable => 'No ingredients available';
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes Min';
+  }
+
+  @override
+  String calories(int calories) {
+    return '$calories Cal';
+  }
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get failedToLoadExercises => 'Failed to load exercises';
+
+  @override
+  String get noExercisesFound => 'No exercises found';
+
+  @override
+  String get chestExercise => 'Chest Exercise';
+
+  @override
+  String get exerciseDescription =>
+      'Start your fitness journey with chest exercises.';
 }

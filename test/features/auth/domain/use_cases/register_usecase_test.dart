@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/features/auth/domain/entities/login_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_entity.dart';
 import 'package:super_fitness/features/auth/domain/entities/register_params.dart';
@@ -31,6 +32,28 @@ class FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<LoginEntity>> login(LoginParams params) async {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
   }
 }
 

@@ -26,10 +26,10 @@ import 'package:super_fitness/features/profile/domain/use_cases/logout_use_case.
 
 @injectable
 class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
-  final EditProfileUseCase _editProfileUseCase;
-  final ChangePasswordUseCase _changePasswordUseCase;
-  final LogoutUseCase _logoutUseCase;
-  final SessionService _sessionService;
+  final EditProfileUseCase? _editProfileUseCase;
+  final ChangePasswordUseCase? _changePasswordUseCase;
+  final LogoutUseCase? _logoutUseCase;
+  final SessionService? _sessionService;
 
   ProfileCubit(
     this._editProfileUseCase,
@@ -37,6 +37,13 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
     this._logoutUseCase,
     this._sessionService,
   ) : super(const ProfileState());
+
+  ProfileCubit.dummy()
+      : _editProfileUseCase = null,
+        _changePasswordUseCase = null,
+        _logoutUseCase = null,
+        _sessionService = null,
+        super(const ProfileState());
 
   @override
   void doEvent(Object event) {
@@ -76,6 +83,7 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onGetUserData() async {
+    if (_sessionService == null) return;
     try {
       final userData = await _sessionService.getUserData();
 
@@ -100,6 +108,7 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
   // ===========================================================================
 
   Future<void> _onEditProfile(EditProfileParams params) async {
+    if (_editProfileUseCase == null) return;
     emit(state.copyWith(editProfileApiState: BaseState.loading()));
 
     final result = await _editProfileUseCase(params);
@@ -144,6 +153,7 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
 
     emit(state.copyWith(changePasswordApiState: BaseState.loading()));
 
+    if (_changePasswordUseCase == null) return;
     final result = await _changePasswordUseCase(
       ChangePasswordParams(password: password, newPassword: newPassword),
     );
@@ -170,13 +180,14 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
   Future<void> _onLogout() async {
     emit(state.copyWith(logoutApiState: BaseState.loading()));
 
+    if (_logoutUseCase == null) return;
     final result = await _logoutUseCase();
 
     if (isClosed) return;
 
     switch (result) {
       case Success<LogoutEntity>(:final data):
-        await _sessionService.clearSession();
+        await _sessionService?.clearSession();
 
         if (isClosed) return;
 

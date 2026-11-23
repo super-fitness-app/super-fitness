@@ -4,6 +4,7 @@ import 'package:super_fitness/config/base/base_event.dart';
 import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/router/app_router.dart';
+import 'package:super_fitness/config/network/app_error.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/core/utils/app_validators.dart';
 import 'package:super_fitness/core/utils/password_generator.dart';
@@ -42,6 +43,28 @@ class _FakeAuthRepo implements AuthRepo {
   @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async {
     return facebookResultToReturn!;
+  }
+
+  @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
   }
 }
 

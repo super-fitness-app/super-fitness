@@ -29,6 +29,28 @@ class _FakeAuthRepo implements AuthRepo {
       throw UnimplementedError();
 
   @override
+  Future<ApiResults<void>> forgotPassword({required String email}) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<Map<String, dynamic>>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
+  Future<ApiResults<void>> resetPassword({
+    required String otpToken,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return const FailureResponse(NetworkFailure(AppError.cancelled));
+  }
+
+  @override
   Future<ApiResults<SocialAuthUserEntity>> signInWithFacebook() async =>
       throw UnimplementedError();
 }

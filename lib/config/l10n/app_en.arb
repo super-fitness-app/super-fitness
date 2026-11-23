@@ -7,6 +7,7 @@
 
   "emptyValidationError": "This field is required",
   "invalidEmailError": "Please enter a valid email address",
+  "invalidEmail": "Please enter a valid email",
   "invalidPhoneError": "Please enter a valid Egyptian phone number",
   "nationalIdError": "Please enter a valid national ID",
   "weakPasswordError": "Password is too weak",
@@ -56,23 +57,16 @@
   "profile": "Profile",
   "heyThere": "Hey There",
   "welcomeBack": "WELCOME BACK",
-  "login": "Login",
   "email": "Email",
   "password": "Password",
   "forgotPassword": "Forgot Password ?",
   "dontHaveAccount": "Don't Have An Account Yet ?",
-  "register": "Register",
-
-  "heyThere": "Hey There",
   "createAnAccount": "CREATE AN ACCOUNT",
   "register": "Register",
   "firstName": "First Name",
   "lastName": "Last Name",
-  "email": "Email",
-  "password": "Password",
   "firstNameRequired": "First name is required",
   "lastNameRequired": "Last name is required",
-  "invalidEmail": "Please enter a valid email",
   "passwordMinLength": "Password must be at least 8 characters",
   "or": "Or",
   "forgetPassword": "Forget Password",
@@ -109,7 +103,8 @@
   "intermediate": "Intermediate",
   "advance": "Advance",
   "trueBeast": "True Beast",
-    "editProfile": "Edit Profile",
+
+  "editProfile": "Edit Profile",
   "changePassword": "Change Password",
   "selectLanguage": "Select Language: ",
   "english": "English",
@@ -118,7 +113,6 @@
   "privacyPolicy": "Privacy Policy",
   "help": "Help",
   "logout": "Logout",
-    "editProfile": "Edit Profile",
   "firstName": "First Name",
   "lastName": "Last Name",
   "email": "Email",
@@ -129,7 +123,21 @@
   "notSpecified": "Not specified",
   "kgUnit": "KG",
   "editWeight": "Edit Weight ({unit})",
+  "@editWeight": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
   "enterWeight": "Enter weight in {unit}",
+  "@enterWeight": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
   "cancel": "Cancel",
   "save": "Save",
   "saveChanges": "Save Changes",
@@ -137,18 +145,141 @@
   "invalidWeight": "Enter a valid weight.",
   "selectGoal": "Select Goal",
   "selectActivityLevel": "Select Activity Level",
-  "gainWeight": "Gain weight",
-  "loseWeight": "Lose weight",
   "maintainWeight": "Maintain weight",
-  "rookie": "Rookie",
-  "beginner": "Beginner",
-  "intermediate": "Intermediate",
-  "advanced": "Advanced",
-    "createNewPassword": "Create New Password",
+  "createNewPassword": "Create New Password",
   "makeSurePasswordIs8Characters": "Make Sure It's 8 Characters Or More",
   "oldPassword": "Old Password",
   "newPassword": "New Password",
   "confirmPassword": "Confirm Password",
   "passwordsDoNotMatch": "Passwords do not match",
-  "passwordChangedSuccessfully": "Password changed successfully"
+  "passwordChangedSuccessfully": "Password changed successfully",
+
+  "smartCoachGreeting": "Hi {userName} ,",
+  "@smartCoachGreeting": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "hiAhmed": "Hi Ahmed ,",
+  "hiWithName": "Hi {name} ,",
+  "@hiWithName": {
+    "description": "Greeting with dynamic user name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "smartCoachSubtitle": "I Am Your Smart Coach",
+  "smartCoachWelcomeAssist": "How Can I Assist You\nToday ?",
+  "smartCoachGetStarted": "Get Started",
+  "smartCoachInputHint": "Ask me anything about fitness...",
+  "smartCoachThinking": "Smart Coach is thinking...",
+  "smartCoachExerciseCardSets": "Sets & Reps",
+  "smartCoachExerciseCardMuscle": "Target Muscle",
+  "smartCoachNutritionCalories": "Calories",
+  "smartCoachNutritionProtein": "Protein",
+  "smartCoachNutritionCarbs": "Carbs",
+  "smartCoachNutritionFat": "Fat",
+  "smartCoachClearChat": "Clear Chat",
+  "smartCoachClearChatConfirm": "Are you sure you want to clear this conversation?",
+  "smartCoachClear": "Clear",
+  "smartCoachCancel": "Cancel",
+  "smartCoachTokenWarning": "Conversation approaching memory limit ({tokens}/3000 tokens). Start a new chat soon.",
+  "@smartCoachTokenWarning": {
+    "placeholders": {
+      "tokens": {
+        "type": "int"
+      }
+    }
+  },
+  "smartCoachTokenLocked": "This conversation reached the 3000-token limit. Please start a new chat to continue.",
+  "smartCoachStartNewChat": "Start New Chat",
+  "smartCoachPreviousConversations": "Previous Conversations",
+  "smartCoachNoPreviousChats": "No previous chats",
+  "smartCoachEmptyTitle": "How can I help you today?",
+  "smartCoachEmptySubtitle": "Ask me about custom workout routines, diet macros, or form checks.",
+  "smartCoachPromptWorkout": "🏋️ Design a 3-day workout split",
+  "smartCoachPromptNutrition": "🥗 High protein meal ideas",
+  "smartCoachPromptForm": "🔥 How to fix my squat form?",
+  "smartCoachDeleteChatTitle": "Delete Conversation?",
+  "smartCoachDeleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
+  "smartCoachDelete": "Delete",
+
+  "letsStartYourDay": "Let's Start Your Day",
+  "category": "Category",
+  "gym": "Gym",
+  "fitness": "Fitness",
+  "yoga": "Yoga",
+  "aerobics": "Aerobics",
+  "trainer": "Trainer",
+  "recommendationToday": "Recommendation To Day",
+  "jogging": "Jogging",
+  "pushUp": "Push-Up",
+  "squat": "Squat",
+  "upcomingWorkouts": "Upcoming Workouts",
+  "seeAll": "See All",
+  "fullBody": "Full Body",
+  "chest": "Chest",
+  "arm": "Arm",
+  "shoulder": "Shoulder",
+  "back": "Back",
+  "legs": "Legs",
+  "arms": "Arms",
+  "recommendationForYou": "Recommendation For You",
+  "breakfast": "Breakfast",
+  "lunch": "Lunch",
+  "dinner": "Dinner",
+  "popularTraining": "Popular Training",
+  "exercisesThatStrengthenYourChest": "Exercises That Strengthen Your Chest",
+  "exercisesThatStrengthenYourBack": "Exercises That Strengthen Your Back",
+  "tasksCount": "{count} Tasks",
+  "@tasksCount": {
+    "description": "Task count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "foodRecommendation": "Food Recommendation",
+  "noMealsFound": "No meals found",
+  "retry": "Retry",
+  "failedToLoadMeals": "Failed to load meals",
+  "foodDetails": "Food Details",
+  "ingredients": "Ingredients",
+  "energy": "Energy",
+  "protein": "Protein",
+  "carbs": "Carbs",
+  "fat": "Fat",
+  "failedToLoadMealDetails": "Failed to load meal details",
+  "playVideo": "Play Video",
+  "noIngredientsAvailable": "No ingredients available",
+
+  "durationMinutes": "{minutes} Min",
+  "@durationMinutes": {
+    "description": "Exercise duration in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calories": "{calories} Cal",
+  "@calories": {
+    "description": "Exercise calories",
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "advanced": "Advanced",
+  "failedToLoadExercises": "Failed to load exercises",
+  "noExercisesFound": "No exercises found",
+  "chestExercise": "Chest Exercise",
+  "exerciseDescription": "Start your fitness journey with chest exercises."
 }
