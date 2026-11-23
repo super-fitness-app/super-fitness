@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/network/api_results.dart';
-import 'package:super_fitness/core/errors/app_failure.dart';
 import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
 import 'package:super_fitness/features/profile/domain/entities/change_password_entity.dart';
 import 'package:super_fitness/features/profile/domain/entities/edit_profile_entity.dart';
@@ -13,8 +12,9 @@ import 'package:super_fitness/features/profile/domain/use_cases/edit_profile_use
 import 'package:super_fitness/features/profile/domain/use_cases/logout_use_case.dart';
 
 class FakeProfileRepo extends Fake implements ProfileRepo {
-  ApiResults<LogoutEntity> logoutResult =
-      const Success(LogoutEntity(message: 'Logged out'));
+  ApiResults<LogoutEntity> logoutResult = const Success(
+    LogoutEntity(message: 'Logged out'),
+  );
   ApiResults<ChangePasswordEntity> changePasswordResult = const Success(
     ChangePasswordEntity(message: 'Password changed', token: 'new_token'),
   );
@@ -80,33 +80,39 @@ void main() {
       expect(result, isA<FailureResponse<LogoutEntity>>());
     });
 
-    test('ChangePasswordUseCase forwards params to repo and returns result', () async {
-      const params = ChangePasswordParams(
-        password: 'oldPassword123',
-        newPassword: 'newPassword123',
-      );
+    test(
+      'ChangePasswordUseCase forwards params to repo and returns result',
+      () async {
+        const params = ChangePasswordParams(
+          password: 'oldPassword123',
+          newPassword: 'newPassword123',
+        );
 
-      final result = await changePasswordUseCase(params);
+        final result = await changePasswordUseCase(params);
 
-      expect(repo.lastChangePasswordParams, equals(params));
-      expect(result, isA<Success<ChangePasswordEntity>>());
-      final entity = (result as Success<ChangePasswordEntity>).data;
-      expect(entity.token, equals('new_token'));
-    });
+        expect(repo.lastChangePasswordParams, equals(params));
+        expect(result, isA<Success<ChangePasswordEntity>>());
+        final entity = (result as Success<ChangePasswordEntity>).data;
+        expect(entity.token, equals('new_token'));
+      },
+    );
 
-    test('EditProfileUseCase forwards params to repo and returns result', () async {
-      const params = EditProfileParams(
-        firstName: 'John',
-        lastName: 'Doe',
-        weight: 75.0,
-      );
+    test(
+      'EditProfileUseCase forwards params to repo and returns result',
+      () async {
+        const params = EditProfileParams(
+          firstName: 'John',
+          lastName: 'Doe',
+          weight: 75.0,
+        );
 
-      final result = await editProfileUseCase(params);
+        final result = await editProfileUseCase(params);
 
-      expect(repo.lastEditProfileParams, equals(params));
-      expect(result, isA<Success<EditProfileEntity>>());
-      final entity = (result as Success<EditProfileEntity>).data;
-      expect(entity.message, equals('Profile updated'));
-    });
+        expect(repo.lastEditProfileParams, equals(params));
+        expect(result, isA<Success<EditProfileEntity>>());
+        final entity = (result as Success<EditProfileEntity>).data;
+        expect(entity.message, equals('Profile updated'));
+      },
+    );
   });
 }

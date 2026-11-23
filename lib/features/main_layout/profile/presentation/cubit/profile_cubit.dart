@@ -39,11 +39,11 @@ class ProfileCubit extends BaseCubit<ProfileState, BaseEvent> {
   ) : super(const ProfileState());
 
   ProfileCubit.dummy()
-      : _editProfileUseCase = null,
-        _changePasswordUseCase = null,
-        _logoutUseCase = null,
-        _sessionService = null,
-        super(const ProfileState());
+    : _editProfileUseCase = null,
+      _changePasswordUseCase = null,
+      _logoutUseCase = null,
+      _sessionService = null,
+      super(const ProfileState());
 
   @override
   void doEvent(Object event) {

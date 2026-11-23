@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_fitness/config/base/base_state.dart';
 import 'package:super_fitness/config/network/api_results.dart';
 import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/features/auth/domain/entities/user_entity.dart';
@@ -32,7 +31,6 @@ class FakeSessionService extends Fake implements SessionService {
   @override
   Future<String> getToken() async => token;
 
-  @override
   Future<void> saveToken(String newToken) async {
     token = newToken;
   }
@@ -51,10 +49,12 @@ class FakeSessionService extends Fake implements SessionService {
 }
 
 class FakeProfileRepoForCubit extends Fake implements ProfileRepo {
-  ApiResults<LogoutEntity> logoutResult =
-      const Success(LogoutEntity(message: 'Logged out'));
-  ApiResults<ChangePasswordEntity> changePasswordResult =
-      const Success(ChangePasswordEntity(message: 'Password changed', token: 'token'));
+  ApiResults<LogoutEntity> logoutResult = const Success(
+    LogoutEntity(message: 'Logged out'),
+  );
+  ApiResults<ChangePasswordEntity> changePasswordResult = const Success(
+    ChangePasswordEntity(message: 'Password changed', token: 'token'),
+  );
   ApiResults<EditProfileEntity> editProfileResult = const Success(
     EditProfileEntity(
       message: 'Updated',
@@ -131,7 +131,11 @@ void main() {
       },
       act: (cubit) => cubit.doEvent(const GetUserDataEvent()),
       expect: () => [
-        isA<ProfileState>().having((s) => s.user?.firstName, 'firstName', 'John'),
+        isA<ProfileState>().having(
+          (s) => s.user?.firstName,
+          'firstName',
+          'John',
+        ),
       ],
     );
 
@@ -144,20 +148,34 @@ void main() {
         cubit.doEvent(const ToggleConfirmPasswordVisibilityEvent());
       },
       expect: () => [
-        isA<ProfileState>().having((s) => s.isCurrentPasswordVisible, 'current', isTrue),
-        isA<ProfileState>().having((s) => s.isNewPasswordVisible, 'new', isTrue),
-        isA<ProfileState>().having((s) => s.isConfirmPasswordVisible, 'confirm', isTrue),
+        isA<ProfileState>().having(
+          (s) => s.isCurrentPasswordVisible,
+          'current',
+          isTrue,
+        ),
+        isA<ProfileState>().having(
+          (s) => s.isNewPasswordVisible,
+          'new',
+          isTrue,
+        ),
+        isA<ProfileState>().having(
+          (s) => s.isConfirmPasswordVisible,
+          'confirm',
+          isTrue,
+        ),
       ],
     );
 
     blocTest<ProfileCubit, ProfileState>(
       'SubmitChangePasswordEvent emits failure when passwords do not match',
       build: () => cubit,
-      act: (cubit) => cubit.doEvent(const SubmitChangePasswordEvent(
-        password: 'currentPassword123',
-        newPassword: 'newPassword123',
-        confirmPassword: 'differentPassword123',
-      )),
+      act: (cubit) => cubit.doEvent(
+        const SubmitChangePasswordEvent(
+          password: 'currentPassword123',
+          newPassword: 'newPassword123',
+          confirmPassword: 'differentPassword123',
+        ),
+      ),
       expect: () => [
         isA<ProfileState>().having(
           (s) => s.changePasswordApiState.isFailure,
@@ -170,11 +188,13 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'SubmitChangePasswordEvent emits loading and success when passwords match',
       build: () => cubit,
-      act: (cubit) => cubit.doEvent(const SubmitChangePasswordEvent(
-        password: 'currentPassword123',
-        newPassword: 'newPassword123',
-        confirmPassword: 'newPassword123',
-      )),
+      act: (cubit) => cubit.doEvent(
+        const SubmitChangePasswordEvent(
+          password: 'currentPassword123',
+          newPassword: 'newPassword123',
+          confirmPassword: 'newPassword123',
+        ),
+      ),
       expect: () => [
         isA<ProfileState>().having(
           (s) => s.changePasswordApiState.isLoading,
@@ -194,8 +214,16 @@ void main() {
       build: () => cubit,
       act: (cubit) => cubit.doEvent(const LogoutEvent()),
       expect: () => [
-        isA<ProfileState>().having((s) => s.logoutApiState.isLoading, 'isLoading', isTrue),
-        isA<ProfileState>().having((s) => s.logoutApiState.isSuccess, 'isSuccess', isTrue),
+        isA<ProfileState>().having(
+          (s) => s.logoutApiState.isLoading,
+          'isLoading',
+          isTrue,
+        ),
+        isA<ProfileState>().having(
+          (s) => s.logoutApiState.isSuccess,
+          'isSuccess',
+          isTrue,
+        ),
       ],
       verify: (_) {
         expect(sessionService.sessionCleared, isTrue);

@@ -18,8 +18,10 @@ import 'package:super_fitness/features/profile/domain/params/edit_profile_params
 class FakeProfileRemoteDataSource extends Fake
     implements ProfileRemoteDataSource {
   LogoutResponse logoutResponse = const LogoutResponse(message: 'success');
-  ChangePasswordResponse changePasswordResponse =
-      const ChangePasswordResponse(message: 'success', token: 'jwt_token');
+  ChangePasswordResponse changePasswordResponse = const ChangePasswordResponse(
+    message: 'success',
+    token: 'jwt_token',
+  );
   EditProfileResponse editProfileResponse = EditProfileResponse(
     message: 'success',
     user: LoginUser(
@@ -66,13 +68,8 @@ class FakeAuthLocalDataSource extends Fake implements AuthLocalDataSource {
   Future<String> getToken() async => savedToken ?? '';
 
   @override
-  Future<void> saveToken(String? token) async {
+  Future<void> saveToken(String token) async {
     savedToken = token;
-  }
-
-  @override
-  Future<void> deleteToken() async {
-    savedToken = null;
   }
 
   @override
@@ -101,32 +98,50 @@ void main() {
       expect(entity.message, equals('success'));
     });
 
-    test('changePassword calls remote data source, saves token, and returns entity', () async {
-      const params = ChangePasswordParams(
-        password: 'currentPassword123',
-        newPassword: 'newPassword123',
-      );
+    test(
+      'changePassword calls remote data source, saves token, and returns entity',
+      () async {
+        const params = ChangePasswordParams(
+          password: 'currentPassword123',
+          newPassword: 'newPassword123',
+        );
 
-      final result = await repo.changePassword(params);
+        final result = await repo.changePassword(params);
 
-      expect(remoteDataSource.lastChangePasswordRequest?.password, equals('currentPassword123'));
-      expect(remoteDataSource.lastChangePasswordRequest?.newPassword, equals('newPassword123'));
-      expect(localDataSource.savedToken, equals('jwt_token'));
-      expect(result, isA<Success<ChangePasswordEntity>>());
-    });
+        expect(
+          remoteDataSource.lastChangePasswordRequest?.password,
+          equals('currentPassword123'),
+        );
+        expect(
+          remoteDataSource.lastChangePasswordRequest?.newPassword,
+          equals('newPassword123'),
+        );
+        expect(localDataSource.savedToken, equals('jwt_token'));
+        expect(result, isA<Success<ChangePasswordEntity>>());
+      },
+    );
 
-    test('editProfile calls remote data source and returns EditProfileEntity', () async {
-      const params = EditProfileParams(
-        firstName: 'Jane',
-        lastName: 'Smith',
-        email: 'jane@example.com',
-      );
+    test(
+      'editProfile calls remote data source and returns EditProfileEntity',
+      () async {
+        const params = EditProfileParams(
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'jane@example.com',
+        );
 
-      final result = await repo.editProfile(params);
+        final result = await repo.editProfile(params);
 
-      expect(remoteDataSource.lastEditProfileRequest?.firstName, equals('Jane'));
-      expect(remoteDataSource.lastEditProfileRequest?.email, equals('jane@example.com'));
-      expect(result, isA<Success<EditProfileEntity>>());
-    });
+        expect(
+          remoteDataSource.lastEditProfileRequest?.firstName,
+          equals('Jane'),
+        );
+        expect(
+          remoteDataSource.lastEditProfileRequest?.email,
+          equals('jane@example.com'),
+        );
+        expect(result, isA<Success<EditProfileEntity>>());
+      },
+    );
   });
 }
