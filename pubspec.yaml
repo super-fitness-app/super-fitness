@@ -56,6 +56,7 @@ dependencies:
   crypto: ^3.0.8
   sqflite: ^2.4.5
   flutter_facebook_auth: ^7.1.5
+  url_launcher: ^6.3.3
   pin_code_fields: ^10.1.1
   youtube_player_flutter: ^10.0.1
   mocktail: ^1.0.5

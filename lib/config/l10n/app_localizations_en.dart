@@ -316,6 +316,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trueBeast => 'True Beast';
 
   @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get selectLanguage => 'Select Language: ';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabic => 'Arabic';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get yourWeight => 'Your Weight';
+
+  @override
+  String get yourGoal => 'Your Goal';
+
+  @override
+  String get yourActivityLevel => 'Your Activity Level';
+
+  @override
+  String get tapToEdit => 'tap To Edit';
+
+  @override
+  String get notSpecified => 'Not specified';
+
+  @override
+  String get kgUnit => 'KG';
+
+  @override
+  String editWeight(String unit) {
+    return 'Edit Weight ($unit)';
+  }
+
+  @override
+  String enterWeight(String unit) {
+    return 'Enter weight in $unit';
+  }
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get completeRequiredFields => 'Please complete all required fields.';
+
+  @override
+  String get invalidWeight => 'Enter a valid weight.';
+
+  @override
+  String get selectGoal => 'Select Goal';
+
+  @override
+  String get selectActivityLevel => 'Select Activity Level';
+
+  @override
+  String get maintainWeight => 'Maintain weight';
+
+  @override
+  String get createNewPassword => 'Create New Password';
+
+  @override
+  String get makeSurePasswordIs8Characters =>
+      'Make Sure It\'s 8 Characters Or More';
+
+  @override
+  String get oldPassword => 'Old Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
   String smartCoachGreeting(String userName) {
     return 'Hi $userName ,';
   }

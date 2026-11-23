@@ -313,6 +313,107 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trueBeast => 'محترف رياضي';
 
   @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get selectLanguage => 'اختيار اللغة: ';
+
+  @override
+  String get english => 'الإنجليزية';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get security => 'الأمان';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get help => 'المساعدة';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get yourWeight => 'وزنك';
+
+  @override
+  String get yourGoal => 'هدفك';
+
+  @override
+  String get yourActivityLevel => 'مستوى نشاطك';
+
+  @override
+  String get tapToEdit => 'اضغط للتعديل';
+
+  @override
+  String get notSpecified => 'غير محدد';
+
+  @override
+  String get kgUnit => 'كجم';
+
+  @override
+  String editWeight(String unit) {
+    return 'تعديل الوزن ($unit)';
+  }
+
+  @override
+  String enterWeight(String unit) {
+    return 'أدخل الوزن بـ $unit';
+  }
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get completeRequiredFields => 'يرجى إكمال جميع الحقول المطلوبة.';
+
+  @override
+  String get invalidWeight => 'أدخل وزنًا صحيحًا.';
+
+  @override
+  String get selectGoal => 'اختر الهدف';
+
+  @override
+  String get selectActivityLevel => 'اختر مستوى النشاط';
+
+  @override
+  String get maintainWeight => 'الحفاظ على الوزن';
+
+  @override
+  String get createNewPassword => 'إنشاء كلمة مرور جديدة';
+
+  @override
+  String get makeSurePasswordIs8Characters =>
+      'تأكد من أن كلمة المرور 8 أحرف أو أكثر';
+
+  @override
+  String get oldPassword => 'كلمة المرور القديمة';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
   String smartCoachGreeting(String userName) {
     return 'مرحباً $userName ،';
   }

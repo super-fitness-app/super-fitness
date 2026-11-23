@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:super_fitness/config/l10n/app_localizations.dart';
 import 'package:super_fitness/core/ui/themes/app_theme.dart';
-import 'package:super_fitness/features/main_layout/profile/profile_view.dart';
+import 'package:super_fitness/features/main_layout/profile/presentation/view/profile_view.dart';
 
 void main() {
   Widget buildTestWidget() {

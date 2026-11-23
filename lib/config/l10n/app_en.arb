@@ -104,6 +104,56 @@
   "advance": "Advance",
   "trueBeast": "True Beast",
 
+  "editProfile": "Edit Profile",
+  "changePassword": "Change Password",
+  "selectLanguage": "Select Language: ",
+  "english": "English",
+  "arabic": "Arabic",
+  "security": "Security",
+  "privacyPolicy": "Privacy Policy",
+  "help": "Help",
+  "logout": "Logout",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "yourWeight": "Your Weight",
+  "yourGoal": "Your Goal",
+  "yourActivityLevel": "Your Activity Level",
+  "tapToEdit": "tap To Edit",
+  "notSpecified": "Not specified",
+  "kgUnit": "KG",
+  "editWeight": "Edit Weight ({unit})",
+  "@editWeight": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "enterWeight": "Enter weight in {unit}",
+  "@enterWeight": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "save": "Save",
+  "saveChanges": "Save Changes",
+  "completeRequiredFields": "Please complete all required fields.",
+  "invalidWeight": "Enter a valid weight.",
+  "selectGoal": "Select Goal",
+  "selectActivityLevel": "Select Activity Level",
+  "maintainWeight": "Maintain weight",
+  "createNewPassword": "Create New Password",
+  "makeSurePasswordIs8Characters": "Make Sure It's 8 Characters Or More",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordChangedSuccessfully": "Password changed successfully",
+
   "smartCoachGreeting": "Hi {userName} ,",
   "@smartCoachGreeting": {
     "placeholders": {
