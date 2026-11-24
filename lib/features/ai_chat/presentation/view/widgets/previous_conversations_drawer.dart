@@ -115,12 +115,13 @@ class _NewChatButton extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         final cubit = context.read<AiChatCubit>();
         cubit.doEvent(const CreateNewSessionEvent());
         Navigator.of(context).pop();
         if (isFromWelcomeScreen) {
-          context.push(AppRoutes.smartCoachChat);
+          await context.push(AppRoutes.smartCoachChat, extra: cubit);
+          cubit.doEvent(const LoadChatSessionsEvent());
         }
       },
       borderRadius: BorderRadius.circular(20),
@@ -237,12 +238,16 @@ class _SessionTile extends StatelessWidget {
         context.read<AiChatCubit>().doEvent(DeleteChatSessionEvent(session.id));
       },
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           final cubit = context.read<AiChatCubit>();
           cubit.doEvent(SelectChatSessionEvent(session.id));
           Navigator.of(context).pop();
           if (isFromWelcomeScreen) {
-            context.push(AppRoutes.smartCoachChat, extra: session.id);
+            await context.push(
+              AppRoutes.smartCoachChat,
+              extra: (cubit, session.id),
+            );
+            cubit.doEvent(const LoadChatSessionsEvent());
           }
         },
         borderRadius: BorderRadius.circular(12),
