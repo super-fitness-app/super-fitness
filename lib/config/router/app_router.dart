@@ -7,6 +7,7 @@ import 'package:super_fitness/config/session/session_service.dart';
 import 'package:super_fitness/config/storage/storage_service.dart';
 import 'package:super_fitness/core/const/app_constants.dart';
 import 'package:super_fitness/core/utils/video_player/app_video_player.dart';
+import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_chat_view.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/smart_coach_welcome_view.dart';
 import 'package:super_fitness/features/auth/presentation/forget_password/manager/forget_password_cubit.dart';
@@ -214,8 +215,19 @@ abstract final class AppRouter {
         GoRoute(
           path: AppRoutes.smartCoachChat,
           parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state) =>
-              SmartCoachChatView(sessionId: state.extra as String?),
+          builder: (context, state) {
+            final (cubit, sessionId) = switch (state.extra) {
+              AiChatCubit c => (c, null),
+              String id => (null, id),
+              (AiChatCubit? c, String? id) => (c, id),
+              Map<String, dynamic> map => (
+                map['cubit'] as AiChatCubit?,
+                map['sessionId'] as String?,
+              ),
+              _ => (null, null),
+            };
+            return SmartCoachChatView(cubit: cubit, sessionId: sessionId);
+          },
         ),
         GoRoute(
           path: AppRoutes.home,

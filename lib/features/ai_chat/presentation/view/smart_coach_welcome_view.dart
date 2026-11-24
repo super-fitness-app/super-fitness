@@ -6,27 +6,47 @@ import 'package:super_fitness/config/router/app_router.dart';
 import 'package:super_fitness/core/const/app_colors.dart';
 import 'package:super_fitness/core/const/app_images.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_cubit.dart';
+import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_event.dart';
 import 'package:super_fitness/features/ai_chat/presentation/manager/ai_chat_state.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/previous_conversations_drawer.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/welcome_glass_card.dart';
 import 'package:super_fitness/features/ai_chat/presentation/view/widgets/welcome_top_bar.dart';
 
-class SmartCoachWelcomeView extends StatelessWidget {
+class SmartCoachWelcomeView extends StatefulWidget {
   final AiChatCubit? cubit;
 
   const SmartCoachWelcomeView({super.key, this.cubit});
 
   @override
+  State<SmartCoachWelcomeView> createState() => _SmartCoachWelcomeViewState();
+}
+
+class _SmartCoachWelcomeViewState extends State<SmartCoachWelcomeView> {
+  late final AiChatCubit? _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit =
+        widget.cubit ??
+        (getIt.isRegistered<AiChatCubit>() ? getIt<AiChatCubit>() : null);
+    _cubit?.doEvent(const LoadChatSessionsEvent());
+  }
+
+  @override
+  void dispose() {
+    if (widget.cubit == null) {
+      _cubit?.close();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cubit = _cubit;
     if (cubit != null) {
       return BlocProvider.value(
-        value: cubit!,
-        child: const _WelcomeBlocConsumer(),
-      );
-    }
-    if (getIt.isRegistered<AiChatCubit>()) {
-      return BlocProvider(
-        create: (_) => getIt<AiChatCubit>(),
+        value: cubit,
         child: const _WelcomeBlocConsumer(),
       );
     }
@@ -98,9 +118,7 @@ class _WelcomeBody extends StatelessWidget {
                     bottom: 90,
                   ),
                   child: WelcomeGlassCard(
-                    onGetStarted: () {
-                      context.push(AppRoutes.smartCoachChat);
-                    },
+                    onGetStarted: () => _navigateToChat(context),
                   ),
                 ),
               ],
@@ -109,6 +127,17 @@ class _WelcomeBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static Future<void> _navigateToChat(BuildContext context) async {
+    AiChatCubit? cubit;
+    try {
+      cubit = context.read<AiChatCubit>();
+    } catch (_) {}
+    await context.push(AppRoutes.smartCoachChat, extra: cubit);
+    if (context.mounted && cubit != null) {
+      cubit.doEvent(const LoadChatSessionsEvent());
+    }
   }
 }
 
@@ -130,7 +159,7 @@ class _BackgroundLayer extends StatelessWidget {
                 const ColoredBox(color: AppColors.background),
           ),
         ),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
